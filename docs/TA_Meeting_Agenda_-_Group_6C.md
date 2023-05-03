@@ -29,8 +29,6 @@
 ## Future documents
 
 ## Extra information
- - Next meeting: Thursday 11:00
- - Future meetings: Monday 15:00
 
 
 
