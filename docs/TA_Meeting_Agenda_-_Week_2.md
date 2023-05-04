@@ -1,6 +1,8 @@
 # TA Meeting Agenda - Group 6C
 
 ### Week: 2
+### Chair: Vian
+### Notetaker: Radu
 ### Main focus: Project plan
 
 ## **Opening**
