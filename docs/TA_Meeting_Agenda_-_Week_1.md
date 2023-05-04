@@ -1,6 +1,8 @@
 # TA Meeting Agenda - Group 6C
 
 ### Week: 1
+### Chair: Elena
+### Notetaker: Alex
 ### Main focus: Project plan
 
 ## **Opening**
