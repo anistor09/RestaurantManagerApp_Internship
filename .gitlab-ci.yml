@@ -3,7 +3,7 @@ stages:
   - checkstyle
   - test
 
-build site:
+Build:
   image: node:6
   stage: build
   script:
@@ -14,7 +14,7 @@ build site:
     paths:
       - dist
 
-checkstyle:
+Checkstyle:
   image: node:6
   stage: checkstyle
   script:
@@ -25,7 +25,7 @@ checkstyle:
     paths:
       - checkstyle.xml
 
-unit test:
+Test:
   image: node:6
   stage: test
   script:
