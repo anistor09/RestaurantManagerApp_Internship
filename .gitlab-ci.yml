@@ -3,8 +3,8 @@ stages:
   - checkstyle
   - test
 
-build site:
-  image: node:6
+Build:
+  image: node:16.19.1
   stage: build
   script:
     - npm install --progress=false
@@ -12,10 +12,10 @@ build site:
   artifacts:
     expire_in: 1 week
     paths:
-      - dist
+      - dist/
 
-checkstyle:
-  image: node:6
+Checkstyle:
+  image: node:16.19.1
   stage: checkstyle
   script:
     - npm install
@@ -25,8 +25,8 @@ checkstyle:
     paths:
       - checkstyle.xml
 
-unit test:
-  image: node:6
+Test:
+  image: node:16.19.1
   stage: test
   script:
     - npm install --progress=false
