@@ -29,9 +29,26 @@
 - Is there any room for improvement for the process? In which way can we improve?
 # Meeting Notes
 
+## 1. Design prototype
+- AB testing : let client play with the 2 designs and mention it in the report
+- Reason about colour-blindness for the report
+## 2. Sprint planning
+- It is okay
+- Start with basics and continue by planning with the client
+## 3. Previous work
+- It's okay right now
+- Could add later integration tests, jacoco report, not mandatory
+## 4. Planning
+- TA can do the midterm presentation after 4PM
+
 
 ## Extra information
-
-
+- Have the mobile enviorement moved to a could
+- Need to make must/should requirements equal
+- Move back analytics to should, backend is not required to be a must
+- Add comments for MRs
+- The requirements should be really specific
+- Talk to the clients about the requirements and the backend
+- Next meeting will be on Monday at 12:15
 
 
