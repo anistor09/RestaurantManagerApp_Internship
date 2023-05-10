@@ -2,7 +2,7 @@
 
 <template>
   <div>
-  <NuxtWelcome/>
+    <h2>About</h2>
   </div>
 </template>
 

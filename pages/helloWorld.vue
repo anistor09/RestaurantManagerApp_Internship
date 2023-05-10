@@ -1,7 +1,8 @@
 <script lang="ts" setup></script>
 
 <template>
-	<CounterInput></CounterInput>
+	<el-button type="success">Default</el-button>
+	<el-button></el-button>
 </template>
 
 <style scoped></style>
