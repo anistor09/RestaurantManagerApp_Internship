@@ -1,0 +1,35 @@
+[{
+    "id": 1,
+    "name": "Sky Bar",
+    "logo_url": "",
+    "latitude": "45.666",
+    "longitude": " 34.231",
+    "rating": "4.5",
+    "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/70/93/be/mandarin-bar.jpg",
+    "description": "Sky Bar in the center of Rotterdam",
+    "background_color": "red",
+    "font_color": "black",
+    "foreground_color": "white",
+    "category": "bars",
+    "addresse": "Julianalaan 32",
+    "email": "skybar@gmail.com",
+    "phone_number": "0769174798"
+},
+{
+    "id": 2,
+    "name": "burger Bar",
+    "logo_url": "https://www.burgerbar.nl/wp-content/uploads/Burgerbar_Smashed_fries_drink_sauce_2880x2304.jpg",
+    "latitude": "35.666",
+    "longitude": "65.231",
+    "rating": "3.5",
+    "image_url": "",
+    "description": "burger bar with best burgers",
+    "background_color": "purple",
+    "font_color": "black",
+    "foreground_color": "white",
+    "category": "burgers",
+    "addresse": "Roland hostlaan 32",
+    "email": "burger@gmail.com",
+    "phone_number": "0374313243"
+}
+]
