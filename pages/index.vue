@@ -2,7 +2,7 @@
 
 <template>
   <div>
-  <NuxtWelcome/>
+  <RestaurantComponent/>
   </div>
 </template>
 
