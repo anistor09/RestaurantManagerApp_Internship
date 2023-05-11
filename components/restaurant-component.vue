@@ -1,82 +1,91 @@
 <script lang="ts" setup>
-    const resName = "Restaurant Name"
-    const imageSource = "https://dailynewshungary.com/wp-content/webpc-passthru.php?src=https://dailynewshungary.com/wp-content/uploads/2022/06/rsz_2hard_rock_hotel_budapest2.jpg&nocache=1"
-    const logoSource = "https://mma.prnewswire.com/media/1713860/SKYBAR_LOGO_PARIS__1.jpg"
-    const openHour = "8:00"
-    const closeHour = "18:00"
-    const phoneNumber = "+310712345678"
-    const email = "email@restaurant.com"
-    const location = "Market St, San Francisco, CA, USA"
+// Hardcoded information, will be extracted from the restaurant global object later on
+const restaurantName = 'SkyBar';
+const imageSource = 'https://media-cdn.tripadvisor.com/media/photo-s/27/a7/c7/05/skybar-paris.jpg';
+const logoSource = 'https://mma.prnewswire.com/media/1713860/SKYBAR_LOGO_PARIS__1.jpg';
+const openHour = '8:00';
+const closeHour = '18:00';
+const phoneNumber = '+310712345678';
+const email = 'email@restaurant.com';
+const location = 'Market St, San Francisco, CA, USA';
 </script>
 
+<!-- Card component containing basic information related to the restaurant, including logo and background image -->
 <template>
-    <el-row>
-      <el-col
-        :span="8"
-      >
-        <el-card class="card" :body-style="{ padding: '0px' }">
-          <img
-            :src= "imageSource"
-            class="image"
-          />
-          <div style="height: 10vh">
-            <!-- <img :src= "logoSource"/> -->
-            <div id="title">{{ resName }}</div>
-            <div> {{ location }}</div>
-            <div class="bottom">
-            <el-button text class="button">Edit</el-button>
-            <el-button text class="button">Delete</el-button>
-            </div>
-            <!-- <div id="info">
-                <div> Opening hours: {{openHour}} - {{closeHour}} </div>
-                <div> Phone number: {{ phoneNumber }} </div>
-                <div> Email: {{ email }} </div>
-            </div> -->
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+	<el-card id="card" shadow="always" :body-style="{ padding: '0px' }">
+		<!-- The background image of the card (blurred) -->
+		<img id="image" :src="imageSource" />
+
+		<!-- The logo of the restaurant, cut as a circle -->
+		<img id="logo" :src="logoSource" />
+
+		<!-- The text part of the card -->
+		<div style="height: 10vh">
+			<!-- The name of the restaurant -->
+			<div id="title">{{ restaurantName }}</div>
+
+			<!-- The location of the restaurant, written under the title -->
+			<div id="location">{{ location }}</div>
+
+			<!-- The information of the restaurant, which gives a general overview -->
+			<div id="info">
+				<div>Opening hours: {{ openHour }} - {{ closeHour }}</div>
+				<div>Phone number: {{ phoneNumber }}</div>
+				<div>Email: {{ email }}</div>
+			</div>
+		</div>
+	</el-card>
 </template>
-  
+
 <style>
-  #title {
-    margin-top: 1.5vh;
-    margin-left: 1vw;
-    font-weight: bold;
-    font-size: 1.2rem;
-  }
+/* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
+@import url('https://fonts.googleapis.com/css?family=Cairo');
 
-  #info {
-    float: right;
-    position: absolute;
-  }
+#card {
+	position: relative;
+	width: 50vw;
+	height: 20vh;
+	border-radius: 3vw;
+	font-family: 'Cairo';
+}
 
-  .card {
-    width: 50vw;
-    height: 20vh;
-    border-radius: 3vw;
-    font-family: math;
-    box-shadow: 0.2vh 0.1vw 0.7vh 0.2vw rgba(0,0,0,.3) !important;
-  }
+#logo {
+	position: absolute;
+	left: 1vw;
+	top: 4vh;
+	width: 6vw;
+	height: 6vw;
+	border-radius: 100%;
+	box-shadow: 0.2vh 0.1vw 0.7vh 0.2vw rgba(0, 0, 0, 0.07) !important;
+}
 
-  .bottom {
-    line-height: 12px;
-    display: flex;
-    justify-content: center;
-    margin-top: 1vh;
-  }
-  
-  .button {
-    padding: 0;
-    min-height: auto;
-    font-family: math;
-  }
-  
-  .image {
-    width: 100%;
-    filter: blur(3px);
-    height: 10vh;
-    display: block;
-  }
+#image {
+	display: block;
+	width: 100%;
+	height: 10vh;
+	filter: blur(3px);
+}
+
+#title {
+	position: absolute;
+	left: 7vw;
+	margin-left: 0.5vw;
+	margin-top: 1vh;
+	font-size: 1.5rem;
+	font-weight: bolder;
+}
+
+#location {
+	position: absolute;
+	left: 6vw;
+	margin-top: 4vh;
+	margin-left: 1.2vw;
+}
+
+#info {
+	position: absolute;
+	top: 11vh;
+	left: 35vw;
+	line-height: 1.5;
+}
 </style>
-  
