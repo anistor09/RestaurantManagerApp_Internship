@@ -1,0 +1,33 @@
+stages:
+  - build
+  - checkstyle
+  - test
+
+Build:
+  image: node:16.19.1
+  stage: build
+  script:
+    - npm install --progress=false
+    - npm run build
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist/
+
+Checkstyle:
+  image: node:16.19.1
+  stage: checkstyle
+  script:
+    - npm install
+    - npm run lint
+    - prettier-checkstyle "src/**/*.vue" > checkstyle.xml || true
+  artifacts:
+    paths:
+      - checkstyle.xml
+
+Test:
+  image: node:16.19.1
+  stage: test
+  script:
+    - npm install --progress=false
+    - npm run unit
