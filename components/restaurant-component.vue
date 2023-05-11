@@ -64,14 +64,15 @@ const location = 'Market St, San Francisco, CA, USA';
 	width: 100%;
 	height: 10vh;
 	filter: blur(3px);
+    border-bottom: 0.3vh solid black;
 }
 
 #title {
 	position: absolute;
 	left: 7vw;
 	margin-left: 0.5vw;
-	margin-top: 1vh;
-	font-size: 1.5rem;
+	margin-top: -0.3vh;
+	font-size: 1.8rem;
 	font-weight: bolder;
 }
 
@@ -87,5 +88,6 @@ const location = 'Market St, San Francisco, CA, USA';
 	top: 11vh;
 	left: 35vw;
 	line-height: 1.5;
+    text-align: center;
 }
 </style>
