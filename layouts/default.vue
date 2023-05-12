@@ -1,20 +1,34 @@
+<script setup lang="ts">
+    const imageURL = "/_nuxt/assets/images/Logo.png";
+</script>
+
 <template>
     <el-container>
         <el-aside>
-            <el-menu default-active="2" background-color="pink" style="height: 100vh;">
-                <el-menu-item index="1">
-                    <NuxtLink to="/">Home</NuxtLink>
+            <div>
+            <el-menu default-active="1" text-color="white" active-text-color="black">
+                <el-image :src="imageURL"/>
+                <el-menu-item @click="navigateTo('/')" index="1">
+                    <span>Home</span>
                 </el-menu-item>
-                <el-menu-item index="2">
-                    <NuxtLink to="/helloWorld">Hello</NuxtLink>
+                <el-menu-item @click="navigateTo('/')"  index="2">
+                    <span>Menus</span>
                 </el-menu-item>
-                <el-menu-item index="3">
-                    <NuxtLink to="/">Page 3</NuxtLink>
+                <el-menu-item @click="navigateTo('/')" index="3">
+                    <span>Products</span>
                 </el-menu-item>
-                <el-menu-item index="4">
-                    <NuxtLink to="/">Page 4</NuxtLink>
+                <el-menu-item @click="navigateTo('/')" index="4">
+                    <span>Tables</span>
+                </el-menu-item>
+                <el-menu-item @click="navigateTo('/')" index="5">
+                    <span>Help</span>
+                </el-menu-item>
+                <el-menu-item style="position: relative;top: 15%;" @click="navigateTo('/')" index="6">
+                    <el-image class="icon" src="https://cdn.onlinewebfonts.com/svg/img_574534.png"/>
+                    <span id="setting">Settings</span>
                 </el-menu-item>
             </el-menu>
+            </div>
         </el-aside>
         <slot></slot>
     </el-container>
@@ -22,8 +36,50 @@
   
   
 <style>
-.router-link-exact-active {
-    font-weight: bold;
+@import url('https://fonts.googleapis.com/css2?family=Solway&display=swap');
+.el-menu-item{
+    display: flex;
+    justify-content: center;
+    font-size: xx-large;
+    align-items: center;
+    top: 10%;
+    padding-top: 20%;
+    padding-bottom: 20%;
+    font-family: 'Solway';
 }
+.el-menu-item:hover{
+    background-color: transparent;
+}
+
+.el-menu-item.is-active{
+    color: white;
+    text-shadow: 3px 2px black;
+}
+
+.el-menu{
+    padding-top: 10%;
+    background: rgb(255,97,121);
+    background: linear-gradient(180deg, rgba(255,97,121,1) 0%, rgba(255,58,113,1) 100%);
+    height: 100vh;
+}
+.el-image{
+    display: grid;
+    justify-content: center;
+    width: auto;
+    height: auto;
+}
+.icon{
+    position: relative;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+}
+#setting{
+    color: white;
+    font-family: 'Solway';
+    font-size: xx-large;
+    padding-left: 5%;
+}   
 </style>
   
