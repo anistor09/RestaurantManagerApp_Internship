@@ -1,87 +1,78 @@
 <script setup>
-import { rest } from "lodash";
 import restaurants from "../mockData/restaurants.json"
-const restaurant  = ref(restaurants.filter(x => x.id == 1)[0])
-
-function textBoxStyle(width) {
-  return {
-    'border-radius': `30px`,
-    'background-color': 'red',
-    'width': `${width}%`
-  };
-}
-    
+const restaurant  = ref(restaurants.filter(x => x.id === 1)[0])
 </script>
 
 <template>
-    <h1>
-        Restaurant Overview
-    </h1>
-    <div class="All">
-        <div class="imageNameAddress">
-            <img :src="restaurant.image_url" alt="" class=circle-image>
-            <div class="nameAddress">
-                <input
+    <div>
+        <h1>
+            Restaurant Overview
+        </h1>
+        <div class="All">
+            <div class="imageNameAddress">
+                <img :src="restaurant.image_url" alt="" class=circle-image>
+                <div class="nameAddress">
+                    <input
+                        v-model=restaurant.name
+                        class="specialInput"
+                        style="font-size: 23px; width: 40%;"
+                        type="input"
+                        placeholder="Please input"
+                    />
+                    <input
+                        v-model=restaurant.addresse
+                        class="specialInput"
+                        type="input"
+                        style="font-size: 18px; text-align: start;"
+                        placeholder="Please input"
+                    />
+                </div>
+            </div>
+            <br><br>
+            <div class="otherDetails">
+                <div class="prefix">Description:</div>
+                <textarea
+                    v-model=restaurant.description
                     class="specialInput"
-                    v-model=restaurant.name
-                    style="font-size: 23px; width: 40%;"
+                    autosize
+                    style="text-align: start; width: 40%; height: auto; overflow: hidden; max-width: 80vw; border-radius: 45px; padding-left: 1%"
+                    placeholder="Please input"
+                />
+                <!-- Opening Hours: <br> -->
+                <!-- <input type="text" id="restaurantDescriptionEdit" :value="restaurant."> <br> -->
+                <div class="details">
+                    <div class="prefix">Phone Number:</div>
+                    <input
+                        v-model=restaurant.phone_number
+                        class="specialInput"
+                        style="width: 9%; text-align: center"
+                        type="input"
+                        placeholder="Please input"
+                />
+                </div>
+                <div class="details">
+                    <div class="prefix">Email:</div>
+                    <input
+                        v-model=restaurant.email
+                        class="specialInput"
+                        style="width: 15%;"
+                        type="input"
+                        placeholder="Please input"
+                    />
+                </div>
+                <div class="details">
+                <div class="prefix">Category:</div>
+                <input
+                    v-model=restaurant.category
+                    class="specialInput"
+                    style="width: 10%;"
                     type="input"
                     placeholder="Please input"
                 />
-                <input
-                    class="specialInput"
-                    v-model=restaurant.addresse
-                    type="input"
-                    style="font-size: 18px; text-align: start;"
-                    placeholder="Please input"
-                />
-            </div>
-        </div>
-        <br><br>
-        <div class="otherDetails">
-            <div class="prefix">Description:</div>
-            <textarea
-                class="specialInput"
-                v-model=restaurant.description
-                autosize
-                style="text-align: start; width: 40%; height: auto; overflow: hidden; max-width: 80vw; border-radius: 45px; padding-left: 1%"
-                placeholder="Please input"
-            />
-            <!-- Opening Hours: <br> -->
-            <!-- <input type="text" id="restaurantDescriptionEdit" :value="restaurant."> <br> -->
-            <div class="details">
-                <div class="prefix">Phone Number:</div>
-                <input
-                    class="specialInput"
-                    id="rPhone"
-                    v-model=restaurant.phone_number
-                    style="width: 9%; text-align: center"
-                    type="input"
-                    placeholder="Please input"
-            />
-            </div>
-            <div class="details">
-                <div class="prefix">Email:</div>
-                <input
-                    class="specialInput"
-                    v-model=restaurant.email
-                    style="width: 15%;"
-                    type="input"
-                    placeholder="Please input"
-                />
-            </div>
-            <div class="details">
-            <div class="prefix">Category:</div>
-            <input
-                class="specialInput"
-                v-model=restaurant.category
-                style="width: 10%;"
-                type="input"
-                placeholder="Please input"
-            />
-            </div>
-            <div class="button-container">
-                <el-button color="#ED5087" plain round> Save changes</el-button>
+                </div>
+                <div class="button-container">
+                    <el-button color="#ED5087" plain round> Save changes</el-button>
+                </div>
             </div>
         </div>
     </div>
