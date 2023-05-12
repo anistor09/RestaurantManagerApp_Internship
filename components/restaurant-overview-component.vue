@@ -80,9 +80,8 @@ function textBoxStyle(width) {
                 placeholder="Please input"
             />
             </div>
-            <br><br>
             <div class="button-container">
-                <el-button color="#ED5087">Save changes</el-button>
+                <el-button color="#ED5087" plain round> Save changes</el-button>
             </div>
         </div>
     </div>
@@ -143,7 +142,9 @@ function textBoxStyle(width) {
     .button-container {
         display: flex;
         justify-content: flex-end;
-        padding: 50px;
+        padding: 5%;
+        align-items: center;
+        font-family: 'Cairo';
     }
     .circle-image {
         width: 130px; /* set the width to whatever you need */
