@@ -1,12 +1,8 @@
 <script lang="ts" setup>
 // Hardcoded information, will be extracted from the restaurant global object later on
-const itemName = 'Fries';
-const imageSource = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9orIJR7zMICOYAZ3bZ_Y9IGKJmDrD4Zk9Dw&usqp=CAU';
-const category = 'Side Dish';
-const subcategory = 'None';
-const description = 'Crunchy and delicious, our fries are the perfect addition to any meal.';
-const price = 2;
-const currency = '$';
+const itemName = 'Appetizers';
+const imageSource = 'https://images-gmi-pmc.edge-generalmills.com/fca4b25f-5859-4048-974c-4ef02a0014ee.jpg';
+const description = 'Our carefully crafted selection of small plates will awaken your taste buds and leave you yearning for more.';
 </script>
 
 <!-- Item card component containing basic information, including image, description and edit/delete buttons-->
@@ -16,20 +12,15 @@ const currency = '$';
 		<img id="image" :src="imageSource" />
 
 		<!-- The text part of the card -->
-		<div style="height: 10vh">
+		<div>
 			<!-- The name of the restaurant -->
 			<div id="title">{{ itemName }}</div>
 
-			<!-- The information of the item, which gives a general overview -->
-			<div class="info">
-				<div><b>Category:</b> {{category}}</div>
-				<div><b>Subcategory:</b> {{ subcategory }}</div>
-			</div>
-            <div id="description" class="info"><b>Description:</b> {{ description }}</div>
-            <div class="info"><b>Price:</b> {{price}} {{ currency }}</div>
+			<!-- The description of the category, which gives a general overview -->
+            <div id="description"><b>Description:</b> {{ description }}</div>
 
             <!-- The Edit and Delete buttons of the card -->
-            <div id="buttons">
+            <div id="buttons" class="extraPadding">
                 <el-button color="#ED5087" plain round> Edit </el-button>
                 <el-button color="#ED5087" plain round> Delete</el-button>
 			</div>
@@ -61,20 +52,19 @@ const currency = '$';
 }
 
 #description {
-    padding: 5% 10% 3% 10%;
+    line-height: 1.5;
+    text-align: center;
 }
 
 #buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 0.5vh;
 	font-family: 'Cairo';
 }
 
-.info {
-	line-height: 1.5;
-    text-align: center;
+.extraPadding {
+    padding-top: 19% !important;
 }
 
 @media only screen and (max-width: 800px) {
@@ -87,5 +77,9 @@ const currency = '$';
     #title {
         font-size: 1.5rem;
     }
+
+    .extraPadding {
+    padding-top: 10% !important;
+}
 }
 </style>
