@@ -2,6 +2,14 @@
 import { rest } from "lodash";
 import restaurants from "../mockData/restaurants.json"
 const restaurant  = ref(restaurants.filter(x => x.id == 1)[0])
+
+function textBoxStyle(width) {
+  return {
+    'border-radius': `30px`,
+    'background-color': 'red',
+    'width': `${width}%`
+  };
+}
     
 </script>
 
@@ -9,69 +17,69 @@ const restaurant  = ref(restaurants.filter(x => x.id == 1)[0])
     <h1>
         Restaurant Overview
     </h1>
-    <div>
+    <div class="All">
         <div class="imageNameAddress">
             <img :src="restaurant.image_url" alt="" class=circle-image>
             <div class="nameAddress">
-                <el-input
-                    id="rName"
-                    class="editRestaurantField"
+                <input
+                    class="specialInput"
                     v-model=restaurant.name
-                    autosize
-                    type="textarea"
+                    style="font-size: 23px; width: 40%;"
+                    type="input"
                     placeholder="Please input"
                 />
-                <el-input
-                    id="rAddress"
-                    class="editRestaurantField"
+                <input
+                    class="specialInput"
                     v-model=restaurant.addresse
-                    autosize
-                    type="textarea"
+                    type="input"
+                    style="font-size: 18px; text-align: start;"
                     placeholder="Please input"
                 />
             </div>
         </div>
-        <br><br><br>
-        <div>
-            Description: <br>
-            <el-input
-                id="rDescription"
-                class="editRestaurantField"
+        <br><br>
+        <div class="otherDetails">
+            <div class="prefix">Description:</div>
+            <textarea
+                class="specialInput"
                 v-model=restaurant.description
                 autosize
-                type="textarea"
+                style="text-align: start; width: 40%; height: auto; overflow: hidden; max-width: 80vw; border-radius: 45px; padding-left: 1%"
                 placeholder="Please input"
             />
             <!-- Opening Hours: <br> -->
             <!-- <input type="text" id="restaurantDescriptionEdit" :value="restaurant."> <br> -->
-            Phone Number: <br>
-            <el-input
-                class="editRestaurantField"
-                id="rPhone"
-                v-model=restaurant.phone_number
-                autosize
-                type="textarea"
-                placeholder="Please input"
+            <div class="details">
+                <div class="prefix">Phone Number:</div>
+                <input
+                    class="specialInput"
+                    id="rPhone"
+                    v-model=restaurant.phone_number
+                    style="width: 9%; text-align: center"
+                    type="input"
+                    placeholder="Please input"
             />
-            Email: <br>
-            <el-input
-                class="editRestaurantField"
-                id="rEmail"
-                v-model=restaurant.email
-                autosize
-                type="textarea"
-                placeholder="Please input"
-            />
-            Category: <br>
-            <el-input
-                class="editRestaurantField"
-                id="rCategory"
+            </div>
+            <div class="details">
+                <div class="prefix">Email:</div>
+                <input
+                    class="specialInput"
+                    v-model=restaurant.email
+                    style="width: 15%;"
+                    type="input"
+                    placeholder="Please input"
+                />
+            </div>
+            <div class="details">
+            <div class="prefix">Category:</div>
+            <input
+                class="specialInput"
                 v-model=restaurant.category
-                autosize
-                type="textarea"
+                style="width: 10%;"
+                type="input"
                 placeholder="Please input"
             />
-
+            </div>
             <br><br>
             <div class="button-container">
                 <el-button color="#ED5087">Save changes</el-button>
@@ -80,7 +88,12 @@ const restaurant  = ref(restaurants.filter(x => x.id == 1)[0])
     </div>
 </template>
 
+
 <style scoped>
+    @import url('https://fonts.googleapis.com/css?family=Cairo');
+    .All{
+        font-family: "Cairo";
+    }
     h1 {
         position: relative;
     }
@@ -92,6 +105,18 @@ const restaurant  = ref(restaurants.filter(x => x.id == 1)[0])
         background-color: black;
         margin-top: 10px;
       }
+
+    .details {
+        display: flex;
+        align-items: center;
+        padding-top: 1%;
+        width: 100%;
+    }
+    .prefix {
+        margin-right: 10px;
+        font-size: 20px;
+        padding-left: 3px;
+    }
       
     .imageNameAddress {
         display: flex;
@@ -99,34 +124,21 @@ const restaurant  = ref(restaurants.filter(x => x.id == 1)[0])
     }
 
     .nameAddress{
+        display: flex;
+        flex-direction: column;
         padding: 25px;
+    }
+    .specialInput{
+        color: black;
+        padding: 4px;
+        background-color: #D9D9D9;
+        border-radius: 15px;
+        margin: 0.2vh;
+        height: 20px;
+        font-size: 20px;
+        border: none;
+        font-family: "Cairo";
         text-align: center;
-    }
-    .nameAddress {
-        display: block;
-    }
-    .editRestaurantField  >>> .el-textarea__inner{
-        border-radius: 30px;
-        background-color: #dddddd;
-    }
-
-    .editRestaurantField >>> #rName.el-textarea__inner{
-        max-width: 30%;
-    }
-    .editRestaurantField >>> #rAddress.el-textarea__inner{
-        max-width: 50%;
-    }
-    .editRestaurantField >>> #rDescription.el-textarea__inner{
-        max-width: 30%;
-    }
-    .editRestaurantField >>> #rPhone.el-textarea__inner{
-        max-width: 8%;
-    }
-    .editRestaurantField >>> #rEmail.el-textarea__inner{
-        max-width: 10%;
-    }
-    .editRestaurantField >>> #rCategory.el-textarea__inner{
-        max-width: 5%;
     }
     .button-container {
         display: flex;
@@ -134,8 +146,8 @@ const restaurant  = ref(restaurants.filter(x => x.id == 1)[0])
         padding: 50px;
     }
     .circle-image {
-        width: 90px; /* set the width to whatever you need */
-        height: 90px; /* set the height to whatever you need */
+        width: 130px; /* set the width to whatever you need */
+        height: 130px; /* set the height to whatever you need */
         border-radius: 50%; /* make the image circular */
     }
 </style>
