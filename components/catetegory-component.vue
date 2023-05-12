@@ -48,7 +48,7 @@ const description =
 }
 
 #title {
-	font-size: 2rem;
+	font-size: 1.7vw;
 	font-weight: bolder;
 	text-align: center;
 }
@@ -56,6 +56,7 @@ const description =
 #description {
 	line-height: 1.5;
 	text-align: center;
+	font-size: 0.8vw;
 }
 
 #buttons {
@@ -78,6 +79,10 @@ const description =
 
 	#title {
 		font-size: 1.5rem;
+	}
+
+	#description {
+		font-size: 4vw;
 	}
 
 	.extraPadding {

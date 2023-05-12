@@ -56,7 +56,7 @@ const currency = '$';
 }
 
 #title {
-	font-size: 2rem;
+	font-size: 1.7vw;
 	font-weight: bolder;
 	text-align: center;
 }
@@ -76,6 +76,7 @@ const currency = '$';
 .info {
 	line-height: 1.5;
 	text-align: center;
+	font-size: 0.8vw;
 }
 
 @media only screen and (max-width: 800px) {
@@ -83,6 +84,10 @@ const currency = '$';
 		border-radius: 9vw;
 		width: 65vw;
 		height: 42vh;
+	}
+
+	.info {
+		font-size: 4vw;
 	}
 
 	#title {
