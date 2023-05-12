@@ -93,7 +93,7 @@ const location = 'Market St, San Francisco, CA, USA';
 	font-size: 0.9vw;
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 500px) {
 	#card {
 		border-radius: 9vw;
 		width: 65vw;
@@ -111,7 +111,7 @@ const location = 'Market St, San Francisco, CA, USA';
 	}
 
 	#title {
-		font-size: 10vw;
+		font-size: 9vw;
 		top: 16vh;
 		left: 17vw;
 	}
