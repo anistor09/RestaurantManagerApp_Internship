@@ -8,19 +8,19 @@
             <div>
             <el-menu default-active="1" text-color="white" active-text-color="black">
                 <el-image :src="imageURL"/>
-                <el-menu-item @click="navigateTo('/')" index="1">
+                <el-menu-item index="1" @click="navigateTo('/')">
                     <span>Home</span>
                 </el-menu-item>
-                <el-menu-item @click="navigateTo('/')"  index="2">
+                <el-menu-item index="2" @click="navigateTo('/')">
                     <span>Menus</span>
                 </el-menu-item>
-                <el-menu-item @click="navigateTo('/')" index="3">
+                <el-menu-item index="3" @click="navigateTo('/')">
                     <span>Products</span>
                 </el-menu-item>
-                <el-menu-item @click="navigateTo('/')" index="4">
+                <el-menu-item index="4" @click="navigateTo('/')">
                     <span>Tables</span>
                 </el-menu-item>
-                <el-menu-item @click="navigateTo('/')" index="5">
+                <el-menu-item index="5" @click="navigateTo('/')">
                     <span>Help</span>
                 </el-menu-item>
                 <el-menu-item style="position: relative;top: 15%;" @click="navigateTo('/')" index="6">
