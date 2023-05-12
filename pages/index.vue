@@ -4,12 +4,12 @@ import CatetegoryComponent from '~/components/catetegory-component.vue';
 </script>
 
 <template>
-  <!-- <el-row>
+	<!-- <el-row>
     <el-col :span="5"><ItemComponent /></el-col>
     <el-col :span="5"><CatetegoryComponent /></el-col>
   </el-row> -->
-  <ItemComponent />
-  <CatetegoryComponent />
+	<ItemComponent />
+	<CatetegoryComponent />
 </template>
 
 <style scoped></style>

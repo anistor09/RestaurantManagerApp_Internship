@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 // Hardcoded information, will be extracted from the restaurant global object later on
 const itemName = 'Fries';
-const imageSource = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9orIJR7zMICOYAZ3bZ_Y9IGKJmDrD4Zk9Dw&usqp=CAU';
+const imageSource =
+	'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9orIJR7zMICOYAZ3bZ_Y9IGKJmDrD4Zk9Dw&usqp=CAU';
 const category = 'Side Dish';
 const subcategory = 'None';
 const description = 'Crunchy and delicious, our fries are the perfect addition to any meal.';
@@ -22,16 +23,16 @@ const currency = '$';
 
 			<!-- The information of the item, which gives a general overview -->
 			<div class="info">
-				<div><b>Category:</b> {{category}}</div>
+				<div><b>Category:</b> {{ category }}</div>
 				<div><b>Subcategory:</b> {{ subcategory }}</div>
 			</div>
-            <div id="description" class="info"><b>Description:</b> {{ description }}</div>
-            <div class="info"><b>Price:</b> {{price}} {{ currency }}</div>
+			<div id="description" class="info"><b>Description:</b> {{ description }}</div>
+			<div class="info"><b>Price:</b> {{ price }} {{ currency }}</div>
 
-            <!-- The Edit and Delete buttons of the card -->
-            <div id="buttons">
-                <el-button color="#ED5087" plain round> Edit </el-button>
-                <el-button color="#ED5087" plain round> Delete</el-button>
+			<!-- The Edit and Delete buttons of the card -->
+			<div id="buttons">
+				<el-button color="#ED5087" plain round> Edit </el-button>
+				<el-button color="#ED5087" plain round> Delete</el-button>
 			</div>
 		</div>
 	</el-card>
@@ -43,8 +44,8 @@ const currency = '$';
 
 #card {
 	border-radius: 3vw;
-    width: 15vw;
-    height: 42vh;
+	width: 15vw;
+	height: 42vh;
 	font-family: 'Cairo';
 }
 
@@ -57,35 +58,35 @@ const currency = '$';
 #title {
 	font-size: 2rem;
 	font-weight: bolder;
-    text-align: center;
+	text-align: center;
 }
 
 #description {
-    padding: 5% 10% 3% 10%;
+	padding: 5% 10% 3% 10%;
 }
 
 #buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 0.5vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 0.5vh;
 	font-family: 'Cairo';
 }
 
 .info {
 	line-height: 1.5;
-    text-align: center;
+	text-align: center;
 }
 
 @media only screen and (max-width: 800px) {
-    #card {
-        border-radius: 9vw;
-        width: 65vw;
-        height: 42vh; 
-    }
+	#card {
+		border-radius: 9vw;
+		width: 65vw;
+		height: 42vh;
+	}
 
-    #title {
-        font-size: 1.5rem;
-    }
+	#title {
+		font-size: 1.5rem;
+	}
 }
 </style>

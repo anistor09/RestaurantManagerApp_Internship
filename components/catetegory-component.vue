@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 // Hardcoded information, will be extracted from the restaurant global object later on
 const itemName = 'Appetizers';
-const imageSource = 'https://images-gmi-pmc.edge-generalmills.com/fca4b25f-5859-4048-974c-4ef02a0014ee.jpg';
-const description = 'Our carefully crafted selection of small plates will awaken your taste buds and leave you yearning for more.';
+const imageSource =
+	'https://images-gmi-pmc.edge-generalmills.com/fca4b25f-5859-4048-974c-4ef02a0014ee.jpg';
+const description =
+	'Our carefully crafted selection of small plates will awaken your taste buds and leave you yearning for more.';
 </script>
 
 <!-- Item card component containing basic information, including image, description and edit/delete buttons-->
@@ -17,12 +19,12 @@ const description = 'Our carefully crafted selection of small plates will awaken
 			<div id="title">{{ itemName }}</div>
 
 			<!-- The description of the category, which gives a general overview -->
-            <div id="description"><b>Description:</b> {{ description }}</div>
+			<div id="description"><b>Description:</b> {{ description }}</div>
 
-            <!-- The Edit and Delete buttons of the card -->
-            <div id="buttons" class="extraPadding">
-                <el-button color="#ED5087" plain round> Edit </el-button>
-                <el-button color="#ED5087" plain round> Delete</el-button>
+			<!-- The Edit and Delete buttons of the card -->
+			<div id="buttons" class="extraPadding">
+				<el-button color="#ED5087" plain round> Edit </el-button>
+				<el-button color="#ED5087" plain round> Delete</el-button>
 			</div>
 		</div>
 	</el-card>
@@ -34,8 +36,8 @@ const description = 'Our carefully crafted selection of small plates will awaken
 
 #card {
 	border-radius: 3vw;
-    width: 15vw;
-    height: 42vh;
+	width: 15vw;
+	height: 42vh;
 	font-family: 'Cairo';
 }
 
@@ -48,38 +50,38 @@ const description = 'Our carefully crafted selection of small plates will awaken
 #title {
 	font-size: 2rem;
 	font-weight: bolder;
-    text-align: center;
+	text-align: center;
 }
 
 #description {
-    line-height: 1.5;
-    text-align: center;
+	line-height: 1.5;
+	text-align: center;
 }
 
 #buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	font-family: 'Cairo';
 }
 
 .extraPadding {
-    padding-top: 19% !important;
+	padding-top: 19% !important;
 }
 
 @media only screen and (max-width: 800px) {
-    #card {
-        border-radius: 9vw;
-        width: 65vw;
-        height: 42vh; 
-    }
+	#card {
+		border-radius: 9vw;
+		width: 65vw;
+		height: 42vh;
+	}
 
-    #title {
-        font-size: 1.5rem;
-    }
+	#title {
+		font-size: 1.5rem;
+	}
 
-    .extraPadding {
-    padding-top: 10% !important;
-}
+	.extraPadding {
+		padding-top: 10% !important;
+	}
 }
 </style>
