@@ -23,7 +23,7 @@
                 <el-menu-item index="5" @click="navigateTo('/')">
                     <span>Help</span>
                 </el-menu-item>
-                <el-menu-item style="position: relative;top: 15%;" @click="navigateTo('/')" index="6">
+                <el-menu-item style="position: relative;top: 15%;left:0%" index="6" @click="navigateTo('/')" >
                     <el-image class="icon" src="https://cdn.onlinewebfonts.com/svg/img_574534.png"/>
                     <span id="setting">Settings</span>
                 </el-menu-item>
@@ -39,7 +39,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Solway&display=swap');
 .el-menu-item{
     display: flex;
-    justify-content: center;
+    left: 17%;
     font-size: xx-large;
     align-items: center;
     top: 10%;
