@@ -72,7 +72,7 @@ const location = 'Market St, San Francisco, CA, USA';
 	left: 7vw;
 	margin-left: 0.5vw;
 	margin-top: -0.3vh;
-	font-size: 1.8rem;
+	font-size: 1.6vw;
 	font-weight: bolder;
 }
 
@@ -81,6 +81,7 @@ const location = 'Market St, San Francisco, CA, USA';
 	left: 6vw;
 	margin-top: 4vh;
 	margin-left: 1.2vw;
+	font-size: 0.9vw;
 }
 
 #info {
@@ -89,5 +90,50 @@ const location = 'Market St, San Francisco, CA, USA';
 	left: 35vw;
 	line-height: 1.5;
     text-align: center;
+	font-size: 0.9vw;
 }
+
+@media only screen and (max-width: 800px) {
+	#card {
+		border-radius: 9vw;
+		width: 65vw;
+		height: 37vh;
+	}
+
+	#logo {
+	position: absolute;
+	left: 17vw;
+	top: 4vh;
+	width: 30vw;
+	height: 30vw;
+	border-radius: 100%;
+	box-shadow: 0.2vh 0.1vw 0.7vh 0.2vw rgba(0, 0, 0, 0.07) !important;
+	}
+
+	#title {
+		font-size: 10vw;
+		top: 16vh;
+		left: 17vw;
+	}
+
+	#location {
+		left: 3vw;
+		top: 18vh;
+		font-size: 4vw;
+	}
+
+	#info {
+		position: absolute;
+		top: 27vh;
+		left: 8vw;
+		line-height: 1.5;
+		text-align: center;
+		font-size: 3.5vw;
+	}
+
+	.extraPadding {
+		padding-top: 10% !important;
+	}
+}
+
 </style>
