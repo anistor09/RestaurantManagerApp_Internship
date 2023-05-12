@@ -149,6 +149,7 @@ function textBoxStyle(width) {
         width: 130px; /* set the width to whatever you need */
         height: 130px; /* set the height to whatever you need */
         border-radius: 50%; /* make the image circular */
+        box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.8);
     }
 </style>
 
