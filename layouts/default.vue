@@ -78,9 +78,6 @@
     font-family: 'Solway';
     font-size: xx-large;
     padding-left: 5%;
-}   
-.div{
-    display: flex;
 }
 </style>
   
