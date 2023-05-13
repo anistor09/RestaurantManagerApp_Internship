@@ -30,6 +30,10 @@
 @import url('https://fonts.googleapis.com/css?family=Tourney');
 @import url('https://fonts.googleapis.com/css?family=Cairo');
 
+html, body {
+    overflow: hidden;
+}
+
 /* The images are sent in the back using z-index since they overlapped with the button */
 #imgUp {
 	position: fixed;
