@@ -1,5 +1,4 @@
 ### Description
-Merge request from %{source_branch} to %{target_branch}.
 *add concrete description of what was implemented*
 
 ### Definition of done
