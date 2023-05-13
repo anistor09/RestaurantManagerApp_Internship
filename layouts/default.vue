@@ -4,7 +4,7 @@
 
 <template>
     <el-container style="min-height: 100vh;">
-        <el-aside style="overflow: unset;">
+        <el-aside style="overflow: hidden;">
             <el-menu default-active="1" text-color="white" active-text-color="black">
                 <el-image :src="imageURL"/>
                 <el-menu-item index="1" @click="navigateTo('/')">
