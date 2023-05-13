@@ -3,9 +3,8 @@
 </script>
 
 <template>
-    <el-container>
-        <el-aside>
-            <div>
+    <el-container style="min-height: 100vh;">
+        <el-aside style="overflow: unset;">
             <el-menu default-active="1" text-color="white" active-text-color="black">
                 <el-image :src="imageURL"/>
                 <el-menu-item index="1" @click="navigateTo('/')">
@@ -28,7 +27,6 @@
                     <span id="setting">Settings</span>
                 </el-menu-item>
             </el-menu>
-            </div>
         </el-aside>
         <slot></slot>
     </el-container>
@@ -60,7 +58,7 @@
     padding-top: 10%;
     background: rgb(255,97,121);
     background: linear-gradient(180deg, rgba(255,97,121,1) 0%, rgba(255,58,113,1) 100%);
-    height: 100vh;
+    min-height: 100vh;
 }
 .el-image{
     display: grid;
