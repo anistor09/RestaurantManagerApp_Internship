@@ -20,12 +20,6 @@ const description =
 
 			<!-- The description of the category, which gives a general overview -->
 			<div id="description"><b>Description:</b> {{ description }}</div>
-
-			<!-- The Edit and Delete buttons of the card -->
-			<div id="buttons" class="extraPadding">
-				<el-button color="#ED5087" plain round> Edit </el-button>
-				<el-button color="#ED5087" plain round> Delete</el-button>
-			</div>
 		</div>
 	</el-card>
 </template>
@@ -37,14 +31,14 @@ const description =
 #card {
 	border-radius: 3vw;
 	width: 15vw;
-	height: 42vh;
+	height: 20vw;
 	font-family: 'Cairo';
 }
 
 #image {
 	display: block;
 	width: 100%;
-	height: 12vh;
+	height: 6vw;
 }
 
 #title {
@@ -57,6 +51,7 @@ const description =
 	line-height: 1.5;
 	text-align: center;
 	font-size: 0.8vw;
+	padding: 5% 10% 3% 10%;
 }
 
 #buttons {
@@ -70,11 +65,15 @@ const description =
 	padding-top: 19% !important;
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 500px) {
 	#card {
 		border-radius: 9vw;
 		width: 65vw;
-		height: 42vh;
+		height: 78vw;
+	}
+
+	#image {
+		height: 25vw;
 	}
 
 	#title {

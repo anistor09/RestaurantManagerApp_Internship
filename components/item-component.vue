@@ -28,31 +28,25 @@ const currency = '$';
 			</div>
 			<div id="description" class="info"><b>Description:</b> {{ description }}</div>
 			<div class="info"><b>Price:</b> {{ price }} {{ currency }}</div>
-
-			<!-- The Edit and Delete buttons of the card -->
-			<div id="buttons">
-				<el-button color="#ED5087" plain round> Edit </el-button>
-				<el-button color="#ED5087" plain round> Delete</el-button>
-			</div>
 		</div>
 	</el-card>
 </template>
 
-<style>
+<style scoped>
 /* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
 @import url('https://fonts.googleapis.com/css?family=Cairo');
 
 #card {
 	border-radius: 3vw;
 	width: 15vw;
-	height: 42vh;
+	height: 20vw;
 	font-family: 'Cairo';
 }
 
 #image {
 	display: block;
 	width: 100%;
-	height: 12vh;
+	height: 6vw;
 }
 
 #title {
@@ -79,11 +73,15 @@ const currency = '$';
 	font-size: 0.8vw;
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 500px) {
 	#card {
 		border-radius: 9vw;
 		width: 65vw;
-		height: 42vh;
+		height: 78vw;
+	}
+
+	#image {
+		height: 25vw;
 	}
 
 	.info {
