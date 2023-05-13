@@ -28,7 +28,8 @@
                 </el-menu-item>
             </el-menu>
         </el-aside>
-        <slot></slot>
+        <el-main style="padding: 0;"><slot></slot></el-main>
+        
     </el-container>
 </template>
   
@@ -53,7 +54,6 @@
     color: white;
     text-shadow: 3px 2px black;
 }
-
 .el-menu{
     padding-top: 10%;
     background: rgb(255,97,121);
@@ -79,5 +79,8 @@
     font-size: xx-large;
     padding-left: 5%;
 }   
+.div{
+    display: flex;
+}
 </style>
   
