@@ -36,9 +36,11 @@
   
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Solway&display=swap');
+span{
+    padding-left: 20%;
+}
 .el-menu-item{
     display: flex;
-    left: 17%;
     font-size: xx-large;
     align-items: center;
     top: 10vh;
@@ -67,6 +69,7 @@
     height: auto;
 }
 .icon{
+    box-shadow: 0.1vh 0.1vw 1svh 0.2vw rgba(0, 0, 0, 0.5) !important;
     position: relative;
     border-radius: 50%;
     width: 50px;
