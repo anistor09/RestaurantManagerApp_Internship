@@ -17,5 +17,5 @@
     "sourceType": "module"
   },
   "plugins": ["vue", "@typescript-eslint", "prettier"],
-  "rules": {}
+  "rules": {"vue/no-multiple-template-root": "off" }
 }
