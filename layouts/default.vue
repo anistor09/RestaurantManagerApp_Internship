@@ -35,7 +35,7 @@
   
   
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Solway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans');
 span{
     padding-left: 20%;
 }
@@ -46,7 +46,7 @@ span{
     top: 10vh;
     padding-top: 20%;
     padding-bottom: 20%;
-    font-family: 'Solway';
+    font-family: 'Open Sans';
 }
 .el-menu-item:hover{
     background-color: transparent;
@@ -78,7 +78,7 @@ span{
 }
 #setting{
     color: white;
-    font-family: 'Solway';
+    font-family: 'Open Sans';
     font-size: xx-large;
     padding-left: 5%;
 }
