@@ -4,25 +4,26 @@
 ### Chair: Alex
 ### Notetaker: Vian
 ### Main focus: Design propotype and sprint planning
+### Duration: 30 min
 
-## **Opening**
+## **Opening** [2 min]
 - Check in, how is everyone doing
 - Understand what documents are expected
 
 ## **Main topics**
-## 1. Design prototype
+## 1. Design prototype [13 min]
 - Does the TA like the prototype that we have made?
 - Are there any suggestion for this design?
-## 2. Sprint planning
+## 2. Sprint planning [2 min]
 - Is it ok to have a mini sprint until this Thursday so we can discuss the sprint with the client?( suggested by the coach)
-## 3. Previous work
+## 3. Previous work [7 min]
 - Does the TA suggest any improvements for pipelines/issues(previous work)?
-## 4. Planning
+## 4. Planning [4 min]
 - What time would the TA prefer for the midterm presentation?
 - Is it possible to receive available timeslots for endterm presentation?
 
 
-## **Closure and Summary**
+## **Closure and Summary** [2 min]
 - Go through the established arrangements one more time
 - Decide on scheduling next meeting
 - Is there anything else we should be aware of?
