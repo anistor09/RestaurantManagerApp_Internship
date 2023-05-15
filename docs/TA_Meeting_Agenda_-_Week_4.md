@@ -23,6 +23,8 @@
 ## 4. Planning
 - Decide on next meeting
 - Are there any news the final presentation timeslot?
+## 5. Client gitlab access
+- Is there any way for the clients to get higher access to the gitlab in order to see the code itself?
 
 ## **Closure and Summary**
 - Go through the established arrangements one more time
