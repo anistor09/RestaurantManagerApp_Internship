@@ -24,7 +24,7 @@ const description =
 	</el-card>
 </template>
 
-<style>
+<style scoped>
 /* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
 @import url('https://fonts.googleapis.com/css?family=Cairo');
 

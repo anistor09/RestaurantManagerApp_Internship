@@ -34,7 +34,7 @@
 </template>
   
   
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans');
 span{
     padding-left: 20%;
