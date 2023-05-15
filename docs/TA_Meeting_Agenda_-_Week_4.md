@@ -14,9 +14,17 @@
 - Everyone should talk about what they have done during this sprint
 ## 2. Next assignment due
 - Do we need 2 ehtics or can we only include one?
+- Do we need to motivate for the other ehtics why them do not apply for our project?
 - What should we write for the Design chapter?
-## 3. Planning
+## 3. Feedback for our first spirnt
+- Were the issues assinged for the first sprint enough?
+- Does the TA belive that we are on track?
+- Does the TA suggest any improvements for following sprints?
+## 4. Planning
 - Decide on next meeting
+- Are there any news the final presentation timeslot?
+## 5. Client gitlab access
+- Is there any way for the clients to get higher access to the gitlab in order to see the code itself?
 
 ## **Closure and Summary**
 - Go through the established arrangements one more time
