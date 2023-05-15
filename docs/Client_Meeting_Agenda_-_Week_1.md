@@ -4,34 +4,35 @@
 ### Chair: Elena
 ### Notetaker: Alex
 ### Main focus: Project plan
+### Duration: 60 min
 
-## **Opening**
+## **Opening** [2 min]
 - Check in, how is everyone doing
 - The main focus of the meeting for us: understand the problem and collect some requirements
 
 ## **Main topics**
-## 1. Problem analysis
+## 1. Problem analysis [15 min]
 *Understand the actual task*
 - Who are the stakeholders? To whom is the project directed to: restaurant staff, customers, etc.
 - Do we have any potential users that we can interview/send a questionnarie to in order to understand their needs better and know what to focus on?
 - Do we have any user experiences so far that we can guide ourselves with?
 - Do we have access to the codebase so that we can investigate it and match the UI design?
 
-## 2. Requirements
+## 2. Requirements [20 min]
 *Collect some basic requirements, discuss potential advanced features*
 - How is it feasible for you to collect the requirements?
 - Should we arrange another meeting to discuss this in more detail or can we do this now?
 
-## 3. Risk analysis
+## 3. Risk analysis [8 min]
 *Check how much support we can expect*
 - How should be the progress be delivered?
 - Are you available every week during this project?
 
-## 4. Frameworks
+## 4. Frameworks [13 min]
 - Do you have any recommendations on where to start learning Vue.js: a course, videos, etc.
 - Do we use any CSS libraries for making the UI design more coherent?
 
-## **Closure and Summary**
+## **Closure and Summary** [2 min]
 - Go through the established arrangements one more time
 - Decide on scheduling next meeting
 

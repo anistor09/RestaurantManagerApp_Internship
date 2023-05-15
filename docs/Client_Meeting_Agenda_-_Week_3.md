@@ -1,21 +1,23 @@
 # Meeting Agenda - Group 6C
 
-### Chair: Elena
+### Chair: Alex
 ### Notetaker: Vian
 ### Week: 3
+### Main goal: Figma prototype
+### Duration: 60 mins
 
-## **Opening**
+## **Opening** (2 min)
 - Check in, how is everyone doing
 - Discuss the plan for the next week
 
 ## **Main topics**
-## 1. Protoype Figma
+## 1. Protoype Figma (50 min)
 - How is the protoype that we designed? What changes need to be made?
 
-## 2. Update Requirements
+## 2. Update Requirements (6 min)
 - We should move around the requirements to have an qeual distribution
 
-## **Closure and Summary**
+## **Closure and Summary** (2 min)
 - Decide on scheduling next meeting
 
 # Meeting Notes
