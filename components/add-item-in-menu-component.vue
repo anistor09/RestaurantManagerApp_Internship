@@ -67,11 +67,12 @@ const changeItem = () => {
       </el-select>
     </div>
 
-    <div v-if="enableSubcategory" class="div">
+    <div class="div">
       <h1>SubCategory:</h1>
 
       <el-select
         v-model="subcategoryName"
+        :disabled="!enableSubcategory"
         placeholder="Select"
         size="large"
         @change="changeSubCategory"
@@ -85,10 +86,10 @@ const changeItem = () => {
       </el-select>
     </div>
 
-    <div v-if="enableItems" class="div">
+    <div class="div">
       <h1>Item:</h1>
 
-      <el-select v-model="itemName" placeholder="Select" size="large" @change="changeItem">
+      <el-select v-model="itemName" placeholder="Select" size="large" :disabled="!enableItems" @change="changeItem">
         <el-option
           v-for="item in filteredItems"
           :key="item.id"
