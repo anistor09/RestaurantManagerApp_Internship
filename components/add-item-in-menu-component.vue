@@ -4,25 +4,44 @@ import restaurants from '../mockData/restaurants.json';
 const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 
 const categories = ref(restaurant.value.categorySet);
+
+// the category name that will be displayed on the bar
 const categoryName = ref('');
+
+// this represents the category object itself that is selected by the user
+// TODO: add interfaces to prevent the case when there are no filteredSubcategories.
 const selectedCategory = ref(categories.value[0]);
 
+// the category name that will be displayed on the bar
 const subcategoryName = ref('');
+
+// this represents the array of subcategories
+// It is dynamically changed in order to display only the subcategories that are from the selected category
 const filteredSubcategories = ref(restaurant.value.subCategorySet);
+
+// this represents the subcategory object itself that is selected by the user
+// TODO: add interfaces to prevent the case when there are no filteredSubcategories.
 const selectedSubcategory = ref(filteredSubcategories.value[0]);
 
 const restaurantItems = ref(restaurant.value.itemSet);
+
+// the items that have the category and subcategory selected
 const filteredItems = ref(restaurant.value.itemSet);
+
+// the name of the item which is displayed on the bar
 const itemName = ref('');
+
+// the object itself of the selected item (what the popup will return)
+// TODO: add interfaces to prevent the case when there are no filteredSubcategories.
 const selectedItem = ref(restaurantItems.value[0]);
 
 const enableSubcategory = ref(false);
 const enableItems = ref(false);
 
-const www = () => {
-	console.log(categories.value[0]);
-};
-
+/*
+  This method applies when the user choose the category. It enables the subcategories and make the filtering. 
+  Moreover, it disables the items because the user didn't choose the subcategory. 
+*/
 const changeCategory = () => {
 	enableSubcategory.value = true;
 	subcategoryName.value = '';
@@ -32,6 +51,9 @@ const changeCategory = () => {
 	filteredSubcategories.value = selectedCategory.value.subCategorySet;
 };
 
+/*
+  This method applies when the user choose the subcategory. It enables the items and make the filtering.
+*/
 const changeSubCategory = () => {
 	enableItems.value = true;
 	itemName.value = '';
@@ -45,6 +67,9 @@ const changeSubCategory = () => {
 	);
 };
 
+/*
+  This method applies when the user choose the item. It updated the object.
+*/
 const changeItem = () => {
 	selectedItem.value = filteredItems.value.filter((x) => x.name === itemName.value)[0];
 };
@@ -57,8 +82,8 @@ const changeItem = () => {
 				<h1 class="title">Category:</h1>
 
 				<el-select
-					class="specialSelect"
 					v-model="categoryName"
+					class="specialSelect"
 					placeholder="Select category"
 					size="large"
 					@change="changeCategory"
@@ -76,8 +101,8 @@ const changeItem = () => {
 				<h1 class="title">SubCategory:</h1>
 
 				<el-select
-					class="specialSelect"
 					v-model="subcategoryName"
+					class="specialSelect"
 					:disabled="!enableSubcategory"
 					placeholder="Select subcategory"
 					size="large"
@@ -96,8 +121,8 @@ const changeItem = () => {
 				<h1 class="title">Item:</h1>
 
 				<el-select
-					class="specialSelect"
 					v-model="itemName"
+					class="specialSelect"
 					placeholder="Select item"
 					size="large"
 					:disabled="!enableItems"
@@ -136,9 +161,9 @@ const changeItem = () => {
 	align-items: center;
 	flex-direction: column;
 	justify-content: space-around;
-  border: 10px solid #ED5087;
-  border-radius: 100px;
-  padding: 20px;
+	border: 10px solid #ed5087;
+	border-radius: 100px;
+	padding: 20px;
 }
 #buttonContainer {
 	display: flex;
@@ -147,13 +172,13 @@ const changeItem = () => {
 	align-items: center;
 }
 
-.specialSelect >>> .el-input__wrapper{
-  border-radius: 25px;
-  background-color: #D9D9D9;
-  padding-left: 4%;
-  padding-right: 4%;
-  width: 100%; 
-  height: 100%;
+.specialSelect >>> .el-input__wrapper {
+	border-radius: 25px;
+	background-color: #d9d9d9;
+	padding-left: 4%;
+	padding-right: 4%;
+	width: 100%;
+	height: 100%;
 }
 .specialSelect >>> .el-input__inner {
 	color: black;
@@ -169,16 +194,16 @@ const changeItem = () => {
 	height: 100%;
 }
 .div {
-  width: 60%;
+	width: 60%;
 }
 .title {
-  color: #ED5087;
+	color: #ed5087;
 }
 .specialSelect >>> .el-input {
 	width: 100%;
 	height: 100%;
 }
-.el-button+.el-button{
-  margin-left: 0;
+.el-button + .el-button {
+	margin-left: 0;
 }
 </style>
