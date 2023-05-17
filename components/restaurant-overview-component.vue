@@ -10,7 +10,7 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 			<!-- Container which contains the image, the name of the restaurant and it's address-->
 			<div id="imageNameAddress">
 				<img :src="restaurant.image_url" alt="" id="circleImage" />
-			    <!-- Container which contains the name of the restaurant and it's address-->
+				<!-- Container which contains the name of the restaurant and it's address-->
 				<div id="nameAddress">
 					<input
 						v-model="restaurant.name"
@@ -29,10 +29,10 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 				</div>
 			</div>
 			<br /><br />
-            <!-- Container which the other information(description, phone number, email and category)-->
+			<!-- Container which the other information(description, phone number, email and category)-->
 			<div class="otherDetails">
 				<div class="prefix">Description:</div>
-                <!-- The textarea where the restaurant description can be changed by the restaurant owner-->
+				<!-- The textarea where the restaurant description can be changed by the restaurant owner-->
 				<textarea
 					v-model="restaurant.description"
 					class="specialInput"
@@ -43,18 +43,18 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 						height: auto;
 						overflow: hidden;
 						max-width: 80vw;
-                        min-width: 300px;
+						min-width: 300px;
 						border-radius: 45px;
 						padding-left: 1%;
 					"
 					placeholder="Please input"
 				/>
-                <!-- TODO -->
+				<!-- TODO -->
 				<!-- Opening Hours: <br> -->
 				<!-- <input type="text" id="restaurantDescriptionEdit" :value="restaurant."> <br> -->
 				<div class="details">
 					<div class="prefix">Phone Number:</div>
-                    <!-- The input where the restaurant phone number can be changed by the restaurant owner-->
+					<!-- The input where the restaurant phone number can be changed by the restaurant owner-->
 					<input
 						v-model="restaurant.phone_number"
 						class="specialInput"
@@ -65,18 +65,18 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 				</div>
 				<div class="details">
 					<div class="prefix">Email:</div>
-                    <!-- The input where the restaurant email can be changed by the restaurant owner-->
+					<!-- The input where the restaurant email can be changed by the restaurant owner-->
 					<input
 						v-model="restaurant.email"
 						class="specialInput"
-						style="width: 15%; min-width: 200px;"
+						style="width: 15%; min-width: 200px"
 						type="input"
 						placeholder="Please input"
 					/>
 				</div>
 				<div class="details">
 					<div class="prefix">Category:</div>
-                    <!-- The input where the restaurant category can be changed by the restaurant owner-->
+					<!-- The input where the restaurant category can be changed by the restaurant owner-->
 					<input
 						v-model="restaurant.category"
 						class="specialInput"
@@ -142,7 +142,7 @@ h1::after {
 .specialInput {
 	color: black;
 	padding: 4px;
-	background-color: #DFDFDF;
+	background-color: #dfdfdf;
 	border-radius: 15px;
 	margin: 0.2vh;
 	height: 20px;
