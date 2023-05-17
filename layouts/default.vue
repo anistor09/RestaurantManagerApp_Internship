@@ -1,36 +1,45 @@
 <script setup lang="ts">
+    import { useRestaurantStore } from '~/store/restaurant'
     const imageURL = "/_nuxt/assets/images/Logo.png";
+    
+    const restaurantStore = useRestaurantStore()
+    await restaurantStore.getRestaurant()
+
+    const loading = computed(() => restaurantStore.loadingGetter)
 </script>
 
 <template>
-    <el-container style="min-height: 100vh;">
-        <el-aside style="overflow: hidden;">
-            <el-menu default-active="1" text-color="white" active-text-color="black">
-                <el-image :src="imageURL"/>
-                <el-menu-item index="1" @click="navigateTo('/')">
-                    <span>Home</span>
-                </el-menu-item>
-                <el-menu-item index="2" @click="navigateTo('/')">
-                    <span>Menus</span>
-                </el-menu-item>
-                <el-menu-item index="3" @click="navigateTo('/')">
-                    <span>Products</span>
-                </el-menu-item>
-                <el-menu-item index="4" @click="navigateTo('/')">
-                    <span>Tables</span>
-                </el-menu-item>
-                <el-menu-item index="5" @click="navigateTo('/')">
-                    <span>Help</span>
-                </el-menu-item>
-                <el-menu-item style="top: 15vh;left:0%" index="6" @click="navigateTo('/')" >
-                    <el-image class="icon" src="https://cdn.onlinewebfonts.com/svg/img_574534.png"/>
-                    <span id="setting">Settings</span>
-                </el-menu-item>
-            </el-menu>
-        </el-aside>
-        <el-main style="padding: 0;"><slot></slot></el-main>
-        
-    </el-container>
+    <div v-if="loading" v-loading.fullscreen.lock="true"></div>
+    <div v-else>
+        <el-container style="min-height: 100vh;">
+            <el-aside style="overflow: hidden;">
+                <el-menu default-active="1" text-color="white" active-text-color="black">
+                    <el-image :src="imageURL"/>
+                    <el-menu-item index="1" @click="navigateTo('/')">
+                        <span>Home</span>
+                    </el-menu-item>
+                    <el-menu-item index="2" @click="navigateTo('/')">
+                        <span>Menus</span>
+                    </el-menu-item>
+                    <el-menu-item index="3" @click="navigateTo('/')">
+                        <span>Products</span>
+                    </el-menu-item>
+                    <el-menu-item index="4" @click="navigateTo('/tables')">
+                        <span>Tables</span>
+                    </el-menu-item>
+                    <el-menu-item index="5" @click="navigateTo('/')">
+                        <span>Help</span>
+                    </el-menu-item>
+                    <el-menu-item style="top: 15vh;left:0%" index="6" @click="navigateTo('/settings')" >
+                        <el-image class="icon" src="https://cdn.onlinewebfonts.com/svg/img_574534.png"/>
+                        <span id="setting">Settings</span>
+                    </el-menu-item>
+                </el-menu>
+            </el-aside>
+            <el-main style="padding: 0;"><slot></slot></el-main>
+            
+        </el-container>
+    </div>
 </template>
   
   
@@ -57,6 +66,7 @@ span{
     text-shadow: 3px 2px black;
 }
 .el-menu{
+    border-right: unset;
     padding-top: 10%;
     background: rgb(255,97,121);
     background: linear-gradient(180deg, rgba(255,97,121,1) 0%, rgba(255,58,113,1) 100%);
