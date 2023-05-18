@@ -4,22 +4,23 @@
 ### Chair: Vian
 ### Notetaker: Radu
 ### Main focus: Project plan
+### Duration: 30 min
 
-## **Opening**
+## **Opening** [2 min]
 - Check in, how is everyone doing
 
 ## **Main topics**
 
-## 1. Code of Conduct
+## 1. Code of Conduct [8 min]
 - We finished it, could you take a look at it before we send it?
 
-## 2. Project plan
+## 2. Project plan [13 min]
 - Any more feedback for the updated version of the project plan?
 
-## 3. Future documents
+## 3. Future documents [5 min]
 - What's next in terms of deliverables?
 
-## **Closure and Summary**
+## **Closure and Summary** [2 min]
 - Decide on scheduling next meeting
 - The next meeting will happen on Monday 08.05.2023 at 15:00
 

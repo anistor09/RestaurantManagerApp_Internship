@@ -5,6 +5,7 @@ import { Choice } from './Choice';
 import { Option } from './Option';
 import { Carte } from './Carte';
 import { Hours } from './Hours';
+import { Table } from './Table';
 
 export interface Restaurant {
     id: number;
@@ -29,4 +30,5 @@ export interface Restaurant {
     optionSet: Option[];
     carteSet: Carte[];
     hoursSet: Hours[];
+    tableRestaurantSet: Table[];
 }

@@ -1,4 +1,8 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+	definePageMeta({
+  		layout: "empty",
+	});
+</script>
 
 <!-- The login page. Can be accessed at: http://localhost:3000/login -->
 <template>
@@ -26,7 +30,7 @@
 	</div>
 </template>
 
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css?family=Tourney');
 @import url('https://fonts.googleapis.com/css?family=Cairo');
 

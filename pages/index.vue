@@ -1,9 +1,14 @@
 <script lang="ts" setup>
-import AddItemInMenuComponent from '~/components/add-item-in-menu-component.vue';
 </script>
 
 <template>
-	<AddItemInMenuComponent/>
+  <div>
+    <RestaurantComponent/>
+  <div><el-row>
+      <el-col :span="5"><ItemComponent /></el-col>
+      <el-col :span="5"><CategoryComponent /></el-col>
+    </el-row></div>
+  </div>
 </template>
 
 <style scoped></style>
