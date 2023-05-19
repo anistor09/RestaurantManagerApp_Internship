@@ -3,7 +3,9 @@
 - Our aim was to create the components needed for our application, as well as the login page
 - Most of the components for the must have requirements are ready, EXCEPT for:
  > add/edit cateogry/subcategory page
+
  > side dishes, options and choices in the edit item page
+ 
  > add menu page (pop-up)
 
  ### Next sprint
