@@ -11,4 +11,9 @@
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.right{
+  width: 100vw;
+  height: 100vh;
+}
+</style>
