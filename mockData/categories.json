@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "name": "Steaks",
+        "restaurant_id": 1,
+        "description": "Enjoy our carrefully steaks prepared on our last-technology barbeque",
+        "presentation_order": 1.5,
+        "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/70/93/be/mandarin-bar.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Drinks",
+        "restaurant_id": 1,
+        "description": "Try our drinks to refresh yourself",
+        "presentation_order": 2.0,
+        "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/70/93/be/mandarin-bar.jpg"
+    }
+]

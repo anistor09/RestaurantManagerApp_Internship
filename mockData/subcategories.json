@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "name": "Pork",
+        "description": "Pork barbeque steak",
+        "restaurant_id": 1,
+        "category_id": 1,
+        "presentation_order": 1.5,
+        "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/70/93/be/mandarin-bar.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Beef",
+        "restaurant_id": 1,
+        "category_id": 1,
+        "description": "Beef beef beef beef beef",
+        "presentation_order": 2.0,
+        "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/70/93/be/mandarin-bar.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Sodas",
+        "description": "Cola fanta sprite nestetea",
+        "restaurant_id": 1,
+        "category_id": 2,
+        "presentation_order": 1.5,
+        "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/70/93/be/mandarin-bar.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Wines",
+        "restaurant_id": 1,
+        "category_id": 2,
+        "description": "Red/White/Roze Wine",
+        "presentation_order": 2.0,
+        "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/70/93/be/mandarin-bar.jpg"
+    }
+]
