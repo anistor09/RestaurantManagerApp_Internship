@@ -6,6 +6,7 @@ export interface Item {
     id: number;
     name: string;
     description: string;
+    longDescription: string;
     presentationOrder: number;
     imageUrl: string;
     price: number;
@@ -13,4 +14,5 @@ export interface Item {
     subCategory: SubCategory;
     sideItemSet: Item[];
     optionSet: Option[];
+    allergen: string;
 }

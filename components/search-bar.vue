@@ -6,7 +6,7 @@ defineProps({
 </script>
 
 <template>
-	<el-select v-model="value" filterable placeholder="Select">
+	<el-select v-model="value" class="specialSelect" filterable placeholder="Select">
 		<el-option v-for="item in options" :value="item" />
 	</el-select>
 </template>

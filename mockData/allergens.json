@@ -1,0 +1,73 @@
+ [
+      {
+        "id": 1,
+        "letter": "A",
+        "name": "Cereals containing gluten"
+      },
+      {
+        "id": 2,
+        "letter": "B",
+        "name": "Crustaceans"
+      },
+      {
+        "id": 3,
+        "letter": "C",
+        "name": "Eggs"
+      },
+      {
+        "id": 4,
+        "letter": "D",
+        "name": "Fish"
+      },
+      {
+        "id": 5,
+        "letter": "E",
+        "name": "Peanuts"
+      },
+      {
+        "id": 6,
+        "letter": "F",
+        "name": "Soybeans"
+      },
+      {
+        "id": 7,
+        "letter": "G",
+        "name": "Milk (including lactose)"
+      },
+      {
+        "id": 8,
+        "letter": "H",
+        "name": "Nuts"
+      },
+      {
+        "id": 9,
+        "letter": "L",
+        "name": "Celery"
+      },
+      {
+        "id": 10,
+        "letter": "M",
+        "name": "Mustard"
+      },
+      {
+        "id": 11,
+        "letter": "N",
+        "name": "Sesame seeds"
+      },
+      {
+        "id": 12,
+        "letter": "O",
+        "name": "Sulphur dioxide and sulphites"
+      },
+      {
+        "id": 13,
+        "letter": "P",
+        "name": "Lupin"
+      },
+      {
+        "id": 14,
+        "letter": "R",
+        "name": "Molluscs"
+      }
+    ]
+  
