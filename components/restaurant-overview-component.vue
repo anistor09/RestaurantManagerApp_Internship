@@ -1,5 +1,4 @@
 <script setup>
-
 import { useRestaurantStore } from '~/store/restaurant';
 
 const restaurantStore = useRestaurantStore();
@@ -8,24 +7,21 @@ const restaurant = restaurantStore.restaurantGetter;
 const workingDays = ['Monday', 'Tuesday', 'Wendsnday', 'Thursday', 'Friday', 'Saturnday', 'Sunday'];
 const startTimes = ref(['', '', '', '', '', '', '']);
 const endTimes = ref(['', '', '', '', '', '', '']);
-
-
-
 </script>
 
 <template>
-	<div style="width:100%;">
-		<div id="title"><h1 style="font-size: 40px;">Restaurant Overview</h1></div>
+	<div>
+		<div id="title"><h1 style="font-size: 40px">Restaurant Overview</h1></div>
 		<div class="All">
 			<!-- Container which contains the image, the name of the restaurant and it's address-->
 			<div id="imageNameAddress">
-				<img id="circleImage" :src="restaurant.imageUrl" alt=""/>
-			    <!-- Container which contains the name of the restaurant and it's address-->
+				<img id="circleImage" :src="restaurant.imageUrl" alt="" />
+				<!-- Container which contains the name of the restaurant and it's address-->
 				<div id="nameAddress">
 					<input
 						v-model="restaurant.name"
 						class="specialInput"
-						style="font-size: 23px; width: 20%"
+						style="font-size: 23px; width: 80%"
 						type="input"
 						placeholder="Please input"
 					/>
@@ -33,7 +29,7 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 						v-model="restaurant.addresse"
 						class="specialInput"
 						type="input"
-						style="font-size: 18px; text-align: start; width: 50%"
+						style="font-size: 18px; text-align: start; width: 100%"
 						placeholder="Please input"
 					/>
 				</div>
@@ -100,7 +96,7 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 						<div class="dayName">{{ day }}</div>
 						<el-time-select
 							v-model="startTimes[index]"
-							style="width: 12%;"
+							style="width: 12%"
 							placeholder="Start time"
 							start="00:00"
 							step="00:30"
@@ -108,7 +104,7 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 						/>
 						<el-time-select
 							v-model="endTimes[index]"
-							style="width: 12%;"
+							style="width: 12%"
 							placeholder="End time"
 							start="00:00"
 							step="00:30"
@@ -127,12 +123,14 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 <style scoped>
 /* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
 @import url('https://fonts.googleapis.com/css?family=Cairo');
-.All {
+* {
 	font-family: 'Cairo';
-	width: 100%;
-	height: 100%;
+}
+.All {
 	padding-top: 2%;
 	padding-left: 2%;
+	height: 81vh;
+	overflow: auto;
 }
 h1 {
 	padding-left: 2%;
@@ -142,7 +140,6 @@ h1 {
 	content: '';
 	display: block;
 	height: 3px;
-	width: 100%;
 	background-color: #727171;
 	margin-top: 10px;
 }
@@ -151,9 +148,7 @@ h1 {
 	display: flex;
 	align-items: center;
 	padding-top: 1%;
-	width: 100%;
 	font-size: 20px;
-
 }
 
 /* Styling for the descriptions of the inputs */
@@ -167,14 +162,12 @@ h1 {
 #imageNameAddress {
 	display: flex;
 	align-items: center;
-	width: 100%;
 }
 
 #nameAddress {
 	display: flex;
 	flex-direction: column;
 	padding: 25px;
-	width: 100%;
 }
 
 /*Styling for the inputs*/
@@ -197,23 +190,19 @@ h1 {
 	align-items: center;
 }
 .dayName {
-    width: 12%;
-    min-width: 80px;
+	width: 12%;
+	min-width: 80px;
 }
 .workingDay {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 	padding-left: 0%;
 }
 .box {
 	height: auto;
-	width: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
-}
-.fieldText {
-	width: 100%;
 }
 
 #circleImage {
