@@ -1,21 +1,31 @@
 <script setup>
-import restaurants from '../mockData/restaurants.json';
-const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
+
+import { useRestaurantStore } from '~/store/restaurant';
+
+const restaurantStore = useRestaurantStore();
+const restaurant = restaurantStore.restaurantGetter;
+
+const workingDays = ['Monday', 'Tuesday', 'Wendsnday', 'Thursday', 'Friday', 'Saturnday', 'Sunday'];
+const startTimes = ref(['', '', '', '', '', '', '']);
+const endTimes = ref(['', '', '', '', '', '', '']);
+
+
+
 </script>
 
 <template>
-	<div>
-		<h1>Restaurant Overview</h1>
+	<div style="width:100%;">
+		<div id="title"><h1 style="font-size: 40px;">Restaurant Overview</h1></div>
 		<div class="All">
 			<!-- Container which contains the image, the name of the restaurant and it's address-->
 			<div id="imageNameAddress">
-				<img id="circleImage" :src="restaurant.image_url" alt=""/>
+				<img id="circleImage" :src="restaurant.imageUrl" alt=""/>
 			    <!-- Container which contains the name of the restaurant and it's address-->
 				<div id="nameAddress">
 					<input
 						v-model="restaurant.name"
 						class="specialInput"
-						style="font-size: 23px; width: 40%"
+						style="font-size: 23px; width: 20%"
 						type="input"
 						placeholder="Please input"
 					/>
@@ -23,12 +33,11 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 						v-model="restaurant.addresse"
 						class="specialInput"
 						type="input"
-						style="font-size: 18px; text-align: start"
+						style="font-size: 18px; text-align: start; width: 50%"
 						placeholder="Please input"
 					/>
 				</div>
 			</div>
-			<br /><br />
 			<!-- Container which the other information(description, phone number, email and category)-->
 			<div class="otherDetails">
 				<div class="prefix">Description:</div>
@@ -85,6 +94,28 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 						placeholder="Please input"
 					/>
 				</div>
+				<div class="box" style="">
+					<div class="prefix">Working Hours:</div>
+					<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
+						<div class="dayName">{{ day }}</div>
+						<el-time-select
+							v-model="startTimes[index]"
+							style="width: 12%;"
+							placeholder="Start time"
+							start="00:00"
+							step="00:30"
+							end="23:59"
+						/>
+						<el-time-select
+							v-model="endTimes[index]"
+							style="width: 12%;"
+							placeholder="End time"
+							start="00:00"
+							step="00:30"
+							end="23:59"
+						/>
+					</div>
+				</div>
 				<div id="buttonContainer">
 					<el-button color="#ED5087" plain round> Save changes</el-button>
 				</div>
@@ -98,12 +129,16 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 @import url('https://fonts.googleapis.com/css?family=Cairo');
 .All {
 	font-family: 'Cairo';
+	width: 100%;
+	height: 100%;
+	padding-top: 2%;
+	padding-left: 2%;
 }
 h1 {
-	position: relative;
+	padding-left: 2%;
 }
-/* The line after the restaurant overview */
-h1::after {
+
+#title::after {
 	content: '';
 	display: block;
 	height: 3px;
@@ -111,13 +146,14 @@ h1::after {
 	background-color: #727171;
 	margin-top: 10px;
 }
-
 /*Styling for both the containers which formed of pairs of inputs and their descriptions*/
 .details {
 	display: flex;
 	align-items: center;
 	padding-top: 1%;
 	width: 100%;
+	font-size: 20px;
+
 }
 
 /* Styling for the descriptions of the inputs */
@@ -125,17 +161,20 @@ h1::after {
 	margin-right: 10px;
 	font-size: 20px;
 	padding-left: 3px;
+	color: #ed5087;
 }
 
 #imageNameAddress {
 	display: flex;
 	align-items: center;
+	width: 100%;
 }
 
 #nameAddress {
 	display: flex;
 	flex-direction: column;
 	padding: 25px;
+	width: 100%;
 }
 
 /*Styling for the inputs*/
@@ -154,9 +193,27 @@ h1::after {
 #buttonContainer {
 	display: flex;
 	justify-content: flex-end;
-	padding: 5%;
+	padding-right: 5%;
 	align-items: center;
-	font-family: 'Cairo';
+}
+.dayName {
+    width: 12%;
+    min-width: 80px;
+}
+.workingDay {
+    display: flex;
+    flex-direction: row;
+	padding-left: 0%;
+}
+.box {
+	height: auto;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+.fieldText {
+	width: 100%;
 }
 
 #circleImage {
