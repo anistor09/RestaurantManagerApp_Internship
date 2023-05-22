@@ -11,14 +11,14 @@
 <template>
     <div v-if="loading" v-loading.fullscreen.lock="true"></div>
     <div v-else>
-        <el-container style="min-height: 100vh;">
+        <el-container style="position: fixed; width: 100%; height: 100%;">
             <el-aside style="overflow: hidden;">
                 <el-menu default-active="1" text-color="white" active-text-color="black">
                     <el-image :src="imageURL"/>
                     <el-menu-item index="1" @click="navigateTo('/')">
                         <span>Home</span>
                     </el-menu-item>
-                    <el-menu-item index="2" @click="navigateTo('/')">
+                    <el-menu-item index="2" @click="navigateTo('/menus')">
                         <span>Menus</span>
                     </el-menu-item>
                     <el-menu-item index="3" @click="navigateTo('/')">
