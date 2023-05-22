@@ -17,6 +17,7 @@
 - Does the TA belive that we are on track?
 - Does the TA suggest any improvements for following sprints?
 - We are held back by the clients because they have issues with their backend, on which we rely on
+- Advice on testing (Elena)
 ## 3. Planning  [3 min]
 - Decide on next meeting
 - Are there any news the final presentation timeslot?
