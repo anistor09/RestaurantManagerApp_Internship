@@ -7,6 +7,11 @@ const restaurant = restaurantStore.restaurantGetter;
 const workingDays = ['Monday', 'Tuesday', 'Wendsnday', 'Thursday', 'Friday', 'Saturnday', 'Sunday'];
 const startTimes = ref(['', '', '', '', '', '', '']);
 const endTimes = ref(['', '', '', '', '', '', '']);
+const doubleCheck = ref(false);
+
+const checkIfChange = () => {
+	doubleCheck.value = true;
+};
 const saveChanges = () => {
 	console.log(restaurant.hoursSet);
 	restaurant.hoursSet = [];
@@ -21,6 +26,7 @@ const saveChanges = () => {
 			restaurant.hoursSet.push(hour);
 		}
 	}
+	doubleCheck.value = false;
 	console.log(restaurant.hoursSet);
 	//make POST request and update the restaurant stored on frontend with a set
 };
@@ -140,8 +146,32 @@ onMounted(() => {
 					</div>
 				</div>
 				<div id="buttonContainer">
-					<el-button color="#ED5087" plain round @click="saveChanges"> Save changes</el-button>
+					<el-button color="#ED5087" plain round @click="checkIfChange()"> Save changes</el-button>
 				</div>
+
+				<Teleport to="body">
+					<el-dialog
+						v-model="doubleCheck"
+						width="20%"
+						style="
+							font-family: 'Open Sans';
+							text-align: center;
+							font-size: 0.8vw;
+							font-weight: bold;
+							color: black;
+							border-radius: 40px;
+							border: 0.15vw solid #ed5087 !important;
+							top: 20%;
+						"
+					>
+						<div>
+							Are you sure you want to make this changes?
+							<div id="change-bottom-button">
+								<el-button color="#ED5087" plain round @click="saveChanges()">Yes</el-button>
+							</div>
+						</div>
+					</el-dialog>
+				</Teleport>
 			</div>
 		</div>
 	</div>
@@ -230,6 +260,13 @@ h1 {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
+}
+
+
+#change-bottom-button {
+	display: flex;
+	padding-top: 8%;
+	justify-content: center;
 }
 
 #circleImage {
