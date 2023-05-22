@@ -16,8 +16,8 @@ const saveChanges = () => {
 	console.log(restaurant.hoursSet);
 	restaurant.hoursSet = [];
 	for (let i = 0; i < 7; i++) {
-		if (startTimes.value[i] != '' && endTimes.value[i] != '') {
-			let hour: Hours = {
+		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
+			const hour: Hours = {
 				id: 1,
 				opening: startTimes.value[i],
 				closing: endTimes.value[i],
@@ -28,7 +28,7 @@ const saveChanges = () => {
 	}
 	doubleCheck.value = false;
 	console.log(restaurant.hoursSet);
-	//make POST request and update the restaurant stored on frontend with a set
+	// make POST request and update the restaurant stored on frontend with a set
 };
 
 onMounted(() => {
