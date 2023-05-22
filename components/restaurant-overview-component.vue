@@ -1,12 +1,39 @@
-<script setup>
+<script lang="ts" setup>
 import { useRestaurantStore } from '~/store/restaurant';
-
+import { Hours } from '~/interfaces/Hours';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
 const workingDays = ['Monday', 'Tuesday', 'Wendsnday', 'Thursday', 'Friday', 'Saturnday', 'Sunday'];
 const startTimes = ref(['', '', '', '', '', '', '']);
 const endTimes = ref(['', '', '', '', '', '', '']);
+const saveChanges = () => {
+	console.log(restaurant.hoursSet);
+	restaurant.hoursSet = [];
+	for (let i = 0; i < 7; i++) {
+		if (startTimes.value[i] != '' && endTimes.value[i] != '') {
+			let hour: Hours = {
+				id: 1,
+				opening: startTimes.value[i],
+				closing: endTimes.value[i],
+				day: i,
+			};
+			restaurant.hoursSet.push(hour);
+		}
+	}
+	console.log(restaurant.hoursSet);
+	//make POST request and update the restaurant stored on frontend with a set
+};
+
+onMounted(() => {
+	for (const [index, element] of restaurant.hoursSet.entries()) {
+		if (index < 7) {
+			startTimes.value[index] = element.opening;
+			endTimes.value[index] = element.closing;
+		}
+	}
+	console.log('set');
+});
 </script>
 
 <template>
@@ -61,7 +88,7 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 					<div class="prefix">Phone Number:</div>
 					<!-- The input where the restaurant phone number can be changed by the restaurant owner-->
 					<input
-						v-model="restaurant.phone_number"
+						v-model="restaurant.phoneNumber"
 						class="specialInput"
 						style="width: 9%; text-align: center; min-width: 130px"
 						type="input"
@@ -113,7 +140,7 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 					</div>
 				</div>
 				<div id="buttonContainer">
-					<el-button color="#ED5087" plain round> Save changes</el-button>
+					<el-button color="#ED5087" plain round @click="saveChanges"> Save changes</el-button>
 				</div>
 			</div>
 		</div>
