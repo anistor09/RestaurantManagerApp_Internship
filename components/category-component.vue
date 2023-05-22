@@ -26,13 +26,13 @@ const description =
 
 <style scoped>
 /* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
-@import url('https://fonts.googleapis.com/css?family=Cairo');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 #card {
 	border-radius: 3vw;
 	width: 15vw;
 	height: 20vw;
-	font-family: 'Cairo';
+	font-family: 'Open Sans';
 }
 
 #image {
@@ -58,7 +58,7 @@ const description =
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-family: 'Cairo';
+	font-family: 'Open Sans';
 }
 
 .extraPadding {

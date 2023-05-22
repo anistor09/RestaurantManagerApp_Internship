@@ -39,14 +39,14 @@ const location = 'Market St, San Francisco, CA, USA';
 
 <style scoped>
 /* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
-@import url('https://fonts.googleapis.com/css?family=Cairo');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 #card {
 	position: relative;
 	width: 50vw;
 	height: 20vh;
 	border-radius: 3vw;
-	font-family: 'Cairo';
+	font-family: 'Open Sans';
 }
 
 #logo {

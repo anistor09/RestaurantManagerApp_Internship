@@ -25,14 +25,14 @@
         <!-- Similarly, the button and the welcome text are wrapped and, thus, resized, together -->
 		<div id="buttonWrapper">
 			<div id="welcome">WELCOME BACK!</div>
-			<el-button id="button" color="#ED5087" plain round> Login </el-button>
+			<el-button id="button" color="#ED5087"  plain round @click="navigateTo('/')"> Login </el-button>
 		</div>
 	</div>
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Tourney');
-@import url('https://fonts.googleapis.com/css?family=Cairo');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 html, body {
     overflow: hidden;
@@ -49,7 +49,7 @@ html, body {
 }
 
 #imgDown {
-	position: absolute;
+	position: fixed;
 	padding-top: 20vh;
 	right: 50%;
 	width: 80%;
@@ -81,7 +81,7 @@ html, body {
 }
 
 #welcome {
-	font-family: 'Cairo';
+	font-family: 'Open Sans';
 	font-weight: bolder;
 	font-size: 3vw;
 	color: #727171;
@@ -92,7 +92,7 @@ html, body {
 
 /* The styling of the Element Plus is overwritten to fit our Figma design */
 #button {
-	font-family: 'Cairo' !important;
+	font-family: 'Open Sans' !important;
 	font-size: 2vw;
 	font-weight: bolder;
 	width: 25% !important;
