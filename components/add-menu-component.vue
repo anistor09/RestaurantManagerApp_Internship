@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+import { useRestaurantStore } from '~/store/restaurant';
+import { Hours } from '~/interfaces/Hours';
+import { Carte } from '~/interfaces/Carte';
+const restaurantStore = useRestaurantStore();
+const restaurant = restaurantStore.restaurantGetter;
 const defaultSrc =
 	'https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg';
 const src = ref(defaultSrc);
@@ -9,6 +14,41 @@ const workingDays = ['Monday', 'Tuesday', 'Wendsnday', 'Thursday', 'Friday', 'Sa
 const startTimes = ref(['', '', '', '', '', '', '']);
 const endTimes = ref(['', '', '', '', '', '', '']);
 
+
+const doubleCheck = ref(false);
+
+const checkIfChange = () => {
+	doubleCheck.value = true;
+};
+
+const addMenu = () => {
+	let hoursSet = [];
+	for (let i = 0; i < 7; i++) {
+		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
+			const hour: Hours = {
+				id: 1,
+				opening: startTimes.value[i],
+				closing: endTimes.value[i],
+				day: i,
+			};
+			hoursSet.push(hour);
+		}
+	}
+	console.log(restaurant.hoursSet);
+	const carte: Carte = {
+		id: -1,
+		name: name.value,
+		description: description.value,
+		version: 1,
+		active: true,
+		imageUrl: defaultSrc,
+		itemSet: [],
+		hoursSet: hoursSet
+	}
+	doubleCheck.value = false;
+	//restaurant.carteSet.add(carte) TODO with SET
+}
+
 </script>
 
 <template>
@@ -16,9 +56,9 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 
 	<div id="popup">
 		<div id="all">
-			<div class="box" style="">
+			<div class="box" style="height: 100%;">
 				<div class="fieldText">Photo</div>
-				<div style="width: 92%; height: 90%; display: flex">
+				<div style="width: 92%; height: 100%; display: flex;">
 					<el-image :src="src" style="width: 35%; height: 100%; border-radius: 40px" />
 					<div class="photoButtonSpace">
 						<el-button class="specialPhotoButton">Change</el-button>
@@ -29,7 +69,7 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 			<div class="box">
 				<div id="addName">
 					<div class="fieldText">Name</div>
-					<input v-model="name" class="specialInput" style="height: 56.25%" />
+					<input v-model="name" class="specialInput" style="height: 100%;" />
 				</div>
 			</div>
 			<div class="box" style="">
@@ -59,8 +99,31 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 				</div>
 			</div>
             <div id="buttonContainer">
-				<el-button class="specialPhotoButton" style="width: 15%; height: 50%;">Add</el-button>
+				<el-button class="specialPhotoButton" style="width: 15%; height: 50%;" @click="checkIfChange()">Add</el-button>
 			</div>
+			<Teleport to="body">
+				<el-dialog
+					v-model="doubleCheck"
+					width="20%"
+					style="
+						font-family: 'Open Sans';
+						text-align: center;
+						font-size: 0.8vw;
+						font-weight: bold;
+						color: black;
+						border-radius: 40px;
+						border: 0.15vw solid #ed5087 !important;
+						top: 20%;
+					"
+				>
+					<div>
+						Are you sure you want to add this menu?
+						<div id="change-bottom-button">
+							<el-button color="#ED5087" plain round @click="addMenu()">Yes</el-button>
+						</div>
+					</div>
+				</el-dialog>
+			</Teleport>
 		</div>
 	</div>
 </template>
@@ -155,11 +218,11 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 	padding-right: 3%;
 	background-color: #d9d9d9;
 	border-radius: 25px;
-	font-size: 0.9vw;
+	font-size: 1.1vw;
 	font-weight: normal !important;
 	border: none;
 	width: 88%;
-	height: 22.5%;
+	height: 100%;
 }
 
 .specialTextArea {
@@ -222,5 +285,9 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 .el-select-dropdown__item.selected {
 	color: #ed5087;
 }
-
+#change-bottom-button {
+	display: flex;
+	padding-top: 8%;
+	justify-content: center;
+}
 </style>
