@@ -14,7 +14,6 @@ const workingDays = ['Monday', 'Tuesday', 'Wendsnday', 'Thursday', 'Friday', 'Sa
 const startTimes = ref(['', '', '', '', '', '', '']);
 const endTimes = ref(['', '', '', '', '', '', '']);
 
-
 const doubleCheck = ref(false);
 
 const checkIfChange = () => {
@@ -22,7 +21,7 @@ const checkIfChange = () => {
 };
 
 const addMenu = () => {
-	let hoursSet = [];
+	const hoursSet = [];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
 			const hour: Hours = {
@@ -34,7 +33,6 @@ const addMenu = () => {
 			hoursSet.push(hour);
 		}
 	}
-	console.log(restaurant.hoursSet);
 	const carte: Carte = {
 		id: -1,
 		name: name.value,
@@ -43,113 +41,106 @@ const addMenu = () => {
 		active: true,
 		imageUrl: defaultSrc,
 		itemSet: [],
-		hoursSet: hoursSet
-	}
+		hoursSet
+	};
 	doubleCheck.value = false;
-	//restaurant.carteSet.add(carte) TODO with SET
-}
-
+	restaurant.carteSet.push(carte)
+	// TODO SET VALUE
+};
 </script>
 
 <template>
-	<div class="demo-time-range"></div>
-
-	<div id="popup">
-		<div id="all">
-			<div class="box" style="height: 100%;">
-				<div class="fieldText">Photo</div>
-				<div style="width: 92%; height: 100%; display: flex;">
-					<el-image :src="src" style="width: 35%; height: 100%; border-radius: 40px" />
-					<div class="photoButtonSpace">
-						<el-button class="specialPhotoButton">Change</el-button>
-						<el-button class="specialPhotoButton">Delete</el-button>
-					</div>
+	<div id="all">
+		<div class="box" style="height: 100%">
+			<div class="fieldText">Photo</div>
+			<div style="width: 92%; height: 100%; display: flex">
+				<el-image :src="src" style="width: 35%; height: 100%; border-radius: 40px" />
+				<div class="photoButtonSpace">
+					<el-button class="specialPhotoButton">Change</el-button>
+					<el-button class="specialPhotoButton">Delete</el-button>
 				</div>
 			</div>
-			<div class="box">
-				<div id="addName">
-					<div class="fieldText">Name</div>
-					<input v-model="name" class="specialInput" style="height: 100%;" />
-				</div>
-			</div>
-			<div class="box" style="">
-				<div class="fieldText">Description</div>
-				<textarea v-model="description" class="specialTextArea"></textarea>
-			</div>
-			<div class="box" style="">
-				<div class="fieldText">Working Hours:</div>
-				<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
-					<div class="dayName">{{ day }}</div>
-					<el-time-select
-						v-model="startTimes[index]"
-                        style="width: 25%;"
-						placeholder="Start time"
-						start="00:00"
-						step="00:30"
-						end="23:59"
-					/>
-					<el-time-select
-						v-model="endTimes[index]"
-                        style="width: 25%;"
-						placeholder="End time"
-						start="00:00"
-						step="00:30"
-						end="23:59"
-					/>
-				</div>
-			</div>
-            <div id="buttonContainer">
-				<el-button class="specialPhotoButton" style="width: 15%; height: 50%;" @click="checkIfChange()">Add</el-button>
-			</div>
-			<Teleport to="body">
-				<el-dialog
-					v-model="doubleCheck"
-					width="20%"
-					style="
-						font-family: 'Open Sans';
-						text-align: center;
-						font-size: 0.8vw;
-						font-weight: bold;
-						color: black;
-						border-radius: 40px;
-						border: 0.15vw solid #ed5087 !important;
-						top: 20%;
-					"
-				>
-					<div>
-						Are you sure you want to add this menu?
-						<div id="change-bottom-button">
-							<el-button color="#ED5087" plain round @click="addMenu()">Yes</el-button>
-						</div>
-					</div>
-				</el-dialog>
-			</Teleport>
 		</div>
+		<div class="box">
+			<div id="addName">
+				<div class="fieldText">Name</div>
+				<input v-model="name" class="specialInput" style="height: 100%" />
+			</div>
+		</div>
+		<div class="box" style="">
+			<div class="fieldText">Description</div>
+			<textarea v-model="description" class="specialTextArea"></textarea>
+		</div>
+		<div class="box" style="">
+			<div class="fieldText">Working Hours:</div>
+			<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
+				<div class="dayName">{{ day }}</div>
+				<el-time-select
+					v-model="startTimes[index]"
+					style="width: 25%"
+					placeholder="Start time"
+					start="00:00"
+					step="00:30"
+					end="23:59"
+				/>
+				<el-time-select
+					v-model="endTimes[index]"
+					style="width: 25%"
+					placeholder="End time"
+					start="00:00"
+					step="00:30"
+					end="23:59"
+				/>
+			</div>
+		</div>
+		<div id="buttonContainer">
+			<el-button class="specialPhotoButton" style="width: 15%; height: 50%" @click="checkIfChange()"
+				>Add</el-button
+			>
+		</div>
+		<Teleport to="body">
+			<el-dialog
+				v-model="doubleCheck"
+				width="20%"
+				style="
+					font-family: 'Open Sans';
+					text-align: center;
+					font-size: 0.8vw;
+					font-weight: bold;
+					color: black;
+					border-radius: 40px;
+					border: 0.15vw solid #ed5087 !important;
+					top: 20%;
+				"
+			>
+				<div>
+					Are you sure you want to add this menu?
+					<div id="change-bottom-button">
+						<el-button color="#ED5087" plain round @click="addMenu()">Yes</el-button>
+					</div>
+				</div>
+			</el-dialog>
+		</Teleport>
 	</div>
 </template>
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Cairo');
-#popup {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	height: 100%;
-	font-family: 'Cairo';
-}
+
 #all {
 	width: 50%;
 	height: 85%;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	flex-direction: column;
 	border: 10px solid #ed5087;
 	border-radius: 100px;
 	padding: 20px;
+	font-family: 'Cairo';
 }
 
 .timeSelect {
-    width: 40% !important;
+	width: 40% !important;
 }
 
 #addName {
@@ -161,8 +152,8 @@ const addMenu = () => {
 }
 
 .dayName {
-    width: 12%;
-    min-width: 80px;
+	width: 12%;
+	min-width: 80px;
 }
 .box {
 	padding-left: 8%;
@@ -180,7 +171,6 @@ const addMenu = () => {
 }
 .photoButtonSpace {
 	width: 50%;
-	height: 100%;
 	padding-left: 5%;
 	display: flex;
 	flex-direction: column;
@@ -208,8 +198,8 @@ const addMenu = () => {
 }
 
 .workingDay {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
 .specialInput {
@@ -220,6 +210,7 @@ const addMenu = () => {
 	border-radius: 25px;
 	font-size: 1.1vw;
 	font-weight: normal !important;
+	font-family: 'Cairo';
 	border: none;
 	width: 88%;
 	height: 100%;
@@ -230,6 +221,7 @@ const addMenu = () => {
 	font-weight: lighter !important;
 	padding: 3%;
 	font-size: 0.9vw;
+	font-family: 'Cairo';
 	background-color: #d9d9d9;
 	border-radius: 25px;
 	border: none;
@@ -243,12 +235,12 @@ const addMenu = () => {
 #buttonContainer {
 	display: flex;
 	justify-content: center;
-    align-items: center;
-    padding-top: 5%;
+	align-items: center;
+	padding-top: 5%;
 	/*padding-right: 15%;*/
 	align-items: center;
-    height: 10%;
-    width: 100%;
+	height: 10%;
+	width: 100%;
 }
 
 .el-select .el-input__wrapper {
