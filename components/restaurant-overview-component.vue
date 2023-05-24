@@ -12,7 +12,7 @@ const doubleCheck = ref(false);
 const checkIfChange = () => {
 	doubleCheck.value = true;
 };
-const saveChanges = () => {
+const saveChanges = async() => {
 	console.log(restaurant.hoursSet);
 	restaurant.hoursSet = [];
 	for (let i = 0; i < 7; i++) {
@@ -26,9 +26,17 @@ const saveChanges = () => {
 			restaurant.hoursSet.push(hour);
 		}
 	}
+	const bodyString = JSON.stringify(restaurant);
+	console.log(bodyString);
+	/*
+	await useFetch('/api/restaurant/editRestaurant', {
+		method: 'PUT',
+		body: bodyString,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});*/
 	doubleCheck.value = false;
-	console.log(restaurant.hoursSet);
-	// make POST request and update the restaurant stored on frontend with a set
 };
 
 onMounted(() => {
