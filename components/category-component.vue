@@ -1,25 +1,44 @@
 <script lang="ts" setup>
-// Hardcoded information, will be extracted from the restaurant global object later on
-const itemName = 'Appetizers';
-const imageSource =
-	'https://images-gmi-pmc.edge-generalmills.com/fca4b25f-5859-4048-974c-4ef02a0014ee.jpg';
-const description =
-	'Our carefully crafted selection of small plates will awaken your taste buds and leave you yearning for more.';
+import { Category } from '~/interfaces/Category';
+
+const props = defineProps({
+	category: {
+		type: Object as () => Category,
+		required: true,
+	},
+});
+
+function editCategory() {
+	console.log('TODO: wire with edit category page');
+}
 </script>
 
 <!-- Item card component containing basic information, including image, description and edit/delete buttons-->
 <template>
-	<el-card id="card" shadow="always" :body-style="{ padding: '0px' }">
-		<!-- The background image of the card -->
-		<img id="image" :src="imageSource" />
+	<el-card id="card" shadow="always" :body-style="{ padding: '0px' }" @click="editCategory()">
+		<div style="width: 100%; height: 100%">
+			<!-- The background image of the card -->
+			<img
+				id="image"
+				:src="
+					props.category.imageUrl ||
+					'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png'
+				"
+			/>
 
-		<!-- The text part of the card -->
-		<div>
-			<!-- The name of the restaurant -->
-			<div id="title">{{ itemName }}</div>
+			<!-- The text part of the card -->
+			<div>
+				<!-- The name of the restaurant -->
+				<div id="title">{{ props.category.name }}</div>
 
-			<!-- The description of the category, which gives a general overview -->
-			<div id="description"><b>Description:</b> {{ description }}</div>
+				<!-- The description of the category, which gives a general overview -->
+				<div id="description">
+					<el-scrollbar>
+						<b>Description:</b>
+						{{ props.category.description == '' ? 'None' : props.category.description }}
+					</el-scrollbar>
+				</div>
+			</div>
 		</div>
 	</el-card>
 </template>
@@ -28,64 +47,46 @@ const description =
 /* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
+#card >>> .el-card__body {
+	height: 100%;
+}
+
 #card {
 	border-radius: 3vw;
-	width: 15vw;
-	height: 20vw;
 	font-family: 'Open Sans';
+	width: 15vw;
+	height: 40vh;
+	cursor: pointer;
+}
+
+#card:hover {
+	box-shadow: 1px 3px 3px 3px #ed508786;
 }
 
 #image {
 	display: block;
 	width: 100%;
-	height: 6vw;
+	height: 30%;
+	object-fit: cover;
 }
 
 #title {
-	font-size: 1.7vw;
+	font-size: 1.5vw;
+	padding-left: 5%;
+	padding-right: 5%;
 	font-weight: bolder;
 	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	height: 20%;
 }
 
 #description {
-	line-height: 1.5;
 	text-align: center;
+	padding-left: 10%;
+	padding-right: 10%;
+	height: 50%;
 	font-size: 0.8vw;
-	padding: 5% 10% 3% 10%;
-}
-
-#buttons {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-family: 'Open Sans';
-}
-
-.extraPadding {
-	padding-top: 19% !important;
-}
-
-@media only screen and (max-width: 500px) {
-	#card {
-		border-radius: 9vw;
-		width: 65vw;
-		height: 78vw;
-	}
-
-	#image {
-		height: 25vw;
-	}
-
-	#title {
-		font-size: 1.5rem;
-	}
-
-	#description {
-		font-size: 4vw;
-	}
-
-	.extraPadding {
-		padding-top: 10% !important;
-	}
 }
 </style>

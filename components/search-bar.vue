@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const value = ref('');
 defineProps({
-	options: [],
+	options: Array as () => String[],
 });
 </script>
 
