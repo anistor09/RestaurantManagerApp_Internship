@@ -1,9 +1,21 @@
 <script lang="ts" setup>
-import restaurants from '../mockData/restaurants.json';
+import { useRestaurantStore } from '~/store/restaurant';
+import { Carte } from '~/interfaces/Carte';
+const restaurantStore = useRestaurantStore();
+const restaurant = restaurantStore.restaurantGetter;
 
-const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 
-const categories = ref(restaurant.value.categorySet);
+const emit = defineEmits(['close'])
+
+const props = defineProps({
+	menu: {
+		type: Object as () => Carte,
+		required: true,
+	},
+});
+const menuRef = ref(props.menu);
+
+const categories = ref(restaurant.categorySet);
 
 // the category name that will be displayed on the bar
 const categoryName = ref('');
@@ -17,16 +29,16 @@ const subcategoryName = ref('');
 
 // this represents the array of subcategories
 // It is dynamically changed in order to display only the subcategories that are from the selected category
-const filteredSubcategories = ref(restaurant.value.subCategorySet);
+const filteredSubcategories = ref(restaurant.subCategorySet);
 
 // this represents the subcategory object itself that is selected by the user
 // TODO: add interfaces to prevent the case when there are no filteredSubcategories.
 const selectedSubcategory = ref(filteredSubcategories.value[0]);
 
-const restaurantItems = ref(restaurant.value.itemSet);
+const restaurantItems = ref(restaurant.itemSet);
 
 // the items that have the category and subcategory selected
-const filteredItems = ref(restaurant.value.itemSet);
+const filteredItems = ref(restaurant.itemSet);
 
 // the name of the item which is displayed on the bar
 const itemName = ref('');
@@ -73,10 +85,30 @@ const changeSubCategory = () => {
 const changeItem = () => {
 	selectedItem.value = filteredItems.value.filter((x) => x.name === itemName.value)[0];
 };
+
+
+
+const addItemInMenu = async() => {
+	const data = {
+		carteId: menuRef.value.id,
+		itemId: selectedItem.value.id
+	};
+	await useFetch('/api/menus/addItemInMenu', {
+		method: 'POST',
+		body: data,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+	menuRef.value.itemSet.push(selectedItem.value);
+	emit('close');
+}
+
+
+
 </script>
 
 <template>
-	<div id="popup">
 		<div id="all">
 			<div class="div">
 				<h1 class="title">Category:</h1>
@@ -137,33 +169,21 @@ const changeItem = () => {
 				</el-select>
 			</div>
 			<div id="buttonContainer">
-				<el-button color="#ED5087" plain round> Add</el-button>
+				<el-button color="#ED5087" plain round @click="addItemInMenu()"> Add</el-button>
 			</div>
 		</div>
-	</div>
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Cairo');
-
-#popup {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+#all {
 	width: 100%;
 	height: 100%;
-	font-family: 'Cairo';
-}
-#all {
-	width: 35%;
-	height: 60%;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	justify-content: space-around;
-	border: 10px solid #ed5087;
-	border-radius: 100px;
-	padding: 20px;
+	justify-content: center;
+	font-family: 'Cairo';
 }
 #buttonContainer {
 	display: flex;
@@ -194,7 +214,7 @@ const changeItem = () => {
 	height: 100%;
 }
 .div {
-	width: 60%;
+	width: 100%;
 }
 .title {
 	color: #ed5087;

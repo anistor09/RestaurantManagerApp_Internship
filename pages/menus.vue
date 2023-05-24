@@ -52,6 +52,10 @@ function createItemWrapper(item: Item): ItemWrapper {
 watch(selectedMenuName, () => {
 	currentCategory.value = '';
 });
+
+const addItemInMenu = ref(false);
+const addMenu = ref(false);
+
 </script>
 
 <template>
@@ -70,8 +74,46 @@ watch(selectedMenuName, () => {
 						</el-select>
 					</div>
 					<div class="el-col" :style="{ flex: '0 0 40%', textAlign: 'right', paddingTop: '3vh' }">
-						<el-button class="menus-button" color="#ED5087" plain round> Add menu </el-button>
-						<el-button class="menus-button" color="#ED5087" plain round> Place item </el-button>
+						<el-button class="menus-button" color="#ED5087" plain round @click="addMenu = true"> Add menu </el-button>
+						<el-button class="menus-button" :disabled="selectedMenuName === ''" color="#ED5087" plain round @click="addItemInMenu = true;"> Place item </el-button>
+						<Teleport to="body">
+							<el-dialog
+								v-model="addItemInMenu"
+								style="
+									width: 35%;
+									height: 70%;
+									display: flex;
+									align-items: center;
+									flex-direction: column;
+									justify-content: space-around;
+									border: 5px solid #ed5087;
+									border-radius: 50px !important;
+								"
+							>
+							<AddItemInMenuComponent :menu="selectedMenu" @close="addItemInMenu = false"></AddItemInMenuComponent>				
+							</el-dialog>
+						</Teleport>
+						<Teleport to="body">
+							<el-dialog
+								v-model="addMenu"
+								style="
+								top: -10%;
+								width: 40%;
+								height: 85%;
+								min-height: 750px;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								flex-direction: column;
+								border: 5px solid #ed5087;
+								border-radius: 50px !important;
+								padding: 10px;
+								font-family: 'Open Sans';
+								"
+							>
+							<AddMenuComponent :restaurant="restaurant" @close="addMenu = false"></AddMenuComponent>				
+							</el-dialog>
+						</Teleport>
 					</div>
 				</div>
 			</el-header>
@@ -168,7 +210,7 @@ watch(selectedMenuName, () => {
 .el-select .el-input__wrapper {
 	font-family: 'Open Sans';
 	font-size: 1.1vw;
-	width: 12vw;
+	width: 15vw;
 	font-weight: bolder;
 	height: auto;
 	border-radius: 30px;

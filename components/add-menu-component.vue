@@ -1,9 +1,17 @@
 <script lang="ts" setup>
-import { useRestaurantStore } from '~/store/restaurant';
-import { Hours } from '~/interfaces/Hours';
 import { Carte } from '~/interfaces/Carte';
-const restaurantStore = useRestaurantStore();
-const restaurant = restaurantStore.restaurantGetter;
+import { Hours } from '~/interfaces/Hours';
+import { Restaurant } from '~/interfaces/Restaurant';
+
+const emit = defineEmits(['close'])
+
+const props = defineProps({
+	restaurant: {
+		type: Object as () => Restaurant,
+		required: true,
+	},
+});
+const restaurantRef = ref(props.restaurant);
 const defaultSrc =
 	'https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg';
 const src = ref(defaultSrc);
@@ -20,7 +28,7 @@ const checkIfChange = () => {
 	doubleCheck.value = true;
 };
 
-const addMenu = () => {
+const addMenu = async() => {
 	const hoursSet = [];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
@@ -43,10 +51,50 @@ const addMenu = () => {
 		itemSet: [],
 		hoursSet
 	};
+	await useFetch('/api/menus/addMenu', {
+		method: 'POST',
+		body: carte,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+	restaurantRef.value.carteSet.push(carte);
 	doubleCheck.value = false;
-	restaurant.carteSet.push(carte)
-	// TODO SET VALUE
+	emit('close');
 };
+
+/*
+function handleAdd() {
+	const requestBody = {
+		number: tableNumber.value,
+		capacity: tableCapacity.value,
+		restaurantId: 1,
+	};
+	useFetch('/api/table/add', {
+		method: 'POST',
+		body: requestBody,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	}).then((response) => {
+		tables.value.push({
+			id: tableId.value,
+			number: tableNumber.value,
+			capacity: tableCapacity.value,
+			url: response.data.value?.url === undefined ? 'Not there yet' : response.data.value.url,
+		});
+		addPopup.value = false;
+	});
+}
+
+watchEffect(() => {
+	const selected = getTable.value;
+	if (selected) {
+		tableNumber.value = selected.number;
+		tableCapacity.value = selected.capacity;
+	}
+});
+*/
 </script>
 
 <template>
@@ -127,16 +175,7 @@ const addMenu = () => {
 @import url('https://fonts.googleapis.com/css?family=Cairo');
 
 #all {
-	width: 50%;
-	height: 85%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	border: 10px solid #ed5087;
-	border-radius: 100px;
-	padding: 20px;
-	font-family: 'Cairo';
+	
 }
 
 .timeSelect {
@@ -156,7 +195,7 @@ const addMenu = () => {
 	min-width: 80px;
 }
 .box {
-	padding-left: 8%;
+	padding-left: 17%;
 	height: auto;
 	width: 100%;
 	display: flex;
@@ -212,7 +251,7 @@ const addMenu = () => {
 	font-weight: normal !important;
 	font-family: 'Cairo';
 	border: none;
-	width: 88%;
+	width: 60%;
 	height: 100%;
 }
 
@@ -226,7 +265,7 @@ const addMenu = () => {
 	border-radius: 25px;
 	border: none;
 	resize: none;
-	width: 88%;
+	width: 60%;
 	height: 50%;
 }
 .specialSelect {
