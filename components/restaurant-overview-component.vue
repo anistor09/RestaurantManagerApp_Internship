@@ -28,14 +28,15 @@ const saveChanges = async() => {
 	}
 	const bodyString = JSON.stringify(restaurant);
 	console.log(bodyString);
-	/*
+	
 	await useFetch('/api/restaurant/editRestaurant', {
 		method: 'PUT',
 		body: bodyString,
 		headers: {
 			'Content-Type': 'application/json',
 		},
-	});*/
+	});
+		
 	doubleCheck.value = false;
 };
 
