@@ -1,37 +1,31 @@
 <script lang="ts" setup>
-// Hardcoded information, will be extracted from the restaurant global object later on
-const restaurantName = 'SkyBar';
-const imageSource = 'https://media-cdn.tripadvisor.com/media/photo-s/27/a7/c7/05/skybar-paris.jpg';
-const logoSource = 'https://mma.prnewswire.com/media/1713860/SKYBAR_LOGO_PARIS__1.jpg';
-const openHour = '8:00';
-const closeHour = '18:00';
-const phoneNumber = '+310712345678';
-const email = 'email@restaurant.com';
-const location = 'Market St, San Francisco, CA, USA';
+import { useRestaurantStore } from '~/store/restaurant';
+const restaurantStore = useRestaurantStore();
+const restaurant = restaurantStore.restaurantGetter;
 </script>
 
 <!-- Card component containing basic information related to the restaurant, including logo and background image -->
 <template>
 	<el-card id="card" shadow="always" :body-style="{ padding: '0px' }">
 		<!-- The background image of the card (blurred) -->
-		<img id="image" :src="imageSource" />
+		<img id="image" :src="restaurant.imageUrl" />
 
 		<!-- The logo of the restaurant, cut as a circle -->
-		<img id="logo" :src="logoSource" />
+		<img id="logo" :src="restaurant.logoUrl" />
 
 		<!-- The text part of the card -->
-		<div style="height: 10vh">
-			<!-- The name of the restaurant -->
-			<div id="title">{{ restaurantName }}</div>
+		<div style="height: 10v; display: flex; flex-direction: row">
+			<div style="width: 80%; height: 100%">
+				<!-- The name of the restaurant -->
+				<div id="title">{{ restaurant.name }}</div>
 
-			<!-- The location of the restaurant, written under the title -->
-			<div id="location">{{ location }}</div>
-
+				<!-- The location of the restaurant, written under the title -->
+				<i id="location">{{ restaurant.addresse == null ? 'No location added' : restaurant.addresse  }}</i>
+			</div>
 			<!-- The information of the restaurant, which gives a general overview -->
 			<div id="info">
-				<div>Opening hours: {{ openHour }} - {{ closeHour }}</div>
-				<div>Phone number: {{ phoneNumber }}</div>
-				<div>Email: {{ email }}</div>
+				<div>Phone number: {{ restaurant.phoneNumber == null ? 'None' : restaurant.phoneNumber  }}</div>
+				<div>Email: {{ restaurant.email == null ? 'None' : restaurant.email }}</div>
 			</div>
 		</div>
 	</el-card>
@@ -43,7 +37,7 @@ const location = 'Market St, San Francisco, CA, USA';
 
 #card {
 	position: relative;
-	width: 50vw;
+	width: 100%;
 	height: 20vh;
 	border-radius: 3vw;
 	font-family: 'Open Sans';
@@ -64,7 +58,7 @@ const location = 'Market St, San Francisco, CA, USA';
 	width: 100%;
 	height: 10vh;
 	filter: blur(3px);
-    border-bottom: 0.3vh solid black;
+	border-bottom: 0.3vh solid black;
 }
 
 #title {
@@ -85,11 +79,10 @@ const location = 'Market St, San Francisco, CA, USA';
 }
 
 #info {
-	position: absolute;
-	top: 11vh;
-	left: 35vw;
+	padding-top: 1.4%;
+	width: 40%;
 	line-height: 1.5;
-    text-align: center;
+	text-align: center;
 	font-size: 0.9vw;
 }
 
@@ -101,13 +94,13 @@ const location = 'Market St, San Francisco, CA, USA';
 	}
 
 	#logo {
-	position: absolute;
-	left: 17vw;
-	top: 4vh;
-	width: 30vw;
-	height: 30vw;
-	border-radius: 100%;
-	box-shadow: 0.2vh 0.1vw 0.7vh 0.2vw rgba(0, 0, 0, 0.07) !important;
+		position: absolute;
+		left: 17vw;
+		top: 4vh;
+		width: 30vw;
+		height: 30vw;
+		border-radius: 100%;
+		box-shadow: 0.2vh 0.1vw 0.7vh 0.2vw rgba(0, 0, 0, 0.07) !important;
 	}
 
 	#title {
@@ -135,5 +128,4 @@ const location = 'Market St, San Francisco, CA, USA';
 		padding-top: 10% !important;
 	}
 }
-
 </style>

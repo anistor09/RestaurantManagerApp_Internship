@@ -2,14 +2,14 @@
 </script>
 
 <template>
-  <div>
-    <RestaurantComponent/>
+  <div style="padding-top: 20px; padding-left:15px; padding-right:15px; height: 40%">
+    <RestaurantComponent></RestaurantComponent>
   </div>
 </template>
 
 <style scoped>
-.right{
-  width: 100vw;
-  height: 100vh;
+
+.id {
+
 }
 </style>
