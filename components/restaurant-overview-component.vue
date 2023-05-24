@@ -9,8 +9,8 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 		<div class="All">
 			<!-- Container which contains the image, the name of the restaurant and it's address-->
 			<div id="imageNameAddress">
-				<img id="circleImage" :src="restaurant.image_url" alt=""/>
-			    <!-- Container which contains the name of the restaurant and it's address-->
+				<img id="circleImage" :src="restaurant.imageUrl" alt="" />
+				<!-- Container which contains the name of the restaurant and it's address-->
 				<div id="nameAddress">
 					<input
 						v-model="restaurant.name"
