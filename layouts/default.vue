@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import { useRestaurantStore } from '~/store/restaurant';
 const imageURL = '/_nuxt/assets/images/Logo.png';
+import { useRestaurantStore } from '~/store/restaurant';
 
 const restaurantStore = useRestaurantStore();
 await restaurantStore.getRestaurant();
-
-const loading = computed(() => restaurantStore.loadingGetter);
 </script>
 
 <template>
-	<div v-if="loading" v-loading.fullscreen.lock="true"></div>
-	<div v-else>
+	<div>
 		<el-container style="position: fixed; width: 100%; height: 100%">
 			<el-aside style="overflow: hidden; width: 16vw">
 				<el-menu default-active="1" text-color="white" active-text-color="black">
 					<img class="logo" :src="imageURL" />
-					<el-menu-item index="1" @click="navigateTo('/')">
+					<el-menu-item index="1" @click="navigateTo('/home')">
 						<span>Home</span>
 					</el-menu-item>
 					<el-menu-item index="2" @click="navigateTo('/menus')">
@@ -27,7 +24,7 @@ const loading = computed(() => restaurantStore.loadingGetter);
 					<el-menu-item index="4" @click="navigateTo('/tables')">
 						<span>Tables</span>
 					</el-menu-item>
-					<el-menu-item index="5" @click="navigateTo('/')">
+					<el-menu-item index="5" @click="navigateTo('/home')">
 						<span>Help</span>
 					</el-menu-item>
 					<el-menu-item class="settings" index="6" @click="navigateTo('/settings')">

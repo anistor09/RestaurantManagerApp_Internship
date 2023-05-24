@@ -4,8 +4,7 @@ import { Carte } from '~/interfaces/Carte';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
-
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close']);
 
 const props = defineProps({
 	menu: {
@@ -86,12 +85,10 @@ const changeItem = () => {
 	selectedItem.value = filteredItems.value.filter((x) => x.name === itemName.value)[0];
 };
 
-
-
-const addItemInMenu = async() => {
+const addItemInMenu = async () => {
 	const data = {
 		carteId: menuRef.value.id,
-		itemId: selectedItem.value.id
+		itemId: selectedItem.value.id,
 	};
 	await useFetch('/api/menus/addItemInMenu', {
 		method: 'POST',
@@ -102,80 +99,77 @@ const addItemInMenu = async() => {
 	});
 	menuRef.value.itemSet.push(selectedItem.value);
 	emit('close');
-}
-
-
-
+};
 </script>
 
 <template>
-		<div id="all">
-			<div class="div">
-				<h1 class="title">Category:</h1>
+	<div id="all">
+		<div class="div">
+			<h2 class="title">Category:</h2>
 
-				<el-select
-					v-model="categoryName"
-					class="specialSelect"
-					placeholder="Select category"
-					size="large"
-					@change="changeCategory"
-				>
-					<el-option
-						v-for="category in categories"
-						:key="category.id"
-						:label="category.name"
-						:value="category.name"
-					/>
-				</el-select>
-			</div>
-
-			<div class="div">
-				<h1 class="title">SubCategory:</h1>
-
-				<el-select
-					v-model="subcategoryName"
-					class="specialSelect"
-					:disabled="!enableSubcategory"
-					placeholder="Select subcategory"
-					size="large"
-					@change="changeSubCategory"
-				>
-					<el-option
-						v-for="subcategory in filteredSubcategories"
-						:key="subcategory.id"
-						:label="subcategory.name"
-						:value="subcategory.name"
-					/>
-				</el-select>
-			</div>
-
-			<div class="div">
-				<h1 class="title">Item:</h1>
-
-				<el-select
-					v-model="itemName"
-					class="specialSelect"
-					placeholder="Select item"
-					size="large"
-					:disabled="!enableItems"
-					@change="changeItem"
-				>
-					<el-option
-						v-for="item in filteredItems"
-						:key="item.id"
-						:label="item.name"
-						:value="item.name"
-					/>
-				</el-select>
-			</div>
-			<div id="buttonContainer">
-				<el-button color="#ED5087" plain round @click="addItemInMenu()"> Add</el-button>
-			</div>
+			<el-select
+				v-model="categoryName"
+				class="specialSelect"
+				placeholder="Select category"
+				size="large"
+				@change="changeCategory"
+			>
+				<el-option
+					v-for="category in categories"
+					:key="category.id"
+					:label="category.name"
+					:value="category.name"
+				/>
+			</el-select>
 		</div>
+
+		<div class="div">
+			<h2 class="title">Subcategory:</h2>
+
+			<el-select
+				v-model="subcategoryName"
+				class="specialSelect"
+				:disabled="!enableSubcategory"
+				placeholder="Select subcategory"
+				size="large"
+				@change="changeSubCategory"
+			>
+				<el-option
+					v-for="subcategory in filteredSubcategories"
+					:key="subcategory.id"
+					:label="subcategory.name"
+					:value="subcategory.name"
+				/>
+			</el-select>
+		</div>
+
+		<div class="div">
+			<h2 class="title">Item:</h2>
+
+			<el-select
+				v-model="itemName"
+				class="specialSelect"
+				placeholder="Select item"
+				size="large"
+				:disabled="!enableItems"
+				@change="changeItem"
+			>
+				<el-option
+					v-for="item in filteredItems"
+					:key="item.id"
+					:label="item.name"
+					:value="item.name"
+				/>
+			</el-select>
+		</div>
+		<div id="buttonContainer">
+			<el-button color="#ED5087" plain round @click="addItemInMenu()"> Add</el-button>
+		</div>
+	</div>
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Cairo');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 #all {
 	width: 100%;
 	height: 100%;
@@ -183,12 +177,14 @@ const addItemInMenu = async() => {
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
-	font-family: 'Cairo';
+	font-family: 'Open Sans';
+	position: relative;
+	bottom: 2vh;
 }
 #buttonContainer {
 	display: flex;
 	justify-content: center;
-	padding: 5%;
+	padding-top: 2.5vh;
 	align-items: center;
 }
 
@@ -217,6 +213,7 @@ const addItemInMenu = async() => {
 	width: 100%;
 }
 .title {
+	font-size: 1.1vw;
 	color: #ed5087;
 }
 .specialSelect >>> .el-input {

@@ -55,7 +55,6 @@ watch(selectedMenuName, () => {
 
 const addItemInMenu = ref(false);
 const addMenu = ref(false);
-
 </script>
 
 <template>
@@ -74,14 +73,25 @@ const addMenu = ref(false);
 						</el-select>
 					</div>
 					<div class="el-col" :style="{ flex: '0 0 40%', textAlign: 'right', paddingTop: '3vh' }">
-						<el-button class="menus-button" color="#ED5087" plain round @click="addMenu = true"> Add menu </el-button>
-						<el-button class="menus-button" :disabled="selectedMenuName === ''" color="#ED5087" plain round @click="addItemInMenu = true;"> Place item </el-button>
+						<el-button class="menus-button" color="#ED5087" plain round @click="addMenu = true">
+							Add menu
+						</el-button>
+						<el-button
+							class="menus-button"
+							:disabled="selectedMenuName === ''"
+							color="#ED5087"
+							plain
+							round
+							@click="addItemInMenu = true"
+						>
+							Place item
+						</el-button>
 						<Teleport to="body">
 							<el-dialog
 								v-model="addItemInMenu"
 								style="
-									width: 35%;
-									height: 70%;
+									width: 20%;
+									height: 45%;
 									display: flex;
 									align-items: center;
 									flex-direction: column;
@@ -90,28 +100,34 @@ const addMenu = ref(false);
 									border-radius: 50px !important;
 								"
 							>
-							<AddItemInMenuComponent :menu="selectedMenu" @close="addItemInMenu = false"></AddItemInMenuComponent>				
+								<AddItemInMenuComponent
+									:menu="selectedMenu"
+									@close="addItemInMenu = false"
+								></AddItemInMenuComponent>
 							</el-dialog>
 						</Teleport>
 						<Teleport to="body">
 							<el-dialog
 								v-model="addMenu"
 								style="
-								top: -10%;
-								width: 40%;
-								height: 85%;
-								min-height: 750px;
-								display: flex;
-								align-items: center;
-								justify-content: center;
-								flex-direction: column;
-								border: 5px solid #ed5087;
-								border-radius: 50px !important;
-								padding: 10px;
-								font-family: 'Open Sans';
+									top: -10%;
+									width: 40%;
+									height: 85%;
+									min-height: 750px;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+									flex-direction: column;
+									border: 5px solid #ed5087;
+									border-radius: 50px !important;
+									padding: 10px;
+									font-family: 'Open Sans';
 								"
 							>
-							<AddMenuComponent :restaurant="restaurant" @close="addMenu = false"></AddMenuComponent>				
+								<AddMenuComponent
+									:restaurant="restaurant"
+									@close="addMenu = false"
+								></AddMenuComponent>
 							</el-dialog>
 						</Teleport>
 					</div>
