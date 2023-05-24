@@ -4,7 +4,7 @@
 <template>
   <div class="container">
     <div class="right">
-      <edit-item :add-item="true" :item-id="85"/>
+      <edit-item :add-item="false" :item-id="85"/>
     </div>
   </div>
 </template>
