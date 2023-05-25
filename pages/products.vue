@@ -24,9 +24,9 @@ const filterCategories = computed(() =>
 	),
 );
 
-function addCategory() {
-	console.log('TODO: wire with add category page');
-}
+const addCategory = () => {
+	window.open('/editCategoryView', '_blank');
+};
 
 function addItem() {
 	console.log('TODO: wire with add item page');
@@ -35,6 +35,7 @@ function addItem() {
 
 <template>
 	<el-scrollbar>
+		<PageTitle title="Products"></PageTitle>
 		<el-tabs v-model="currentProduct" class="products-tabs">
 			<el-tab-pane
 				v-for="product in selectedProducts"
@@ -131,8 +132,9 @@ function addItem() {
 
 .products-tabs {
 	justify-content: center;
-	max-width: 99%;
-	margin: 0 auto; /* Center the tabs horizontally */
+	max-width: 98%;
+	margin: 0 auto;
+	/* Center the tabs horizontally */
 }
 
 .el-tabs {
