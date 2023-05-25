@@ -1,11 +1,59 @@
-<script setup>
-import restaurants from '../mockData/restaurants.json';
-const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
+<script lang="ts" setup>
+import { useRestaurantStore } from '~/store/restaurant';
+import { Hours } from '~/interfaces/Hours';
+const restaurantStore = useRestaurantStore();
+const restaurant = restaurantStore.restaurantGetter;
+
+const workingDays = ['Monday', 'Tuesday', 'Wendsnday', 'Thursday', 'Friday', 'Saturnday', 'Sunday'];
+const startTimes = ref(['', '', '', '', '', '', '']);
+const endTimes = ref(['', '', '', '', '', '', '']);
+const doubleCheck = ref(false);
+
+const checkIfChange = () => {
+	doubleCheck.value = true;
+};
+const saveChanges = async() => {
+	console.log(restaurant.hoursSet);
+	restaurant.hoursSet = [];
+	for (let i = 0; i < 7; i++) {
+		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
+			const hour: Hours = {
+				id: 1,
+				opening: startTimes.value[i],
+				closing: endTimes.value[i],
+				day: i,
+			};
+			restaurant.hoursSet.push(hour);
+		}
+	}
+	const bodyString = JSON.stringify(restaurant);
+	console.log(bodyString);
+	
+	await useFetch('/api/restaurant/editRestaurant', {
+		method: 'PUT',
+		body: bodyString,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+		
+	doubleCheck.value = false;
+};
+
+onMounted(() => {
+	for (const [index, element] of restaurant.hoursSet.entries()) {
+		if (index < 7) {
+			startTimes.value[index] = element.opening;
+			endTimes.value[index] = element.closing;
+		}
+	}
+	console.log('set');
+});
 </script>
 
 <template>
 	<div>
-		<h1>Restaurant Overview</h1>
+		<PageTitle title="Restaurant Overview"></PageTitle>
 		<div class="All">
 			<!-- Container which contains the image, the name of the restaurant and it's address-->
 			<div id="imageNameAddress">
@@ -15,7 +63,7 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 					<input
 						v-model="restaurant.name"
 						class="specialInput"
-						style="font-size: 23px; width: 40%"
+						style="font-size: 23px; width: 80%"
 						type="input"
 						placeholder="Please input"
 					/>
@@ -23,12 +71,11 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 						v-model="restaurant.addresse"
 						class="specialInput"
 						type="input"
-						style="font-size: 18px; text-align: start"
+						style="font-size: 18px; text-align: start; width: 100%"
 						placeholder="Please input"
 					/>
 				</div>
 			</div>
-			<br /><br />
 			<!-- Container which the other information(description, phone number, email and category)-->
 			<div class="otherDetails">
 				<div class="prefix">Description:</div>
@@ -56,7 +103,7 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 					<div class="prefix">Phone Number:</div>
 					<!-- The input where the restaurant phone number can be changed by the restaurant owner-->
 					<input
-						v-model="restaurant.phone_number"
+						v-model="restaurant.phoneNumber"
 						class="specialInput"
 						style="width: 9%; text-align: center; min-width: 130px"
 						type="input"
@@ -85,9 +132,55 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 						placeholder="Please input"
 					/>
 				</div>
-				<div id="buttonContainer">
-					<el-button color="#ED5087" plain round> Save changes</el-button>
+				<div class="box" style="">
+					<div class="prefix">Working Hours:</div>
+					<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
+						<div class="dayName">{{ day }}</div>
+						<el-time-select
+							v-model="startTimes[index]"
+							style="width: 12%"
+							placeholder="Start time"
+							start="00:00"
+							step="00:30"
+							end="23:59"
+						/>
+						<el-time-select
+							v-model="endTimes[index]"
+							style="width: 12%"
+							placeholder="End time"
+							start="00:00"
+							step="00:30"
+							end="23:59"
+						/>
+					</div>
 				</div>
+				<div id="buttonContainer">
+					<el-button color="#ED5087" plain round @click="checkIfChange()"> Save changes</el-button>
+				</div>
+
+				<Teleport to="body">
+					<el-dialog
+						v-model="doubleCheck"
+						width="20%"
+						style="
+							font-family: 'Open Sans';
+							text-align: center;
+							font-size: 0.8vw;
+							font-weight: bold;
+							color: black;
+							border-radius: 40px;
+							border: 0.15vw solid #ed5087 !important;
+							top: 20%;
+						"
+					>
+						<div>
+							Are you sure you want to make this changes?
+							<div id="change-bottom-button">
+								<el-button color="#ED5087" plain round @click="saveChanges()">Yes</el-button>
+							</div>
+						</div>
+					</el-dialog>
+				</Teleport>
 			</div>
 		</div>
 	</div>
@@ -96,28 +189,32 @@ const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
 <style scoped>
 /* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
 @import url('https://fonts.googleapis.com/css?family=Cairo');
-.All {
+* {
 	font-family: 'Cairo';
 }
-h1 {
-	position: relative;
+.All {
+	padding-top: 2%;
+	padding-left: 2%;
+	height: 81vh;
+	overflow: auto;
 }
-/* The line after the restaurant overview */
-h1::after {
+h1 {
+	padding-left: 2%;
+}
+
+#title::after {
 	content: '';
 	display: block;
 	height: 3px;
-	width: 100%;
 	background-color: #727171;
 	margin-top: 10px;
 }
-
 /*Styling for both the containers which formed of pairs of inputs and their descriptions*/
 .details {
 	display: flex;
 	align-items: center;
 	padding-top: 1%;
-	width: 100%;
+	font-size: 20px;
 }
 
 /* Styling for the descriptions of the inputs */
@@ -125,6 +222,7 @@ h1::after {
 	margin-right: 10px;
 	font-size: 20px;
 	padding-left: 3px;
+	color: #ed5087;
 }
 
 #imageNameAddress {
@@ -154,9 +252,30 @@ h1::after {
 #buttonContainer {
 	display: flex;
 	justify-content: flex-end;
-	padding: 5%;
+	padding-right: 5%;
 	align-items: center;
-	font-family: 'Cairo';
+}
+.dayName {
+	width: 12%;
+	min-width: 80px;
+}
+.workingDay {
+	display: flex;
+	flex-direction: row;
+	padding-left: 0%;
+}
+.box {
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+
+#change-bottom-button {
+	display: flex;
+	padding-top: 8%;
+	justify-content: center;
 }
 
 #circleImage {
