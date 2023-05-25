@@ -36,8 +36,12 @@ if (props.addCategory === false) {
 const openNotification = (notifTitle: string) => {
 	ElNotification({
 		title: notifTitle,
-		message: h('div', { style: 'color: #ed5087' }, 'You can now close this window.'),
-		customClass: 'notificationClass',
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'You can now close this window.',
+		),
+		customClass: 'notif',
 	});
 };
 
@@ -232,7 +236,9 @@ const openNotification = (notifTitle: string) => {
 	color: #727171;
 	font-size: 1vw;
 }
-
+.notif {
+	font-family: 'Open Sans';
+}
 .box {
 	padding-left: 10%;
 	height: 100%;

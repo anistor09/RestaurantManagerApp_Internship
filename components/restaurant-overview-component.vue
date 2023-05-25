@@ -4,7 +4,7 @@ import { Hours } from '~/interfaces/Hours';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
-const workingDays = ['Monday', 'Tuesday', 'Wendsnday', 'Thursday', 'Friday', 'Saturnday', 'Sunday'];
+const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturnday', 'Sunday'];
 const startTimes = ref(['', '', '', '', '', '', '']);
 const endTimes = ref(['', '', '', '', '', '', '']);
 const doubleCheck = ref(false);
@@ -12,7 +12,7 @@ const doubleCheck = ref(false);
 const checkIfChange = () => {
 	doubleCheck.value = true;
 };
-const saveChanges = async() => {
+const saveChanges = async () => {
 	console.log(restaurant.hoursSet);
 	restaurant.hoursSet = [];
 	for (let i = 0; i < 7; i++) {
@@ -28,7 +28,7 @@ const saveChanges = async() => {
 	}
 	const bodyString = JSON.stringify(restaurant);
 	console.log(bodyString);
-	
+
 	await useFetch('/api/restaurant/editRestaurant', {
 		method: 'PUT',
 		body: bodyString,
@@ -36,7 +36,7 @@ const saveChanges = async() => {
 			'Content-Type': 'application/json',
 		},
 	});
-		
+
 	doubleCheck.value = false;
 };
 
@@ -174,7 +174,7 @@ onMounted(() => {
 						"
 					>
 						<div>
-							Are you sure you want to make this changes?
+							Are you sure you want to make these changes?
 							<div id="change-bottom-button">
 								<el-button color="#ED5087" plain round @click="saveChanges()">Yes</el-button>
 							</div>
@@ -270,7 +270,6 @@ h1 {
 	flex-direction: column;
 	justify-content: space-around;
 }
-
 
 #change-bottom-button {
 	display: flex;
