@@ -11,7 +11,7 @@ export const useRestaurantStore = defineStore({
     id: 'restaurant-store',
     state: (): RestaurantState => ({
         id: 1,
-        restaurant: null,
+        restaurant: {} as Restaurant,
         loading: true,
     }),
     actions: {

@@ -51,11 +51,8 @@ const logSelectedAllergens = () => { console.log(selectedAllergens.value) }
 
 <template>
     <div class="container">
-        <div class="top">
-            <h3 v-if="addItem" style="padding-left: 4%;">Add an item</h3>
-            <h3 v-else style="padding-left: 4%;">Edit an item</h3>
-        </div>
-        <div class="line"></div>
+        <page-title v-if="addItem" :title="'Add an item'"/>
+        <page-title v-else :title="'Edit an item'"/>
         <div class="bottom">
             <div class="left">
                 <div class="elementLeft">
@@ -175,22 +172,6 @@ v-for="allergen in allergens" :key="allergen.id" :label="allergen.name"
     width: 100%;
     height: 100%;
     overflow: hidden;
-}
-
-.top {
-    width: 100%;
-    height: 11.6%;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    font-size: 3vw;
-    font-family: "Cairo", Arial, sans-serif;
-}
-
-.line {
-    height: 0.4%;
-    background-color: #727171;
-    margin: 0;
 }
 
 .bottom {
