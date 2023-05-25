@@ -53,7 +53,7 @@ onMounted(() => {
 
 <template>
 	<div>
-		<div id="title"><h1 style="font-size: 40px">Restaurant Overview</h1></div>
+		<PageTitle title="Restaurant Overview"></PageTitle>
 		<div class="All">
 			<!-- Container which contains the image, the name of the restaurant and it's address-->
 			<div id="imageNameAddress">
