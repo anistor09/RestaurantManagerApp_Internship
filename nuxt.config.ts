@@ -8,7 +8,5 @@ export default defineNuxtConfig({
 			},
 		},
 	},
-	css: [
-		'~/assets/css/global.css'
-	]
+	css: ['~/assets/css/global.css'],
 });

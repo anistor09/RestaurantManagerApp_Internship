@@ -12,7 +12,7 @@ await restaurantStore.getRestaurant();
 			<el-aside style="overflow: hidden; width: 16vw">
 				<el-menu default-active="1" text-color="white" active-text-color="black">
 					<img class="logo" :src="imageURL" />
-					<el-menu-item index="1" @click="navigateTo('/home')">
+					<el-menu-item index="1" @click="navigateTo('/')">
 						<span>Home</span>
 					</el-menu-item>
 					<el-menu-item index="2" @click="navigateTo('/menus')">
@@ -24,10 +24,7 @@ await restaurantStore.getRestaurant();
 					<el-menu-item index="4" @click="navigateTo('/tables')">
 						<span>Tables</span>
 					</el-menu-item>
-					<el-menu-item index="5" @click="navigateTo('/home')">
-						<span>Help</span>
-					</el-menu-item>
-					<el-menu-item class="settings" index="6" @click="navigateTo('/settings')">
+					<el-menu-item class="settings" index="5" @click="navigateTo('/settings')">
 						<img class="icon" src="https://cdn.onlinewebfonts.com/svg/img_574534.png" />
 						<span id="setting">Settings</span>
 					</el-menu-item>
