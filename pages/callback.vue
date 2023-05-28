@@ -14,9 +14,10 @@ onBeforeMount(() => {
 	useFetch('/api/auth/token', {
 		method: 'POST',
 		body: code,
-	}).then((response) => {
-		console.log(response);
+	}).then(async () => {
+		const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+		await sleep(1000);
+		navigateTo('/');
 	});
-	navigateTo('/');
 });
 </script>

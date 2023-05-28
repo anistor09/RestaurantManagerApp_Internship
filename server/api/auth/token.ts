@@ -19,11 +19,12 @@ export default defineEventHandler((event) => {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
 		});
-
 		const responseData = await response.json();
 
-		console.log(responseData);
+		console.log(responseData.access_token);
 
-		return responseData;
+		setCookie(event, 'token', responseData.access_token);
+
+		return 'Token set';
 	});
 });
