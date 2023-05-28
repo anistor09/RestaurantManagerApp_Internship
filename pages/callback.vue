@@ -6,8 +6,8 @@
 
 <script lang="ts" setup>
 onBeforeMount(() => {
-	let route = useRoute();
-	let code = route.query.code;
+	const route = useRoute();
+	const code = route.query.code;
 
 	// Make a request to the token endpoint to exchange the code for an access token
 

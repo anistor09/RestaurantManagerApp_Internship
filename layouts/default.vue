@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const imageURL = '/_nuxt/assets/images/Logo.png';
 import { useRestaurantStore } from '~/store/restaurant';
+const imageURL = '/_nuxt/assets/images/Logo.png';
 
 const restaurantStore = useRestaurantStore();
 await restaurantStore.getRestaurant();
