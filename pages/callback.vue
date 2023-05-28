@@ -15,7 +15,7 @@ onBeforeMount(() => {
 		method: 'POST',
 		body: code,
 	}).then(async () => {
-		const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+		const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 		await sleep(1000);
 		navigateTo('/');
 	});
