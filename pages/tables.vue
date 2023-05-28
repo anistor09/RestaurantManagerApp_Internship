@@ -137,7 +137,7 @@ watchEffect(() => {
 			</el-dialog>
 		</Teleport>
 		<div>
-			<header id="header">Tables</header>
+			<PageTitle title="Tables"></PageTitle>
 			<main>
 				<div id="buttonContainer">
 					<SearchBar v-model="selectedTable" :options="tables.map((x) => 'Table ' + x.number)" />

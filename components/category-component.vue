@@ -8,9 +8,9 @@ const props = defineProps({
 	},
 });
 
-function editCategory() {
-	console.log('TODO: wire with edit category page');
-}
+const editCategory = () => {
+	window.open(`/editCategoryView/${props.category.id}`, '_blank');
+};
 </script>
 
 <!-- Item card component containing basic information, including image, description and edit/delete buttons-->

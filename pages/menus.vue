@@ -59,6 +59,7 @@ const addMenu = ref(false);
 
 <template>
 	<el-scrollbar>
+		<PageTitle title="Menus"></PageTitle>
 		<el-container>
 			<el-header>
 				<div class="el-row">
