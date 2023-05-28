@@ -6,4 +6,7 @@
 	</div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.id {
+}
+</style>
