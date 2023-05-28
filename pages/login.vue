@@ -8,17 +8,21 @@ const restaurantStore = useRestaurantStore();
 await restaurantStore.getRestaurant();
 
 function signIn() {
-	// Redirect the user to the authorization endpoint
-	const authorizeUrl = 'https://auth.ewai.fr/oauth2/authorize';
-	const responseType = 'code';
-	const clientId = '69us2hj5rvvotdu17lamc00tu9';
-	const redirectUri = 'http://localhost:3000/callback';
+	const token = useCookie('token');
+	if (token.value !== undefined && token.value !== null) navigateTo('/');
+	else {
+		// Redirect the user to the authorization endpoint
+		const authorizeUrl = 'https://auth.ewai.fr/oauth2/authorize';
+		const responseType = 'code';
+		const clientId = '69us2hj5rvvotdu17lamc00tu9';
+		const redirectUri = 'http://localhost:3000/callback';
 
-	const url = `${authorizeUrl}?response_type=${responseType}&client_id=${clientId}&redirect_uri=${redirectUri}`;
+		const url = `${authorizeUrl}?response_type=${responseType}&client_id=${clientId}&redirect_uri=${redirectUri}`;
 
-	navigateTo(url, {
-		external: true,
-	});
+		navigateTo(url, {
+			external: true,
+		});
+	}
 }
 </script>
 
