@@ -8,5 +8,13 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+	runtimeConfig: {
+		clientSecret: '',
+
+		public: {
+			clientId: '',
+			callback: '',
+		},
+	},
 	css: ['~/assets/css/global.css'],
 });

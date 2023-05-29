@@ -1,8 +1,10 @@
 export default defineEventHandler((event) => {
 	return readBody(event).then(async (code) => {
-		const clientId = '69us2hj5rvvotdu17lamc00tu9';
-		const clientSecret = 'kfh7t64r74vt93vq50vqenkml4m3a19449s4arptvfg1ih3q0ra';
-		const redirectUri = 'http://localhost:3000/callback';
+		const config = useRuntimeConfig();
+
+		const clientId = config.public.clientId;
+		const clientSecret = config.clientSecret;
+		const redirectUri = config.public.callback;
 
 		const requestBody = new URLSearchParams();
 		requestBody.append('response_type', 'code');
