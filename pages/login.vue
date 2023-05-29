@@ -1,11 +1,7 @@
 <script lang="ts" setup>
-import { useRestaurantStore } from '~/store/restaurant';
 definePageMeta({
 	layout: 'empty',
 });
-
-const restaurantStore = useRestaurantStore();
-await restaurantStore.getRestaurant();
 
 const config = useRuntimeConfig();
 

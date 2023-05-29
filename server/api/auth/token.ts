@@ -23,8 +23,6 @@ export default defineEventHandler((event) => {
 		});
 		const responseData = await response.json();
 
-		console.log(responseData.access_token);
-
 		setCookie(event, 'token', responseData.access_token);
 
 		return 'Token set';
