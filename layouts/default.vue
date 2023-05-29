@@ -45,7 +45,7 @@ span {
 	font-size: 2vw;
 	align-items: center;
 	top: 10vh;
-	padding-top: 6vh;
+	padding-top: 8vh;
 	padding-bottom: 7vh;
 	font-family: 'Open Sans';
 }
@@ -54,7 +54,7 @@ span {
 	padding-left: 10%;
 }
 .settings {
-	padding-top: 20vh;
+	padding-top: 14vh;
 	justify-content: center;
 	position: relative;
 	right: 1vw;
