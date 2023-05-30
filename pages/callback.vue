@@ -1,8 +1,4 @@
-<template>
-	<div>
-		<h1>Callback Page</h1>
-	</div>
-</template>
+<template></template>
 
 <script lang="ts" setup>
 definePageMeta({
