@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useRestaurantStore } from '~/store/restaurant';
-
 definePageMeta({
 	layout: 'empty',
 });
