@@ -17,7 +17,6 @@ export default defineEventHandler((event) => {
 		});
 
 		const responseData: Table = await response.json();
-		console.log(responseData);
 		return responseData;
 	});
 });
