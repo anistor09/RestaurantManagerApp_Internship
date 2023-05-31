@@ -1,8 +1,13 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { ItemWrapper } from '~/interfaces/ItemWrapper';
+import { Restaurant } from '~/interfaces/Restaurant';
 
 const props = defineProps({
+	restaurant: {
+		type: Object as () => Restaurant,
+		required: true,
+	},
 	subcategoryName: {
 		type: String,
 		required: true,
@@ -11,20 +16,30 @@ const props = defineProps({
 		type: Array as () => ItemWrapper[],
 		required: true,
 	},
+	collapsed: {
+		type: Boolean,
+		required: true,
+	},
+	menuId: {
+		type: Number,
+		required: true,
+	},
 });
+const localRestaurant = ref(props.restaurant);
 const localItems = ref(props.items);
 const deletedItemId = ref(0);
 const search = ref('');
+const isCollapsed = ref(['1']);
+
+if (!props.collapsed) {
+	isCollapsed.value = [];
+}
 
 const filterTableData = computed(() =>
 	localItems.value.filter(
 		(data) => !search.value || data.item.name.toLowerCase().includes(search.value.toLowerCase()),
 	),
 );
-
-function handleDelete() {
-	localItems.value = localItems.value.filter((wrapper) => wrapper.item.id !== deletedItemId.value);
-}
 
 function deleteItem(id: number) {
 	const itemWrapper = localItems.value.find((wrapper) => wrapper.item.id === id);
@@ -33,6 +48,28 @@ function deleteItem(id: number) {
 		deletedItemId.value = id;
 	}
 }
+const handleDelete = async () => {
+	// Remove from database
+	const data = {
+		id: props.menuId,
+		itemId: deletedItemId.value,
+	};
+	await useFetch('/api/menus/removeItemFromMenu', {
+		method: 'POST',
+		body: data,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	// Remove locally
+	localRestaurant.value.carteSet = localRestaurant.value.carteSet.filter((menu) => {
+		if (menu.id === props.menuId) {
+			menu.itemSet = menu.itemSet.filter((x) => x.id !== deletedItemId.value);
+		}
+		return true;
+	});
+};
 
 watch(
 	() => props.items,
@@ -45,7 +82,7 @@ watch(
 <!-- Card component containing the subcategory, along with a list of items -->
 <template>
 	<el-card id="subcategory-card" shadow="always" :body-style="{ padding: '0px' }">
-		<el-collapse>
+		<el-collapse v-model="isCollapsed">
 			<el-collapse-item :title="subcategoryName" name="1">
 				<el-table id="subcategory-table" :data="filterTableData">
 					<el-table-column align="center" label="Image">
@@ -69,7 +106,7 @@ watch(
 						</template>
 						<template #default="{ row }">
 							<el-button id="button" color="#ED5087" plain round @click="deleteItem(row.item.id)"
-								>Delete</el-button
+								>Remove from menu</el-button
 							>
 							<Teleport to="body">
 								<el-dialog v-model="row.showDelete" width="20%" class="subcategory-delete-popup">

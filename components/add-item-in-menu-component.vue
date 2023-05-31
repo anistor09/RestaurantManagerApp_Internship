@@ -109,6 +109,8 @@ const addItemInMenu = async () => {
 
 			<el-select
 				v-model="categoryName"
+				filterable
+				clearable
 				class="specialSelect"
 				placeholder="Select category"
 				size="large"
@@ -128,6 +130,8 @@ const addItemInMenu = async () => {
 
 			<el-select
 				v-model="subcategoryName"
+				filterable
+				clearable
 				class="specialSelect"
 				:disabled="!enableSubcategory"
 				placeholder="Select subcategory"
@@ -148,6 +152,8 @@ const addItemInMenu = async () => {
 
 			<el-select
 				v-model="itemName"
+				filterable
+				clearable
 				class="specialSelect"
 				placeholder="Select item"
 				size="large"
