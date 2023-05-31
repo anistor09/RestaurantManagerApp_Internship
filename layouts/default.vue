@@ -29,7 +29,7 @@ const active = computed(() => {
 			<el-aside style="overflow: hidden; width: 16vw">
 				<el-menu :default-active="active" text-color="white" active-text-color="#696969">
 					<img class="logo" :src="imageURL" />
-					<el-menu-item index="1" @click="navigateTo('/home')">
+					<el-menu-item index="1" @click="navigateTo('/')">
 						<span>Home</span>
 					</el-menu-item>
 					<el-menu-item index="2" @click="navigateTo('/menus')">
@@ -65,7 +65,7 @@ span {
 	font-size: 2vw;
 	align-items: center;
 	top: 10vh;
-	padding-top: 6vh;
+	padding-top: 8vh;
 	padding-bottom: 7vh;
 	font-family: 'Open Sans';
 }
