@@ -1,16 +1,33 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
 import { useRestaurantStore } from '~/store/restaurant';
+
 const imageURL = '/_nuxt/assets/images/Logo.png';
 
 const restaurantStore = useRestaurantStore();
 await restaurantStore.getRestaurant();
+const restaurant = restaurantStore.restaurantGetter;
+
+const route = useRoute();
+
+const path = computed(() => route.path);
+
+const active = computed(() => {
+	if (path.value.includes('home')) return '1';
+	if (path.value.includes('menus')) return '2';
+	if (path.value.includes('products')) return '3';
+	if (path.value.includes('tables')) return '4';
+	if (path.value.includes('settings')) return '5';
+	else return '';
+});
 </script>
 
 <template>
 	<div>
 		<el-container style="position: fixed; width: 100%; height: 100%">
 			<el-aside style="overflow: hidden; width: 16vw">
-				<el-menu default-active="1" text-color="white" active-text-color="black">
+				<el-menu :default-active="active" text-color="white" active-text-color="#696969">
 					<img class="logo" :src="imageURL" />
 					<el-menu-item index="1" @click="navigateTo('/')">
 						<span>Home</span>
@@ -25,7 +42,10 @@ await restaurantStore.getRestaurant();
 						<span>Tables</span>
 					</el-menu-item>
 					<el-menu-item class="settings" index="5" @click="navigateTo('/settings')">
-						<img class="icon" src="https://cdn.onlinewebfonts.com/svg/img_574534.png" />
+						<img
+							class="icon"
+							:src="restaurant.logoUrl || 'https://cdn.onlinewebfonts.com/svg/img_574534.png'"
+						/>
 						<span id="setting">Settings</span>
 					</el-menu-item>
 				</el-menu>
@@ -54,7 +74,7 @@ span {
 	padding-left: 10%;
 }
 .settings {
-	padding-top: 14vh;
+	padding-top: 20vh;
 	justify-content: center;
 	position: relative;
 	right: 1vw;
@@ -78,7 +98,8 @@ span {
 	box-shadow: 0.1vh 0.1vw 1svh 0.2vw rgba(0, 0, 0, 0.5) !important;
 	position: relative;
 	border-radius: 50%;
-	width: 20%;
+	width: 3.5rem;
+	height: 3.5rem;
 	background-color: white;
 }
 #setting {
