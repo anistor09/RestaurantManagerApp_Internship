@@ -9,8 +9,10 @@ import { useRestaurantStore } from '~/store/restaurant';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
+const editPopupKey = ref(0);
 const currentCategory = ref('');
 const selectedMenuName = ref('');
+const forceCollapse = ['1'];
 const instructions = 'Manage and customize your menus easily with these steps:';
 const steps =
 	'Step 1: Select your menu \nStep 2: Choose the category \nStep 3: Choose the subcategory \nStep 4: Happy editing!';
@@ -55,6 +57,18 @@ watch(selectedMenuName, () => {
 
 const addItemInMenu = ref(false);
 const addMenu = ref(false);
+const editMenu = ref(false);
+
+function editMenuOnClose(name: string) {
+	selectedMenuName.value = name;
+	editMenu.value = false;
+	editPopupKey.value++;
+}
+
+function closeEditPopup() {
+	editMenu.value = false;
+	editPopupKey.value++;
+}
 </script>
 
 <template>
@@ -63,20 +77,95 @@ const addMenu = ref(false);
 		<el-container>
 			<el-header>
 				<div class="el-row">
-					<div class="el-col" :style="{ flex: '0 0 56%', 'text-align': 'left' }">
+					<div class="el-col" :style="{ flex: '0 0 67%', 'text-align': 'left', paddingTop: '3vh' }">
 						<el-select
 							v-model="selectedMenuName"
-							class="menu-selector"
+							:style="{ paddingRight: '1vw' }"
 							filterable
+							clearable
 							placeholder="Select menu"
 						>
-							<el-option v-for="item in restaurant.carteSet" :value="item.name" />
+							<el-option v-for="item in restaurant.carteSet" :key="item.id" :value="item.name" />
 						</el-select>
-					</div>
-					<div class="el-col" :style="{ flex: '0 0 40%', textAlign: 'right', paddingTop: '3vh' }">
-						<el-button class="menus-button" color="#ED5087" plain round @click="addMenu = true">
+						<el-button
+							class="menus-button"
+							:style="{ width: '6vw' }"
+							color="#ED5087"
+							plain
+							round
+							@click="addMenu = true"
+						>
 							Add menu
 						</el-button>
+						<ClientOnly>
+							<Teleport to="body">
+								<el-dialog
+									v-model="addMenu"
+									:style="{
+										top: '-10%',
+										width: '40%',
+										height: '85%',
+										minHeight: '750px',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										flexDirection: 'column',
+										border: '5px solid #ed5087',
+										borderRadius: '50px !important',
+										padding: '10px',
+										fontFamily: 'Open Sans',
+									}"
+								>
+									<AddMenuComponent
+										:restaurant="restaurant"
+										@close="addMenu = false"
+									></AddMenuComponent>
+								</el-dialog>
+							
+							</Teleport>
+							
+						</ClientOnly>
+					</div>
+					<div class="el-col" :style="{ flex: '0 0 30%', textAlign: 'right', paddingTop: '3vh' }">
+						<el-button
+							class="menus-button"
+							:disabled="selectedMenuName === ''"
+							color="#ED5087"
+							plain
+							round
+							@click="editMenu = true"
+						>
+							Edit menu
+						</el-button>
+						<ClientOnly>
+							<Teleport to="body">
+								<el-dialog
+									:key="editPopupKey"
+									v-model="editMenu"
+									:before-close="closeEditPopup"
+									:style="{
+										top: '-10%',
+										width: '40%',
+										height: '85%',
+										minHeight: '750px',
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										flexDirection: 'column',
+										border: '5px solid #ed5087',
+										borderRadius: '50px !important',
+										padding: '10px',
+										fontFamily: 'Open Sans',
+									}"
+								>
+									<EditMenuComponent
+										:restaurant="restaurant"
+										:menu="selectedMenu"
+										@close="editMenuOnClose"
+									></EditMenuComponent>
+								</el-dialog>
+							</Teleport>
+						</ClientOnly>
 						<el-button
 							class="menus-button"
 							:disabled="selectedMenuName === ''"
@@ -87,50 +176,28 @@ const addMenu = ref(false);
 						>
 							Place item
 						</el-button>
-						<Teleport to="body">
-							<el-dialog
-								v-model="addItemInMenu"
-								style="
-									width: 20%;
-									height: 45%;
-									display: flex;
-									align-items: center;
-									flex-direction: column;
-									justify-content: space-around;
-									border: 5px solid #ed5087;
-									border-radius: 50px !important;
-								"
-							>
-								<AddItemInMenuComponent
-									:menu="selectedMenu"
-									@close="addItemInMenu = false"
-								></AddItemInMenuComponent>
-							</el-dialog>
-						</Teleport>
-						<Teleport to="body">
-							<el-dialog
-								v-model="addMenu"
-								style="
-									top: -10%;
-									width: 40%;
-									height: 85%;
-									min-height: 750px;
-									display: flex;
-									align-items: center;
-									justify-content: center;
-									flex-direction: column;
-									border: 5px solid #ed5087;
-									border-radius: 50px !important;
-									padding: 10px;
-									font-family: 'Open Sans';
-								"
-							>
-								<AddMenuComponent
-									:restaurant="restaurant"
-									@close="addMenu = false"
-								></AddMenuComponent>
-							</el-dialog>
-						</Teleport>
+						<ClientOnly>
+							<Teleport to="body">
+								<el-dialog
+									v-model="addItemInMenu"
+									:style="{
+										width: '20%',
+										height: '45%',
+										display: 'flex',
+										alignItems: 'center',
+										flexDirection: 'column',
+										justifyContent: 'space-around',
+										border: '5px solid #ed5087',
+										borderRadius: '50px !important',
+									}"
+								>
+									<AddItemInMenuComponent
+										:menu="selectedMenu"
+										@close="addItemInMenu = false"
+									></AddItemInMenuComponent>
+								</el-dialog>
+							</Teleport>
+						</ClientOnly>
 					</div>
 				</div>
 			</el-header>
@@ -149,34 +216,64 @@ const addMenu = ref(false);
 					>
 						<div id="menus-wrapper">
 							<el-col>
-								<el-row
-									v-for="subcategory in selectedSubcategories"
-									:key="subcategory.id"
-									class="menus-row"
-								>
+								<el-row v-if="selectedSubcategories.length == 0" :key="1" class="menus-row">
 									<SubcategoryComponent
-										:subcategory-name="subcategory.name"
+										v-model="forceCollapse"
+										:restaurant="restaurant"
+										subcategory-name=""
 										:items="
 											selectedMenu.itemSet
-												.filter(
-													(x) =>
-														x.category.name == category.name &&
-														x.subCategory?.name == subcategory.name,
-												)
+												.filter((x) => x.category.name == category.name)
 												.map((x) => createItemWrapper(x))
 										"
+										:collapsed="true"
+										:menu-id="selectedMenu.id"
 									/>
 								</el-row>
-								<el-row :key="100000" class="menus-row">
-									<SubcategoryComponent
-										subcategory-name="Others"
-										:items="
-											selectedMenu.itemSet
-												.filter((x) => x.category.name == category.name && x.subCategory == null)
-												.map((x) => createItemWrapper(x))
+								<div v-else>
+									<el-row
+										v-for="subcategory in selectedSubcategories"
+										:key="subcategory.id"
+										class="menus-row"
+									>
+										<SubcategoryComponent
+											:restaurant="restaurant"
+											:subcategory-name="subcategory.name"
+											:items="
+												selectedMenu.itemSet
+													.filter(
+														(x) =>
+															x.category.name == category.name &&
+															x.subCategory?.name == subcategory.name,
+													)
+													.map((x) => createItemWrapper(x))
+											"
+											:collapsed="false"
+											:menu-id="selectedMenu.id"
+										/>
+									</el-row>
+									<el-row
+										v-if="
+											selectedMenu.itemSet.filter(
+												(x) => x.category.name == category.name && x.subCategory == null,
+											).length > 0
 										"
-									/>
-								</el-row>
+										:key="100000"
+										class="menus-row"
+									>
+										<SubcategoryComponent
+											:restaurant="restaurant"
+											subcategory-name="Others"
+											:items="
+												selectedMenu.itemSet
+													.filter((x) => x.category.name == category.name && x.subCategory == null)
+													.map((x) => createItemWrapper(x))
+											"
+											:collapsed="false"
+											:menu-id="selectedMenu.id"
+										/>
+									</el-row>
+								</div>
 							</el-col>
 						</div>
 					</el-tab-pane>
@@ -214,6 +311,10 @@ const addMenu = ref(false);
 #menus-wrapper {
 	padding-left: 2vw;
 	padding-top: 2vh;
+}
+
+.el-overlay-dialog {
+	overflow: hidden;
 }
 
 .menus-button {
@@ -257,10 +358,6 @@ const addMenu = ref(false);
 
 .el-select-dropdown__item.selected {
 	color: #ed5087;
-}
-
-.menu-selector {
-	padding-top: 3vh;
 }
 
 .menus-row {
