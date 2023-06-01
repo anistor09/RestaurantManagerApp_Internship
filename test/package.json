@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@vitejs/plugin-vue": "^4.2.3"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^2.3.2"
+  }
+}

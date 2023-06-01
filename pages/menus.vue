@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import SubcategoryComponent from '~/components/subcategory-component.vue';
-import { Carte } from '~/interfaces/Carte';
-import { Category } from '~/interfaces/Category';
-import { Item } from '~/interfaces/Item';
-import { ItemWrapper } from '~/interfaces/ItemWrapper';
-import { SubCategory } from '~/interfaces/SubCategory';
-import { useRestaurantStore } from '~/store/restaurant';
+import SubcategoryComponent from '../components/subcategory-component.vue';
+import { Carte } from '../interfaces/Carte';
+import { Category } from '../interfaces/Category';
+import { Item } from '../interfaces/Item';
+import { ItemWrapper } from '../interfaces/ItemWrapper';
+import { SubCategory } from '../interfaces/SubCategory';
+import { useRestaurantStore } from '../store/restaurant';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
