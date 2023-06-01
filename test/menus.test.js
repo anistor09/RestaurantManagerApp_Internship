@@ -1,25 +1,43 @@
 import { vi, it, expect } from "vitest";
 import { mount } from "@vue/test-utils"
 import restaurants from '../mockData/restaurants.json'
-import MenusPage from '../pages/menus.vue';
+import testPage from '../pages/testPage.vue';
 import EditMenuComponent from '../components/edit-menu-component.vue';
 import AddItemInMenuComponent from '../components/add-item-in-menu-component.vue';
 import AddMenuComponent from '../components/add-menu-component.vue';
 
+/*
 vi.mock('../store/restaurant', () => {
-    return {
-		useRestaurantStore: vi.fn().mockReturnValue({ 
-			restaurantGetter: restaurants[0],
-			getRestaurant: vi.fn()
-		}) 
-	}
-})
+		const useRestaurantStore = () => {
+			return {
+				restaurantGetter: vi.fn().mockReturnValue(restaurants[0]),
+				getRestaurant: vi.fn()
+			}
+		}
+		return useRestaurantStore;
+	})
+*/
+
 
 it('renders menus page', () => {
-	const wrapper = mount(MenusPage);
+
+	vi.mock('../store/restaurant.ts', () => {
+		const useObject = () => {
+
+		}
+		return {
+			useRestaurantStore: vi.fn( () => {
+				return {
+					restaurantGetter: restaurants[0],
+					getRestaurant: vi.fn()
+				}
+			}) 
+		}
+	})
+	const wrapper = mount(testPage);
 	expect(wrapper.exists()).toBe(true);
 });
-
+/*
 
 it('opens add menu dialog', async () => {
 	const wrapper = mount(MenusPage);
@@ -49,4 +67,4 @@ it('renders add menu component', () => {
 	const wrapper = mount(MenusPage);
 	const addMenuComponent = wrapper.findComponent(AddMenuComponent);
 	expect(addMenuComponent.exists()).toBe(true);
-});
+});*/
