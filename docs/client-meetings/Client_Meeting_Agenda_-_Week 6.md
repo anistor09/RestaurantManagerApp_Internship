@@ -41,12 +41,12 @@
 
 
 # Meeting Notes
-token expires in 1 h
-create new menu instead of add menu on menus page
-cyprus can have bugs when we add it to the pipeline
-category and subcategory endpoints still not fixed
-changes will be made by sunday by our client
-repaired requests will have restaurantId instead of the whole restaurant
+- token expires in 1 h
+- create new menu instead of add menu on menus page
+- cyprus can have bugs when we add it to the pipeline
+- category and subcategory endpoints still not fixed
+- changes will be made by sunday by our client
+- repaired requests will have restaurantId instead of the whole restaurant
 
 
 
