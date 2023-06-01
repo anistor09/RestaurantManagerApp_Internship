@@ -90,14 +90,14 @@ function closeEditPopup() {
 						</el-select>
 						<el-button
 							class="menus-button"
-							:style="{ width: '6vw' }"
+							:style="{ width: '18%' }"
 							color="#ED5087"
 							plain
 							round
 							data-testid="add-menu-button"
 							@click="addMenu = true"
 						>
-							Add menu
+							Create new menu
 						</el-button>
 						<ClientOnly>
 							<Teleport to="body">
@@ -171,6 +171,7 @@ function closeEditPopup() {
 						</ClientOnly>
 						<el-button
 							class="menus-button"
+							style="width: 40%"
 							:disabled="selectedMenuName === ''"
 							color="#ED5087"
 							plain
@@ -178,7 +179,7 @@ function closeEditPopup() {
 							data-testid="place-item-button"
 							@click="addItemInMenu = true"
 						>
-							Place item
+							Add item to menu
 						</el-button>
 						<ClientOnly>
 							<Teleport to="body">
@@ -217,6 +218,7 @@ function closeEditPopup() {
 						:key="category.id"
 						:label="category.name"
 						:name="category.name"
+						data-testid="category-tabs"
 					>
 						<div id="menus-wrapper">
 							<el-col>
@@ -254,6 +256,7 @@ function closeEditPopup() {
 											"
 											:collapsed="false"
 											:menu-id="selectedMenu.id"
+											data-testid="subcategory-component"
 										/>
 									</el-row>
 									<el-row

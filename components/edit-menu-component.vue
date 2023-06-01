@@ -168,7 +168,7 @@ const checkIfDelete = () => {
 				>Save menu</el-button
 			>
 			<div style="margin-left: 1vw"></div>
-			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" @click="checkIfDelete()"
+			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" data-testId="delete-button" @click="checkIfDelete()"
 				>Delete menu</el-button
 			>
 		</div>
@@ -213,7 +213,7 @@ const checkIfDelete = () => {
 					<div>
 						Are you sure you want to delete this menu?
 						<div id="change-bottom-button">
-							<el-button color="#ED5087" plain round @click="deleteMenu()">Yes</el-button>
+							<el-button color="#ED5087" plain round data-testId="confirm-delete" @click="deleteMenu()">Yes</el-button>
 						</div>
 					</div>
 				</el-dialog>
