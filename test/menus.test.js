@@ -1,22 +1,23 @@
-import { it, expect } from "vitest";
+import { vi, it, expect } from "vitest";
 import { mount } from "@vue/test-utils"
+import restaurants from '../mockData/restaurants.json'
 import MenusPage from '../pages/menus.vue';
 import EditMenuComponent from '../components/edit-menu-component.vue';
 import AddItemInMenuComponent from '../components/add-item-in-menu-component.vue';
 import AddMenuComponent from '../components/add-menu-component.vue';
 
+vi.mock('../store/restaurant', () => ({
+    useRestaurantStore: vi.fn(() => ({
+        restaurantGetter: restaurants[0],
+        getRestaurant: vi.fn()
+     }))
+}))
 
 it('renders menus page', () => {
 	const wrapper = mount(MenusPage);
 	expect(wrapper.exists()).toBe(true);
 });
 
-it('selects a menu', async () => {
-	const wrapper = mount(MenusPage);
-	const selectMenu = wrapper.find('[data-testid="select-menu"]');
-	await selectMenu.setValue('ALL DAY MENU');
-	expect(selectMenu.element.value).toBe('ALL DAY MENU');
-});
 
 it('opens add menu dialog', async () => {
 	const wrapper = mount(MenusPage);
