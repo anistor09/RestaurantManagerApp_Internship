@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { useRestaurantStore } from '~/store/restaurant';
-import { Carte } from '~/interfaces/Carte';
+import { useRestaurantStore } from '../store/restaurant';
+import { Carte } from '../interfaces/Carte';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
