@@ -1,7 +1,7 @@
 import { vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import restaurants from '../mockData/restaurants.json';
-import testPage from '../pages/testPage.vue';
+import testPage from '../pages/menus.vue';
 import EditMenuComponent from '../components/edit-menu-component.vue';
 import AddItemInMenuComponent from '../components/add-item-in-menu-component.vue';
 import AddMenuComponent from '../components/add-menu-component.vue';

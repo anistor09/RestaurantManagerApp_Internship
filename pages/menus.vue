@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ref, computed, watch } from 'vue';
 import SubcategoryComponent from '../components/subcategory-component.vue';
 import { Carte } from '../interfaces/Carte';
 import { Category } from '../interfaces/Category';

@@ -2,6 +2,7 @@
 import { useRestaurantStore } from '../store/restaurant';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
+console.log(restaurant.carteSet)
 </script>
 
 <template>
