@@ -6,12 +6,14 @@ import EditMenuComponent from '../components/edit-menu-component.vue';
 import AddItemInMenuComponent from '../components/add-item-in-menu-component.vue';
 import AddMenuComponent from '../components/add-menu-component.vue';
 
-vi.mock('../store/restaurant', () => ({
-    useRestaurantStore: vi.fn(() => ({
-        restaurantGetter: restaurants[0],
-        getRestaurant: vi.fn()
-     }))
-}))
+vi.mock('../store/restaurant', () => {
+    return {
+		useRestaurantStore: vi.fn().mockReturnValue({ 
+			restaurantGetter: restaurants[0],
+			getRestaurant: vi.fn()
+		}) 
+	}
+})
 
 it('renders menus page', () => {
 	const wrapper = mount(MenusPage);
