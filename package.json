@@ -17,6 +17,7 @@
 		"@sidebase/nuxt-auth": "^0.6.0-alpha.2",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
+		"cypress": "^12.13.0",
 		"eslint": "^8.29.0",
 		"eslint-config-prettier": "^8.6.0",
 		"eslint-plugin-prettier": "^4.2.1",
@@ -34,6 +35,7 @@
 	},
 	"dependencies": {
 		"@pinia/nuxt": "^0.4.10",
-		"pinia": "^2.0.36"
+		"@pinia/testing": "^0.1.2",
+		"pinia": "^2.1.3"
 	}
 }

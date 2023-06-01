@@ -83,6 +83,7 @@ function closeEditPopup() {
 							:style="{ paddingRight: '1vw' }"
 							filterable
 							clearable
+							data-testid="select-menu"
 							placeholder="Select menu"
 						>
 							<el-option v-for="item in restaurant.carteSet" :key="item.id" :value="item.name" />
@@ -93,6 +94,7 @@ function closeEditPopup() {
 							color="#ED5087"
 							plain
 							round
+							data-testid="add-menu-button"
 							@click="addMenu = true"
 						>
 							Add menu
@@ -133,6 +135,7 @@ function closeEditPopup() {
 							color="#ED5087"
 							plain
 							round
+							data-testid="edit-menu-button"
 							@click="editMenu = true"
 						>
 							Edit menu
@@ -172,6 +175,7 @@ function closeEditPopup() {
 							color="#ED5087"
 							plain
 							round
+							data-testid="place-item-button"
 							@click="addItemInMenu = true"
 						>
 							Place item
