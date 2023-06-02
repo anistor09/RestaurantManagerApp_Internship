@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { Table } from '~/interfaces/Table';
-import { useRestaurantStore } from '~/store/restaurant';
+import { ref, computed, watchEffect } from 'vue';
+import { Table } from '../interfaces/Table';
+import { useRestaurantStore } from '../store/restaurant';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 const tables = ref(restaurant.tableRestaurantSet);
