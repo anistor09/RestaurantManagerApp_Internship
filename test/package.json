@@ -1,8 +1,46 @@
 {
-  "dependencies": {
-    "@vitejs/plugin-vue": "^4.2.3"
-  },
-  "devDependencies": {
-    "@vue/test-utils": "^2.3.2"
-  }
+	"name": "nuxt-app",
+	"private": true,
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore .",
+		"test": "vitest --run --coverage",
+		"test:ui": "vitest --ui"
+	},
+	"devDependencies": {
+		"@element-plus/nuxt": "^1.0.4",
+		"@nuxtjs/eslint-config-typescript": "^12.0.0",
+		"@pinia/testing": "^0.1.2",
+		"@sidebase/nuxt-auth": "0.5.0",
+		"@typescript-eslint/eslint-plugin": "^5.45.0",
+		"@typescript-eslint/parser": "^5.45.0",
+		"@vitest/coverage-c8": "^0.31.4",
+		"@vitest/ui": "^0.31.4",
+		"@vue/test-utils": "^2.3.2",
+		"cypress": "^12.13.0",
+		"eslint": "^8.29.0",
+		"eslint-config-prettier": "^8.6.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-unicorn": "^47.0.0",
+		"eslint-plugin-vue": "^9.8.0",
+		"nuxt": "^3.5.2",
+		"tslint-config-prettier": "^1.18.0",
+		"typescript": "^4.9.3",
+		"unplugin-icons": "^0.15.3",
+		"vite-plugin-eslint": "^1.8.1"
+	},
+	"dependencies": {
+		"@pinia/nuxt": "^0.4.10",
+		"@pinia/testing": "^0.1.2",
+		"@vitejs/plugin-vue": "^4.2.3",
+		"happy-dom": "^9.20.3",
+		"pinia": "^2.1.3",
+		"vite": "latest",
+		"vitest": "latest",
+		"vue": "^3.3.0"
+	}
 }
