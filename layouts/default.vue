@@ -74,7 +74,7 @@ span {
 	padding-left: 10%;
 }
 .settings {
-	padding-top: 20vh;
+	padding-top: 14vh;
 	justify-content: center;
 	position: relative;
 	right: 1vw;

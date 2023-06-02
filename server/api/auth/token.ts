@@ -23,7 +23,7 @@ export default defineEventHandler((event) => {
 		});
 		const responseData = await response.json();
 
-		const twoHoursInSeconds = 2 * 60 * 60;
+		const twoHoursInSeconds = 60 * 60;
 		setCookie(event, 'token', responseData.access_token, {
 			expires: new Date(Date.now() + twoHoursInSeconds * 1000),
 		});
