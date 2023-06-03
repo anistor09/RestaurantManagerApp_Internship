@@ -28,6 +28,7 @@ Checkstyle:
 Test:
   image: node:16.19.1
   stage: test
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   script:
     - npm install --progress=false
     - npm run test

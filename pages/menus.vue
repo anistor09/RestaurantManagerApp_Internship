@@ -1,6 +1,24 @@
 <script lang="ts" setup>
+import {
+	ElRow,
+	ElCol,
+	ElScrollbar,
+	ElMain,
+	ElTabPane,
+	ElTabs,
+	ElContainer,
+	ElOption,
+	ElButton,
+	ElDialog,
+	ElHeader,
+	ElSelect,
+} from 'element-plus';
 import { ref, computed, watch } from 'vue';
 import SubcategoryComponent from '../components/subcategory-component.vue';
+import EditMenuComponent from '../components/edit-menu-component.vue';
+import AddItemInMenuComponent from '../components/add-item-in-menu-component.vue';
+import AddMenuComponent from '../components/add-menu-component.vue';
+import PageTitle from '../components/page-title.vue';
 import { Carte } from '../interfaces/Carte';
 import { Category } from '../interfaces/Category';
 import { Item } from '../interfaces/Item';

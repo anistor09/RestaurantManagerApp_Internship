@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "name": "restaurant mockat",
+        "name": "Mocked Restaurant",
         "imageUrl": "https://ewai-restaurant-manager-image-repo.s3.eu-central-1.amazonaws.com/restaurant/file/1200px-Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg",
         "latitude": 52.006653613926844,
         "longitude": 4.356486959049088,

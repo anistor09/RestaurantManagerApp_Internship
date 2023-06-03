@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
 import { Carte } from '../interfaces/Carte';
 const restaurantStore = useRestaurantStore();

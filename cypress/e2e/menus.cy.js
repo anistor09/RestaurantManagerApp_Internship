@@ -6,16 +6,28 @@ Cypress.on('window:before:load', (win) => {
 		disconnect() {}
 	};
 });
+   
 
 describe('Menus e2e tests', () => {
+	
 	beforeEach(() => {
 		cy.viewport(1500, 900);
-		cy.intercept('GET', 'https://dev-api.ewai.fr/restaurant/1', { fixture: 'restaurant.json' }).as(
-			'getRestaurant',
-		);
-		cy.visit('http://localhost:3000/menus');
-		cy.wait('@getRestaurant');
-	});
+	  
+		// Login on the test account
+		cy.visit('http://localhost:3000/login');
+		cy.get('[data-testid="login-button"]').click().click();
+		
+		cy.origin('https://auth.ewai.fr', async () => {
+			cy.get('#signInFormUsername').type('test@ewai.fr', {force: true});
+			cy.get('#signInFormPassword').type('9AFPz3DCT@', {force: true});
+			await cy.get('.submitButton-customizable').filter(':visible').click({ force: true});
+		})
+
+		cy.wait(1000)
+		cy.visit('http://localhost:3000/menus')
+		cy.wait(1000)
+	  });
+	  
 
 	// Basic tests - display instructions, open pop-ups, display category tab
 
@@ -61,7 +73,7 @@ describe('Menus e2e tests', () => {
 	  cy.get('.menu-tabs').should('be.visible');
 	});
 
-	// Real Flow tests TODO: add test for placing an item and then deleting it
+	// Real Flow tests TODO: add test for placing an item and then deleting it, should be done when testing the "Add item in menu" pop-up
 
 	it('Add a menu and then delete it', () => {
 		// Open the Create new menu pop-up
@@ -121,7 +133,43 @@ describe('Menus e2e tests', () => {
 		  .filter((index, element) => Cypress.$(element).text().includes('Soft drinks'))
 		  .should('have.length', 1)
 		  .click();
+
+		// Find "Polara" in this subcategory
+		cy.get('[data-testid="subcategory-component"]')
+		  .filter(':visible')
+		  .filter((index, element) => Cypress.$(element).text().includes('Polara'))
+		  .should('have.length', 1)
+		  .click();
 	  });
+
+	  it('Find an item in ALL DAY MENU', () => {
+		// Find the menu in the dropdown and click on it
+		cy.get('[data-testid="select-menu"]').click();
+		cy.get('.el-select-dropdown__item')
+		  .filter((index, element) => Cypress.$(element).text().includes('ALL DAY MENU'))
+		  .should('have.length', 1)
+		  .click();
+
+		// Find the category in the menu and click on it
+		cy.get('.el-tabs__item')
+		  .filter((index, element) => Cypress.$(element).text().includes('Drink'))
+		  .should('have.length', 1)
+		  .click();
+
+		// Find the subcategory in the category and click on it
+		cy.get('[data-testid="subcategory-component"]')
+		  .filter(':visible')
+		  .filter((index, element) => Cypress.$(element).text().includes('Soft drinks'))
+		  .should('have.length', 1)
+		  .click();
+
+		// Find "Polara" in this subcategory
+		cy.get('.el-table__cell')
+		  .filter(':visible')
+		  .filter((index, element) => Cypress.$(element).text().includes('Polara'))
+		  .should('have.length', 1)
+	  });
+	  
 	  
 
 	afterEach(() => {

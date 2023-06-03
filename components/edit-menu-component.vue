@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { Carte } from '~/interfaces/Carte';
-import { Restaurant } from '~/interfaces/Restaurant';
 import { Hours } from '~/interfaces/Hours';
+import { Restaurant } from '~/interfaces/Restaurant';
 
 const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
