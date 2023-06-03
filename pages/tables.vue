@@ -131,13 +131,19 @@ watchEffect(() => {
 		<Teleport to="body">
 			<el-dialog v-model="addPopup" width="20%" style="border-radius: 5%; height: 22%">
 				<div id="addTablePopup" class="edit">
-					<div><span>Table Number: </span><input v-model="tableNumber" class="specialInput" /></div>
+					<div>
+						<span>Table Number: </span
+						><input id="addtableInput1" v-model="tableNumber" class="specialInput" />
+					</div>
 					<div style="padding-top: 2%">
-						<span>Table Capacity: </span><input v-model="tableCapacity" class="specialInput" />
+						<span>Table Capacity: </span
+						><input id="addtableInput2" v-model="tableCapacity" class="specialInput" />
 					</div>
 					<div style="padding-top: 5%">
 						<el-button color="#ED5087" plain round @click="addPopup = false">Cancel</el-button>
-						<el-button color="#ED5087" plain round @click="handleAdd()">Add</el-button>
+						<el-button id="addTableButtonConfirm" color="#ED5087" plain round @click="handleAdd()"
+							>Add</el-button
+						>
 					</div>
 				</div>
 			</el-dialog>
@@ -148,7 +154,7 @@ watchEffect(() => {
 		<main>
 			<div id="buttonContainer">
 				<SearchBar v-model="selectedTable" :options="tables.map((x) => 'Table ' + x.number)" />
-				<el-button data-testid="addTableButton" color="#ED5087" plain round @click="addPopup = true"
+				<el-button id="addTableButton" color="#ED5087" plain round @click="addPopup = true"
 					>Add Table</el-button
 				>
 			</div>
