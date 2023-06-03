@@ -45,7 +45,7 @@ function signIn() {
 		<!-- Similarly, the button and the welcome text are wrapped and, thus, resized, together -->
 		<div id="buttonWrapper">
 			<div id="welcome">WELCOME BACK!</div>
-			<el-button id="button" color="#ED5087" plain round @click="signIn()"> Login </el-button>
+			<el-button id="button" color="#ED5087" plain round data-testid="login-button" @click="signIn()"> Login </el-button>
 		</div>
 	</div>
 </template>
