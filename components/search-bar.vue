@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ElOption, ElSelect } from 'element-plus';
 import { ref } from 'vue';
 const value = ref('');
 defineProps({
