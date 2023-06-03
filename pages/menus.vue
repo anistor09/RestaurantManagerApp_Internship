@@ -1,11 +1,17 @@
 <script lang="ts" setup>
-import SubcategoryComponent from '~/components/subcategory-component.vue';
-import { Carte } from '~/interfaces/Carte';
-import { Category } from '~/interfaces/Category';
-import { Item } from '~/interfaces/Item';
-import { ItemWrapper } from '~/interfaces/ItemWrapper';
-import { SubCategory } from '~/interfaces/SubCategory';
-import { useRestaurantStore } from '~/store/restaurant';
+import { ElRow, ElCol, ElScrollbar, ElMain, ElTabPane, ElTabs, ElContainer, ElOption, ElButton, ElDialog, ElHeader, ElSelect } from 'element-plus';
+import { ref, computed, watch } from 'vue';
+import SubcategoryComponent from '../components/subcategory-component.vue';
+import EditMenuComponent from '../components/edit-menu-component.vue';
+import AddItemInMenuComponent from '../components/add-item-in-menu-component.vue';
+import AddMenuComponent from '../components/add-menu-component.vue';
+import PageTitle from '../components/page-title.vue';
+import { Carte } from '../interfaces/Carte';
+import { Category } from '../interfaces/Category';
+import { Item } from '../interfaces/Item';
+import { ItemWrapper } from '../interfaces/ItemWrapper';
+import { SubCategory } from '../interfaces/SubCategory';
+import { useRestaurantStore } from '../store/restaurant';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
@@ -83,19 +89,21 @@ function closeEditPopup() {
 							:style="{ paddingRight: '1vw' }"
 							filterable
 							clearable
+							data-testid="select-menu"
 							placeholder="Select menu"
 						>
 							<el-option v-for="item in restaurant.carteSet" :key="item.id" :value="item.name" />
 						</el-select>
 						<el-button
 							class="menus-button"
-							:style="{ width: '6vw' }"
+							:style="{ width: '18%' }"
 							color="#ED5087"
 							plain
 							round
+							data-testid="add-menu-button"
 							@click="addMenu = true"
 						>
-							Add menu
+							Create new menu
 						</el-button>
 						<ClientOnly>
 							<Teleport to="body">
@@ -133,6 +141,7 @@ function closeEditPopup() {
 							color="#ED5087"
 							plain
 							round
+							data-testid="edit-menu-button"
 							@click="editMenu = true"
 						>
 							Edit menu
@@ -168,13 +177,15 @@ function closeEditPopup() {
 						</ClientOnly>
 						<el-button
 							class="menus-button"
+							style="width: 40%"
 							:disabled="selectedMenuName === ''"
 							color="#ED5087"
 							plain
 							round
+							data-testid="place-item-button"
 							@click="addItemInMenu = true"
 						>
-							Place item
+							Add item to menu
 						</el-button>
 						<ClientOnly>
 							<Teleport to="body">
@@ -213,6 +224,7 @@ function closeEditPopup() {
 						:key="category.id"
 						:label="category.name"
 						:name="category.name"
+						data-testid="category-tabs"
 					>
 						<div id="menus-wrapper">
 							<el-col>
@@ -250,6 +262,7 @@ function closeEditPopup() {
 											"
 											:collapsed="false"
 											:menu-id="selectedMenu.id"
+											data-testid="subcategory-component"
 										/>
 									</el-row>
 									<el-row

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
@@ -82,7 +83,7 @@ const addMenu = async () => {
 		<div class="box">
 			<div id="addName">
 				<div class="fieldText">Name</div>
-				<input v-model="name" class="specialInput" style="height: 100%" />
+				<input v-model="name" class="specialInput" style="height: 100%" data-testid="add-name-to-menu" />
 			</div>
 		</div>
 		<div class="box" style="">
@@ -112,7 +113,7 @@ const addMenu = async () => {
 			</div>
 		</div>
 		<div id="buttonContainer">
-			<el-button class="specialPhotoButton" style="width: 15%; height: 50%" @click="checkIfChange()"
+			<el-button class="specialPhotoButton" style="width: 15%; height: 50%" data-testid="add-button" @click="checkIfChange()"
 				>Add</el-button
 			>
 		</div>
@@ -134,7 +135,7 @@ const addMenu = async () => {
 				<div>
 					Are you sure you want to add this menu?
 					<div id="change-bottom-button">
-						<el-button color="#ED5087" plain round @click="addMenu()">Yes</el-button>
+						<el-button color="#ED5087" plain round data-testid="confirm-add" @click="addMenu()">Yes</el-button>
 					</div>
 				</div>
 			</el-dialog>

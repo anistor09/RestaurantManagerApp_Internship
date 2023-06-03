@@ -97,7 +97,7 @@ watch(
 							/>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" label="Name" prop="item.name" />
+					<el-table-column align="center" label="Name" prop="item.name" data-testid="item-name-column"/>
 					<el-table-column align="center" label="Description" prop="item.description" />
 					<el-table-column align="center" label="Price" prop="item.price" />
 					<el-table-column align="center">
