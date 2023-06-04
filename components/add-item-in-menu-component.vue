@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ElSelect } from 'element-plus';
 import { ref } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
 import { Carte } from '../interfaces/Carte';
@@ -48,7 +49,6 @@ const itemName = ref('');
 const selectedItem = ref(restaurantItems.value[0]);
 
 const enableSubcategory = ref(false);
-const enableItems = ref(false);
 
 /*
   This method applies when the user choose the category. It enables the subcategories and make the filtering. 
@@ -57,9 +57,12 @@ const enableItems = ref(false);
 const changeCategory = () => {
 	enableSubcategory.value = true;
 	subcategoryName.value = '';
-	enableItems.value = false;
 	itemName.value = '';
 	selectedCategory.value = categories.value.filter((x) => x.name === categoryName.value)[0];
+	filteredItems.value = restaurantItems.value.filter(
+		(x) =>
+			x.category.id === selectedCategory.value.id
+	);
 	filteredSubcategories.value = selectedCategory.value.subCategorySet;
 };
 
@@ -67,7 +70,6 @@ const changeCategory = () => {
   This method applies when the user choose the subcategory. It enables the items and make the filtering.
 */
 const changeSubCategory = () => {
-	enableItems.value = true;
 	itemName.value = '';
 	selectedSubcategory.value = filteredSubcategories.value.filter(
 		(x) => x.name === subcategoryName.value,
@@ -84,6 +86,11 @@ const changeSubCategory = () => {
 */
 const changeItem = () => {
 	selectedItem.value = filteredItems.value.filter((x) => x.name === itemName.value)[0];
+	selectedCategory.value = selectedItem.value.category;
+	categoryName.value = selectedCategory.value.name;
+	selectedSubcategory.value = selectedItem.value.subCategory;
+	subcategoryName.value = selectedSubcategory.value.name;
+
 };
 
 const addItemInMenu = async () => {
@@ -106,10 +113,11 @@ const addItemInMenu = async () => {
 <template>
 	<div id="all">
 		<div class="div">
-			<h2 class="title">Category:</h2>
+			<h2 id="categoryIdPrefix" class="title">Category:</h2>
 
 			<el-select
 				v-model="categoryName"
+				id="categoryId"
 				filterable
 				clearable
 				class="specialSelect"
@@ -127,10 +135,11 @@ const addItemInMenu = async () => {
 		</div>
 
 		<div class="div">
-			<h2 class="title">Subcategory:</h2>
+			<h2 id="subcategoryIdPrefix" class="title">Subcategory:</h2>
 
 			<el-select
 				v-model="subcategoryName"
+				id="subcategoryId"
 				filterable
 				clearable
 				class="specialSelect"
@@ -149,16 +158,16 @@ const addItemInMenu = async () => {
 		</div>
 
 		<div class="div">
-			<h2 class="title">Item:</h2>
+			<h2 id="itemIdPrefix" class="title">Item:</h2>
 
 			<el-select
 				v-model="itemName"
+				id="itemIdPrefix"
 				filterable
 				clearable
 				class="specialSelect"
 				placeholder="Select item"
 				size="large"
-				:disabled="!enableItems"
 				@change="changeItem"
 			>
 				<el-option

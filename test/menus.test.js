@@ -1,12 +1,14 @@
 import { vi, it, expect } from 'vitest';
-import { mount } from '@vue/test-utils';
 import { ElSelect } from 'element-plus';
+import { mount } from '@vue/test-utils';
 
-import restaurants from '../mockData/restaurants.json';
+
 import Menus from '../pages/menus.vue';
 
 import AddMenuComponent from '../components/add-menu-component.vue';
 import PageTitle from '../components/page-title.vue';
+import restaurants from '../mockData/restaurants.json';
+
 
 vi.mock('../store/restaurant.ts', () => {
 	return {
