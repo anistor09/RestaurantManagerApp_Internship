@@ -8,7 +8,14 @@ defineProps({
 </script>
 
 <template>
-	<el-select v-model="value" class="specialSelect" filterable placeholder="Select" clearable>
+	<el-select
+		data-testid="select"
+		v-model="value"
+		class="specialSelect"
+		filterable
+		placeholder="Select"
+		clearable
+	>
 		<el-option v-for="item in options" :value="item" />
 	</el-select>
 </template>

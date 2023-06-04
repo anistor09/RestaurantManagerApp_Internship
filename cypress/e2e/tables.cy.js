@@ -26,23 +26,34 @@ describe('Tables e2e tests', () => {
 		cy.wait(1000)
 		cy.visit('http://localhost:3000/tables')
 		cy.wait(1000)
-	  });
+	});
 	  
 
 	// Basic tests - display instructions, open pop-ups, display category tab
 
 	it('Add a new table and delete it', () => {
-	  cy.get('#addTableButton').click();
-	  cy.get('#addTablePopup').should('be.visible');
-	  cy.get('#addtableInput1').type("313");
-	  cy.get('#addtableInput2').type("314");
-      cy.get('#addTableButtonConfirm').click();
+	  // Add a table
+    cy.get('#addTableButton').click()
+    cy.get('#addtableInput1').clear().type('999')
+    cy.get('#addtableInput2').clear().type('999')
+    cy.intercept('POST', '/api/table/add', {
+      statusCode: 200,
+    }).as('add-table')
+    cy.get('#addTableButtonConfirm').click()
+    cy.wait('@add-table')
+    cy.contains('Table 999').should('exist')
 
-      cy.get('.el-select').type("313");
-      cy.get('.el-select').click();  
-	  cy.get('.el-select-dropdown__item').first().click();
-	  cy.get('#card').should('be.visible');
-
+    // Delete the added table
+    cy.get('[data-testid="select"]').click();
+	  cy.get('.el-select-dropdown__item').contains("Table 999").click();
+    cy.contains('Table 999').should('be.visible')
+    cy.contains('Delete').click()
+    cy.contains('Yes').click()
+    
+    cy.get('[data-testid="select"]').click();
+		cy.get('.el-select-dropdown__item')
+		  .filter((index, element) => Cypress.$(element).text().includes('Table 999'))
+		  .should('not.exist');
 	});
 
 	afterEach(() => {
