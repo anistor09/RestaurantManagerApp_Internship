@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ElButton, ElCard } from 'element-plus';
 defineProps<{
 	url: String;
 	number: Number;
