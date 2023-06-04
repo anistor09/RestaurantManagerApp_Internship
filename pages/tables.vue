@@ -1,6 +1,12 @@
 <script lang="ts" setup>
-import { Table } from '~/interfaces/Table';
-import { useRestaurantStore } from '~/store/restaurant';
+import { ElButton, ElDialog } from 'element-plus';
+import { ref, computed, watchEffect } from 'vue';
+import { Table } from '../interfaces/Table';
+import { useRestaurantStore } from '../store/restaurant';
+import PageTitle from '../components/page-title.vue';
+import TableComponent from '../components/table-component.vue';
+import SearchBar from '../components/search-bar.vue';
+
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 const tables = ref(restaurant.tableRestaurantSet);
@@ -95,9 +101,13 @@ watchEffect(() => {
 		<Teleport to="body">
 			<el-dialog v-model="editPopup" width="20%" style="border-radius: 5%; height: 22%">
 				<div class="edit">
-					<div><span>Table Number: </span><input v-model="tableNumber" class="specialInput" /></div>
+					<div>
+						<span>Table Number: </span
+						><input id="addtableInput3" v-model="tableNumber" class="specialInput" />
+					</div>
 					<div style="padding-top: 2%">
-						<span>Table Capacity: </span><input v-model="tableCapacity" class="specialInput" />
+						<span>Table Capacity: </span
+						><input id="addtableInput4" v-model="tableCapacity" class="specialInput" />
 					</div>
 					<div style="padding-top: 5%">
 						<el-button color="#ED5087" plain round @click="editPopup = false">Cancel</el-button>
@@ -124,55 +134,63 @@ watchEffect(() => {
 		</Teleport>
 		<Teleport to="body">
 			<el-dialog v-model="addPopup" width="20%" style="border-radius: 5%; height: 22%">
-				<div class="edit">
-					<div><span>Table Number: </span><input v-model="tableNumber" class="specialInput" /></div>
+				<div id="addTablePopup" class="edit">
+					<div>
+						<span>Table Number: </span
+						><input id="addtableInput1" v-model="tableNumber" class="specialInput" />
+					</div>
 					<div style="padding-top: 2%">
-						<span>Table Capacity: </span><input v-model="tableCapacity" class="specialInput" />
+						<span>Table Capacity: </span
+						><input id="addtableInput2" v-model="tableCapacity" class="specialInput" />
 					</div>
 					<div style="padding-top: 5%">
 						<el-button color="#ED5087" plain round @click="addPopup = false">Cancel</el-button>
-						<el-button color="#ED5087" plain round @click="handleAdd()">Add</el-button>
+						<el-button id="addTableButtonConfirm" color="#ED5087" plain round @click="handleAdd()"
+							>Add</el-button
+						>
 					</div>
 				</div>
 			</el-dialog>
 		</Teleport>
-		<div>
-			<PageTitle title="Tables"></PageTitle>
-			<main>
-				<div id="buttonContainer">
-					<SearchBar v-model="selectedTable" :options="tables.map((x) => 'Table ' + x.number)" />
-					<el-button color="#ED5087" plain round @click="addPopup = true">Add Table</el-button>
-				</div>
-				<div id="tableContainer">
-					<TableComponent
-						v-for="table in filteredTables"
-						:id="table.id"
-						:number="table.number"
-						:capacity="table.capacity"
-						:url="table.url"
-						@edit="
-							(x) => {
-								editPopup = true;
-								tableId = x;
-							}
-						"
-						@delete="
-							(x) => {
-								deletePopup = true;
-								tableId = x;
-							}
-						"
-						@qr-code="
-							(x) => {
-								qrcodePopup = true;
-								qrcodeUrl = x;
-							}
-						"
-					/>
-				</div>
-			</main>
-		</div>
 	</ClientOnly>
+	<div>
+		<PageTitle title="Tables"></PageTitle>
+		<main>
+			<div id="buttonContainer">
+				<SearchBar v-model="selectedTable" :options="tables.map((x) => 'Table ' + x.number)" />
+				<el-button id="addTableButton" color="#ED5087" plain round @click="addPopup = true"
+					>Add Table</el-button
+				>
+			</div>
+			<div id="tableContainer">
+				<TableComponent
+					v-for="table in filteredTables"
+					:id="table.id"
+					:number="table.number"
+					:capacity="table.capacity"
+					:url="table.url"
+					@edit="
+						(x) => {
+							editPopup = true;
+							tableId = x;
+						}
+					"
+					@delete="
+						(x) => {
+							deletePopup = true;
+							tableId = x;
+						}
+					"
+					@qr-code="
+						(x) => {
+							qrcodePopup = true;
+							qrcodeUrl = x;
+						}
+					"
+				/>
+			</div>
+		</main>
+	</div>
 </template>
 
 <style scoped>

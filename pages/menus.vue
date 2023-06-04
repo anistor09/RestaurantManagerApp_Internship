@@ -1,5 +1,18 @@
 <script lang="ts" setup>
-import { ElRow, ElCol, ElScrollbar, ElMain, ElTabPane, ElTabs, ElContainer, ElOption, ElButton, ElDialog, ElHeader, ElSelect } from 'element-plus';
+import {
+	ElRow,
+	ElCol,
+	ElScrollbar,
+	ElMain,
+	ElTabPane,
+	ElTabs,
+	ElContainer,
+	ElOption,
+	ElButton,
+	ElDialog,
+	ElHeader,
+	ElSelect,
+} from 'element-plus';
 import { ref, computed, watch } from 'vue';
 import SubcategoryComponent from '../components/subcategory-component.vue';
 import EditMenuComponent from '../components/edit-menu-component.vue';
@@ -129,9 +142,7 @@ function closeEditPopup() {
 										@close="addMenu = false"
 									></AddMenuComponent>
 								</el-dialog>
-							
 							</Teleport>
-							
 						</ClientOnly>
 					</div>
 					<div class="el-col" :style="{ flex: '0 0 30%', textAlign: 'right', paddingTop: '3vh' }">
