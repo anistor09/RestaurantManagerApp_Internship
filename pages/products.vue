@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import { Search } from '@element-plus/icons-vue';
 import { useRestaurantStore } from '~/store/restaurant';
+import { useCategoryStore } from '~/store/category';
+import { useItemStore } from '~/store/item';
 
+const categoryStore = useCategoryStore();
+const itemStore = useItemStore();
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
@@ -25,19 +29,86 @@ const filterCategories = computed(() =>
 );
 
 const addCategory = () => {
-
-	const newWindow = window.open('/editCategoryView', '_blank');
-	if (newWindow !== null)
-		newWindow.onbeforeunload = function () {
-			window.location.reload();
-		};
-
+	window.open('/editCategoryView', '_blank');
 };
 
 function addItem() {
-	// console.log(restaurant.categorySet.map(x => x.id));
-	// console.log(restaurant.categorySet.length);
+	window.open('/editItemView', '_blank');
 }
+
+onMounted(() => {
+	window.addEventListener('storage', handleStorageEvent);
+});
+
+onUnmounted(() => {
+	window.removeEventListener('storage', handleStorageEvent);
+});
+
+const handleStorageEvent = (event: StorageEvent) => {
+	if (event.key === 'category') {
+		categoryStore.$hydrate();
+		if (categoryStore.categoryGetter.length !== 0) {
+			const newCategory = categoryStore.categoryGetter[0];
+			const index = restaurant.categorySet.findIndex((x) => x.id === newCategory.id);
+			if (index === -1) {
+				restaurant.categorySet.push(newCategory);
+			} else {
+				restaurant.categorySet[index].description = newCategory.description;
+				restaurant.categorySet[index].imageUrl = newCategory.imageUrl;
+				restaurant.categorySet[index].name = newCategory.name;
+				restaurant.categorySet[index].presentationOrder = newCategory.presentationOrder;
+				restaurant.categorySet[index].subCategorySet = newCategory.subCategorySet;
+			}
+			setTimeout(() => {
+				categoryStore.categoryReset();
+			}, 1000);
+		}
+		if (categoryStore.deleteGetter.length !== 0) {
+			const categoryId = categoryStore.deleteGetter[0];
+			const index = restaurant.categorySet.findIndex((x) => x.id === categoryId);
+			if (index !== -1) {
+				restaurant.categorySet.splice(index, 1);
+			}
+			setTimeout(() => {
+				categoryStore.categoryReset();
+			}, 1000);
+		}
+	} else if (event.key === 'item') {
+		itemStore.$hydrate();
+		if (itemStore.itemGetter.length !== 0) {
+			const newItem = itemStore.itemGetter[0];
+			const index = restaurant.itemSet.findIndex((x) => x.id === newItem.id);
+			if (index === -1) {
+				restaurant.itemSet.push(newItem);
+			} else {
+				restaurant.itemSet[index].description = newItem.description;
+				restaurant.itemSet[index].imageUrl = newItem.imageUrl;
+				restaurant.itemSet[index].name = newItem.name;
+				restaurant.itemSet[index].presentationOrder = newItem.presentationOrder;
+				restaurant.itemSet[index].category = newItem.category;
+				restaurant.itemSet[index].subCategory = newItem.subCategory;
+				restaurant.itemSet[index].price = newItem.price;
+				restaurant.itemSet[index].allergen = newItem.allergen;
+				restaurant.itemSet[index].longDescription = newItem.longDescription;
+				restaurant.itemSet[index].optionSet = newItem.optionSet;
+				restaurant.itemSet[index].sideItemSet = newItem.sideItemSet;
+			}
+			setTimeout(() => {
+				itemStore.itemReset();
+			}, 1000);
+		}
+		if (itemStore.deleteGetter.length !== 0) {
+			const itemId = itemStore.deleteGetter[0];
+			const index = restaurant.itemSet.findIndex((x) => x.id === itemId);
+			if (index !== -1) {
+				restaurant.itemSet.splice(index, 1);
+			}
+			setTimeout(() => {
+				itemStore.itemReset();
+			}, 1000);
+		}
+	}
+};
 </script>
 
 <template>
@@ -45,30 +116,51 @@ function addItem() {
 		<el-scrollbar>
 			<PageTitle title="Products"></PageTitle>
 			<el-tabs v-model="currentProduct" class="products-tabs">
-				<el-tab-pane v-for="product in selectedProducts" :key="product" :label="product" :name="product"
-					class="products-individual-tab">
+				<el-tab-pane
+					v-for="product in selectedProducts"
+					:key="product"
+					:label="product"
+					:name="product"
+					class="products-individual-tab"
+				>
 					<el-row v-if="currentProduct === 'Items'" class="up-buttons-products">
 						<el-col :span="2" :offset="1">
-							<el-input v-model="searchItems" class="search-bar-products" size="default"
-								placeholder="Search by item" :prefix-icon="Search" />
+							<el-input
+								v-model="searchItems"
+								class="search-bar-products"
+								size="default"
+								placeholder="Search by item"
+								:prefix-icon="Search"
+							/>
 						</el-col>
 						<el-col :span="2" :offset="17">
-							<el-button class="products-button" color="#ED5087" plain round @click="addItem()">+ Add
-								item</el-button>
+							<el-button class="products-button" color="#ED5087" plain round @click="addItem()"
+								>+ Add item</el-button
+							>
 						</el-col>
 					</el-row>
 					<el-row v-else class="up-buttons-products">
 						<el-col :span="2" :offset="1">
-							<el-input v-model="searchCategories" class="search-bar-products" size="default"
-								placeholder="Search by category" :prefix-icon="Search" />
+							<el-input
+								v-model="searchCategories"
+								class="search-bar-products"
+								size="default"
+								placeholder="Search by category"
+								:prefix-icon="Search"
+							/>
 						</el-col>
 						<el-col :span="2" :offset="17">
-							<el-button class="products-button" color="#ED5087" plain round @click="addCategory()">+ Add
-								category</el-button>
+							<el-button class="products-button" color="#ED5087" plain round @click="addCategory()"
+								>+ Add category</el-button
+							>
 						</el-col>
 					</el-row>
 					<div v-if="currentProduct === 'Items'">
-						<el-row v-for="rowIndex in Math.ceil(filterItems.length / 3)" :key="rowIndex" class="products-rows">
+						<el-row
+							v-for="rowIndex in Math.ceil(filterItems.length / 3)"
+							:key="rowIndex"
+							class="products-rows"
+						>
 							<el-col v-for="colIndex in 3" :key="colIndex" :span="8">
 								<div v-if="(rowIndex - 1) * 3 + colIndex - 1 < filterItems.length">
 									<ItemComponent :item="filterItems[(rowIndex - 1) * 3 + colIndex - 1]" />
@@ -77,11 +169,16 @@ function addItem() {
 						</el-row>
 					</div>
 					<div v-else>
-						<el-row v-for="rowIndex in Math.ceil(filterCategories.length / 3)" :key="rowIndex"
-							class="products-rows">
+						<el-row
+							v-for="rowIndex in Math.ceil(filterCategories.length / 3)"
+							:key="rowIndex"
+							class="products-rows"
+						>
 							<el-col v-for="colIndex in 3" :key="colIndex" :span="8">
 								<div v-if="(rowIndex - 1) * 3 + colIndex - 1 < filterCategories.length">
-									<CategoryComponent :category="filterCategories[(rowIndex - 1) * 3 + colIndex - 1]" />
+									<CategoryComponent
+										:category="filterCategories[(rowIndex - 1) * 3 + colIndex - 1]"
+									/>
 								</div>
 							</el-col>
 						</el-row>

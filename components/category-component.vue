@@ -9,13 +9,7 @@ const props = defineProps({
 });
 
 const editCategory = () => {
-
-
-	const newWindow = window.open(`/editCategoryView/${props.category.id}`, '_blank');
-	if (newWindow !== null)
-		newWindow.onbeforeunload = function () {
-			window.location.reload();
-		};
+	window.open(`/editCategoryView/${props.category.id}`, '_blank');
 };
 </script>
 
@@ -24,10 +18,13 @@ const editCategory = () => {
 	<el-card id="card" shadow="always" :body-style="{ padding: '0px' }" @click="editCategory()">
 		<div style="width: 100%; height: 100%">
 			<!-- The background image of the card -->
-			<img id="image" :src="
-				props.category.imageUrl ||
-				'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png'
-			" />
+			<img
+				id="image"
+				:src="
+					props.category.imageUrl ||
+					'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png'
+				"
+			/>
 
 			<!-- The text part of the card -->
 			<div>
@@ -50,7 +47,7 @@ const editCategory = () => {
 /* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-#card>>>.el-card__body {
+#card >>> .el-card__body {
 	height: 100%;
 }
 

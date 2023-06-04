@@ -3,7 +3,10 @@ import { ElOption, ElSelect } from 'element-plus';
 import { ref } from 'vue';
 const value = ref('');
 defineProps({
-	options: Array as () => String[],
+	options:{
+		type: Array as () => String[],
+		required: true
+	}
 });
 </script>
 
@@ -35,29 +38,4 @@ defineProps({
 	border-radius: 30px;
 }
 
-.el-select .el-input.is-focus .el-input__wrapper {
-	box-shadow: 0 0 0 1px #ed5087 inset !important;
-}
-
-.el-select .el-input.is-ac .el-input__wrapper {
-	box-shadow: 0 0 0 1px #ed5087 inset !important;
-}
-
-.el-select {
-	--el-select-input-focus-border-color: #ed5087;
-}
-
-.el-popper {
-	border-radius: 25px;
-}
-
-.el-select-dropdown__item {
-	font-family: 'Open Sans';
-	font-size: 1vw;
-	text-align: center;
-}
-
-.el-select-dropdown__item.selected {
-	color: #ed5087;
-}
 </style>

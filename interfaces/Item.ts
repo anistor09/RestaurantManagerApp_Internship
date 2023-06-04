@@ -11,7 +11,7 @@ export interface Item {
     imageUrl: string;
     price: number;
     category: Category;
-    subCategory: SubCategory;
+    subCategory: SubCategory | null;
     sideItemSet: Item[];
     optionSet: Option[];
     allergen: string;
