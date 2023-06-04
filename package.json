@@ -35,6 +35,7 @@
 		"vite-plugin-eslint": "^1.8.1"
 	},
 	"dependencies": {
+		"@pinia-plugin-persistedstate/nuxt": "^1.1.1",
 		"@pinia/nuxt": "^0.4.10",
 		"@pinia/testing": "^0.1.2",
 		"@vitejs/plugin-vue": "^4.2.3",
