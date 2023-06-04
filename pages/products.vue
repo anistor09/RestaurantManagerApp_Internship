@@ -25,88 +25,71 @@ const filterCategories = computed(() =>
 );
 
 const addCategory = () => {
-	window.open('/editCategoryView', '_blank');
+
+	const newWindow = window.open('/editCategoryView', '_blank');
+	if (newWindow !== null)
+		newWindow.onbeforeunload = function () {
+			window.location.reload();
+		};
+
 };
 
 function addItem() {
-	console.log('TODO: wire with add item page');
+	// console.log(restaurant.categorySet.map(x => x.id));
+	// console.log(restaurant.categorySet.length);
 }
 </script>
 
 <template>
-	<el-scrollbar>
-		<PageTitle title="Products"></PageTitle>
-		<el-tabs v-model="currentProduct" class="products-tabs">
-			<el-tab-pane
-				v-for="product in selectedProducts"
-				:key="product"
-				:label="product"
-				:name="product"
-				class="products-individual-tab"
-			>
-				<el-row v-if="currentProduct === 'Items'" class="up-buttons-products">
-					<el-col :span="2" :offset="1">
-						<el-input
-							v-model="searchItems"
-							class="search-bar-products"
-							size="default"
-							placeholder="Search by item"
-							:prefix-icon="Search"
-						/>
-					</el-col>
-					<el-col :span="2" :offset="17">
-						<el-button class="products-button" color="#ED5087" plain round @click="addItem()"
-							>+ Add item</el-button
-						>
-					</el-col>
-				</el-row>
-				<el-row v-else class="up-buttons-products">
-					<el-col :span="2" :offset="1">
-						<el-input
-							v-model="searchCategories"
-							class="search-bar-products"
-							size="default"
-							placeholder="Search by category"
-							:prefix-icon="Search"
-						/>
-					</el-col>
-					<el-col :span="2" :offset="17">
-						<el-button class="products-button" color="#ED5087" plain round @click="addCategory()"
-							>+ Add category</el-button
-						>
-					</el-col>
-				</el-row>
-				<div v-if="currentProduct === 'Items'">
-					<el-row
-						v-for="rowIndex in Math.ceil(filterItems.length / 3)"
-						:key="rowIndex"
-						class="products-rows"
-					>
-						<el-col v-for="colIndex in 3" :key="colIndex" :span="8">
-							<div v-if="(rowIndex - 1) * 3 + colIndex - 1 < filterItems.length">
-								<ItemComponent :item="filterItems[(rowIndex - 1) * 3 + colIndex - 1]" />
-							</div>
+	<ClientOnly>
+		<el-scrollbar>
+			<PageTitle title="Products"></PageTitle>
+			<el-tabs v-model="currentProduct" class="products-tabs">
+				<el-tab-pane v-for="product in selectedProducts" :key="product" :label="product" :name="product"
+					class="products-individual-tab">
+					<el-row v-if="currentProduct === 'Items'" class="up-buttons-products">
+						<el-col :span="2" :offset="1">
+							<el-input v-model="searchItems" class="search-bar-products" size="default"
+								placeholder="Search by item" :prefix-icon="Search" />
+						</el-col>
+						<el-col :span="2" :offset="17">
+							<el-button class="products-button" color="#ED5087" plain round @click="addItem()">+ Add
+								item</el-button>
 						</el-col>
 					</el-row>
-				</div>
-				<div v-else>
-					<el-row
-						v-for="rowIndex in Math.ceil(filterCategories.length / 3)"
-						:key="rowIndex"
-						class="products-rows"
-					>
-						<el-col v-for="colIndex in 3" :key="colIndex" :span="8">
-							<div v-if="(rowIndex - 1) * 3 + colIndex - 1 < filterCategories.length">
-								<CategoryComponent
-									:category="filterCategories[(rowIndex - 1) * 3 + colIndex - 1]"
-								/>
-							</div>
+					<el-row v-else class="up-buttons-products">
+						<el-col :span="2" :offset="1">
+							<el-input v-model="searchCategories" class="search-bar-products" size="default"
+								placeholder="Search by category" :prefix-icon="Search" />
+						</el-col>
+						<el-col :span="2" :offset="17">
+							<el-button class="products-button" color="#ED5087" plain round @click="addCategory()">+ Add
+								category</el-button>
 						</el-col>
 					</el-row>
-				</div>
-			</el-tab-pane>
-		</el-tabs>
-	</el-scrollbar>
+					<div v-if="currentProduct === 'Items'">
+						<el-row v-for="rowIndex in Math.ceil(filterItems.length / 3)" :key="rowIndex" class="products-rows">
+							<el-col v-for="colIndex in 3" :key="colIndex" :span="8">
+								<div v-if="(rowIndex - 1) * 3 + colIndex - 1 < filterItems.length">
+									<ItemComponent :item="filterItems[(rowIndex - 1) * 3 + colIndex - 1]" />
+								</div>
+							</el-col>
+						</el-row>
+					</div>
+					<div v-else>
+						<el-row v-for="rowIndex in Math.ceil(filterCategories.length / 3)" :key="rowIndex"
+							class="products-rows">
+							<el-col v-for="colIndex in 3" :key="colIndex" :span="8">
+								<div v-if="(rowIndex - 1) * 3 + colIndex - 1 < filterCategories.length">
+									<CategoryComponent :category="filterCategories[(rowIndex - 1) * 3 + colIndex - 1]" />
+								</div>
+							</el-col>
+						</el-row>
+					</div>
+				</el-tab-pane>
+			</el-tabs>
+		</el-scrollbar>
+	</ClientOnly>
 </template>
 
 <style>
