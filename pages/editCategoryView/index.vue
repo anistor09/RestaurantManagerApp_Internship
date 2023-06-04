@@ -1,9 +1,11 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+// const id: number = parseInt(useRoute().params.id.toString());
+</script>
 
 <template>
 	<div class="container">
 		<div class="right">
-			<editCategory :add-category="true"/>
+			<editCategory :add-category="true" />
 		</div>
 	</div>
 </template>
