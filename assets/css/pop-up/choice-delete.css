@@ -1,0 +1,62 @@
+.choice-delete-popup{
+    height: 25vh !important;
+    width: 20vw !important;
+    border-radius: 40px !important;
+    border: 0.15vw solid #ed5087 !important;
+}
+
+.choiceFieldText {
+  color: #ED5087;
+  font-size: 1.3vw !important;
+}
+
+.choice-delete-popup .el-dialog__headerbtn{
+  height: 40% !important;
+  width: 4% !important;
+  display:flex;
+  position:relative;
+  top: 0%;
+}
+
+.choice-delete-popup .el-dialog__headerbtn .el-dialog__close:hover{
+  color: #ED5087;
+}
+
+.choice-delete-popup .el-dialog__header{
+  height: 10% !important;
+  width: 75% !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  margin-left: 15%;
+}
+
+.choice-delete-popup .el-dialog__body {
+  padding: 0 !important;
+  height: 90% !important;
+  width: 80% !important;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.choice-delete-popup-button {
+	width:35% !important;
+	height:100% !important;
+	border-radius: 25px !important;
+  font-size: 0.9vw !important;
+  border-color: #ED5087 !important;
+  color: #ED5087 !important;
+	background-color: rgb(253, 238, 243) !important;
+}
+
+.choice-delete-popup-button:hover{
+	background-color: #ED5087;
+    color: white;
+}
+
+.choice-delete-popup-button:focus{
+	background-color: rgb(253, 238, 243);
+    color: #ED5087;
+}

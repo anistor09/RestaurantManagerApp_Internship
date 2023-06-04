@@ -8,9 +8,9 @@ const props = defineProps({
 	},
 });
 
-function editItem() {
-	console.log('TODO: wire with editItem page');
-}
+const editItem = () => {
+	window.open(`/editItemView/${props.item.id}`, '_blank');
+};
 </script>
 
 <!-- Item card component containing basic information, including image, description and edit/delete buttons-->

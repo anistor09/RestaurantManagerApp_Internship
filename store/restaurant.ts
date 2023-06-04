@@ -25,4 +25,3 @@ export const useRestaurantStore = defineStore({
 		restaurantGetter: (state) => state.restaurant,
 	},
 });
-
