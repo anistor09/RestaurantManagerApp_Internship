@@ -134,13 +134,13 @@ const checkIfDelete = () => {
 		</div>
 		<div class="box">
 			<div id="addName">
-				<div class="fieldText">Name</div>
-				<input v-model="name" class="specialInput" style="height: 100%" />
+				<div id="nameIdPrefix" class="fieldText">Name</div>
+				<input id="nameId" v-model="name" class="specialInput" style="height: 100%" />
 			</div>
 		</div>
 		<div class="box" style="">
-			<div class="fieldText">Description</div>
-			<textarea v-model="description" class="specialTextArea"></textarea>
+			<div id="descriptionIdPrefix" class="fieldText">Description</div>
+			<textarea id="descriptionId" v-model="description" class="specialTextArea"></textarea>
 		</div>
 		<div class="box" style="">
 			<div class="fieldText">Menu periods</div>
