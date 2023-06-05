@@ -5,15 +5,39 @@ const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
 const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturnday', 'Sunday'];
-const startTimes = ref(['', '', '', '', '', '', '']);
-const endTimes = ref(['', '', '', '', '', '', '']);
+const name = ref(restaurant.name);
+const addresse = ref(restaurant.addresse);
+const description = ref(restaurant.description);
+const imageUrl = ref(restaurant.logoUrl)
+const phoneNumber = ref(restaurant.phoneNumber)
+const email = ref(restaurant.email)
+const category = ref(restaurant.category)
 const doubleCheck = ref(false);
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
 };
+
+const deepCopyHours = () => {
+	const opening = ['', '', '', '', '', '', ''];
+	const closing = ['', '', '', '', '', '', ''];
+	console.log(restaurant.id);
+	for (const [index, element] of restaurant.hoursSet.entries()) {
+		if (index < 7) {
+			opening[index] = element.opening;
+			closing[index] = element.closing;
+		}
+	}
+	return [opening, closing];
+}
+
+const times = deepCopyHours();
+
+const startTimes = ref(times[0]);
+const endTimes = ref(times[1]);
+
 const saveChanges = async () => {
-	console.log(restaurant.hoursSet);
+	// console.log(restaurant.hoursSet);
 	restaurant.hoursSet = [];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
@@ -26,12 +50,16 @@ const saveChanges = async () => {
 			restaurant.hoursSet.push(hour);
 		}
 	}
-	const bodyString = JSON.stringify(restaurant);
-	console.log(bodyString);
+	restaurant.name = name.value;
+	restaurant.addresse = addresse.value;
+	restaurant.description = description.value;
+	restaurant.phoneNumber = phoneNumber.value;
+	restaurant.email = email.value;
+	restaurant.category = category.value;
 
 	await useFetch('/api/restaurant/editRestaurant', {
 		method: 'PUT',
-		body: bodyString,
+		body: restaurant,
 		headers: {
 			'Content-Type': 'application/json',
 		},
@@ -40,105 +68,102 @@ const saveChanges = async () => {
 	doubleCheck.value = false;
 };
 
-onMounted(() => {
-	for (const [index, element] of restaurant.hoursSet.entries()) {
-		if (index < 7) {
-			startTimes.value[index] = element.opening;
-			endTimes.value[index] = element.closing;
-		}
-	}
-	console.log('set');
-});
 </script>
 
 <template>
 	<div>
 		<PageTitle title="Restaurant Overview"></PageTitle>
 		<div class="All">
-			<!-- Container which contains the image, the name of the restaurant and it's address-->
-			<div id="imageNameAddress">
-				<img id="circleImage" :src="restaurant.imageUrl" alt="" />
-				<!-- Container which contains the name of the restaurant and it's address-->
-				<div id="nameAddress">
-					<input
-						v-model="restaurant.name"
+			<div id="firstHalf">
+				<!-- Container which contains the image, the name of the restaurant and it's address-->
+				<div id="imageNameAddress">
+					<img id="circleImage" :src="imageUrl" alt="" />
+					<!-- Container which contains the name of the restaurant and it's address-->
+					<div id="nameAddress">
+						<input
+							v-model="name"
+							class="specialInput"
+							style="font-size: 23px; width: 80%"
+							type="input"
+							placeholder="Please input"
+						/>
+						<input
+							v-model="addresse"
+							class="specialInput"
+							type="input"
+							style="font-size: 18px; text-align: start; width: 100%"
+							placeholder="Please input"
+						/>
+					</div>
+				</div>
+				<!-- Container which the other information(description, phone number, email and category)-->
+				<div class="otherDetails">
+					<div class="prefix">Description:</div>
+					<!-- The textarea where the restaurant description can be changed by the restaurant owner-->
+					<textarea
+						v-model="description"
 						class="specialInput"
-						style="font-size: 23px; width: 80%"
-						type="input"
+						autosize
+						style="
+							text-align: start;
+							width: 80%;
+							height: auto;
+							overflow: hidden;
+							max-width: 80vw;
+							min-width: 300px;
+							border-radius: 45px;
+							padding-left: 1%;
+						"
 						placeholder="Please input"
 					/>
-					<input
-						v-model="restaurant.addresse"
-						class="specialInput"
-						type="input"
-						style="font-size: 18px; text-align: start; width: 100%"
-						placeholder="Please input"
-					/>
+					<!-- TODO -->
+					<!-- Opening Hours: <br> -->
+					<!-- <input type="text" id="restaurantDescriptionEdit" :value="restaurant."> <br> -->
+					<div class="details">
+						<div class="prefix">Phone Number:</div>
+						<!-- The input where the restaurant phone number can be changed by the restaurant owner-->
+						<input
+							v-model="phoneNumber"
+							class="specialInput"
+							style="width: 9%; text-align: center; min-width: 130px"
+							type="input"
+							placeholder="Please input"
+						/>
+					</div>
+					<div class="details">
+						<div class="prefix">Email:</div>
+						<!-- The input where the restaurant email can be changed by the restaurant owner-->
+						<input
+							v-model="email"
+							class="specialInput"
+							style="width: 15%; min-width: 200px"
+							type="input"
+							placeholder="Please input"
+						/>
+					</div>
+					<div class="details">
+						<div class="prefix">Category:</div>
+						<!-- The input where the restaurant category can be changed by the restaurant owner-->
+						<input
+							v-model="category"
+							class="specialInput"
+							style="width: 10%"
+							type="input"
+							placeholder="Please input"
+						/>
+					</div>
+					
 				</div>
 			</div>
-			<!-- Container which the other information(description, phone number, email and category)-->
-			<div class="otherDetails">
-				<div class="prefix">Description:</div>
-				<!-- The textarea where the restaurant description can be changed by the restaurant owner-->
-				<textarea
-					v-model="restaurant.description"
-					class="specialInput"
-					autosize
-					style="
-						text-align: start;
-						width: 40%;
-						height: auto;
-						overflow: hidden;
-						max-width: 80vw;
-						min-width: 300px;
-						border-radius: 45px;
-						padding-left: 1%;
-					"
-					placeholder="Please input"
-				/>
-				<!-- TODO -->
-				<!-- Opening Hours: <br> -->
-				<!-- <input type="text" id="restaurantDescriptionEdit" :value="restaurant."> <br> -->
-				<div class="details">
-					<div class="prefix">Phone Number:</div>
-					<!-- The input where the restaurant phone number can be changed by the restaurant owner-->
-					<input
-						v-model="restaurant.phoneNumber"
-						class="specialInput"
-						style="width: 9%; text-align: center; min-width: 130px"
-						type="input"
-						placeholder="Please input"
-					/>
-				</div>
-				<div class="details">
-					<div class="prefix">Email:</div>
-					<!-- The input where the restaurant email can be changed by the restaurant owner-->
-					<input
-						v-model="restaurant.email"
-						class="specialInput"
-						style="width: 15%; min-width: 200px"
-						type="input"
-						placeholder="Please input"
-					/>
-				</div>
-				<div class="details">
-					<div class="prefix">Category:</div>
-					<!-- The input where the restaurant category can be changed by the restaurant owner-->
-					<input
-						v-model="restaurant.category"
-						class="specialInput"
-						style="width: 10%"
-						type="input"
-						placeholder="Please input"
-					/>
-				</div>
+			<div id="secondHalf">
+				<br><br>
 				<div class="box" style="">
 					<div class="prefix">Working Hours:</div>
 					<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 						<div class="dayName">{{ day }}</div>
 						<el-time-select
 							v-model="startTimes[index]"
-							style="width: 12%"
+							style="width: 24%"
 							placeholder="Start time"
 							start="00:00"
 							step="00:30"
@@ -146,7 +171,7 @@ onMounted(() => {
 						/>
 						<el-time-select
 							v-model="endTimes[index]"
-							style="width: 12%"
+							style="width: 24%"
 							placeholder="End time"
 							start="00:00"
 							step="00:30"
@@ -192,11 +217,20 @@ onMounted(() => {
 * {
 	font-family: 'Cairo';
 }
+
+#firstHalf {
+	width: 50%;
+}
+#secondHalf {
+	position: relative;
+	width: 50%;
+}
 .All {
 	padding-top: 2%;
 	padding-left: 2%;
 	height: 81vh;
 	overflow: auto;
+	display: flex;
 }
 h1 {
 	padding-left: 2%;
@@ -250,6 +284,9 @@ h1 {
 	text-align: center;
 }
 #buttonContainer {
+	position: absolute;
+	right: 0;
+	bottom: 0;
 	display: flex;
 	justify-content: flex-end;
 	padding-right: 5%;
@@ -265,6 +302,8 @@ h1 {
 	padding-left: 0%;
 }
 .box {
+	top: 0;
+	left: 0;
 	height: auto;
 	display: flex;
 	flex-direction: column;
