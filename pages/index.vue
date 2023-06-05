@@ -1,12 +1,11 @@
 <script lang="ts" setup></script>
 
 <template>
-	<div style="padding-top: 20px; padding-left: 15px; padding-right: 15px; height: 40%">
+	<PageTitle title="Home"></PageTitle>
+	<div style="padding-top: 0.5vh; padding-left: 2vw; padding-right: 2vw">
 		<RestaurantComponent></RestaurantComponent>
 	</div>
+	<AnalyticsComponent title="Total Generated Revenue" short-title="revenuue" />
 </template>
 
-<style scoped>
-.id {
-}
-</style>
+<style scoped></style>
