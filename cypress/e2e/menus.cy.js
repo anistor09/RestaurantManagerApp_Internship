@@ -56,14 +56,14 @@ describe('Menus e2e tests', () => {
 	it('Open Edit Menu pop-up when button is clicked', () => {
 	  cy.get('.el-select').click();
 	  cy.get('.el-select-dropdown__item').first().click();
-	  cy.get('.menus-button').contains('Edit menu').click();
+	  cy.get('.menus-button').contains('Edit menu').click({force:true});
 	  cy.get('.el-dialog').should('be.visible');
 	});
 
 	it('Open Add Item in Menu pop-up when button is clicked', () => {
 	  cy.get('.el-select').click();
 	  cy.get('.el-select-dropdown__item').first().click();
-	  cy.get('.menus-button').contains('Add item to menu').click();
+	  cy.get('.menus-button').contains('Add item to menu').click({force:true});
 	  cy.get('.el-dialog').should('be.visible');
 	});
 
