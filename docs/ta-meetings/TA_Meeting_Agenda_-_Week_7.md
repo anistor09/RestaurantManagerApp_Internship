@@ -28,4 +28,9 @@
 - Is there anything else we should be aware of?
 
 # Meeting notes
-
+- Search other system testing frameworks (it is important to pass)
+- Have comments in the code
+- How to install the aplication in ReadMe file
+- Techniocal documention (What a developer needs to know)
+- Mention in the project plan that we ajusted the SCRUM process (added testing later)
+- State in the report the difficulties with the endpoints
