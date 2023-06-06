@@ -61,7 +61,7 @@ it('Check if category name is displayed', () => {
 it('Check if category description is displayed', () => {
     const wrapper = mount(EditCategoryComponent,{
         propsData: {
-            categoryId : 16,
+            categoryId : 27,
             addCategory: false,
         }
       });
@@ -117,13 +117,13 @@ it('Check if input category name is displayed', () => {
 it('Check if input category description is displayed', () => {
     const wrapper = mount(EditCategoryComponent,{
         propsData: {
-            categoryId : 14,
+            categoryId : 27,
             addCategory: false,
         }
       });
     const name = wrapper.find('#input-category-description');
    
-    expect(name.element.value).toBe('Description');
+    expect(name.element.value).toBe('We serve fresh, hand-stretched pizza topped with only the very best of ingredients');
 });
 
 it('Check if input category order is displayed', () => {
