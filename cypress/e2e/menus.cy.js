@@ -130,14 +130,14 @@ describe('Menus e2e tests', () => {
 		// Find the subcategory in the category and click on it
 		cy.get('[data-testid="subcategory-component"]')
 		  .filter(':visible')
-		  .filter((index, element) => Cypress.$(element).text().includes('Soft drinks'))
+		  .filter((index, element) => Cypress.$(element).text().includes('Beer'))
 		  .should('have.length', 1)
 		  .click();
 
 		// Find "Polara" in this subcategory
 		cy.get('[data-testid="subcategory-component"]')
 		  .filter(':visible')
-		  .filter((index, element) => Cypress.$(element).text().includes('Polara'))
+		  .filter((index, element) => Cypress.$(element).text().includes('Moretti 40 cl'))
 		  .should('have.length', 1)
 		  .click();
 	  });
@@ -159,14 +159,14 @@ describe('Menus e2e tests', () => {
 		// Find the subcategory in the category and click on it
 		cy.get('[data-testid="subcategory-component"]')
 		  .filter(':visible')
-		  .filter((index, element) => Cypress.$(element).text().includes('Soft drinks'))
+		  .filter((index, element) => Cypress.$(element).text().includes('Beer'))
 		  .should('have.length', 1)
 		  .click();
 
 		// Find "Polara" in this subcategory
 		cy.get('.el-table__cell')
 		  .filter(':visible')
-		  .filter((index, element) => Cypress.$(element).text().includes('Polara'))
+		  .filter((index, element) => Cypress.$(element).text().includes('Moretti 40 cl'))
 		  .should('have.length', 1)
 	  });
 	  
