@@ -2,7 +2,7 @@
     {
         "id": 16,
         "name": "Sides",
-        "description": "",
+        "description": "Description",
         "presentationOrder": 4.0,
         "imageUrl": null,
         "subCategorySet": []

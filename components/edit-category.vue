@@ -343,11 +343,11 @@ function popUpDeleteSubcategoryLocally(subcatid: number) {
 	deleteSubcategoryPopup.value = true;
 }
 async function handleDeleteCategory() {
-	
+
 	for (const subcategory of subCategories.value) {
 		await handleDeleteSubcategory(subcategory.id)
 	}
-	
+
 	const requestBody = {
 		id: props.categoryId,
 	}
@@ -359,7 +359,7 @@ async function handleDeleteCategory() {
 		},
 	})
 	console.log(response.data.value);
-	if(props.categoryId)
+	if (props.categoryId)
 		categoryStore.deleteGetter.push(props.categoryId)
 	openNotification('Category was successfully deleted')
 	window.close();
@@ -375,8 +375,8 @@ const cancelNewSubcategory = () => {
 
 
 const filteredSubcategories = computed(() => {
-
-	return subCategories.value.sort((a, b) => a.presentationOrder - b.presentationOrder)
+	const unsortedCategories = subCategories.value
+	return unsortedCategories.sort((a, b) => a.presentationOrder - b.presentationOrder)
 });
 const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value });
 </script>
@@ -395,8 +395,9 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 							<div class="edit" style="padding-left: 3%;">
 								<div>
 									<div id="subcategory-name" data-testid="subcategory-name-title"
-										style="padding-bottom: 1%">Name: </div><input id="subcategory-name-input" data-testid="subcategory-name-input"
-										v-model="newSubcategoryName" class="specialInputSubcategory" />
+										style="padding-bottom: 1%">Name: </div><input id="subcategory-name-input"
+										data-testid="subcategory-name-input" v-model="newSubcategoryName"
+										class="specialInputSubcategory" />
 								</div>
 								<div data-testid="subcategory-description-title" style="padding-top: 2%">
 									<div id="subcategory-description" style="padding-bottom: 1%">Description: </div>
@@ -432,7 +433,8 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 						</el-dialog>
 					</Teleport>
 					<Teleport to="body">
-						<el-dialog id="safetyPopUpDeleteSubcategory" v-model="deleteSubcategoryPopup" width="20%" style="border-radius: 5%; height: 23%">
+						<el-dialog id="safetyPopUpDeleteSubcategory" v-model="deleteSubcategoryPopup" width="20%"
+							style="border-radius: 5%; height: 23%">
 							<div class="delete">
 								Are you sure you want to delete this subcategory?
 								<div id="bottomButtons">
@@ -530,7 +532,8 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 											<el-image :src="subcategory.imageUrl == '' ? defaultSrc : subcategory.imageUrl"
 												style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover" />
 											<div class="photoButtonSpace" style=" padding-top: 2%;">
-												<el-button data-testid="edit-subcategory" class="specialPhotoButton" style="margin-bottom: 3vh "
+												<el-button data-testid="edit-subcategory" class="specialPhotoButton"
+													style="margin-bottom: 3vh "
 													@click="changeSubcategory(subcategory.id)">Edit</el-button>
 												<el-button id="deleteSubcategory" class="specialPhotoButton"
 													@click="popUpDeleteSubcategoryLocally(subcategory.id)">Delete</el-button>
@@ -542,7 +545,7 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 						</el-scrollbar>
 					</div>
 					<div style="margin-top: 10%; display: flex; justify-content: flex-end">
-						<el-button  v-if="addCategory" id="saveCategoryButton" class="specialExitButton"
+						<el-button v-if="addCategory" id="saveCategoryButton" class="specialExitButton"
 							@click="handleAddEditCategory()">Save</el-button>
 						<el-button v-else id="addSubcategoryButton" class="specialExitButton"
 							@click="handleAddEditCategory()">Save</el-button>
