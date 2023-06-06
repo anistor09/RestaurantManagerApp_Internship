@@ -88,7 +88,7 @@ function saveNewSubcategoryLocally() {
 		const newSubcategory: SubCategory = {
 			id: getUniqueId(),
 			name: newSubcategoryName.value,
-			description: newSubcategoryName.value,
+			description: newSubcategoryDescription.value,
 			presentationOrder: presentationSubcategoryOrder.value,
 			imageUrl: newSubcategorySrc.value
 		}
@@ -117,7 +117,7 @@ function editSubcategoryLocally() {
 	subCategories.value.splice(positionSubCat, 1, {
 		id: editedSubcategoryId.value,
 		name: newSubcategoryName.value,
-		description: newSubcategoryName.value,
+		description: newSubcategoryDescription.value,
 		presentationOrder: presentationSubcategoryOrder.value,
 		imageUrl: newSubcategorySrc.value
 	});
@@ -134,7 +134,7 @@ function editSubcategoryLocally() {
 function refreshDetails() {
 	newSubcategoryName.value = "";
 	newSubcategoryDescription.value = "";
-	newSubcategorySrc.value = "";
+	newSubcategorySrc.value = defaultSrc;
 	presentationSubcategoryOrder.value = 0
 	addSubcategoryPopUp.value = false;
 	hasSubcategoriesFct();
@@ -369,7 +369,7 @@ const cancelNewSubcategory = () => {
 	editSubcategory.value = false
 	newSubcategoryName.value = "";
 	newSubcategoryDescription.value = "";
-	newSubcategorySrc.value = "";
+	newSubcategorySrc.value = defaultSrc;
 	presentationSubcategoryOrder.value = 0
 }
 
@@ -410,7 +410,7 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 									</div><input data-testid="subcategory-presentationorder-input"
 										v-model.number="presentationSubcategoryOrder" class="specialInputSubcategory" />
 								</div>
-								<div style="width: 100%; height: 90%; display: flex; padding-top: 6%">
+								<div style="width: 100%; height: 90%; display: flex; padding-top: 6%; padding-left: 13%;">
 									<el-image :src="newSubcategorySrc"
 										style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover" />
 									<div class="photoButtonSpace" style="margin-bottom: 3vh; padding-top: 3%;">
@@ -574,7 +574,7 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 }
 
 .subcategoryWrapper {
-	height: 70%;
+	height: 69%;
 	width: 99%;
 	border: 2px solid #ed5087;
 	border-radius: 1vw;
