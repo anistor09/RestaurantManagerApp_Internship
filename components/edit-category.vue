@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 
-import { SubCategory } from '~/interfaces/SubCategory';
-import { useRestaurantStore } from '~/store/restaurant';
-import { useCategoryStore } from '~/store/category';
+import { useRestaurantStore } from '../store/restaurant';
+import { useCategoryStore } from '../store/category';
+import PageTitle from '../components/page-title.vue';
+import { SubCategory } from '../interfaces/SubCategory';
+
 
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
