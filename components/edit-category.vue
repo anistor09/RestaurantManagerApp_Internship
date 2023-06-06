@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 
+import { ref, computed } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
 import { useCategoryStore } from '../store/category';
 import PageTitle from '../components/page-title.vue';
