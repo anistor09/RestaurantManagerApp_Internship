@@ -1,18 +1,210 @@
 [
     {
-        "id": 1,
-        "name": "Steaks",
-        "restaurant_id": 1,
-        "description": "Enjoy our carrefully steaks prepared on our last-technology barbeque",
-        "presentation_order": 1.5,
-        "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/70/93/be/mandarin-bar.jpg"
+        "id": 16,
+        "name": "Sides",
+        "description": "",
+        "presentationOrder": 4.0,
+        "imageUrl": null,
+        "subCategorySet": []
     },
     {
-        "id": 2,
+        "id": 27,
+        "name": "Sourdough Pizza",
+        "description": "We serve fresh, hand-stretched pizza topped with only the very best of ingredients",
+        "presentationOrder": 0.0,
+        "imageUrl": "https://ewai-restaurant-manager-image-repo.s3.eu-central-1.amazonaws.com/restaurant/file/SourdoughPizza.jpeg",
+        "subCategorySet": []
+    },
+    {
+        "id": 14,
+        "name": "Small bites",
+        "description": "Description",
+        "presentationOrder": 2.0,
+        "imageUrl": null,
+        "subCategorySet": [{
+            "id": 13,
+            "name": "Japanese Whiskey",
+            "description": "Japanese Whiskey",
+            "presentationOrder": 0.0,
+            "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+        },
+        {
+            "id": 2,
+            "name": "Biere ",
+            "description": "biere ",
+            "presentationOrder": 0.0,
+            "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+        },
+        {
+            "id": 1,
+            "name": "Vins",
+            "description": "Les meilleurs vins de France",
+            "presentationOrder": 0.0,
+            "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+        },
+        {
+            "id": 1,
+            "name": "Vins",
+            "description": "Les meilleurs vins de France",
+            "presentationOrder": 0.0,
+            "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+        },
+        {
+            "id": 1,
+            "name": "Vins",
+            "description": "Les meilleurs vins de France",
+            "presentationOrder": 0.0,
+            "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+        },
+        {
+            "id": 1,
+            "name": "Vins",
+            "description": "Les meilleurs vins de France",
+            "presentationOrder": 0.0,
+            "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+        },
+        {
+            "id": 1,
+            "name": "Vins",
+            "description": "Les meilleurs vins de France",
+            "presentationOrder": 0.0,
+            "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+        }]
+    },
+    {
+        "id": 20,
+        "name": "Alcool",
+        "description": "test",
+        "presentationOrder": 0.0,
+        "imageUrl": "test",
+        "subCategorySet": [
+            {
+                "id": 13,
+                "name": "Japanese Whiskey",
+                "description": "Japanese Whiskey",
+                "presentationOrder": 0.0,
+                "imageUrl": "test"
+            },
+            {
+                "id": 2,
+                "name": "Biere ",
+                "description": "biere ",
+                "presentationOrder": 0.0,
+                "imageUrl": "biere"
+            },
+            {
+                "id": 1,
+                "name": "Vins",
+                "description": "Les meilleurs vins de France",
+                "presentationOrder": 0.0,
+                "imageUrl": "test"
+            },
+            {
+                "id": 14,
+                "name": "Scotish Whiskey",
+                "description": "Whiskey from Scotland",
+                "presentationOrder": 0.0,
+                "imageUrl": "none"
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "name": "Bread & Buns",
+        "description": "",
+        "presentationOrder": 3.0,
+        "imageUrl": null,
+        "subCategorySet": []
+    },
+    {
+        "id": 25,
+        "name": "TEST",
+        "description": "Test",
+        "presentationOrder": 0.0,
+        "imageUrl": "",
+        "subCategorySet": []
+    },
+    {
+        "id": 24,
+        "name": "Nibbles",
+        "description": "",
+        "presentationOrder": 0.0,
+        "imageUrl": "https://ewai-restaurant-manager-image-repo.s3.eu-central-1.amazonaws.com/restaurant/file/Nibbles.jpeg",
+        "subCategorySet": []
+    },
+    {
+        "id": 26,
+        "name": "Starters",
+        "description": "",
+        "presentationOrder": 0.0,
+        "imageUrl": "https://ewai-restaurant-manager-image-repo.s3.eu-central-1.amazonaws.com/restaurant/file/Starters.jpeg",
+        "subCategorySet": []
+    },
+    {
+        "id": 13,
+        "name": "Mains",
+        "description": "",
+        "presentationOrder": 1.0,
+        "imageUrl": "https://ewai-restaurant-manager-image-repo.s3.eu-central-1.amazonaws.com/restaurant/file/AG.png",
+        "subCategorySet": []
+    },
+    {
+        "id": 22,
         "name": "Drinks",
-        "restaurant_id": 1,
-        "description": "Try our drinks to refresh yourself",
-        "presentation_order": 2.0,
-        "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/70/93/be/mandarin-bar.jpg"
+        "description": "",
+        "presentationOrder": 0.0,
+        "imageUrl": "https://ewai-restaurant-manager-image-repo.s3.eu-central-1.amazonaws.com/restaurant/file/drinks.jfif",
+        "subCategorySet": [
+            {
+                "id": 19,
+                "name": "Beer",
+                "description": "",
+                "presentationOrder": 0.0,
+                "imageUrl": ""
+            },
+            {
+                "id": 21,
+                "name": "Sparkling wine ",
+                "description": "All our wines are supplied by our really good friend Michel, a Dutch native with a French name and deep knowledge of Italian wine. Take your pick!",
+                "presentationOrder": 0.0,
+                "imageUrl": ""
+            },
+            {
+                "id": 22,
+                "name": "White wine",
+                "description": "All our wines are supplied by our really good friend Michel, a Dutch native with a French name and deep knowledge of Italian wine. Take your pick!",
+                "presentationOrder": 0.0,
+                "imageUrl": ""
+            },
+            {
+                "id": 24,
+                "name": "Rosé wine",
+                "description": "All our wines are supplied by our really good friend Michel, a Dutch native with a French name and deep knowledge of Italian wine. Take your pick!",
+                "presentationOrder": 0.0,
+                "imageUrl": ""
+            },
+            {
+                "id": 20,
+                "name": "Soft drinks",
+                "description": "Non alcoholic drinks",
+                "presentationOrder": 0.0,
+                "imageUrl": ""
+            },
+            {
+                "id": 23,
+                "name": "Red wine",
+                "description": "All our wines are supplied by our really good friend Michel, a Dutch native with a French name and deep knowledge of Italian wine. Take your pick!",
+                "presentationOrder": 0.0,
+                "imageUrl": ""
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "name": "Secondi",
+        "description": "",
+        "presentationOrder": 0.0,
+        "imageUrl": "https://ewai-restaurant-manager-image-repo.s3.eu-central-1.amazonaws.com/restaurant/file/Secondi.jpeg",
+        "subCategorySet": []
     }
 ]
