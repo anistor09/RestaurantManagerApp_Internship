@@ -5,10 +5,23 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
+	subtitle: {
+		type: String,
+		required: false,
+		default: ""
+	},
 	shortTitle: {
 		type: String,
 		required: true,
 	},
+	graphTimes: {
+        type: Array as () => String[],
+        required: true
+    },
+    graphValues: {
+        type: Array as () => Number[],
+        required: true
+    }
 });
 
 const chartOptions = ref({
@@ -28,19 +41,34 @@ const chartOptions = ref({
 	colors: ['#ED5087'],
 	title: {
 		text: props.title,
-		align: 'left',
+		align: 'center',
 		style: {
 			fontWeight: 'bolder',
 			fontFamily: 'Open Sans',
 			color: '#ED5087',
+			fontSize: '18'
+		},
+	},
+	subtitle: {
+		text: props.subtitle,
+		align: 'center',
+		style: {
+			fontWeight: 'bold',
+			fontFamily: 'Open Sans',
+			color: '#242424',
+			fontSize: '15'
 		},
 	},
 	xaxis: {
-		categories: ['00:00', '01:30', '02:30', '03:30', '04:30', '05:30', '06:30'],
+		categories: props.graphTimes,
 	},
 	tooltip: {
+		theme: 'light',
 		x: {
-			format: 'dd/MM/yy HH:mm',
+			show: false,
+		},
+		y: {
+			title: props.shortTitle
 		},
 	},
 });
@@ -48,7 +76,7 @@ const chartOptions = ref({
 const series = reactive([
 	{
 		name: props.shortTitle,
-		data: [31, 40, 28, 51, 42, 109, 100],
+		data: props.graphValues,
 	},
 ]);
 </script>
