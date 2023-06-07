@@ -8,20 +8,20 @@ const props = defineProps({
 	subtitle: {
 		type: String,
 		required: false,
-		default: ""
+		default: '',
 	},
 	shortTitle: {
 		type: String,
 		required: true,
 	},
 	graphTimes: {
-        type: Array as () => String[],
-        required: true
-    },
-    graphValues: {
-        type: Array as () => Number[],
-        required: true
-    }
+		type: Array as () => String[],
+		required: true,
+	},
+	graphValues: {
+		type: Array as () => Number[],
+		required: true,
+	},
 });
 
 const chartOptions = ref({
@@ -46,7 +46,7 @@ const chartOptions = ref({
 			fontWeight: 'bolder',
 			fontFamily: 'Open Sans',
 			color: '#ED5087',
-			fontSize: '18'
+			fontSize: '18',
 		},
 	},
 	subtitle: {
@@ -56,7 +56,7 @@ const chartOptions = ref({
 			fontWeight: 'bold',
 			fontFamily: 'Open Sans',
 			color: '#242424',
-			fontSize: '15'
+			fontSize: '15',
 		},
 	},
 	xaxis: {
@@ -68,7 +68,7 @@ const chartOptions = ref({
 			show: false,
 		},
 		y: {
-			title: props.shortTitle
+			title: props.shortTitle,
 		},
 	},
 });

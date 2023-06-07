@@ -5,14 +5,14 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-    itemNames: {
-        type: Array as () => String[],
-        required: true
-    },
-    itemValues: {
-        type: Array as () => Number[],
-        required: true
-    }
+	itemNames: {
+		type: Array as () => String[],
+		required: true,
+	},
+	itemValues: {
+		type: Array as () => Number[],
+		required: true,
+	},
 });
 
 const chartOptions = ref({
@@ -30,21 +30,16 @@ const chartOptions = ref({
 			},
 		},
 	},
-    legend: {
-        show: false
-    },
-	colors: [
-  '#ED5087',
-  '#F5847A',
-  '#F8A869',
-  '#FDC460'
-],
+	legend: {
+		show: false,
+	},
+	colors: ['#ED5087', '#F5847A', '#F8A869', '#FDC460'],
 	dataLabels: {
 		enabled: true,
 		textAnchor: 'start',
 		style: {
 			colors: ['#242424'],
-            fontFamily: 'Open Sans',
+			fontFamily: 'Open Sans',
 		},
 		formatter: function (val: any, opt: any) {
 			return opt.w.globals.labels[opt.dataPointIndex] + ':  ' + val;
@@ -56,7 +51,7 @@ const chartOptions = ref({
 		colors: ['#fff'],
 	},
 	xaxis: {
-		categories: props.itemNames
+		categories: props.itemNames,
 	},
 	yaxis: {
 		labels: {
@@ -70,7 +65,7 @@ const chartOptions = ref({
 			fontWeight: 'bolder',
 			fontFamily: 'Open Sans',
 			color: '#ED5087',
-            fontSize: '18'
+			fontSize: '18',
 		},
 	},
 	tooltip: {
@@ -90,7 +85,7 @@ const chartOptions = ref({
 
 const series = reactive([
 	{
-		data: props.itemValues
+		data: props.itemValues,
 	},
 ]);
 </script>
