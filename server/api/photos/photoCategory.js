@@ -1,9 +1,13 @@
 export default defineEventHandler(async (event) => {
 	const token = getCookie(event, 'token');
-	const body = await readBody(event)
+	const form = await readMultipartFormData(event)
+
+    console.log(form)
+
     const formData = new FormData();
-    formData.append('file', body);
-    const response = await fetch(`https://auth-api.ewai.fr/category/upload/14`, {
+    formData.append('file', new Blob([form[0].data], {type: form[0].type}), form[0].filename);
+
+    const response = await $fetch(`https://auth-api.ewai.fr/category/upload/14`, {
         method: 'POST',
         body: formData,
         headers: {
@@ -11,7 +15,7 @@ export default defineEventHandler(async (event) => {
         },
     });
     
-    const responseData = await response.json();
+    const responseData = response
     console.log(responseData)
     return responseData;
 });

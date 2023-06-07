@@ -53,9 +53,11 @@ function handleFileUpload(event: any) {
 }
 async function uploadImage() {
 	if (selectedFile.value) {
+		const formData = new FormData();
+		formData.append('file', selectedFile.value);
 		const response = await useFetch(`/api/photos/photoCategory`, {
 			method: 'POST',
-			body: selectedFile.value,
+			body: formData,
 		});
 		console.log(response.data.value);
 	} else {
