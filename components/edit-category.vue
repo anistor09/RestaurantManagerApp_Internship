@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 import { SubCategory } from '~/interfaces/SubCategory';
 import { useRestaurantStore } from '~/store/restaurant';
 import { useCategoryStore } from '~/store/category';
@@ -16,8 +15,8 @@ const props = defineProps({
 	categoryId: Number,
 });
 
-
 const name = ref('');
+const selectedFile: Ref<File | null> = ref(null);
 const description = ref('');
 const src = ref(defaultSrc);
 const hasSubcategories = ref(false);
@@ -32,13 +31,11 @@ const editSubcategory = ref(false);
 const editedSubcategoryId = ref(0);
 const tobeDeletedSubcat: Ref<number[]> = ref([]);
 const toBeEditedSubcat: Ref<Set<number>> = ref(new Set<number>());
-const deleteSubcategoryPopup = ref(false)
-const deleteCategoryPopup = ref(false)
+const deleteSubcategoryPopup = ref(false);
+const deleteCategoryPopup = ref(false);
 const deleteSubcatIdLocally = ref(-1);
 
-
 if (props.addCategory === false) {
-
 	const category = restaurant.categorySet.filter((x) => x.id === props.categoryId)[0];
 	name.value = category === undefined ? '' : category.name;
 	description.value = category === undefined ? '' : category.description;
@@ -48,8 +45,22 @@ if (props.addCategory === false) {
 		if (category.subCategorySet.length > 0) {
 			subCategories.value = category.subCategorySet;
 			hasSubcategories.value = true;
-
 		}
+}
+
+function handleFileUpload(event: any) {
+	selectedFile.value = event.target.files[0];
+}
+async function uploadImage() {
+	if (selectedFile.value) {
+		const response = await useFetch(`/api/photos/photoCategory`, {
+			method: 'POST',
+			body: selectedFile.value,
+		});
+		console.log(response.data.value);
+	} else {
+		console.log('no file ');
+	}
 }
 
 const openNotification = (notifTitle: string) => {
@@ -65,33 +76,28 @@ const openNotification = (notifTitle: string) => {
 };
 
 const getUniqueId = () => {
-	const oldIds = subCategories.value.map(x => x.id);
+	const oldIds = subCategories.value.map((x) => x.id);
 	let found = false;
 	let newId = -1;
 	while (!found) {
 		newId = Math.floor(Math.random() * -1001);
-		if (oldIds.filter(y => y === newId).length === 0)
-			found = true;
+		if (oldIds.filter((y) => y === newId).length === 0) found = true;
 	}
 	return newId;
-}
+};
 function saveNewSubcategoryLocally() {
-
 	if (editSubcategory.value) {
-
-		editSubcategoryLocally()
+		editSubcategoryLocally();
 	} else {
-
 		const newSubcategory: SubCategory = {
 			id: getUniqueId(),
 			name: newSubcategoryName.value,
 			description: newSubcategoryName.value,
 			presentationOrder: presentationSubcategoryOrder.value,
-			imageUrl: newSubcategorySrc.value
-		}
+			imageUrl: newSubcategorySrc.value,
+		};
 
-
-		subCategories.value.push(newSubcategory)
+		subCategories.value.push(newSubcategory);
 
 		addSubcategoryPopUp.value = false;
 		refreshDetails();
@@ -100,51 +106,47 @@ function saveNewSubcategoryLocally() {
 function deleteSubcategoryLocally(idSubcat: number) {
 	addSubcategoryPopUp.value = false;
 	deleteSubcategoryPopup.value = false;
-	subCategories.value = subCategories.value.filter(x => x.id !== idSubcat)
+	subCategories.value = subCategories.value.filter((x) => x.id !== idSubcat);
 
 	if (idSubcat >= 0) {
-		tobeDeletedSubcat.value.push(idSubcat)
+		tobeDeletedSubcat.value.push(idSubcat);
 	}
-	refreshDetails()
-
+	refreshDetails();
 }
 function editSubcategoryLocally() {
-	const positionSubCat = subCategories.value.findIndex(x => x.id === editedSubcategoryId.value);
+	const positionSubCat = subCategories.value.findIndex((x) => x.id === editedSubcategoryId.value);
 
 	subCategories.value.splice(positionSubCat, 1, {
 		id: editedSubcategoryId.value,
 		name: newSubcategoryName.value,
 		description: newSubcategoryName.value,
 		presentationOrder: presentationSubcategoryOrder.value,
-		imageUrl: newSubcategorySrc.value
+		imageUrl: newSubcategorySrc.value,
 	});
 
 	if (editedSubcategoryId.value >= 0) {
-		toBeEditedSubcat.value.add(editedSubcategoryId.value)
+		toBeEditedSubcat.value.add(editedSubcategoryId.value);
 	}
 
 	refreshDetails();
 
 	editSubcategory.value = false;
-
 }
 function refreshDetails() {
-	newSubcategoryName.value = "";
-	newSubcategoryDescription.value = "";
-	newSubcategorySrc.value = "";
-	presentationSubcategoryOrder.value = 0
+	newSubcategoryName.value = '';
+	newSubcategoryDescription.value = '';
+	newSubcategorySrc.value = '';
+	presentationSubcategoryOrder.value = 0;
 	addSubcategoryPopUp.value = false;
 	hasSubcategoriesFct();
 }
 function hasSubcategoriesFct() {
 	if (subCategories.value.length > 0) {
 		hasSubcategories.value = true;
-
 	}
 }
 async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, editMode: boolean) {
 	const requestBody = {
-
 		name: subcategory.name,
 		description: subcategory.description,
 		presentationOrder: subcategory.presentationOrder,
@@ -168,7 +170,6 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 			email: restaurant.email,
 			averageWaitingTime: 0,
 		},
-
 	};
 
 	if (!editMode) {
@@ -180,77 +181,71 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 			},
 		});
 
-		console.log("added the subcategory with id " + parseInt(response.data.value as string))
-
-
+		console.log('added the subcategory with id ' + parseInt(response.data.value as string));
 	} else {
 		const putBody = {
 			requestBody,
 			sid: subcategory.id,
-
-		}
+		};
 		await useFetch('/api/subcategory/update', {
 			method: 'PUT',
 			body: putBody,
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		})
+		});
 
-		console.log("edited the subcategory with id " + subcategory.id)
-
-	};
-
-
-
+		console.log('edited the subcategory with id ' + subcategory.id);
+	}
 }
 const changeSubcategory = (idSubcat: number) => {
-	const editedSubcategory = subCategories.value.filter(x => x.id === idSubcat)[0]
+	const editedSubcategory = subCategories.value.filter((x) => x.id === idSubcat)[0];
 
 	newSubcategoryName.value = editedSubcategory === undefined ? '' : editedSubcategory.name;
-	newSubcategoryDescription.value = editedSubcategory === undefined ? '' : editedSubcategory.description;
+	newSubcategoryDescription.value =
+		editedSubcategory === undefined ? '' : editedSubcategory.description;
 	newSubcategorySrc.value = editedSubcategory === undefined ? '' : editedSubcategory.imageUrl;
-	presentationSubcategoryOrder.value = editedSubcategory === undefined ? subCategories.value.length : editedSubcategory.presentationOrder;
+	presentationSubcategoryOrder.value =
+		editedSubcategory === undefined
+			? subCategories.value.length
+			: editedSubcategory.presentationOrder;
 	addSubcategoryPopUp.value = true;
 	editedSubcategoryId.value = idSubcat;
 	editSubcategory.value = true;
-
-}
+};
 async function handleDeleteSubcategory(idSubcat: number) {
 	// await useFetch(`/api/subcategory/${idSubcat}`);
 	const requestBody = {
 		id: idSubcat,
-	}
+	};
 	await useFetch('/api/subcategory/delete', {
 		method: 'DELETE',
 		body: requestBody,
 		headers: {
 			'Content-Type': 'application/json',
 		},
-	})
+	});
 	addSubcategoryPopUp.value = false;
-	subCategories.value = subCategories.value.filter(x => x.id !== idSubcat)
-	hasSubcategoriesFct()
-
+	subCategories.value = subCategories.value.filter((x) => x.id !== idSubcat);
+	hasSubcategoriesFct();
 }
 async function handleSubcategories(categoryId: number) {
 	for (const subcategory of subCategories.value) {
 		if (subcategory.id < 0) {
-			await handleAddEditSubcategory(subcategory, categoryId, false)
+			await handleAddEditSubcategory(subcategory, categoryId, false);
 		}
 	}
 
 	for (const toDeleteId of tobeDeletedSubcat.value) {
-		await handleDeleteSubcategory(toDeleteId)
+		await handleDeleteSubcategory(toDeleteId);
 	}
 	for (const toEditId of toBeEditedSubcat.value) {
-		const editedSubcategory = subCategories.value.filter(x => x.id === toEditId)[0]
-		await handleAddEditSubcategory(editedSubcategory, categoryId, true)
+		const editedSubcategory = subCategories.value.filter((x) => x.id === toEditId)[0];
+		await handleAddEditSubcategory(editedSubcategory, categoryId, true);
 	}
 }
 
 async function handleAddEditCategory() {
-
 	const requestBody = {
 		name: name.value,
 		description: description.value,
@@ -274,7 +269,6 @@ async function handleAddEditCategory() {
 			email: restaurant.email,
 			averageWaitingTime: 0,
 		},
-
 	};
 	if (props.addCategory) {
 		const response = await useFetch('/api/category/add', {
@@ -283,8 +277,8 @@ async function handleAddEditCategory() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		})
-		const categoryId = response.data.value
+		});
+		const categoryId = response.data.value as number;
 		if (categoryId != null) {
 			categoryStore.categoryGetter.push({
 				id: categoryId,
@@ -296,15 +290,13 @@ async function handleAddEditCategory() {
 			});
 		}
 
-		if (categoryId !== null)
-			await handleSubcategories(categoryId)
-		openNotification('Category was successfully added')
-	}
-	else {
+		if (categoryId !== null) await handleSubcategories(categoryId);
+		openNotification('Category was successfully added');
+	} else {
 		const putBody = {
 			requestBody,
 			cid: props.categoryId,
-		}
+		};
 
 		await useFetch('/api/category/update', {
 			method: 'PUT',
@@ -313,7 +305,7 @@ async function handleAddEditCategory() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		})
+		});
 		if (props.categoryId !== undefined) {
 			categoryStore.categoryGetter.push({
 				id: props.categoryId,
@@ -324,58 +316,53 @@ async function handleAddEditCategory() {
 				subCategorySet: subCategories.value,
 			});
 		}
-		if (props.categoryId !== undefined)
-			await handleSubcategories(props.categoryId)
-		openNotification('Category was successfully edited')
+		if (props.categoryId !== undefined) await handleSubcategories(props.categoryId);
+		openNotification('Category was successfully edited');
 	}
 
 	setTimeout(() => {
 		window.close();
 	}, 2000);
-
-
 }
 function popUpDeleteSubcategoryLocally(subcatid: number) {
 	deleteSubcatIdLocally.value = subcatid;
 	deleteSubcategoryPopup.value = true;
 }
 async function handleDeleteCategory() {
-	
 	for (const subcategory of subCategories.value) {
-		await handleDeleteSubcategory(subcategory.id)
+		await handleDeleteSubcategory(subcategory.id);
 	}
-	
+
 	const requestBody = {
 		id: props.categoryId,
-	}
+	};
 	const response = await useFetch('/api/category/delete', {
 		method: 'DELETE',
 		body: requestBody,
 		headers: {
 			'Content-Type': 'application/json',
 		},
-	})
+	});
 	console.log(response.data.value);
-	if(props.categoryId)
-		categoryStore.deleteGetter.push(props.categoryId)
-	openNotification('Category was successfully deleted')
+	if (props.categoryId) categoryStore.deleteGetter.push(props.categoryId);
+	openNotification('Category was successfully deleted');
 	window.close();
 }
 const cancelNewSubcategory = () => {
-	addSubcategoryPopUp.value = false
-	editSubcategory.value = false
-	newSubcategoryName.value = "";
-	newSubcategoryDescription.value = "";
-	newSubcategorySrc.value = "";
-	presentationSubcategoryOrder.value = 0
-}
-
+	addSubcategoryPopUp.value = false;
+	editSubcategory.value = false;
+	newSubcategoryName.value = '';
+	newSubcategoryDescription.value = '';
+	newSubcategorySrc.value = '';
+	presentationSubcategoryOrder.value = 0;
+};
 
 const filteredSubcategories = computed(() => {
-
-	return subCategories.value.sort((a, b) => a.presentationOrder - b.presentationOrder)
+	return subCategories.value.sort((a, b) => a.presentationOrder - b.presentationOrder);
 });
-const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value });
+const hasSubcategoriesComputed = computed(() => {
+	return hasSubcategories.value;
+});
 </script>
 
 <template>
@@ -386,77 +373,103 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 			<div class="bottom">
 				<ClientOnly>
 					<Teleport to="body">
-
 						<el-dialog
-v-model="addSubcategoryPopUp" width="25%" style="border-radius: 5%; height: 58%"
-							:before-close="refreshDetails">
-							<div class="edit" style="padding-left: 3%;">
+							v-model="addSubcategoryPopUp"
+							width="25%"
+							style="border-radius: 5%; height: 58%"
+							:before-close="refreshDetails"
+						>
+							<div class="edit" style="padding-left: 3%">
 								<div>
-									<div style="padding-bottom: 1%">Name: </div><input
-v-model="newSubcategoryName"
-										class="specialInputSubcategory" />
+									<div style="padding-bottom: 1%">Name:</div>
+									<input v-model="newSubcategoryName" class="specialInputSubcategory" />
 								</div>
 								<div style="padding-top: 2%">
-									<div style="padding-bottom: 1%">Description: </div>
+									<div style="padding-bottom: 1%">Description:</div>
 
 									<textarea
-v-model="newSubcategoryDescription"
-										class="specialTextAreaSubcategory"></textarea>
+										v-model="newSubcategoryDescription"
+										class="specialTextAreaSubcategory"
+									></textarea>
 								</div>
 								<div style="padding-top: 2%">
-									<div style="padding-bottom: 1%">Presentation order: </div><input
-										v-model.number="presentationSubcategoryOrder" class="specialInputSubcategory" />
+									<div style="padding-bottom: 1%">Presentation order:</div>
+									<input
+										v-model.number="presentationSubcategoryOrder"
+										class="specialInputSubcategory"
+									/>
 								</div>
-								<div style="width: 100%; height: 90%; display: flex; padding-top: 6%; padding-left: 16%">
+								<div
+									style="
+										width: 100%;
+										height: 90%;
+										display: flex;
+										padding-top: 6%;
+										padding-left: 16%;
+									"
+								>
 									<el-image
-:src="newSubcategorySrc"
-										style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover" />
-									<div class="photoButtonSpace" style="margin-bottom: 3vh; padding-top: 3%;">
-										<el-button
-class="specialPhotoButtonSubcategory"
-											style="margin-bottom: 3vh;">Change</el-button>
+										:src="newSubcategorySrc"
+										style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover"
+									/>
+									<div class="photoButtonSpace" style="margin-bottom: 3vh; padding-top: 3%">
+										<el-button class="specialPhotoButtonSubcategory" style="margin-bottom: 3vh"
+											>Change</el-button
+										>
 										<el-button class="specialPhotoButtonSubcategory">Delete</el-button>
 									</div>
 								</div>
 								<div>
-
 									<div id="bottomButtons">
-										<el-button
-color="#ED5087" plain round
-											@click="cancelNewSubcategory()">Cancel</el-button>
-										<el-button
-color="#ED5087" plain round
-											@click="saveNewSubcategoryLocally()">Save</el-button>
+										<el-button color="#ED5087" plain round @click="cancelNewSubcategory()"
+											>Cancel</el-button
+										>
+										<el-button color="#ED5087" plain round @click="saveNewSubcategoryLocally()"
+											>Save</el-button
+										>
 									</div>
 								</div>
 							</div>
-
 						</el-dialog>
 					</Teleport>
 					<Teleport to="body">
-						<el-dialog v-model="deleteSubcategoryPopup" width="20%" style="border-radius: 5%; height: 20%">
+						<el-dialog
+							v-model="deleteSubcategoryPopup"
+							width="20%"
+							style="border-radius: 5%; height: 20%"
+						>
 							<div class="delete">
 								Are you sure you want to delete this subcategory?
 								<div id="bottomButtons">
+									<el-button color="#ED5087" plain round @click="deleteSubcategoryPopup = false"
+										>No</el-button
+									>
 									<el-button
-color="#ED5087" plain round
-										@click="deleteSubcategoryPopup = false">No</el-button>
-									<el-button
-color="#ED5087" plain round
-										@click="deleteSubcategoryLocally(deleteSubcatIdLocally)">Yes</el-button>
+										color="#ED5087"
+										plain
+										round
+										@click="deleteSubcategoryLocally(deleteSubcatIdLocally)"
+										>Yes</el-button
+									>
 								</div>
 							</div>
 						</el-dialog>
 					</Teleport>
 					<Teleport to="body">
-						<el-dialog v-model="deleteCategoryPopup" width="20%" style="border-radius: 5%; height: 20%">
+						<el-dialog
+							v-model="deleteCategoryPopup"
+							width="20%"
+							style="border-radius: 5%; height: 20%"
+						>
 							<div class="delete">
 								Are you sure you want to delete category {{ name }}?
 								<div id="bottomButtons">
-									<el-button
-color="#ED5087" plain round
-										@click="deleteCategoryPopup = false">No</el-button>
-									<el-button color="#ED5087" plain round @click="handleDeleteCategory()">Yes</el-button>
+									<el-button color="#ED5087" plain round @click="deleteCategoryPopup = false"
+										>No</el-button
+									>
+									<el-button color="#ED5087" plain round @click="handleDeleteCategory()"
+										>Yes</el-button
+									>
 								</div>
 							</div>
 						</el-dialog>
@@ -482,11 +495,16 @@ color="#ED5087" plain round
 							<div class="fieldText" style="padding-bottom: 2%">Photo</div>
 							<div style="width: 92%; height: 90%; display: flex; padding-bottom: 10%">
 								<el-image
-:src="defaultSrc"
-									style="width: 35%; height: 15vh; object-fit: cover; border-radius: 40px" />
-								<div class="photoButtonSpace" style="padding-top: 0.9%;">
+									:src="defaultSrc"
+									style="width: 35%; height: 15vh; object-fit: cover; border-radius: 40px"
+								/>
+								<div class="photoButtonSpace" style="padding-top: 0.9%">
 									<el-button class="specialPhotoButton">Change</el-button>
 									<el-button class="specialPhotoButton">Delete</el-button>
+								</div>
+								<div>
+									<input type="file" @change="handleFileUpload" />
+									<button @click="uploadImage">Upload</button>
 								</div>
 							</div>
 						</div>
@@ -500,11 +518,14 @@ color="#ED5087" plain round
 						</div>
 					</div>
 
-
-					<div style="padding-top: 7%; display: flex; padding-left: 8%;">
+					<div style="padding-top: 7%; display: flex; padding-left: 8%">
 						<el-button
-v-if="!props.addCategory" id="deleteCategoryButton" class="specialExitButton"
-							@click="deleteCategoryPopup = true">Delete Category</el-button>
+							v-if="!props.addCategory"
+							id="deleteCategoryButton"
+							class="specialExitButton"
+							@click="deleteCategoryPopup = true"
+							>Delete Category</el-button
+						>
 					</div>
 				</div>
 				<div class="right">
@@ -515,9 +536,13 @@ v-if="!props.addCategory" id="deleteCategoryButton" class="specialExitButton"
 							</div>
 							<div class="box" style="padding-left: 20%">
 								<el-button
-color="#ED5087" plain round
+									color="#ED5087"
+									plain
+									round
 									style="width: 8vw; font-size: 0.8vw; font-weight: bolder"
-									@click="addSubcategoryPopUp = true">Add subcategory</el-button>
+									@click="addSubcategoryPopUp = true"
+									>Add subcategory</el-button
+								>
 							</div>
 						</div>
 					</div>
@@ -525,23 +550,31 @@ color="#ED5087" plain round
 						<el-scrollbar style="overflow-x: hidden">
 							<div v-if="hasSubcategoriesComputed">
 								<div
-v-for="subcategory in filteredSubcategories" :key="subcategory.id"
-									style="padding-bottom: 2%; height: 20%; width: 80%">
+									v-for="subcategory in filteredSubcategories"
+									:key="subcategory.id"
+									style="padding-bottom: 2%; height: 20%; width: 80%"
+								>
 									<div class="box" style="padding-top: 5%; padding-left: 20%; display: flex">
 										<div class="subcategoryText" style="padding-bottom: 5%">
 											{{ subcategory === undefined ? 'None' : subcategory.name }}
 										</div>
-										<div style="width: 100%; height: 90%; display: flex; padding-bottom: 10% ">
+										<div style="width: 100%; height: 90%; display: flex; padding-bottom: 10%">
 											<el-image
-:src="subcategory.imageUrl == '' ? defaultSrc : subcategory.imageUrl"
-												style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover" />
-											<div class="photoButtonSpace" style=" padding-top: 2%;">
+												:src="subcategory.imageUrl == '' ? defaultSrc : subcategory.imageUrl"
+												style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover"
+											/>
+											<div class="photoButtonSpace" style="padding-top: 2%">
 												<el-button
-class="specialPhotoButton" style="margin-bottom: 3vh "
-													@click="changeSubcategory(subcategory.id)">Edit</el-button>
+													class="specialPhotoButton"
+													style="margin-bottom: 3vh"
+													@click="changeSubcategory(subcategory.id)"
+													>Edit</el-button
+												>
 												<el-button
-class="specialPhotoButton"
-													@click="popUpDeleteSubcategoryLocally(subcategory.id)">Delete</el-button>
+													class="specialPhotoButton"
+													@click="popUpDeleteSubcategoryLocally(subcategory.id)"
+													>Delete</el-button
+												>
 											</div>
 										</div>
 									</div>
@@ -551,11 +584,19 @@ class="specialPhotoButton"
 					</div>
 					<div style="margin-top: 10%; display: flex; justify-content: flex-end">
 						<el-button
-v-if="addCategory" id="addSubcategoryButton" class="specialExitButton"
-							@click="handleAddEditCategory()">Save</el-button>
+							v-if="addCategory"
+							id="addSubcategoryButton"
+							class="specialExitButton"
+							@click="handleAddEditCategory()"
+							>Save</el-button
+						>
 						<el-button
-v-else id="addSubcategoryButton" class="specialExitButton"
-							@click="handleAddEditCategory()">Save</el-button>
+							v-else
+							id="addSubcategoryButton"
+							class="specialExitButton"
+							@click="handleAddEditCategory()"
+							>Save</el-button
+						>
 					</div>
 				</div>
 			</div>
@@ -689,8 +730,6 @@ v-else id="addSubcategoryButton" class="specialExitButton"
 	width: 80%;
 	left: 7%;
 	top: 3.5vh;
-
-
 }
 
 #bottomButtons .el-button {
@@ -745,7 +784,6 @@ v-else id="addSubcategoryButton" class="specialExitButton"
 	height: 30%;
 }
 
-
 .specialExitButton {
 	border-radius: 30px;
 	font-size: 1.25vw;
@@ -774,7 +812,7 @@ v-else id="addSubcategoryButton" class="specialExitButton"
 	color: white;
 }
 
-.el-button+.el-button {
+.el-button + .el-button {
 	margin-left: 0;
 }
 
@@ -794,7 +832,6 @@ v-else id="addSubcategoryButton" class="specialExitButton"
 	font-size: 0.9vw;
 	font-weight: 300;
 	color: black;
-
 }
 
 .delete {
@@ -802,4 +839,5 @@ v-else id="addSubcategoryButton" class="specialExitButton"
 	font-size: 0.85vw;
 	font-weight: 300;
 	color: black;
-}</style>
+}
+</style>
