@@ -315,7 +315,8 @@ async function handleAddEditCategory() {
 			},
 		})
 		if (props.categoryId !== undefined) {
-			categoryStore.categoryGetter.push({
+			const index = categoryStore.categoryGetter.findIndex(x => x.id === props.categoryId);
+			categoryStore.categoryGetter.splice(index, 1, {
 				id: props.categoryId,
 				name: name.value,
 				description: description.value,
@@ -340,11 +341,11 @@ function popUpDeleteSubcategoryLocally(subcatid: number) {
 	deleteSubcategoryPopup.value = true;
 }
 async function handleDeleteCategory() {
-	
+
 	for (const subcategory of subCategories.value) {
 		await handleDeleteSubcategory(subcategory.id)
 	}
-	
+
 	const requestBody = {
 		id: props.categoryId,
 	}
@@ -356,7 +357,7 @@ async function handleDeleteCategory() {
 		},
 	})
 	console.log(response.data.value);
-	if(props.categoryId)
+	if (props.categoryId)
 		categoryStore.deleteGetter.push(props.categoryId)
 	openNotification('Category was successfully deleted')
 	window.close();
@@ -387,20 +388,17 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 				<ClientOnly>
 					<Teleport to="body">
 
-						<el-dialog
-v-model="addSubcategoryPopUp" width="25%" style="border-radius: 5%; height: 58%"
+						<el-dialog v-model="addSubcategoryPopUp" width="25%" style="border-radius: 5%; height: 58%"
 							:before-close="refreshDetails">
 							<div class="edit" style="padding-left: 3%;">
 								<div>
-									<div style="padding-bottom: 1%">Name: </div><input
-v-model="newSubcategoryName"
+									<div style="padding-bottom: 1%">Name: </div><input v-model="newSubcategoryName"
 										class="specialInputSubcategory" />
 								</div>
 								<div style="padding-top: 2%">
 									<div style="padding-bottom: 1%">Description: </div>
 
-									<textarea
-v-model="newSubcategoryDescription"
+									<textarea v-model="newSubcategoryDescription"
 										class="specialTextAreaSubcategory"></textarea>
 								</div>
 								<div style="padding-top: 2%">
@@ -408,12 +406,10 @@ v-model="newSubcategoryDescription"
 										v-model.number="presentationSubcategoryOrder" class="specialInputSubcategory" />
 								</div>
 								<div style="width: 100%; height: 90%; display: flex; padding-top: 6%; padding-left: 16%">
-									<el-image
-:src="newSubcategorySrc"
+									<el-image :src="newSubcategorySrc"
 										style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover" />
 									<div class="photoButtonSpace" style="margin-bottom: 3vh; padding-top: 3%;">
-										<el-button
-class="specialPhotoButtonSubcategory"
+										<el-button class="specialPhotoButtonSubcategory"
 											style="margin-bottom: 3vh;">Change</el-button>
 										<el-button class="specialPhotoButtonSubcategory">Delete</el-button>
 									</div>
@@ -421,11 +417,9 @@ class="specialPhotoButtonSubcategory"
 								<div>
 
 									<div id="bottomButtons">
-										<el-button
-color="#ED5087" plain round
+										<el-button color="#ED5087" plain round
 											@click="cancelNewSubcategory()">Cancel</el-button>
-										<el-button
-color="#ED5087" plain round
+										<el-button color="#ED5087" plain round
 											@click="saveNewSubcategoryLocally()">Save</el-button>
 									</div>
 								</div>
@@ -438,11 +432,9 @@ color="#ED5087" plain round
 							<div class="delete">
 								Are you sure you want to delete this subcategory?
 								<div id="bottomButtons">
-									<el-button
-color="#ED5087" plain round
+									<el-button color="#ED5087" plain round
 										@click="deleteSubcategoryPopup = false">No</el-button>
-									<el-button
-color="#ED5087" plain round
+									<el-button color="#ED5087" plain round
 										@click="deleteSubcategoryLocally(deleteSubcatIdLocally)">Yes</el-button>
 								</div>
 							</div>
@@ -453,8 +445,7 @@ color="#ED5087" plain round
 							<div class="delete">
 								Are you sure you want to delete category {{ name }}?
 								<div id="bottomButtons">
-									<el-button
-color="#ED5087" plain round
+									<el-button color="#ED5087" plain round
 										@click="deleteCategoryPopup = false">No</el-button>
 									<el-button color="#ED5087" plain round @click="handleDeleteCategory()">Yes</el-button>
 								</div>
@@ -481,8 +472,7 @@ color="#ED5087" plain round
 						<div class="box" style="padding-top: 10%">
 							<div class="fieldText" style="padding-bottom: 2%">Photo</div>
 							<div style="width: 92%; height: 90%; display: flex; padding-bottom: 10%">
-								<el-image
-:src="defaultSrc"
+								<el-image :src="defaultSrc"
 									style="width: 35%; height: 15vh; object-fit: cover; border-radius: 40px" />
 								<div class="photoButtonSpace" style="padding-top: 0.9%;">
 									<el-button class="specialPhotoButton">Change</el-button>
@@ -502,8 +492,7 @@ color="#ED5087" plain round
 
 
 					<div style="padding-top: 7%; display: flex; padding-left: 8%;">
-						<el-button
-v-if="!props.addCategory" id="deleteCategoryButton" class="specialExitButton"
+						<el-button v-if="!props.addCategory" id="deleteCategoryButton" class="specialExitButton"
 							@click="deleteCategoryPopup = true">Delete Category</el-button>
 					</div>
 				</div>
@@ -514,8 +503,7 @@ v-if="!props.addCategory" id="deleteCategoryButton" class="specialExitButton"
 								<div class="fieldText">Subcategories</div>
 							</div>
 							<div class="box" style="padding-left: 20%">
-								<el-button
-color="#ED5087" plain round
+								<el-button color="#ED5087" plain round
 									style="width: 8vw; font-size: 0.8vw; font-weight: bolder"
 									@click="addSubcategoryPopUp = true">Add subcategory</el-button>
 							</div>
@@ -524,23 +512,19 @@ color="#ED5087" plain round
 					<div class="subcategoryWrapper">
 						<el-scrollbar style="overflow-x: hidden">
 							<div v-if="hasSubcategoriesComputed">
-								<div
-v-for="subcategory in filteredSubcategories" :key="subcategory.id"
+								<div v-for="subcategory in filteredSubcategories" :key="subcategory.id"
 									style="padding-bottom: 2%; height: 20%; width: 80%">
 									<div class="box" style="padding-top: 5%; padding-left: 20%; display: flex">
 										<div class="subcategoryText" style="padding-bottom: 5%">
 											{{ subcategory === undefined ? 'None' : subcategory.name }}
 										</div>
 										<div style="width: 100%; height: 90%; display: flex; padding-bottom: 10% ">
-											<el-image
-:src="subcategory.imageUrl == '' ? defaultSrc : subcategory.imageUrl"
+											<el-image :src="subcategory.imageUrl == '' ? defaultSrc : subcategory.imageUrl"
 												style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover" />
 											<div class="photoButtonSpace" style=" padding-top: 2%;">
-												<el-button
-class="specialPhotoButton" style="margin-bottom: 3vh "
+												<el-button class="specialPhotoButton" style="margin-bottom: 3vh "
 													@click="changeSubcategory(subcategory.id)">Edit</el-button>
-												<el-button
-class="specialPhotoButton"
+												<el-button class="specialPhotoButton"
 													@click="popUpDeleteSubcategoryLocally(subcategory.id)">Delete</el-button>
 											</div>
 										</div>
@@ -550,11 +534,9 @@ class="specialPhotoButton"
 						</el-scrollbar>
 					</div>
 					<div style="margin-top: 10%; display: flex; justify-content: flex-end">
-						<el-button
-v-if="addCategory" id="addSubcategoryButton" class="specialExitButton"
+						<el-button v-if="addCategory" id="addSubcategoryButton" class="specialExitButton"
 							@click="handleAddEditCategory()">Save</el-button>
-						<el-button
-v-else id="addSubcategoryButton" class="specialExitButton"
+						<el-button v-else id="addSubcategoryButton" class="specialExitButton"
 							@click="handleAddEditCategory()">Save</el-button>
 					</div>
 				</div>
@@ -802,4 +784,5 @@ v-else id="addSubcategoryButton" class="specialExitButton"
 	font-size: 0.85vw;
 	font-weight: 300;
 	color: black;
-}</style>
+}
+</style>
