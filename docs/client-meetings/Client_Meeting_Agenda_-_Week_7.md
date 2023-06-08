@@ -37,5 +37,16 @@
 - Decide on scheduling next meeting
 
 # Meeting Notes
+- Order request(domain/orders), parameters:
+* size (number of orders on a page)
+* page (the index of the page)
+* status
+* restaurantId
+* tableNumber
+* date(not yet)
+- Avg. order price (!per person not per table) graph instead of revenue per item
+- Paralelize the requests on the backend
+- change the name of the AI autocompletion
+- make the autocompletion similar to ChatGpt style response
 
 
