@@ -25,6 +25,8 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 
 const doubleCheck = ref(false);
 
+const nameNeededPopUp = ref(false)
+
 const checkIfChange = () => {
 	doubleCheck.value = true;
 };
@@ -63,6 +65,31 @@ const addMenu = async () => {
 	doubleCheck.value = false;
 	emit('close');
 };
+async function addAiMenuDescription() {
+	if (name.value.length === 0 ) {
+		nameNeededPopUp.value = true;
+	}
+	else {
+		
+		description.value = "The new description is loading...";
+		
+		const requestBody = {
+			itemName: name.value,
+			length: 200,
+			target: 'menu',
+			
+		}
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
+			method: 'POST',
+			body: requestBody,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		description.value = response.data.value 
+		
+	}
+}
 </script>
 
 <template>
@@ -87,7 +114,13 @@ const addMenu = async () => {
 			</div>
 		</div>
 		<div class="box" style="">
-			<div id="descriptionIdPrefix" class="fieldText">Description</div>
+			<!-- <div id="descriptionIdPrefix" class="fieldText">Description</div> -->
+			<div class="div" style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%;">
+										<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%;">Description</div>
+										
+										<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription">✨Write with AI</el-button>
+
+									</div>
 			<textarea id="descriptionIdPrefix" v-model="description" class="specialTextArea"></textarea>
 		</div>
 		<div class="box" style="">
@@ -117,6 +150,17 @@ const addMenu = async () => {
 				>Add</el-button
 			>
 		</div>
+		<Teleport to="body">
+							<el-dialog v-model="nameNeededPopUp" width="20%" style="border-radius: 5%; height: 25%">
+								<div class="delete">
+									Please input the name before you request an AI menu description.
+									<div id="bottomButtons" style="left: 40%;">
+										<el-button color="#ED5087" plain round @click="nameNeededPopUp = false">Ok</el-button>
+
+									</div>
+								</div>
+							</el-dialog>
+						</Teleport>
 		<Teleport to="body">
 			<el-dialog
 				v-model="doubleCheck"
@@ -185,7 +229,18 @@ const addMenu = async () => {
 	width: 50%;
 	height: 30%;
 }
+.aiButtonSubcatgory {
 
+border-radius: 15px;
+font-size: 0.9vw;
+border-color: #ED5087;
+background-color: white;
+color: #ED5087;
+width: 20%;
+height: 3vh;
+}
+
+.aiButtonSubcatgory:hover,
 .specialPhotoButton:hover {
 	background-color: #ed5087;
 	border-color: darkgrey;
@@ -280,5 +335,19 @@ const addMenu = async () => {
 	display: flex;
 	padding-top: 8%;
 	justify-content: center;
+}
+#bottomButtons {
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+	width: 80%;
+	left: 7%;
+	top: 3.5vh;
+}
+.delete {
+	text-align: center;
+	font-size: 0.85vw;
+	font-weight: 300;
+	color: black;
 }
 </style>

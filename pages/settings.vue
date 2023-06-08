@@ -109,8 +109,8 @@ async function addAiRestaurantDescription() {
 					<Teleport to="body">
 						<el-dialog v-model="nameNeededPopUp" width="20%" style="border-radius: 5%; height: 25%">
 							<div class="delete">
-								Please input the name before you request an AI item description.
-								<div id="bottomButtons" style="left: 33%;">
+								Please input the name before you request an AI restaurant description.
+								<div id="bottomButtons" style="left: 40%;">
 									<el-button color="#ED5087" plain round @click="nameNeededPopUp = false">Ok</el-button>
 
 								</div>
@@ -393,5 +393,19 @@ height: 3vh;
 	background-color: #ED5087;
 	border-color: #ED5087;
 	color: white;
+}
+#bottomButtons {
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+	width: 80%;
+	left: 7%;
+	top: 3.5vh;
+}
+.delete {
+	text-align: center;
+	font-size: 0.85vw;
+	font-weight: 300;
+	color: black;
 }
 </style>
