@@ -16,6 +16,7 @@ const phoneNumber = ref(restaurant.phoneNumber)
 const email = ref(restaurant.email)
 const category = ref(restaurant.category)
 const doubleCheck = ref(false);
+const nameNeededPopUp = ref(false)
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -70,6 +71,33 @@ const saveChanges = async () => {
 
 	doubleCheck.value = false;
 };
+async function addAiRestaurantDescription() {
+	if (name.value.length === 0 ) {
+		nameNeededPopUp.value = true;
+	}
+	else {
+		
+		description.value = "The new description is loading...";
+		
+		const requestBody = {
+			itemName: name.value,
+			length: 300,
+			target: 'restaurant',
+			
+		}
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
+			method: 'POST',
+			body: requestBody,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		console.log(response.data.value)
+
+		description.value = response.data.value 
+		
+	}
+}
 
 </script>
 
@@ -77,6 +105,19 @@ const saveChanges = async () => {
 	<div>
 		<PageTitle id="titleComponent" title="Restaurant Overview"></PageTitle>
 		<div class="All">
+			
+					<Teleport to="body">
+						<el-dialog v-model="nameNeededPopUp" width="20%" style="border-radius: 5%; height: 25%">
+							<div class="delete">
+								Please input the name before you request an AI item description.
+								<div id="bottomButtons" style="left: 33%;">
+									<el-button color="#ED5087" plain round @click="nameNeededPopUp = false">Ok</el-button>
+
+								</div>
+							</div>
+						</el-dialog>
+					</Teleport>
+				
 			<div id="firstHalf">
 				<!-- Container which contains the image, the name of the restaurant and it's address-->
 				<div id="imageNameAddress">
@@ -103,8 +144,14 @@ const saveChanges = async () => {
 				</div>
 				<!-- Container which the other information(description, phone number, email and category)-->
 				<div class="otherDetails">
-					<div id="descriptionIdPrefix" class="prefix">Description:</div>
+					<!-- <div id="descriptionIdPrefix" class="prefix">Description:</div> -->
 					<!-- The textarea where the restaurant description can be changed by the restaurant owner-->
+					<div class="div" style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%;">
+										<div id="descriptionIdPrefix" class="prefix" style="width: 18%; padding-bottom: 0.7%;">Description: </div>
+
+										<el-button class="aiButtonSubcatgory" @click="addAiRestaurantDescription">✨Write with AI</el-button>
+
+									</div>
 					<textarea
 						v-model="description"
 						class="specialInput"
@@ -330,5 +377,21 @@ h1 {
 	height: 130px; /* set the height to whatever you need */
 	border-radius: 50%; /* make the image circular */
 	box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.3);
+}
+.aiButtonSubcatgory {
+
+border-radius: 15px;
+font-size: 0.9vw;
+border-color: #ED5087;
+background-color: white;
+color: #ED5087;
+width: 18%;
+height: 3vh;
+}
+
+.aiButtonSubcatgory:hover {
+	background-color: #ED5087;
+	border-color: #ED5087;
+	color: white;
 }
 </style>

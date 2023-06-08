@@ -448,7 +448,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
         const requestBody = {
             itemName: name.value,
             length: neededLength,
-            forItem: true,
+            target: 'an item',
         }
         const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
             method: 'POST',
@@ -497,8 +497,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
                         <div class="div" style="display: flex; align-items: center;">
                             <div class="fieldText" style="width: 30%; padding-bottom: 0.9%;">Description</div>
 
-                            <el-button class="aiButton" @click="addAiShortDescription">Add AI
-                                Description</el-button>
+                            <el-button class="aiButton" @click="addAiShortDescription">✨Write with AI</el-button>
 
                         </div>
                         <textarea v-model="description" class="specialTextArea"></textarea>
@@ -592,7 +591,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
                         <div class="div" style="display: flex; align-items: center; ">
                             <div class="fieldText" style="width: 30%; padding-bottom: 0.9%;">Long Description</div>
 
-                            <el-button class="aiButton" style="height: 45%;" @click="addAiLongDescription">Add AI Description
+                            <el-button class="aiButton" style="height: 45%;" @click="addAiLongDescription">✨Write with AI
                                 </el-button>
 
                         </div>
@@ -837,7 +836,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
     border-color: #ED5087;
     background-color: white;
     color: #ED5087;
-    width: 35%;
+    width: 30%;
     height: 65%;
 }
 

@@ -86,7 +86,7 @@ function saveNewSubcategoryLocally() {
 		const newSubcategory: SubCategory = {
 			id: getUniqueId(),
 			name: newSubcategoryName.value,
-			description: newSubcategoryName.value,
+			description: newSubcategoryDescription.value,
 			presentationOrder: presentationSubcategoryOrder.value,
 			imageUrl: newSubcategorySrc.value
 		}
@@ -115,7 +115,7 @@ function editSubcategoryLocally() {
 	subCategories.value.splice(positionSubCat, 1, {
 		id: editedSubcategoryId.value,
 		name: newSubcategoryName.value,
-		description: newSubcategoryName.value,
+		description: newSubcategoryDescription.value,
 		presentationOrder: presentationSubcategoryOrder.value,
 		imageUrl: newSubcategorySrc.value
 	});
@@ -402,7 +402,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 		const requestBody = {
 			itemName: queriedName,
 			length: neededLength,
-			forItem: false,
+			target: 'a category',
 		}
 		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
 			method: 'POST',
@@ -451,8 +451,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									<div class="div" style="display: flex; align-items: center; padding-bottom: 1%;">
 										<div  style="width: 30%; padding-bottom: 0.9%;">Description: </div>
 
-										<el-button class="aiButtonSubcatgory" @click="addAiSubcategoryDescription">Add AI
-											Description</el-button>
+										<el-button class="aiButtonSubcatgory" @click="addAiSubcategoryDescription">✨Write with AI</el-button>
 
 									</div>
 
@@ -524,10 +523,9 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 						<div class="box">
 							<!-- <div class="fieldText" style="padding-bottom: 2%">Description</div> -->
 							<div class="div" style="display: flex; align-items: center;">
-								<div class="fieldText" style="width: 30%; padding-bottom: 0.9%;">Description</div>
+								<div class="fieldText" style="width: 20%; padding-bottom: 0.9%;">Description</div>
 
-								<el-button class="aiButton" @click="addAiCategoryDescription">Add AI
-									Description</el-button>
+								<el-button class="aiButton" @click="addAiCategoryDescription">✨Write with AI</el-button>
 
 							</div>
 							<textarea v-model="description" class="specialTextArea"></textarea>
@@ -856,19 +854,19 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	border-color: #ED5087;
 	background-color: white;
 	color: #ED5087;
-	width: 25%;
+	width: 20%;
 	height: 65%;
 }
 
 .aiButtonSubcatgory {
 
-border-radius: 25px;
-font-size: 0.55vw;
+border-radius: 15px;
+font-size: 0.7vw;
 border-color: #ED5087;
 background-color: white;
 color: #ED5087;
-width: 25%;
-height: 45%;
+width: 27%;
+height: 3vh;
 }
 
 .aiButton:hover,

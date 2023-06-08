@@ -9,16 +9,18 @@ export default defineEventHandler((event) => {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         };
-        let target = ''
-        if(data.forItem)
-            target = 'an item'
-        else
-            target = 'a category'  
-        const prompt = `Please give me a description of around ${data.length} characters for ${target} named ${data.itemName}, which is part of a restaurant menu.`
+        let prompt = ""
+        const basicPrompt = `Please give me a description of around ${data.length} characters for`
+        if(data.target === 'a category' || data.target === 'an item')
+           prompt = basicPrompt +  `${data.target} named ${data.itemName}, which is part of a restaurant menu.`;
+        if(data.target === 'restaurant')  
+          prompt =  basicPrompt +  `a restaurant named ${data.itemName}. The description will be used in the restaurant's menu.`;
+        if(data.target === 'menu')  
+          prompt =  basicPrompt +  `a menu named ${data.itemName}.`;  
         const sentdata = {
           'model': 'gpt-3.5-turbo',  
           "messages": [{"role": "user", "content": prompt}],
-          "temperature": 0.7,
+          "temperature": 1.0,
           'max_tokens': 50, // Adjust the number of tokens as per your requirement
         };
       
@@ -30,8 +32,11 @@ export default defineEventHandler((event) => {
       
         try {
           const response = await fetch(url, requestOptions);
+          if (response.status === 429) {
+            return 'The server is overloaded. Please try again in a few minutes.';
+          }
           const responseData = await response.json();
-        //   console.log(responseData.choices[0].message.content)
+          
           return responseData.choices[0].message.content
           
         } catch (error) {
