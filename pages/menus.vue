@@ -4,8 +4,6 @@ import {
 	ElCol,
 	ElScrollbar,
 	ElMain,
-	ElTabPane,
-	ElTabs,
 	ElContainer,
 	ElOption,
 	ElButton,
