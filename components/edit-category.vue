@@ -318,7 +318,8 @@ async function handleAddEditCategory() {
 			},
 		})
 		if (props.categoryId !== undefined) {
-			categoryStore.categoryGetter.push({
+			const index = categoryStore.categoryGetter.findIndex(x => x.id === props.categoryId);
+			categoryStore.categoryGetter.splice(index, 1, {
 				id: props.categoryId,
 				name: name.value,
 				description: description.value,
@@ -795,4 +796,5 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 	font-size: 0.85vw;
 	font-weight: 300;
 	color: black;
-}</style>
+}
+</style>
