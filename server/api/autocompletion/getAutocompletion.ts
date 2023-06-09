@@ -12,17 +12,17 @@ export default defineEventHandler((event) => {
         let prompt = ""
         const basicPrompt = `Please give me a description of around ${data.length} characters for`
         if(data.target === 'a category' || data.target === 'an item')
-           prompt = basicPrompt +  ` ${data.target} named ${data.itemName}, which is part of a restaurant menu.`;
+           prompt = basicPrompt +  ` ${data.target} named ${data.itemName}, which is part of a restaurant menu. Please make sure each sentence is coherent and is finished.`;
         if(data.target === 'restaurant')  
-          prompt =  basicPrompt +  ` a restaurant named ${data.itemName}. The description will be used in the restaurant's menu.`;
+          prompt =  basicPrompt +  ` a restaurant named ${data.itemName}. The description will be used in the restaurant's menu. Please make sure each sentence is coherent and is finished.`;
         if(data.target === 'menu')  
-          prompt =  basicPrompt +  ` a menu named ${data.itemName}.`;  
+          prompt =  basicPrompt +  ` a menu named ${data.itemName}. Please make sure each sentence is coherent and is finished.`;  
        
         const sentdata = {
           'model': 'gpt-3.5-turbo',  
           "messages": [{"role": "user", "content": prompt}],
           "temperature": 1.0,
-          'max_tokens': 50, // Adjust the number of tokens as per your requirement
+          'max_tokens': 300, // Adjust the number of tokens as per your requirement
         };
        
         const requestOptions = {
