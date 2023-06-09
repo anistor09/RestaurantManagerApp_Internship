@@ -446,7 +446,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							:before-close="refreshDetails">
 							<div class="edit" style="padding-left: 3%;">
 								<div>
-									<div style="padding-bottom: 1%" id="subcategory-name" data-testid="subcategory-name-title" >Name: </div><input v-model="newSubcategoryName" id="subcategory-name-input"
+									<div style="padding-bottom: 1%" id="subcategory-name" data-testid="subcategory-name-title" >Name: </div><input data-testid="subcategory-name-input" v-model="newSubcategoryName" id="subcategory-name-input"
 										class="specialInputSubcategory" />
 								</div>
 								<div data-testid="subcategory-description-title" style="padding-top: 2%">
