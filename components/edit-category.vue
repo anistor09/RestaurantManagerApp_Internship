@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 
-import { SubCategory } from '~/interfaces/SubCategory';
-import { useRestaurantStore } from '~/store/restaurant';
-import { useCategoryStore } from '~/store/category';
+import { ref, computed } from 'vue';
+import { useRestaurantStore } from '../store/restaurant';
+import { useCategoryStore } from '../store/category';
+import PageTitle from '../components/page-title.vue';
+import { SubCategory } from '../interfaces/SubCategory';
+
 
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
@@ -85,7 +88,7 @@ function saveNewSubcategoryLocally() {
 		const newSubcategory: SubCategory = {
 			id: getUniqueId(),
 			name: newSubcategoryName.value,
-			description: newSubcategoryName.value,
+			description: newSubcategoryDescription.value,
 			presentationOrder: presentationSubcategoryOrder.value,
 			imageUrl: newSubcategorySrc.value
 		}
@@ -114,7 +117,7 @@ function editSubcategoryLocally() {
 	subCategories.value.splice(positionSubCat, 1, {
 		id: editedSubcategoryId.value,
 		name: newSubcategoryName.value,
-		description: newSubcategoryName.value,
+		description: newSubcategoryDescription.value,
 		presentationOrder: presentationSubcategoryOrder.value,
 		imageUrl: newSubcategorySrc.value
 	});
@@ -131,7 +134,7 @@ function editSubcategoryLocally() {
 function refreshDetails() {
 	newSubcategoryName.value = "";
 	newSubcategoryDescription.value = "";
-	newSubcategorySrc.value = "";
+	newSubcategorySrc.value = defaultSrc;
 	presentationSubcategoryOrder.value = 0
 	addSubcategoryPopUp.value = false;
 	hasSubcategoriesFct();
@@ -367,14 +370,14 @@ const cancelNewSubcategory = () => {
 	editSubcategory.value = false
 	newSubcategoryName.value = "";
 	newSubcategoryDescription.value = "";
-	newSubcategorySrc.value = "";
+	newSubcategorySrc.value = defaultSrc;
 	presentationSubcategoryOrder.value = 0
 }
 
 
 const filteredSubcategories = computed(() => {
-
-	return subCategories.value.sort((a, b) => a.presentationOrder - b.presentationOrder)
+	const unsortedCategories = subCategories.value
+	return unsortedCategories.sort((a, b) => a.presentationOrder - b.presentationOrder)
 });
 const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value });
 </script>
@@ -384,28 +387,31 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 		<page-title v-if="addCategory" title="Add category"></page-title>
 		<page-title v-else title="Edit category"></page-title>
 		<div class="container">
-			<div class="bottom">
+			<div id='add-Category-Info' class="bottom">
 				<ClientOnly>
-					<Teleport to="body">
+					<Teleport id="addSubCategoryPopUp" to="body">
 
-						<el-dialog v-model="addSubcategoryPopUp" width="25%" style="border-radius: 5%; height: 58%"
-							:before-close="refreshDetails">
+						<el-dialog id='add_subcategory_popup' v-model="addSubcategoryPopUp" width="25%"
+							style="border-radius: 5%; height: 62%" :before-close="refreshDetails">
 							<div class="edit" style="padding-left: 3%;">
 								<div>
-									<div style="padding-bottom: 1%">Name: </div><input v-model="newSubcategoryName"
+									<div id="subcategory-name" data-testid="subcategory-name-title"
+										style="padding-bottom: 1%">Name: </div><input id="subcategory-name-input"
+										data-testid="subcategory-name-input" v-model="newSubcategoryName"
 										class="specialInputSubcategory" />
 								</div>
-								<div style="padding-top: 2%">
-									<div style="padding-bottom: 1%">Description: </div>
+								<div data-testid="subcategory-description-title" style="padding-top: 2%">
+									<div id="subcategory-description" style="padding-bottom: 1%">Description: </div>
 
-									<textarea v-model="newSubcategoryDescription"
-										class="specialTextAreaSubcategory"></textarea>
+									<textarea id="subcategory-description-input" data-testid="subcategory-description-input"
+										v-model="newSubcategoryDescription" class="specialTextAreaSubcategory"></textarea>
 								</div>
-								<div style="padding-top: 2%">
-									<div style="padding-bottom: 1%">Presentation order: </div><input
+								<div data-testid="subcategory-presentation-order-title" style="padding-top: 2%">
+									<div id="subcategory-presentationorder" style="padding-bottom: 1%">Presentation order:
+									</div><input data-testid="subcategory-presentationorder-input"
 										v-model.number="presentationSubcategoryOrder" class="specialInputSubcategory" />
 								</div>
-								<div style="width: 100%; height: 90%; display: flex; padding-top: 6%; padding-left: 16%">
+								<div style="width: 100%; height: 90%; display: flex; padding-top: 6%; padding-left: 13%;">
 									<el-image :src="newSubcategorySrc"
 										style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover" />
 									<div class="photoButtonSpace" style="margin-bottom: 3vh; padding-top: 3%;">
@@ -417,9 +423,9 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 								<div>
 
 									<div id="bottomButtons">
-										<el-button color="#ED5087" plain round
+										<el-button id="cancelAddEditSubcategory" color="#ED5087" plain round
 											@click="cancelNewSubcategory()">Cancel</el-button>
-										<el-button color="#ED5087" plain round
+										<el-button data-testid="save-subcategory-button" color="#ED5087" plain round
 											@click="saveNewSubcategoryLocally()">Save</el-button>
 									</div>
 								</div>
@@ -428,20 +434,21 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 						</el-dialog>
 					</Teleport>
 					<Teleport to="body">
-						<el-dialog v-model="deleteSubcategoryPopup" width="20%" style="border-radius: 5%; height: 20%">
+						<el-dialog id="safetyPopUpDeleteSubcategory" v-model="deleteSubcategoryPopup" width="20%"
+							style="border-radius: 5%; height: 23%">
 							<div class="delete">
 								Are you sure you want to delete this subcategory?
 								<div id="bottomButtons">
 									<el-button color="#ED5087" plain round
 										@click="deleteSubcategoryPopup = false">No</el-button>
-									<el-button color="#ED5087" plain round
+									<el-button id="yessafetyPopUpDeleteSubcategory" color="#ED5087" plain round
 										@click="deleteSubcategoryLocally(deleteSubcatIdLocally)">Yes</el-button>
 								</div>
 							</div>
 						</el-dialog>
 					</Teleport>
 					<Teleport to="body">
-						<el-dialog v-model="deleteCategoryPopup" width="20%" style="border-radius: 5%; height: 20%">
+						<el-dialog v-model="deleteCategoryPopup" width="20%" style="border-radius: 5%; height: 23%">
 							<div class="delete">
 								Are you sure you want to delete category {{ name }}?
 								<div id="bottomButtons">
@@ -457,15 +464,17 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 					<div class="elementLeft">
 						<div class="box">
 							<div style="height: 40%; width: 100%">
-								<div class="fieldText" style="padding-bottom: 2%">Name</div>
-								<input v-model="name" class="specialInput" style="height: 56.25%" />
+								<div id="category-name" class="fieldText" style="padding-bottom: 2%">Name</div>
+								<input id="input-category-name" v-model="name" class="specialInput"
+									style="height: 56.25%" />
 							</div>
 						</div>
 					</div>
 					<div class="elementLeft">
 						<div class="box">
-							<div class="fieldText" style="padding-bottom: 2%">Description</div>
-							<textarea v-model="description" class="specialTextArea"></textarea>
+							<div id="category-description" class="fieldText" style="padding-bottom: 2%">Description</div>
+							<textarea id="input-category-description" v-model="description"
+								class="specialTextArea"></textarea>
 						</div>
 					</div>
 					<div class="elementLeft" style="padding-bottom: 5%">
@@ -484,8 +493,10 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 					<div class="elementLeft">
 						<div class="box" style="">
 							<div style="height: 40%; width: 100%">
-								<div class="fieldText" style="padding-bottom: 2%">Order in Menu</div>
-								<input v-model="presentationOrder" class="specialInput" style="height: 56.25%" />
+								<div id="category-orderinmenu" class="fieldText" style="padding-bottom: 2%">Order in Menu
+								</div>
+								<input id="input-category-order" v-model="presentationOrder" class="specialInput"
+									style="height: 56.25%" />
 							</div>
 						</div>
 					</div>
@@ -503,14 +514,14 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 								<div class="fieldText">Subcategories</div>
 							</div>
 							<div class="box" style="padding-left: 20%">
-								<el-button color="#ED5087" plain round
-									style="width: 8vw; font-size: 0.8vw; font-weight: bolder"
+								<el-button id="add-subcategory-button" data-testid="add-subcategory" color="#ED5087" plain
+									round style="width: 8vw; font-size: 0.8vw; font-weight: bolder"
 									@click="addSubcategoryPopUp = true">Add subcategory</el-button>
 							</div>
 						</div>
 					</div>
 					<div class="subcategoryWrapper">
-						<el-scrollbar style="overflow-x: hidden">
+						<el-scrollbar id="subcategory-list" style="overflow-x: hidden">
 							<div v-if="hasSubcategoriesComputed">
 								<div v-for="subcategory in filteredSubcategories" :key="subcategory.id"
 									style="padding-bottom: 2%; height: 20%; width: 80%">
@@ -522,9 +533,10 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 											<el-image :src="subcategory.imageUrl == '' ? defaultSrc : subcategory.imageUrl"
 												style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover" />
 											<div class="photoButtonSpace" style=" padding-top: 2%;">
-												<el-button class="specialPhotoButton" style="margin-bottom: 3vh "
+												<el-button data-testid="edit-subcategory" class="specialPhotoButton"
+													style="margin-bottom: 3vh "
 													@click="changeSubcategory(subcategory.id)">Edit</el-button>
-												<el-button class="specialPhotoButton"
+												<el-button id="deleteSubcategory" class="specialPhotoButton"
 													@click="popUpDeleteSubcategoryLocally(subcategory.id)">Delete</el-button>
 											</div>
 										</div>
@@ -534,7 +546,7 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 						</el-scrollbar>
 					</div>
 					<div style="margin-top: 10%; display: flex; justify-content: flex-end">
-						<el-button v-if="addCategory" id="addSubcategoryButton" class="specialExitButton"
+						<el-button v-if="addCategory" id="saveCategoryButton" class="specialExitButton"
 							@click="handleAddEditCategory()">Save</el-button>
 						<el-button v-else id="addSubcategoryButton" class="specialExitButton"
 							@click="handleAddEditCategory()">Save</el-button>
@@ -563,7 +575,7 @@ const hasSubcategoriesComputed = computed(() => { return hasSubcategories.value 
 }
 
 .subcategoryWrapper {
-	height: 70%;
+	height: 69%;
 	width: 99%;
 	border: 2px solid #ed5087;
 	border-radius: 1vw;

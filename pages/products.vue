@@ -129,6 +129,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 								v-model="searchItems"
 								class="search-bar-products"
 								size="default"
+								clearable
 								placeholder="Search by item"
 								:prefix-icon="Search"
 							/>
@@ -145,6 +146,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 								v-model="searchCategories"
 								class="search-bar-products"
 								size="default"
+								clearable
 								placeholder="Search by category"
 								:prefix-icon="Search"
 							/>
