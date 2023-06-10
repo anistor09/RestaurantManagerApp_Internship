@@ -510,7 +510,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							id="safetyPopUpDeleteSubcategory"
 							v-model="deleteSubcategoryPopup"
 							width="20%"
-							style="border-radius: 5%; height: 23%"
+							style="border-radius: 5%;"
 						>
 							<div class="delete">
 								Are you sure you want to delete this subcategory?
@@ -534,7 +534,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 						<el-dialog
 							v-model="deleteCategoryPopup"
 							width="20%"
-							style="border-radius: 5%; height: 23%"
+							style="border-radius: 5%;"
 						>
 							<div class="delete">
 								Are you sure you want to delete category {{ name }}?
@@ -822,7 +822,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	position: relative;
 	width: 80%;
 	left: 7%;
-	padding-top: 1%;
+	padding-top: 5%;
 }
 
 #bottomButtons .el-button {
