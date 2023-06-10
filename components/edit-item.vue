@@ -1,5 +1,6 @@
 <script lang = "ts" setup>
 import allergens from "../mockData/allergens.json"
+import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import { SubCategory } from '~/interfaces/SubCategory';
 import { Category } from '~/interfaces/Category';
 import { Option } from '~/interfaces/Option';
@@ -9,7 +10,7 @@ import { Item } from '~/interfaces/Item';
 import { useRestaurantStore } from '~/store/restaurant'
 import { useCategoryStore } from '~/store/category'
 import { useItemStore } from '~/store/item'
-import NameNeededPopUp from '../components/nameNeededPopUp.vue';
+
 
 
 const restaurantStore = useRestaurantStore()

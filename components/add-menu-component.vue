@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
-import NameNeededPopUp from '../components/nameNeededPopUp.vue';
+
 
 const emit = defineEmits(['close']);
 

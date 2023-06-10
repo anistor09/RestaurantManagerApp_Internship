@@ -12,7 +12,7 @@ const props = defineProps({
 <template>
 	
 		<el-dialog  width="20%" style="border-radius: 10%">
-			<div class="delete">
+			<div id="text" class="delete">
 				Please input the name before you request an AI {{ props.message }} description.
 				<div id="change-bottom-button">
 					<el-button color="#ED5087" plain round @click="$emit('closeNoName')">Ok</el-button>
