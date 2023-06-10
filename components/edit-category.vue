@@ -15,7 +15,10 @@ const defaultSrc =
 // Define props for the component
 const props = defineProps({
 	addCategory: Boolean,
-	categoryId: Number,
+	categoryId: {
+    type: Number,
+    default: -1, 
+  },
 });
 // Define reactive variables using the ref function
 const name = ref('');
