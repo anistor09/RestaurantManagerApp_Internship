@@ -167,8 +167,8 @@ async function addAiMenuDescription() {
 		<ClientOnly>
 			<Teleport to="body">
 				<NameNeededPopUp
-					:message="'menu'"
 					v-model="nameNeededPopUp"
+					:message="'menu'"
 					@closeNoName="nameNeededPopUp = false"
 				></NameNeededPopUp>
 			</Teleport>

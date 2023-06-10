@@ -405,32 +405,32 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 				<ClientOnly>
 					<Teleport to="body">
 						<NameNeededPopUp
-							:message="'category'"
 							v-model="nameNeededPopUp"
-							@closeNoName="nameNeededPopUp = false"
+							:message="'category'"
+							@close-no-name="nameNeededPopUp = false"
 						></NameNeededPopUp>
 					</Teleport>
 					<Teleport to="body">
 						<el-dialog
-							v-model="addSubcategoryPopUp"
 							id="add_subcategory_popup"
+							v-model="addSubcategoryPopUp"
 							width="25%"
-							style="border-radius: 5%;"
+							style="border-radius: 5%"
 							:before-close="refreshDetails"
 						>
 							<div class="edit" style="padding-left: 3%">
 								<div>
 									<div
-										style="padding-bottom: 1%"
 										id="subcategory-name"
+										style="padding-bottom: 1%"
 										data-testid="subcategory-name-title"
 									>
 										Name:
 									</div>
 									<input
-										data-testid="subcategory-name-input"
-										v-model="newSubcategoryName"
 										id="subcategory-name-input"
+										v-model="newSubcategoryName"
+										data-testid="subcategory-name-input"
 										class="specialInputSubcategory"
 									/>
 								</div>
@@ -447,8 +447,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 
 									<textarea
 										id="subcategory-description-input"
-										data-testid="subcategory-description-input"
 										v-model="newSubcategoryDescription"
+										data-testid="subcategory-description-input"
 										class="specialTextAreaSubcategory"
 									></textarea>
 								</div>
@@ -457,8 +457,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 										Presentation order:
 									</div>
 									<input
-										data-testid="subcategory-presentationorder-input"
 										v-model.number="presentationSubcategoryOrder"
+										data-testid="subcategory-presentationorder-input"
 										class="specialInputSubcategory"
 									/>
 								</div>

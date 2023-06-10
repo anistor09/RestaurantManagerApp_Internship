@@ -1,7 +1,8 @@
 export default defineEventHandler((event) => {
+	// Reads the body of the event and returns a promise
 	return readBody(event).then(async (data) => {
+		// Parses the data received from the event
 		const parsedData = {
-			
 			name: data.name,
 			description: data.description,
 			presentationOrder: parseInt(data.presentationOrder),
@@ -25,8 +26,7 @@ export default defineEventHandler((event) => {
 				averageWaitingTime: parseInt("0"),
 			}
 		};
-		
-		
+		// Sends a POST request to the specified URL with the parsed data
 		const response = await fetch(`https://dev-api.ewai.fr/subcategory/?categoryid=${parseInt(data.categoryId)}`, {
 			method: 'POST',
 			body: JSON.stringify(parsedData),
@@ -35,15 +35,12 @@ export default defineEventHandler((event) => {
 			},
 		});
 	
-		
 		const responseData = await response;
-		
 		const responseString = await responseData.text()
 		const splitString =  responseString.split(" ")
-		
-		
+		// Extracts the new ID from the response
 		const newId =splitString[splitString.length - 1];
-		
+		// Returns the new ID
 		return newId;
 	});
 });

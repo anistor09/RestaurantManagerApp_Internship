@@ -1,6 +1,8 @@
 import { Category } from '~/interfaces/Category';
 export default defineEventHandler((event) => {
+	// Reads the body of the event and returns a promise
 	return readBody(event).then(async (data) => {
+		// Parses the data received from the event
 		const parsedData = {
 			name: data.name,
 			description: data.description ,
@@ -25,8 +27,7 @@ export default defineEventHandler((event) => {
 				averageWaitingTime: parseInt("0"),
 			}
 		};
-		
-		
+		// Sends a POST request to the specified URL with the parsed data
 		const response = await fetch(`https://dev-api.ewai.fr/category/?restaurantId=${parseInt(data.restaurant.id)}`, {
 			method: 'POST',
 			body: JSON.stringify(parsedData),
@@ -34,17 +35,8 @@ export default defineEventHandler((event) => {
 				'Content-Type': 'application/json',
 			},
 		});
-	
-		
-		// const responseData = await response;
 		const returnedCategory: Category = await response.json();
-		
-		// const responseString = await responseData.text()
-		// const splitString =  responseString.split(" ")
-		
-		
-		// const newId =splitString[splitString.length - 1];
-		
+		// Returns the ID of the returned category
 		return returnedCategory.id;
 	});
 });

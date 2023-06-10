@@ -104,8 +104,8 @@ async function addAiRestaurantDescription() {
 			<ClientOnly>
 				<Teleport to="body">
 					<NameNeededPopUp
-						:message="'restaurant'"
 						v-model="nameNeededPopUp"
+						:message="'restaurant'"
 						@closeNoName="nameNeededPopUp = false"
 					></NameNeededPopUp>
 				</Teleport>
