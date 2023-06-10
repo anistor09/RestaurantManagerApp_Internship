@@ -349,5 +349,8 @@ async function addAiMenuDescription() {
 	padding-top: 8%;
 	justify-content: center;
 }
+.specialTextArea::-webkit-scrollbar {
+  width: 5px;
+}
 
 </style>

@@ -857,7 +857,27 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	resize: none;
 	width: 70%;
 	height: 50%;
+
+	
+	
 }
+.specialTextAreaSubcategory::-webkit-scrollbar,
+.specialTextArea::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* .specialTextArea::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+} */
+/*  
+.specialTextArea::-webkit-scrollbar-thumb {
+  background-color: #c0c0c0;
+  border-radius: 4px;
+} */
+/*
+.specialTextArea::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+} */
 
 .specialTextAreaSubcategory {
 	color: black;

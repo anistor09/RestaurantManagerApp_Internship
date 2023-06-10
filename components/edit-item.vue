@@ -917,5 +917,10 @@ async function addAiDescription(neededLength: string, short: boolean) {
     height: 92%;
     width: 100%;
 }
+.specialChoiceTextArea::-webkit-scrollbar,
+.specialOptionTextArea::-webkit-scrollbar,
+.specialTextArea::-webkit-scrollbar {
+  width: 5px;
+}
 
 </style>
