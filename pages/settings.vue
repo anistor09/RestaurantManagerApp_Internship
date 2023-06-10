@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
 import { Hours } from '../interfaces/Hours';
+import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import PageTitle from '../components/page-title.vue';
 
 const restaurantStore = useRestaurantStore();
@@ -100,17 +101,16 @@ async function addAiRestaurantDescription() {
 	<div>
 		<PageTitle id="titleComponent" title="Restaurant Overview"></PageTitle>
 		<div class="All">
-			<Teleport to="body">
-				<el-dialog v-model="nameNeededPopUp" width="20%" style="border-radius: 5%; height: 17vh">
-					<div class="delete">
-						Please input the name before you request an AI restaurant description.
-						<div id="bottomButtons" style="left: 40%">
-							<el-button color="#ED5087" plain round @click="nameNeededPopUp = false">Ok</el-button>
-						</div>
-					</div>
-				</el-dialog>
-			</Teleport>
-
+			<ClientOnly>
+				<Teleport to="body">
+					<NameNeededPopUp
+						:message="'restaurant'"
+						v-model="nameNeededPopUp"
+						@closeNoName="nameNeededPopUp = false"
+					></NameNeededPopUp>
+				</Teleport>
+			</ClientOnly>
+			
 			<div id="firstHalf">
 				<!-- Container which contains the image, the name of the restaurant and it's address-->
 				<div id="imageNameAddress">
@@ -391,20 +391,5 @@ h1 {
 	border-color: #ed5087;
 	color: white;
 }
-#bottomButtons {
-	display: flex;
-	justify-content: space-between;
-	position: relative;
-	width: 80%;
-	left: 7%;
-	top: 1.5vh;
-}
-.delete {
-	position: relative;
-	top: -2vh;
-	text-align: center;
-	font-size: 0.85vw;
-	font-weight: 300;
-	color: black;
-}
+
 </style>

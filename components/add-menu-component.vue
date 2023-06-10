@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
+import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 
 const emit = defineEmits(['close']);
 
@@ -25,7 +26,7 @@ const endTimes = ref(['', '', '', '', '', '', '']);
 
 const doubleCheck = ref(false);
 
-const nameNeededPopUp = ref(false)
+const nameNeededPopUp = ref(false);
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -66,19 +67,16 @@ const addMenu = async () => {
 	emit('close');
 };
 async function addAiMenuDescription() {
-	if (name.value.length === 0 ) {
+	if (name.value.length === 0) {
 		nameNeededPopUp.value = true;
-	}
-	else {
-		
-		description.value = "The new description is loading...";
-		
+	} else {
+		description.value = 'The new description is loading...';
+
 		const requestBody = {
 			itemName: name.value,
 			length: 200,
 			target: 'menu',
-			
-		}
+		};
 		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
 			method: 'POST',
 			body: requestBody,
@@ -86,8 +84,7 @@ async function addAiMenuDescription() {
 				'Content-Type': 'application/json',
 			},
 		});
-		description.value = response.data.value 
-		
+		description.value = response.data.value;
 	}
 }
 </script>
@@ -110,17 +107,29 @@ async function addAiMenuDescription() {
 		<div class="box">
 			<div id="addName">
 				<div id="nameIdPrefix" class="fieldText">Name</div>
-				<input id="nameId" v-model="name" class="specialInput" style="height: 100%" data-testid="add-name-to-menu" />
+				<input
+					id="nameId"
+					v-model="name"
+					class="specialInput"
+					style="height: 100%"
+					data-testid="add-name-to-menu"
+				/>
 			</div>
 		</div>
 		<div class="box" style="">
 			<!-- <div id="descriptionIdPrefix" class="fieldText">Description</div> -->
-			<div class="div" style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%;">
-										<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%;">Description</div>
-										
-										<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription">✨Write with AI</el-button>
+			<div
+				class="div"
+				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
+			>
+				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%">
+					Description
+				</div>
 
-									</div>
+				<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription"
+					>✨Write with AI</el-button
+				>
+			</div>
 			<textarea id="descriptionIdPrefix" v-model="description" class="specialTextArea"></textarea>
 		</div>
 		<div class="box" style="">
@@ -146,21 +155,23 @@ async function addAiMenuDescription() {
 			</div>
 		</div>
 		<div id="buttonContainer">
-			<el-button class="specialPhotoButton" style="width: 15%; height: 50%" data-testid="add-button" @click="checkIfChange()"
+			<el-button
+				class="specialPhotoButton"
+				style="width: 15%; height: 50%"
+				data-testid="add-button"
+				@click="checkIfChange()"
 				>Add</el-button
 			>
 		</div>
-		<Teleport to="body">
-							<el-dialog v-model="nameNeededPopUp" width="20%" style="border-radius: 5%; height: 25%">
-								<div class="delete">
-									Please input the name before you request an AI menu description.
-									<div id="bottomButtons" style="left: 40%;">
-										<el-button color="#ED5087" plain round @click="nameNeededPopUp = false">Ok</el-button>
-
-									</div>
-								</div>
-							</el-dialog>
-						</Teleport>
+		<ClientOnly>
+			<Teleport to="body">
+				<NameNeededPopUp
+					:message="'menu'"
+					v-model="nameNeededPopUp"
+					@closeNoName="nameNeededPopUp = false"
+				></NameNeededPopUp>
+			</Teleport>
+		</ClientOnly>
 		<Teleport to="body">
 			<el-dialog
 				v-model="doubleCheck"
@@ -179,7 +190,9 @@ async function addAiMenuDescription() {
 				<div>
 					Are you sure you want to add this menu?
 					<div id="change-bottom-button">
-						<el-button color="#ED5087" plain round data-testid="confirm-add" @click="addMenu()">Yes</el-button>
+						<el-button color="#ED5087" plain round data-testid="confirm-add" @click="addMenu()"
+							>Yes</el-button
+						>
 					</div>
 				</div>
 			</el-dialog>
@@ -230,14 +243,13 @@ async function addAiMenuDescription() {
 	height: 30%;
 }
 .aiButtonSubcatgory {
-
-border-radius: 15px;
-font-size: 0.9vw;
-border-color: #ED5087;
-background-color: white;
-color: #ED5087;
-width: 20%;
-height: 3vh;
+	border-radius: 15px;
+	font-size: 0.9vw;
+	border-color: #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 20%;
+	height: 3vh;
 }
 
 .aiButtonSubcatgory:hover,
@@ -336,18 +348,5 @@ height: 3vh;
 	padding-top: 8%;
 	justify-content: center;
 }
-#bottomButtons {
-	display: flex;
-	justify-content: space-between;
-	position: relative;
-	width: 80%;
-	left: 7%;
-	top: 3.5vh;
-}
-.delete {
-	text-align: center;
-	font-size: 0.85vw;
-	font-weight: 300;
-	color: black;
-}
+
 </style>

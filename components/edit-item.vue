@@ -9,6 +9,7 @@ import { Item } from '~/interfaces/Item';
 import { useRestaurantStore } from '~/store/restaurant'
 import { useCategoryStore } from '~/store/category'
 import { useItemStore } from '~/store/item'
+import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 
 
 const restaurantStore = useRestaurantStore()
@@ -468,17 +469,15 @@ async function addAiDescription(neededLength: string, short: boolean) {
 </script>
 
 <template>
+    <ClientOnly>
     <Teleport to="body">
-        <el-dialog v-model="nameNeededPopUp" width="20%" style="border-radius: 5%; height: 25%">
-            <div class="delete">
-                Please input the name of the item before you request an AI item description.
-                <div id="bottomButtons">
-                    <el-button color="#ED5087" plain round @click="nameNeededPopUp = false">Ok</el-button>
-
-                </div>
-            </div>
-        </el-dialog>
-    </Teleport>
+						<NameNeededPopUp
+							:message="'item'"
+							v-model="nameNeededPopUp"
+							@closeNoName="nameNeededPopUp = false"
+						></NameNeededPopUp>
+					</Teleport>
+      </ClientOnly> 
     <div class="container">
         <page-title v-if="addItem" :title="'Add an item'" />
         <page-title v-else :title="'Edit an item'" />
@@ -918,19 +917,4 @@ async function addAiDescription(neededLength: string, short: boolean) {
     width: 100%;
 }
 
-.delete {
-    text-align: center;
-    font-size: 0.85vw;
-    font-weight: 300;
-    color: black;
-}
-
-#bottomButtons {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    width: 40%;
-    left: 40%;
-    top: 3.5vh;
-}
 </style>
