@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
+
 
 const emit = defineEmits(['close']);
 
@@ -24,6 +26,8 @@ const startTimes = ref(['', '', '', '', '', '', '']);
 const endTimes = ref(['', '', '', '', '', '', '']);
 
 const doubleCheck = ref(false);
+
+const nameNeededPopUp = ref(false);
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -63,6 +67,27 @@ const addMenu = async () => {
 	doubleCheck.value = false;
 	emit('close');
 };
+async function addAiMenuDescription() {
+	if (name.value.length === 0) {
+		nameNeededPopUp.value = true;
+	} else {
+		description.value = 'The new description is loading...';
+
+		const requestBody = {
+			itemName: name.value,
+			length: 200,
+			target: 'menu',
+		};
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
+			method: 'POST',
+			body: requestBody,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		description.value = response.data.value;
+	}
+}
 </script>
 
 <template>
@@ -83,11 +108,29 @@ const addMenu = async () => {
 		<div class="box">
 			<div id="addName">
 				<div id="nameIdPrefix" class="fieldText">Name</div>
-				<input id="nameId" v-model="name" class="specialInput" style="height: 100%" data-testid="add-name-to-menu" />
+				<input
+					id="nameId"
+					v-model="name"
+					class="specialInput"
+					style="height: 100%"
+					data-testid="add-name-to-menu"
+				/>
 			</div>
 		</div>
 		<div class="box" style="">
-			<div id="descriptionIdPrefix" class="fieldText">Description</div>
+			<!-- <div id="descriptionIdPrefix" class="fieldText">Description</div> -->
+			<div
+				class="div"
+				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
+			>
+				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%">
+					Description
+				</div>
+
+				<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription"
+					>✨Write with AI</el-button
+				>
+			</div>
 			<textarea id="descriptionIdPrefix" v-model="description" class="specialTextArea"></textarea>
 		</div>
 		<div class="box" style="">
@@ -113,10 +156,23 @@ const addMenu = async () => {
 			</div>
 		</div>
 		<div id="buttonContainer">
-			<el-button class="specialPhotoButton" style="width: 15%; height: 50%" data-testid="add-button" @click="checkIfChange()"
+			<el-button
+				class="specialPhotoButton"
+				style="width: 15%; height: 50%"
+				data-testid="add-button"
+				@click="checkIfChange()"
 				>Add</el-button
 			>
 		</div>
+		<ClientOnly>
+			<Teleport to="body">
+				<NameNeededPopUp
+					:message="'menu'"
+					v-model="nameNeededPopUp"
+					@closeNoName="nameNeededPopUp = false"
+				></NameNeededPopUp>
+			</Teleport>
+		</ClientOnly>
 		<Teleport to="body">
 			<el-dialog
 				v-model="doubleCheck"
@@ -135,7 +191,9 @@ const addMenu = async () => {
 				<div>
 					Are you sure you want to add this menu?
 					<div id="change-bottom-button">
-						<el-button color="#ED5087" plain round data-testid="confirm-add" @click="addMenu()">Yes</el-button>
+						<el-button color="#ED5087" plain round data-testid="confirm-add" @click="addMenu()"
+							>Yes</el-button
+						>
 					</div>
 				</div>
 			</el-dialog>
@@ -185,7 +243,17 @@ const addMenu = async () => {
 	width: 50%;
 	height: 30%;
 }
+.aiButtonSubcatgory {
+	border-radius: 15px;
+	font-size: 0.9vw;
+	border-color: #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 20%;
+	height: 3vh;
+}
 
+.aiButtonSubcatgory:hover,
 .specialPhotoButton:hover {
 	background-color: #ed5087;
 	border-color: darkgrey;
@@ -281,4 +349,8 @@ const addMenu = async () => {
 	padding-top: 8%;
 	justify-content: center;
 }
+.specialTextArea::-webkit-scrollbar {
+  width: 5px;
+}
+
 </style>
