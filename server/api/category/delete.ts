@@ -1,14 +1,12 @@
 export default defineEventHandler((event) => {
+	// Reads the body of the event and returns a promise
 	return readBody(event).then(async (data) => {
-
-		// console.log(data.id)
-	
-		const response =  await fetch(`https://dev-api.ewai.fr/category/${parseInt(data.id)}`, {
+		// Sends a DELETE request to the specified URL with the parsed data ID
+		await fetch(`https://dev-api.ewai.fr/category/${parseInt(data.id)}`, {
 			method: 'DELETE',
 		});
-		const responseData =  await response.text()
-		console.log(responseData)
-		
+
+		// Returns a success message
 		return "succesfully deleted subcategory";
 	});
 });

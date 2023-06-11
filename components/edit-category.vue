@@ -5,19 +5,22 @@ import { useCategoryStore } from '../store/category';
 import PageTitle from '../components/page-title.vue';
 import { SubCategory } from '../interfaces/SubCategory';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
-
+// Retrieve the restaurant store and category store
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 const categoryStore = useCategoryStore();
-
+// Set the default source for any image
 const defaultSrc =
 	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
-
+// Define props for the component
 const props = defineProps({
 	addCategory: Boolean,
-	categoryId: Number,
+	categoryId: {
+    type: Number,
+    default: -1, 
+  },
 });
-
+// Define reactive variables using the ref function
 const name = ref('');
 const description = ref('');
 const src = ref(defaultSrc);
@@ -50,7 +53,7 @@ if (props.addCategory === false) {
 			hasSubcategories.value = true;
 		}
 }
-
+// Function to display a notification
 const openNotification = (notifTitle: string) => {
 	ElNotification({
 		title: notifTitle,
@@ -62,7 +65,7 @@ const openNotification = (notifTitle: string) => {
 		customClass: 'notif',
 	});
 };
-
+// Function to generate a unique ID for a subcategory
 const getUniqueId = () => {
 	const oldIds = subCategories.value.map((x) => x.id);
 	let found = false;
@@ -73,6 +76,7 @@ const getUniqueId = () => {
 	}
 	return newId;
 };
+// Function to save a new subcategory locally
 function saveNewSubcategoryLocally() {
 	if (editSubcategory.value) {
 		editSubcategoryLocally();
@@ -91,16 +95,17 @@ function saveNewSubcategoryLocally() {
 		refreshDetails();
 	}
 }
+// Function to delete a subcategory locally
 function deleteSubcategoryLocally(idSubcat: number) {
 	addSubcategoryPopUp.value = false;
 	deleteSubcategoryPopup.value = false;
 	subCategories.value = subCategories.value.filter((x) => x.id !== idSubcat);
-
 	if (idSubcat >= 0) {
 		tobeDeletedSubcat.value.push(idSubcat);
 	}
 	refreshDetails();
 }
+// Function to edit a subcategory locally
 function editSubcategoryLocally() {
 	const positionSubCat = subCategories.value.findIndex((x) => x.id === editedSubcategoryId.value);
 
@@ -115,11 +120,10 @@ function editSubcategoryLocally() {
 	if (editedSubcategoryId.value >= 0) {
 		toBeEditedSubcat.value.add(editedSubcategoryId.value);
 	}
-
 	refreshDetails();
-
 	editSubcategory.value = false;
 }
+// Refreshes the details of the category by resetting the new subcategory fields and hiding the add subcategory popup
 function refreshDetails() {
 	newSubcategoryName.value = '';
 	newSubcategoryDescription.value = '';
@@ -133,6 +137,7 @@ function hasSubcategoriesFct() {
 		hasSubcategories.value = true;
 	}
 }
+// Handles the addition or editing of a subcategory.
 async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, editMode: boolean) {
 	const requestBody = {
 		name: subcategory.name,
@@ -159,17 +164,14 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 			averageWaitingTime: 0,
 		},
 	};
-
 	if (!editMode) {
-		const response = await useFetch('/api/subcategory/add', {
+		await useFetch('/api/subcategory/add', {
 			method: 'POST',
 			body: requestBody,
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		});
-
-		console.log('added the subcategory with id ' + parseInt(response.data.value as string));
 	} else {
 		const putBody = {
 			requestBody,
@@ -182,10 +184,9 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 				'Content-Type': 'application/json',
 			},
 		});
-
-		console.log('edited the subcategory with id ' + subcategory.id);
 	}
 }
+// Changes the selected subcategory for editing.
 const changeSubcategory = (idSubcat: number) => {
 	const editedSubcategory = subCategories.value.filter((x) => x.id === idSubcat)[0];
 
@@ -201,8 +202,8 @@ const changeSubcategory = (idSubcat: number) => {
 	editedSubcategoryId.value = idSubcat;
 	editSubcategory.value = true;
 };
+// Handles the deletion of a subcategory.
 async function handleDeleteSubcategory(idSubcat: number) {
-	// await useFetch(`/api/subcategory/${idSubcat}`);
 	const requestBody = {
 		id: idSubcat,
 	};
@@ -217,13 +218,13 @@ async function handleDeleteSubcategory(idSubcat: number) {
 	subCategories.value = subCategories.value.filter((x) => x.id !== idSubcat);
 	hasSubcategoriesFct();
 }
+// Handles the subcategories of a category.
 async function handleSubcategories(categoryId: number) {
 	for (const subcategory of subCategories.value) {
 		if (subcategory.id < 0) {
 			await handleAddEditSubcategory(subcategory, categoryId, false);
 		}
 	}
-
 	for (const toDeleteId of tobeDeletedSubcat.value) {
 		await handleDeleteSubcategory(toDeleteId);
 	}
@@ -232,7 +233,7 @@ async function handleSubcategories(categoryId: number) {
 		await handleAddEditSubcategory(editedSubcategory, categoryId, true);
 	}
 }
-
+// Handles the addition or editing of a category.
 async function handleAddEditCategory() {
 	const requestBody = {
 		name: name.value,
@@ -277,7 +278,6 @@ async function handleAddEditCategory() {
 				subCategorySet: subCategories.value,
 			});
 		}
-
 		if (categoryId !== null) await handleSubcategories(categoryId);
 		openNotification('Category was successfully added');
 	} else {
@@ -285,7 +285,6 @@ async function handleAddEditCategory() {
 			requestBody,
 			cid: props.categoryId,
 		};
-
 		await useFetch('/api/category/update', {
 			method: 'PUT',
 			body: putBody,
@@ -308,35 +307,35 @@ async function handleAddEditCategory() {
 		if (props.categoryId !== undefined) await handleSubcategories(props.categoryId);
 		openNotification('Category was successfully edited');
 	}
-
 	setTimeout(() => {
 		window.close();
 	}, 2000);
 }
+// Opens a popup to confirm deleting a subcategory locally.
 function popUpDeleteSubcategoryLocally(subcatid: number) {
 	deleteSubcatIdLocally.value = subcatid;
 	deleteSubcategoryPopup.value = true;
 }
+// Handles the deletion of a category.
 async function handleDeleteCategory() {
 	for (const subcategory of subCategories.value) {
 		await handleDeleteSubcategory(subcategory.id);
 	}
-
 	const requestBody = {
 		id: props.categoryId,
 	};
-	const response = await useFetch('/api/category/delete', {
+	await useFetch('/api/category/delete', {
 		method: 'DELETE',
 		body: requestBody,
 		headers: {
 			'Content-Type': 'application/json',
 		},
 	});
-	console.log(response.data.value);
 	if (props.categoryId) categoryStore.deleteGetter.push(props.categoryId);
 	openNotification('Category was successfully deleted');
 	window.close();
 }
+// Cancels adding a new subcategory.
 const cancelNewSubcategory = () => {
 	addSubcategoryPopUp.value = false;
 	editSubcategory.value = false;
@@ -345,26 +344,29 @@ const cancelNewSubcategory = () => {
 	newSubcategorySrc.value = defaultSrc;
 	presentationSubcategoryOrder.value = 0;
 };
-
+// Computes the filtered subcategories.
 const filteredSubcategories = computed(() => {
 	const unsortedCategories = subCategories.value;
 	return unsortedCategories.sort((a, b) => a.presentationOrder - b.presentationOrder);
 });
+// Computes if the category has subcategories.
 const hasSubcategoriesComputed = computed(() => {
 	return hasSubcategories.value;
 });
+// Adds AI-generated category description.
 async function addAiCategoryDescription() {
 	await addAiDescription('250', true);
 }
+// Adds AI-generated subcategory description.
 async function addAiSubcategoryDescription() {
 	await addAiDescription('150', false);
 }
+// Adds AI-generated description for category or subcategory.
 async function addAiDescription(neededLength: string, forCategory: boolean) {
 	if (
 		(name.value.length === 0 && forCategory) ||
 		(newSubcategoryName.value.length === 0 && !forCategory)
 	) {
-		console.log(forCategory);
 		nameNeededPopUp.value = true;
 	} else {
 		let queriedName = '';
@@ -388,8 +390,6 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 				'Content-Type': 'application/json',
 			},
 		});
-		console.log(response.data.value);
-
 		if (forCategory) {
 			description.value = response.data.value;
 		} else {
@@ -408,37 +408,36 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 				<ClientOnly>
 					<Teleport to="body">
 						<NameNeededPopUp
-							:message="'category'"
 							v-model="nameNeededPopUp"
-							@closeNoName="nameNeededPopUp = false"
+							:message="'category'"
+							@close-no-name="nameNeededPopUp = false"
 						></NameNeededPopUp>
 					</Teleport>
 					<Teleport to="body">
 						<el-dialog
-							v-model="addSubcategoryPopUp"
 							id="add_subcategory_popup"
+							v-model="addSubcategoryPopUp"
 							width="25%"
-							style="border-radius: 5%; height: 65%"
+							style="border-radius: 5%"
 							:before-close="refreshDetails"
 						>
 							<div class="edit" style="padding-left: 3%">
 								<div>
 									<div
-										style="padding-bottom: 1%"
 										id="subcategory-name"
+										style="padding-bottom: 1%"
 										data-testid="subcategory-name-title"
 									>
 										Name:
 									</div>
 									<input
-										data-testid="subcategory-name-input"
-										v-model="newSubcategoryName"
 										id="subcategory-name-input"
+										v-model="newSubcategoryName"
+										data-testid="subcategory-name-input"
 										class="specialInputSubcategory"
 									/>
 								</div>
 								<div data-testid="subcategory-description-title" style="padding-top: 2%">
-									<!-- <div style="padding-bottom: 1%">Description: </div> -->
 									<div class="div" style="display: flex; align-items: center; padding-bottom: 1%">
 										<div id="subcategory-description" style="width: 30%; padding-bottom: 0.9%">
 											Description:
@@ -451,8 +450,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 
 									<textarea
 										id="subcategory-description-input"
-										data-testid="subcategory-description-input"
 										v-model="newSubcategoryDescription"
+										data-testid="subcategory-description-input"
 										class="specialTextAreaSubcategory"
 									></textarea>
 								</div>
@@ -461,8 +460,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 										Presentation order:
 									</div>
 									<input
-										data-testid="subcategory-presentationorder-input"
 										v-model.number="presentationSubcategoryOrder"
+										data-testid="subcategory-presentationorder-input"
 										class="specialInputSubcategory"
 									/>
 								</div>
@@ -514,7 +513,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							id="safetyPopUpDeleteSubcategory"
 							v-model="deleteSubcategoryPopup"
 							width="20%"
-							style="border-radius: 5%; height: 23%"
+							style="border-radius: 5%;"
 						>
 							<div class="delete">
 								Are you sure you want to delete this subcategory?
@@ -538,7 +537,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 						<el-dialog
 							v-model="deleteCategoryPopup"
 							width="20%"
-							style="border-radius: 5%; height: 23%"
+							style="border-radius: 5%;"
 						>
 							<div class="delete">
 								Are you sure you want to delete category {{ name }}?
@@ -743,17 +742,6 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	height: 80%;
 	overflow: hidden;
 }
-
-.top {
-	width: 100%;
-	height: 11.6%;
-	margin: 0;
-	display: flex;
-	align-items: center;
-	font-size: 3vw;
-	font-family: 'Cairo', Arial, sans-serif;
-}
-
 .bottom {
 	width: 100%;
 	height: 100%;
@@ -837,7 +825,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	position: relative;
 	width: 80%;
 	left: 7%;
-	top: 3.5vh;
+	padding-top: 5%;
 }
 
 #bottomButtons .el-button {
@@ -863,7 +851,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 }
 .specialTextAreaSubcategory::-webkit-scrollbar,
 .specialTextArea::-webkit-scrollbar {
-  width: 5px;
+	width: 5px;
 }
 
 /* .specialTextArea::-webkit-scrollbar-track {
