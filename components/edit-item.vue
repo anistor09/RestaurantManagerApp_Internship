@@ -473,8 +473,8 @@ async function addAiDescription(neededLength: string, short: boolean) {
     <ClientOnly>
     <Teleport to="body">
 						<NameNeededPopUp
-							:message="'item'"
 							v-model="nameNeededPopUp"
+                            :message="'item'"
 							@closeNoName="nameNeededPopUp = false"
 						></NameNeededPopUp>
 					</Teleport>

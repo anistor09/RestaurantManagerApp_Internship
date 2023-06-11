@@ -1,4 +1,5 @@
 export default defineEventHandler((event) => {
+	// Reads the body of the event and returns a promise
 	return readBody(event).then(async (data) => {
 		const parsedData = {
 			
@@ -9,7 +10,7 @@ export default defineEventHandler((event) => {
 			imageUrl: data.requestBody.imageUrl,
 			restaurantId: parseInt(data.requestBody.restaurant.id)
 		};
-		
+		// Sends a PUT request to the specified URL with the parsed data
 		await fetch(`https://dev-api.ewai.fr/subCategory/${parseInt(data.sid)}?categoryid=${parseInt(data.requestBody.categoryId)}`, {
 			method: 'PUT',
 			body: JSON.stringify(parsedData),
@@ -17,9 +18,7 @@ export default defineEventHandler((event) => {
 				'Content-Type': 'application/json',
 			},
 		});
-	
-		
-		
+		// Returns a success message
 		return `Succesfully edited subcategory ${data.sid}`;
 	});
 });
