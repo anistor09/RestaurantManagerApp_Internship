@@ -2,10 +2,12 @@
 import { SubCategory } from '~/interfaces/SubCategory';
 import { useRestaurantStore } from '~/store/restaurant';
 import { useCategoryStore } from '~/store/category';
+import { ImageSubCategory} from '~/interfaces/ImageSubCategory'
 
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 const categoryStore = useCategoryStore();
+const acceptedTypes = ['image/jpeg', 'image/png'];
 
 const defaultSrc =
 	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
@@ -17,16 +19,18 @@ const props = defineProps({
 
 const name = ref('');
 const selectedFile: Ref<File | null> = ref(null);
+const imageEdited: Ref<File | null> = ref(null);
 const description = ref('');
 const src = ref(defaultSrc);
 const hasSubcategories = ref(false);
 const presentationOrder = ref(0);
 const subCategories: Ref<SubCategory[]> = ref([]);
+const imageSubCategories: Ref<ImageSubCategory[]> = ref([]);
 const newSubcategoryName = ref('');
 const newSubcategoryDescription = ref('');
 const addSubcategoryPopUp = ref(false);
 const presentationSubcategoryOrder = ref(0);
-const newSubcategorySrc = ref(src.value);
+const newSubcategorySrc = ref(defaultSrc);
 const editSubcategory = ref(false);
 const editedSubcategoryId = ref(0);
 const tobeDeletedSubcat: Ref<number[]> = ref([]);
@@ -44,26 +48,88 @@ if (props.addCategory === false) {
 	if (category.subCategorySet !== undefined)
 		if (category.subCategorySet.length > 0) {
 			subCategories.value = category.subCategorySet;
+			imageSubCategories.value = category.subCategorySet.map(x=>{
+				const rez:ImageSubCategory={id:x.id, img:null}
+				return rez
+			})
 			hasSubcategories.value = true;
 		}
 }
 
 function handleFileUpload(event: any) {
-	selectedFile.value = event.target.files[0];
-}
-async function uploadImage() {
-	if (selectedFile.value) {
-		const formData = new FormData();
-		formData.append('file', selectedFile.value);
-		const response = await useFetch(`/api/photos/photoCategory`, {
-			method: 'POST',
-			body: formData,
-		});
-		console.log(response.data.value);
-	} else {
-		console.log('no file ');
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
 	}
+	else selectedFile.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+				src.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(selectedFile.value)
+		reader.readAsDataURL(selectedFile.value);
+	else 
+		openErrorNotification("Something went wrong!")	
 }
+
+function handleFileUploadSubCategory(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else imageEdited.value=file
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+				newSubcategorySrc.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(imageEdited.value)
+		reader.readAsDataURL(imageEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+function deleteImg(){
+	selectedFile.value=null
+	src.value=defaultSrc
+}
+
+function deleteImgSubCategory(){
+	imageEdited.value=null
+	newSubcategorySrc.value=defaultSrc
+}
+
+const openErrorNotification = (notifTitle: string) => {
+	ElNotification({
+		title: notifTitle,
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'Please try with a diffrent file.',
+		),
+		customClass: 'notif',
+	});
+};
 
 const openNotification = (notifTitle: string) => {
 	ElNotification({
@@ -100,6 +166,8 @@ function saveNewSubcategoryLocally() {
 		};
 
 		subCategories.value.push(newSubcategory);
+		const aux:ImageSubCategory = {id:newSubcategory.id, img:imageEdited.value}
+		imageSubCategories.value.push(aux)
 
 		addSubcategoryPopUp.value = false;
 		refreshDetails();
@@ -109,7 +177,7 @@ function deleteSubcategoryLocally(idSubcat: number) {
 	addSubcategoryPopUp.value = false;
 	deleteSubcategoryPopup.value = false;
 	subCategories.value = subCategories.value.filter((x) => x.id !== idSubcat);
-
+	imageSubCategories.value = imageSubCategories.value.filter((x) => x.id !== idSubcat);
 	if (idSubcat >= 0) {
 		tobeDeletedSubcat.value.push(idSubcat);
 	}
@@ -117,7 +185,6 @@ function deleteSubcategoryLocally(idSubcat: number) {
 }
 function editSubcategoryLocally() {
 	const positionSubCat = subCategories.value.findIndex((x) => x.id === editedSubcategoryId.value);
-
 	subCategories.value.splice(positionSubCat, 1, {
 		id: editedSubcategoryId.value,
 		name: newSubcategoryName.value,
@@ -125,7 +192,10 @@ function editSubcategoryLocally() {
 		presentationOrder: presentationSubcategoryOrder.value,
 		imageUrl: newSubcategorySrc.value,
 	});
-
+	const aux = imageSubCategories.value.find(x=>x.id===editedSubcategoryId.value)
+	if(aux){
+		aux.img=imageEdited.value
+	}
 	if (editedSubcategoryId.value >= 0) {
 		toBeEditedSubcat.value.add(editedSubcategoryId.value);
 	}
@@ -137,7 +207,8 @@ function editSubcategoryLocally() {
 function refreshDetails() {
 	newSubcategoryName.value = '';
 	newSubcategoryDescription.value = '';
-	newSubcategorySrc.value = '';
+	newSubcategorySrc.value = defaultSrc;
+	imageEdited.value = null;
 	presentationSubcategoryOrder.value = 0;
 	addSubcategoryPopUp.value = false;
 	hasSubcategoriesFct();
@@ -173,7 +244,9 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 			averageWaitingTime: 0,
 		},
 	};
-
+	const aux = imageSubCategories.value.filter(x=>x.id===subcategory.id)[0]
+	if(aux.img)
+		requestBody.imageUrl=""
 	if (!editMode) {
 		const response = await useFetch('/api/subcategory/add', {
 			method: 'POST',
@@ -182,8 +255,24 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 				'Content-Type': 'application/json',
 			},
 		});
-
-		console.log('added the subcategory with id ' + parseInt(response.data.value as string));
+		let newId
+		try {
+			const parsedData = JSON.parse(response.data.value as string);
+			newId=parsedData.id
+		} catch (error) {
+			console.error('Error parsing JSON:', error);
+		}
+		
+		console.log('added the subcategory with id ' + newId);
+		if(aux.img){
+			const formData = new FormData();
+			formData.append('file', aux.img);
+			formData.append('id', newId.toString())
+			await useFetch(`/api/photos/photoSubCategory`, {
+				method: 'POST',
+				body: formData,
+			});
+		}
 	} else {
 		const putBody = {
 			requestBody,
@@ -198,6 +287,16 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 		});
 
 		console.log('edited the subcategory with id ' + subcategory.id);
+
+		if(aux.img){
+			const formData = new FormData();
+			formData.append('file', aux.img);
+			formData.append('id', subcategory.id.toString())
+			await useFetch(`/api/photos/photoSubCategory`, {
+				method: 'POST',
+				body: formData,
+			});
+		}
 	}
 }
 const changeSubcategory = (idSubcat: number) => {
@@ -206,7 +305,8 @@ const changeSubcategory = (idSubcat: number) => {
 	newSubcategoryName.value = editedSubcategory === undefined ? '' : editedSubcategory.name;
 	newSubcategoryDescription.value =
 		editedSubcategory === undefined ? '' : editedSubcategory.description;
-	newSubcategorySrc.value = editedSubcategory === undefined ? '' : editedSubcategory.imageUrl;
+	newSubcategorySrc.value = editedSubcategory === undefined ? defaultSrc : editedSubcategory.imageUrl;
+	imageEdited.value=imageSubCategories.value.filter((x) => x.id === idSubcat)[0].img;
 	presentationSubcategoryOrder.value =
 		editedSubcategory === undefined
 			? subCategories.value.length
@@ -214,6 +314,7 @@ const changeSubcategory = (idSubcat: number) => {
 	addSubcategoryPopUp.value = true;
 	editedSubcategoryId.value = idSubcat;
 	editSubcategory.value = true;
+	
 };
 async function handleDeleteSubcategory(idSubcat: number) {
 	// await useFetch(`/api/subcategory/${idSubcat}`);
@@ -272,6 +373,8 @@ async function handleAddEditCategory() {
 			averageWaitingTime: 0,
 		},
 	};
+	if(selectedFile.value)
+		requestBody.imageUrl=""
 	if (props.addCategory) {
 		const response = await useFetch('/api/category/add', {
 			method: 'POST',
@@ -291,7 +394,15 @@ async function handleAddEditCategory() {
 				subCategorySet: subCategories.value,
 			});
 		}
-
+		if(selectedFile.value){
+			const formData = new FormData();
+			formData.append('file', selectedFile.value);
+			formData.append('id', categoryId.toString())
+			await useFetch(`/api/photos/photoCategory`, {
+				method: 'POST',
+				body: formData,
+			});
+		}
 		if (categoryId !== null) await handleSubcategories(categoryId);
 		openNotification('Category was successfully added');
 	} else {
@@ -316,6 +427,15 @@ async function handleAddEditCategory() {
 				presentationOrder: presentationOrder.value,
 				imageUrl: src.value,
 				subCategorySet: subCategories.value,
+			});
+		}
+		if(selectedFile.value&&props.categoryId){
+			const formData = new FormData();
+			formData.append('file', selectedFile.value);
+			formData.append('id', props.categoryId.toString())
+			await useFetch(`/api/photos/photoCategory`, {
+				method: 'POST',
+				body: formData,
 			});
 		}
 		if (props.categoryId !== undefined) await handleSubcategories(props.categoryId);
@@ -355,7 +475,7 @@ const cancelNewSubcategory = () => {
 	editSubcategory.value = false;
 	newSubcategoryName.value = '';
 	newSubcategoryDescription.value = '';
-	newSubcategorySrc.value = '';
+	newSubcategorySrc.value = defaultSrc;
 	presentationSubcategoryOrder.value = 0;
 };
 
@@ -414,11 +534,10 @@ const hasSubcategoriesComputed = computed(() => {
 										:src="newSubcategorySrc"
 										style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover"
 									/>
-									<div class="photoButtonSpace" style="margin-bottom: 3vh; padding-top: 3%">
-										<el-button class="specialPhotoButtonSubcategory" style="margin-bottom: 3vh"
-											>Change</el-button
-										>
-										<el-button class="specialPhotoButtonSubcategory">Delete</el-button>
+									<div class="photoButtonSpace" style="height: 12vh;">
+										<label for="changeSubCategoryPhoto" class="specialPhotoLabelSubcategory" >Change</label>
+										<input id="changeSubCategoryPhoto" type="file" style="display: none;" @change="handleFileUploadSubCategory" />
+										<el-button class="specialPhotoButtonSubcategory" @click="deleteImgSubCategory()">Delete</el-button> 
 									</div>
 								</div>
 								<div>
@@ -497,16 +616,13 @@ const hasSubcategoriesComputed = computed(() => {
 							<div class="fieldText" style="padding-bottom: 2%">Photo</div>
 							<div style="width: 92%; height: 90%; display: flex; padding-bottom: 10%">
 								<el-image
-									:src="defaultSrc"
+									:src="src"
 									style="width: 35%; height: 15vh; object-fit: cover; border-radius: 40px"
 								/>
 								<div class="photoButtonSpace" style="padding-top: 0.9%">
-									<el-button class="specialPhotoButton">Change</el-button>
-									<el-button class="specialPhotoButton">Delete</el-button>
-								</div>
-								<div>
-									<input type="file" @change="handleFileUpload" />
-									<button @click="uploadImage">Upload</button>
+									<label for="changeCategoryPhoto" class="specialPhotoLabel">Change</label>
+									<input id="changeCategoryPhoto" type="file" style="display: none;" @change="handleFileUpload" />
+									<el-button class="specialPhotoButton" @click="deleteImg()">Delete</el-button>
 								</div>
 							</div>
 						</div>
@@ -776,6 +892,19 @@ const hasSubcategoriesComputed = computed(() => {
 	height: 30%;
 }
 
+.specialPhotoLabel{
+	border-radius: 25px;
+	font-size: 1vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 50%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .specialPhotoButtonSubcategory {
 	border-radius: 25px;
 	font-size: 0.7vw;
@@ -784,6 +913,19 @@ const hasSubcategoriesComputed = computed(() => {
 	color: #ed5087;
 	width: 30%;
 	height: 30%;
+}
+
+.specialPhotoLabelSubcategory {
+	border-radius: 25px;
+	font-size: 0.7vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 30%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .specialExitButton {
@@ -808,11 +950,24 @@ const hasSubcategoriesComputed = computed(() => {
 	color: white;
 }
 
+.specialPhotoLabel:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
+
 .specialPhotoButtonSubcategory:hover {
 	background-color: #ed5087;
 	border-color: darkgrey;
 	color: white;
 }
+
+.specialPhotoLabelSubcategory:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
+
 
 .el-button + .el-button {
 	margin-left: 0;
