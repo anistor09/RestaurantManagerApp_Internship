@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import {
-	ElRow,
-	ElCol,
 	ElScrollbar,
 	ElMain,
 	ElContainer,
