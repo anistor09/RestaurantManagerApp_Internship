@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useRestaurantStore } from '~/store/restaurant';
+import { useRestaurantStore } from '../store/restaurant';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 </script>
