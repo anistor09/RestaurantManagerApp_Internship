@@ -4,30 +4,13 @@ export default defineEventHandler((event) => {
 			
 			id: parseInt(data.sid),
 			name: data.requestBody.name,
-			description: parseInt(data.requestBody.description),
+			description: data.requestBody.description,
 			presentationOrder: parseInt(data.requestBody.presentationOrder),
 			imageUrl: data.requestBody.imageUrl,
-			restaurant: {
-				id: parseInt(data.requestBody.restaurant.id),
-				name: data.requestBody.restaurant.name,
-				imageUrl: data.requestBody.restaurant.imageUrl,
-				latitude: parseInt(data.requestBody.restaurant.latitude),
-				longitude: parseInt(data.requestBody.restaurant.longitude),
-				rating : parseInt(data.requestBody.restaurant.rating),
-				category : data.requestBody.restaurant.category,
-				backgroundColor : data.requestBody.restaurant.backgroundColor,
-				foregroundColor: data.requestBody.restaurant.foregroundColor,
-				font_color: data.requestBody.restaurant.font_color,
-				description: data.requestBody.restaurant.description,
-				logoUrl: data.requestBody.restaurant.logoUrl,
-				addresse: data.requestBody.restaurant.addresse,
-				phoneNumber: data.requestBody.restaurant.phoneNumber,
-				email: data.requestBody.restaurant.email,
-				averageWaitingTime: parseInt("0"),
-			}
+			restaurantId: parseInt(data.requestBody.restaurant.id)
 		};
 		
-		const response =await fetch(`https://dev-api.ewai.fr/subcategory/${parseInt(data.sid)}?categoryid=${parseInt(data.requestBody.categoryId)}`, {
+		await fetch(`https://dev-api.ewai.fr/subCategory/${parseInt(data.sid)}?categoryid=${parseInt(data.requestBody.categoryId)}`, {
 			method: 'PUT',
 			body: JSON.stringify(parsedData),
 			headers: {
@@ -35,13 +18,8 @@ export default defineEventHandler((event) => {
 			},
 		});
 	
-		const responseData = await response;
 		
-		const responseString = await responseData.text()
-		const splitString =  responseString.split(" ")
-
-		const newId =splitString[splitString.length - 1];
 		
-		return newId;
+		return `Succesfully edited subcategory ${data.sid}`;
 	});
 });

@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
 import { Hours } from '../interfaces/Hours';
+import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import PageTitle from '../components/page-title.vue';
 
 const restaurantStore = useRestaurantStore();
@@ -11,11 +12,12 @@ const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sa
 const name = ref(restaurant.name);
 const addresse = ref(restaurant.addresse);
 const description = ref(restaurant.description);
-const imageUrl = ref(restaurant.logoUrl)
-const phoneNumber = ref(restaurant.phoneNumber)
-const email = ref(restaurant.email)
-const category = ref(restaurant.category)
+const imageUrl = ref(restaurant.logoUrl);
+const phoneNumber = ref(restaurant.phoneNumber);
+const email = ref(restaurant.email);
+const category = ref(restaurant.category);
 const doubleCheck = ref(false);
+const nameNeededPopUp = ref(false);
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -32,7 +34,7 @@ const deepCopyHours = () => {
 		}
 	}
 	return [opening, closing];
-}
+};
 
 const times = deepCopyHours();
 
@@ -70,13 +72,45 @@ const saveChanges = async () => {
 
 	doubleCheck.value = false;
 };
+async function addAiRestaurantDescription() {
+	if (name.value.length === 0) {
+		nameNeededPopUp.value = true;
+	} else {
+		description.value = 'The new description is loading...';
 
+		const requestBody = {
+			itemName: name.value,
+			length: 300,
+			target: 'restaurant',
+		};
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
+			method: 'POST',
+			body: requestBody,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		console.log(response.data.value);
+
+		description.value = response.data.value;
+	}
+}
 </script>
 
 <template>
 	<div>
 		<PageTitle id="titleComponent" title="Restaurant Overview"></PageTitle>
 		<div class="All">
+			<ClientOnly>
+				<Teleport to="body">
+					<NameNeededPopUp
+						:message="'restaurant'"
+						v-model="nameNeededPopUp"
+						@closeNoName="nameNeededPopUp = false"
+					></NameNeededPopUp>
+				</Teleport>
+			</ClientOnly>
+			
 			<div id="firstHalf">
 				<!-- Container which contains the image, the name of the restaurant and it's address-->
 				<div id="imageNameAddress">
@@ -85,7 +119,7 @@ const saveChanges = async () => {
 					<div id="nameAddress">
 						<input
 							v-model="name"
-                            id="nameId"
+							id="nameId"
 							class="specialInput"
 							style="font-size: 23px; width: 80%"
 							type="input"
@@ -103,8 +137,20 @@ const saveChanges = async () => {
 				</div>
 				<!-- Container which the other information(description, phone number, email and category)-->
 				<div class="otherDetails">
-					<div id="descriptionIdPrefix" class="prefix">Description:</div>
+					<!-- <div id="descriptionIdPrefix" class="prefix">Description:</div> -->
 					<!-- The textarea where the restaurant description can be changed by the restaurant owner-->
+					<div
+						class="div"
+						style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
+					>
+						<div id="descriptionIdPrefix" class="prefix" style="width: 18%; padding-bottom: 0.7%">
+							Description:
+						</div>
+
+						<el-button class="aiButtonSubcatgory" @click="addAiRestaurantDescription"
+							>✨Write with AI</el-button
+						>
+					</div>
 					<textarea
 						v-model="description"
 						class="specialInput"
@@ -161,11 +207,10 @@ const saveChanges = async () => {
 							placeholder="Please input"
 						/>
 					</div>
-					
 				</div>
 			</div>
 			<div id="secondHalf">
-				<br><br>
+				<br /><br />
 				<div class="box" style="">
 					<div id="hoursId" class="prefix">Working Hours:</div>
 					<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
@@ -331,4 +376,20 @@ h1 {
 	border-radius: 50%; /* make the image circular */
 	box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.3);
 }
+.aiButtonSubcatgory {
+	border-radius: 15px;
+	font-size: 0.9vw;
+	border-color: #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 18%;
+	height: 3vh;
+}
+
+.aiButtonSubcatgory:hover {
+	background-color: #ed5087;
+	border-color: #ed5087;
+	color: white;
+}
+
 </style>

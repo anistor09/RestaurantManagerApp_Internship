@@ -1,9 +1,11 @@
 <script lang="ts" setup>
-import { SubCategory } from '~/interfaces/SubCategory';
-import { useRestaurantStore } from '~/store/restaurant';
-import { useCategoryStore } from '~/store/category';
+import { ref, computed } from 'vue';
+import { useRestaurantStore } from '../store/restaurant';
+import { useCategoryStore } from '../store/category';
+import PageTitle from '../components/page-title.vue';
+import { SubCategory } from '../interfaces/SubCategory';
+import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import { ImageSubCategory} from '~/interfaces/ImageSubCategory'
-
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 const categoryStore = useCategoryStore();
@@ -38,12 +40,13 @@ const toBeEditedSubcat: Ref<Set<number>> = ref(new Set<number>());
 const deleteSubcategoryPopup = ref(false);
 const deleteCategoryPopup = ref(false);
 const deleteSubcatIdLocally = ref(-1);
+const nameNeededPopUp = ref(false);
 
 if (props.addCategory === false) {
 	const category = restaurant.categorySet.filter((x) => x.id === props.categoryId)[0];
 	name.value = category === undefined ? '' : category.name;
 	description.value = category === undefined ? '' : category.description;
-	src.value = category === undefined ? '' : category.imageUrl;
+	src.value = category === undefined ? defaultSrc : category.imageUrl;
 	presentationOrder.value = category === undefined ? 0 : category.presentationOrder;
 	if (category.subCategorySet !== undefined)
 		if (category.subCategorySet.length > 0) {
@@ -160,7 +163,7 @@ function saveNewSubcategoryLocally() {
 		const newSubcategory: SubCategory = {
 			id: getUniqueId(),
 			name: newSubcategoryName.value,
-			description: newSubcategoryName.value,
+			description: newSubcategoryDescription.value,
 			presentationOrder: presentationSubcategoryOrder.value,
 			imageUrl: newSubcategorySrc.value,
 		};
@@ -185,10 +188,11 @@ function deleteSubcategoryLocally(idSubcat: number) {
 }
 function editSubcategoryLocally() {
 	const positionSubCat = subCategories.value.findIndex((x) => x.id === editedSubcategoryId.value);
+
 	subCategories.value.splice(positionSubCat, 1, {
 		id: editedSubcategoryId.value,
 		name: newSubcategoryName.value,
-		description: newSubcategoryName.value,
+		description: newSubcategoryDescription.value,
 		presentationOrder: presentationSubcategoryOrder.value,
 		imageUrl: newSubcategorySrc.value,
 	});
@@ -383,7 +387,7 @@ async function handleAddEditCategory() {
 				'Content-Type': 'application/json',
 			},
 		});
-		const categoryId = response.data.value as number;
+		const categoryId = response.data.value;
 		if (categoryId != null) {
 			categoryStore.categoryGetter.push({
 				id: categoryId,
@@ -397,7 +401,7 @@ async function handleAddEditCategory() {
 		if(selectedFile.value){
 			const formData = new FormData();
 			formData.append('file', selectedFile.value);
-			formData.append('id', categoryId.toString())
+			formData.append('id', categoryId?.toString() as string)
 			await useFetch(`/api/photos/photoCategory`, {
 				method: 'POST',
 				body: formData,
@@ -420,7 +424,8 @@ async function handleAddEditCategory() {
 			},
 		});
 		if (props.categoryId !== undefined) {
-			categoryStore.categoryGetter.push({
+			const index = categoryStore.categoryGetter.findIndex((x) => x.id === props.categoryId);
+			categoryStore.categoryGetter.splice(index, 1, {
 				id: props.categoryId,
 				name: name.value,
 				description: description.value,
@@ -480,11 +485,56 @@ const cancelNewSubcategory = () => {
 };
 
 const filteredSubcategories = computed(() => {
-	return subCategories.value.sort((a, b) => a.presentationOrder - b.presentationOrder);
+	const unsortedCategories = subCategories.value;
+	return unsortedCategories.sort((a, b) => a.presentationOrder - b.presentationOrder);
 });
 const hasSubcategoriesComputed = computed(() => {
 	return hasSubcategories.value;
 });
+async function addAiCategoryDescription() {
+	await addAiDescription('250', true);
+}
+async function addAiSubcategoryDescription() {
+	await addAiDescription('150', false);
+}
+async function addAiDescription(neededLength: string, forCategory: boolean) {
+	if (
+		(name.value.length === 0 && forCategory) ||
+		(newSubcategoryName.value.length === 0 && !forCategory)
+	) {
+		console.log(forCategory);
+		nameNeededPopUp.value = true;
+	} else {
+		let queriedName = '';
+
+		if (forCategory) {
+			description.value = 'The new description is loading...';
+			queriedName = name.value;
+		} else {
+			newSubcategoryDescription.value = 'The new description is loading...';
+			queriedName = newSubcategoryName.value;
+		}
+		const requestBody = {
+			itemName: queriedName,
+			length: neededLength,
+			target: 'a category',
+		};
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
+			method: 'POST',
+			body: requestBody,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		console.log(response.data.value);
+
+		if (forCategory) {
+			description.value = response.data.value;
+		} else {
+			newSubcategoryDescription.value = response.data.value;
+		}
+	}
+}
 </script>
 
 <template>
@@ -492,31 +542,64 @@ const hasSubcategoriesComputed = computed(() => {
 		<page-title v-if="addCategory" title="Add category"></page-title>
 		<page-title v-else title="Edit category"></page-title>
 		<div class="container">
-			<div class="bottom">
+			<div id="add-Category-Info" class="bottom">
 				<ClientOnly>
+					<Teleport to="body">
+						<NameNeededPopUp
+							:message="'category'"
+							v-model="nameNeededPopUp"
+							@closeNoName="nameNeededPopUp = false"
+						></NameNeededPopUp>
+					</Teleport>
 					<Teleport to="body">
 						<el-dialog
 							v-model="addSubcategoryPopUp"
+							id="add_subcategory_popup"
 							width="25%"
-							style="border-radius: 5%; height: 58%"
+							style="border-radius: 5%; height: 65%"
 							:before-close="refreshDetails"
 						>
 							<div class="edit" style="padding-left: 3%">
 								<div>
-									<div style="padding-bottom: 1%">Name:</div>
-									<input v-model="newSubcategoryName" class="specialInputSubcategory" />
+									<div
+										style="padding-bottom: 1%"
+										id="subcategory-name"
+										data-testid="subcategory-name-title"
+									>
+										Name:
+									</div>
+									<input
+										data-testid="subcategory-name-input"
+										v-model="newSubcategoryName"
+										id="subcategory-name-input"
+										class="specialInputSubcategory"
+									/>
 								</div>
-								<div style="padding-top: 2%">
-									<div style="padding-bottom: 1%">Description:</div>
+								<div data-testid="subcategory-description-title" style="padding-top: 2%">
+									<!-- <div style="padding-bottom: 1%">Description: </div> -->
+									<div class="div" style="display: flex; align-items: center; padding-bottom: 1%">
+										<div id="subcategory-description" style="width: 30%; padding-bottom: 0.9%">
+											Description:
+										</div>
+
+										<el-button class="aiButtonSubcatgory" @click="addAiSubcategoryDescription"
+											>✨Write with AI</el-button
+										>
+									</div>
 
 									<textarea
+										id="subcategory-description-input"
+										data-testid="subcategory-description-input"
 										v-model="newSubcategoryDescription"
 										class="specialTextAreaSubcategory"
 									></textarea>
 								</div>
-								<div style="padding-top: 2%">
-									<div style="padding-bottom: 1%">Presentation order:</div>
+								<div data-testid="subcategory-presentation-order-title" style="padding-top: 2%">
+									<div id="subcategory-presentationorder" style="padding-bottom: 1%">
+										Presentation order:
+									</div>
 									<input
+										data-testid="subcategory-presentationorder-input"
 										v-model.number="presentationSubcategoryOrder"
 										class="specialInputSubcategory"
 									/>
@@ -527,7 +610,7 @@ const hasSubcategoriesComputed = computed(() => {
 										height: 90%;
 										display: flex;
 										padding-top: 6%;
-										padding-left: 16%;
+										padding-left: 13%;
 									"
 								>
 									<el-image
@@ -542,10 +625,20 @@ const hasSubcategoriesComputed = computed(() => {
 								</div>
 								<div>
 									<div id="bottomButtons">
-										<el-button color="#ED5087" plain round @click="cancelNewSubcategory()"
+										<el-button
+											id="cancelAddEditSubcategory"
+											color="#ED5087"
+											plain
+											round
+											@click="cancelNewSubcategory()"
 											>Cancel</el-button
 										>
-										<el-button color="#ED5087" plain round @click="saveNewSubcategoryLocally()"
+										<el-button
+											data-testid="save-subcategory-button"
+											color="#ED5087"
+											plain
+											round
+											@click="saveNewSubcategoryLocally()"
 											>Save</el-button
 										>
 									</div>
@@ -555,9 +648,10 @@ const hasSubcategoriesComputed = computed(() => {
 					</Teleport>
 					<Teleport to="body">
 						<el-dialog
+							id="safetyPopUpDeleteSubcategory"
 							v-model="deleteSubcategoryPopup"
 							width="20%"
-							style="border-radius: 5%; height: 20%"
+							style="border-radius: 5%; height: 23%"
 						>
 							<div class="delete">
 								Are you sure you want to delete this subcategory?
@@ -566,6 +660,7 @@ const hasSubcategoriesComputed = computed(() => {
 										>No</el-button
 									>
 									<el-button
+										id="yessafetyPopUpDeleteSubcategory"
 										color="#ED5087"
 										plain
 										round
@@ -580,7 +675,7 @@ const hasSubcategoriesComputed = computed(() => {
 						<el-dialog
 							v-model="deleteCategoryPopup"
 							width="20%"
-							style="border-radius: 5%; height: 20%"
+							style="border-radius: 5%; height: 23%"
 						>
 							<div class="delete">
 								Are you sure you want to delete category {{ name }}?
@@ -600,15 +695,37 @@ const hasSubcategoriesComputed = computed(() => {
 					<div class="elementLeft">
 						<div class="box">
 							<div style="height: 40%; width: 100%">
-								<div class="fieldText" style="padding-bottom: 2%">Name</div>
-								<input v-model="name" class="specialInput" style="height: 56.25%" />
+								<div id="category-name" class="fieldText" style="padding-bottom: 2%">Name</div>
+								<input
+									id="input-category-name"
+									v-model="name"
+									class="specialInput"
+									style="height: 56.25%"
+								/>
 							</div>
 						</div>
 					</div>
 					<div class="elementLeft">
 						<div class="box">
-							<div class="fieldText" style="padding-bottom: 2%">Description</div>
-							<textarea v-model="description" class="specialTextArea"></textarea>
+							<!-- <div class="fieldText" style="padding-bottom: 2%">Description</div> -->
+							<div class="div" style="display: flex; align-items: center">
+								<div
+									id="category-description"
+									class="fieldText"
+									style="width: 20%; padding-bottom: 0.9%"
+								>
+									Description
+								</div>
+
+								<el-button class="aiButton" @click="addAiCategoryDescription"
+									>✨Write with AI</el-button
+								>
+							</div>
+							<textarea
+								id="input-category-description"
+								v-model="description"
+								class="specialTextArea"
+							></textarea>
 						</div>
 					</div>
 					<div class="elementLeft" style="padding-bottom: 5%">
@@ -630,8 +747,15 @@ const hasSubcategoriesComputed = computed(() => {
 					<div class="elementLeft">
 						<div class="box" style="">
 							<div style="height: 40%; width: 100%">
-								<div class="fieldText" style="padding-bottom: 2%">Order in Menu</div>
-								<input v-model="presentationOrder" class="specialInput" style="height: 56.25%" />
+								<div id="category-orderinmenu" class="fieldText" style="padding-bottom: 2%">
+									Order in Menu
+								</div>
+								<input
+									id="input-category-order"
+									v-model="presentationOrder"
+									class="specialInput"
+									style="height: 56.25%"
+								/>
 							</div>
 						</div>
 					</div>
@@ -654,6 +778,8 @@ const hasSubcategoriesComputed = computed(() => {
 							</div>
 							<div class="box" style="padding-left: 20%">
 								<el-button
+									id="add-subcategory-button"
+									data-testid="add-subcategory"
 									color="#ED5087"
 									plain
 									round
@@ -665,7 +791,7 @@ const hasSubcategoriesComputed = computed(() => {
 						</div>
 					</div>
 					<div class="subcategoryWrapper">
-						<el-scrollbar style="overflow-x: hidden">
+						<el-scrollbar id="subcategory-list" style="overflow-x: hidden">
 							<div v-if="hasSubcategoriesComputed">
 								<div
 									v-for="subcategory in filteredSubcategories"
@@ -683,12 +809,14 @@ const hasSubcategoriesComputed = computed(() => {
 											/>
 											<div class="photoButtonSpace" style="padding-top: 2%">
 												<el-button
+													data-testid="edit-subcategory"
 													class="specialPhotoButton"
 													style="margin-bottom: 3vh"
 													@click="changeSubcategory(subcategory.id)"
 													>Edit</el-button
 												>
 												<el-button
+													id="deleteSubcategory"
 													class="specialPhotoButton"
 													@click="popUpDeleteSubcategoryLocally(subcategory.id)"
 													>Delete</el-button
@@ -703,7 +831,7 @@ const hasSubcategoriesComputed = computed(() => {
 					<div style="margin-top: 10%; display: flex; justify-content: flex-end">
 						<el-button
 							v-if="addCategory"
-							id="addSubcategoryButton"
+							id="saveCategoryButton"
 							class="specialExitButton"
 							@click="handleAddEditCategory()"
 							>Save</el-button
@@ -740,7 +868,7 @@ const hasSubcategoriesComputed = computed(() => {
 }
 
 .subcategoryWrapper {
-	height: 70%;
+	height: 69%;
 	width: 99%;
 	border: 2px solid #ed5087;
 	border-radius: 1vw;
@@ -867,7 +995,27 @@ const hasSubcategoriesComputed = computed(() => {
 	resize: none;
 	width: 70%;
 	height: 50%;
+
+	
+	
 }
+.specialTextAreaSubcategory::-webkit-scrollbar,
+.specialTextArea::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* .specialTextArea::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+} */
+/*  
+.specialTextArea::-webkit-scrollbar-thumb {
+  background-color: #c0c0c0;
+  border-radius: 4px;
+} */
+/*
+.specialTextArea::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+} */
 
 .specialTextAreaSubcategory {
 	color: black;
@@ -996,5 +1144,32 @@ const hasSubcategoriesComputed = computed(() => {
 	font-size: 0.85vw;
 	font-weight: 300;
 	color: black;
+}
+
+.aiButton {
+	border-radius: 25px;
+	font-size: 1vw;
+	border-color: #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 20%;
+	height: 65%;
+}
+
+.aiButtonSubcatgory {
+	border-radius: 15px;
+	font-size: 0.7vw;
+	border-color: #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 27%;
+	height: 3vh;
+}
+
+.aiButton:hover,
+.aiButtonSubcatgory:hover {
+	background-color: #ed5087;
+	border-color: #ed5087;
+	color: white;
 }
 </style>
