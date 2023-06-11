@@ -845,6 +845,9 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	resize: none;
 	width: 70%;
 	height: 50%;
+
+	
+	
 }
 .specialTextAreaSubcategory::-webkit-scrollbar,
 .specialTextArea::-webkit-scrollbar {
