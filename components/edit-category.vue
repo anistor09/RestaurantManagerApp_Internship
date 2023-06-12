@@ -81,16 +81,9 @@ function saveNewSubcategoryLocally() {
 	if (editSubcategory.value) {
 		editSubcategoryLocally();
 	} else {
-		const newSubcategory: SubCategory = {
-			id: getUniqueId(),
-			name: newSubcategoryName.value,
-			description: newSubcategoryDescription.value,
-			presentationOrder: presentationSubcategoryOrder.value,
-			imageUrl: newSubcategorySrc.value,
+		const newSubcategory: SubCategory = {id: getUniqueId(), name: newSubcategoryName.value, description: newSubcategoryDescription.value, presentationOrder: presentationSubcategoryOrder.value, imageUrl: newSubcategorySrc.value,
 		};
-
 		subCategories.value.push(newSubcategory);
-
 		addSubcategoryPopUp.value = false;
 		refreshDetails();
 	}
@@ -109,12 +102,7 @@ function deleteSubcategoryLocally(idSubcat: number) {
 function editSubcategoryLocally() {
 	const positionSubCat = subCategories.value.findIndex((x) => x.id === editedSubcategoryId.value);
 
-	subCategories.value.splice(positionSubCat, 1, {
-		id: editedSubcategoryId.value,
-		name: newSubcategoryName.value,
-		description: newSubcategoryDescription.value,
-		presentationOrder: presentationSubcategoryOrder.value,
-		imageUrl: newSubcategorySrc.value,
+	subCategories.value.splice(positionSubCat, 1, { id: editedSubcategoryId.value, name: newSubcategoryName.value, description: newSubcategoryDescription.value, presentationOrder: presentationSubcategoryOrder.value, imageUrl: newSubcategorySrc.value,
 	});
 
 	if (editedSubcategoryId.value >= 0) {
@@ -139,30 +127,8 @@ function hasSubcategoriesFct() {
 }
 // Handles the addition or editing of a subcategory.
 async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, editMode: boolean) {
-	const requestBody = {
-		name: subcategory.name,
-		description: subcategory.description,
-		presentationOrder: subcategory.presentationOrder,
-		imageUrl: subcategory.imageUrl,
-		categoryId: cid,
-		restaurant: {
-			id: restaurant.id,
-			name: restaurant.name,
-			latitude: restaurant.latitude,
-			imageUrl: restaurant.imageUrl,
-			longitude: restaurant.longitude,
-			rating: restaurant.rating,
-			category: restaurant.category,
-			backgroundColor: restaurant.backgroundColor,
-			foregroundColor: restaurant.foregroundColor,
-			font_color: restaurant.font_color,
-			description: restaurant.description,
-			logoUrl: restaurant.logoUrl,
-			addresse: restaurant.addresse,
-			phoneNumber: restaurant.phoneNumber,
-			email: restaurant.email,
-			averageWaitingTime: 0,
-		},
+	const requestBody = { name: subcategory.name, description: subcategory.description, presentationOrder: subcategory.presentationOrder, imageUrl: subcategory.imageUrl, categoryId: cid,
+		restaurant: {id: restaurant.id, name: restaurant.name, latitude: restaurant.latitude, imageUrl: restaurant.imageUrl, longitude: restaurant.longitude, rating: restaurant.rating, category: restaurant.category, backgroundColor: restaurant.backgroundColor, foregroundColor: restaurant.foregroundColor, font_color: restaurant.font_color, description: restaurant.description, logoUrl: restaurant.logoUrl, addresse: restaurant.addresse, phoneNumber: restaurant.phoneNumber, email: restaurant.email, averageWaitingTime: 0, },
 	};
 	if (!editMode) {
 		await useFetch('/api/subcategory/add', {
@@ -235,30 +201,7 @@ async function handleSubcategories(categoryId: number) {
 }
 // Handles the addition or editing of a category.
 async function handleAddEditCategory() {
-	const requestBody = {
-		name: name.value,
-		description: description.value,
-		presentationOrder: presentationOrder.value,
-		imageUrl: src.value,
-		restaurant: {
-			id: restaurant.id,
-			name: restaurant.name,
-			imageUrl: restaurant.imageUrl,
-			latitude: restaurant.latitude,
-			longitude: restaurant.longitude,
-			rating: restaurant.rating,
-			category: restaurant.category,
-			foregroundColor: restaurant.foregroundColor,
-			backgroundColor: restaurant.backgroundColor,
-			font_color: restaurant.font_color,
-			description: restaurant.description,
-			logoUrl: restaurant.logoUrl,
-			addresse: restaurant.addresse,
-			phoneNumber: restaurant.phoneNumber,
-			email: restaurant.email,
-			averageWaitingTime: 0,
-		},
-	};
+	const requestBody = { name: name.value, description: description.value, presentationOrder: presentationOrder.value, imageUrl: src.value, restaurant: { id: restaurant.id, name: restaurant.name, imageUrl: restaurant.imageUrl, latitude: restaurant.latitude, longitude: restaurant.longitude, rating: restaurant.rating, category: restaurant.category, foregroundColor: restaurant.foregroundColor, backgroundColor: restaurant.backgroundColor, font_color: restaurant.font_color, description: restaurant.description, logoUrl: restaurant.logoUrl, addresse: restaurant.addresse, phoneNumber: restaurant.phoneNumber, email: restaurant.email, averageWaitingTime: 0, },};
 	if (props.addCategory) {
 		const response = await useFetch('/api/category/add', {
 			method: 'POST',
@@ -269,13 +212,7 @@ async function handleAddEditCategory() {
 		});
 		const categoryId = response.data.value;
 		if (categoryId != null) {
-			categoryStore.categoryGetter.push({
-				id: categoryId,
-				name: name.value,
-				description: description.value,
-				presentationOrder: presentationOrder.value,
-				imageUrl: src.value,
-				subCategorySet: subCategories.value,
+			categoryStore.categoryGetter.push({ id: categoryId, name: name.value, description: description.value, presentationOrder: presentationOrder.value, imageUrl: src.value, subCategorySet: subCategories.value,
 			});
 		}
 		if (categoryId !== null) await handleSubcategories(categoryId);
@@ -295,14 +232,7 @@ async function handleAddEditCategory() {
 		});
 		if (props.categoryId !== undefined) {
 			const index = categoryStore.categoryGetter.findIndex((x) => x.id === props.categoryId);
-			categoryStore.categoryGetter.splice(index, 1, {
-				id: props.categoryId,
-				name: name.value,
-				description: description.value,
-				presentationOrder: presentationOrder.value,
-				imageUrl: src.value,
-				subCategorySet: subCategories.value,
-			});
+			categoryStore.categoryGetter.splice(index, 1, { id: props.categoryId, name: name.value, description: description.value, presentationOrder: presentationOrder.value, imageUrl: src.value, subCategorySet: subCategories.value, });
 		}
 		if (props.categoryId !== undefined) await handleSubcategories(props.categoryId);
 		openNotification('Category was successfully edited');
