@@ -32,7 +32,7 @@
     color: black !important;
     font-size: 0.9vw !important;  
     text-align: center !important;
-    text-indent: 20% !important;   
+    text-indent: 50% !important;      
 }
 
 
@@ -42,7 +42,7 @@
 
 }
 .currency-select-item{
-    width: 100% !important;
+    width: 50% !important;
     height: 22.5% !important;
 
 }
