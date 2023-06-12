@@ -4,7 +4,10 @@ import { useRestaurantStore } from '../store/restaurant';
 import { Hours } from '../interfaces/Hours';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import PageTitle from '../components/page-title.vue';
+import currencies from '../mockData/currency.json';
+import { useCurrencyStore } from '../store/currency';
 
+const currencyStore = useCurrencyStore();
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
@@ -18,6 +21,7 @@ const email = ref(restaurant.email);
 const category = ref(restaurant.category);
 const doubleCheck = ref(false);
 const nameNeededPopUp = ref(false);
+const selectedCurrency = ref(currencyStore.currencyGetter.currency);
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -42,7 +46,7 @@ const startTimes = ref(times[0]);
 const endTimes = ref(times[1]);
 
 const saveChanges = async () => {
-	// console.log(restaurant.hoursSet);
+	changeCurrencyGlobally();
 	restaurant.hoursSet = [];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
@@ -94,6 +98,9 @@ async function addAiRestaurantDescription() {
 
 		description.value = response.data.value;
 	}
+}
+function changeCurrencyGlobally() {
+	currencyStore.currencyGetter.currency = selectedCurrency.value;
 }
 </script>
 
@@ -206,6 +213,26 @@ async function addAiRestaurantDescription() {
 							type="input"
 							placeholder="Please input"
 						/>
+					</div>
+					<div class="details">
+						<div id="mailIdPrefix" class="prefix">Currency:</div>
+						<div style="width: 10%">
+							<el-select
+								v-model="selectedCurrency"
+								class="special-select-item"
+								collapse-tags
+								filterable
+								default-first-option
+								:reserve-keyword="false"
+							>
+								<el-option
+									v-for="currency in currencies"
+									:key="currency.id"
+									:label="currency.symbol"
+									:value="currency.symbol"
+								/>
+							</el-select>
+						</div>
 					</div>
 				</div>
 			</div>

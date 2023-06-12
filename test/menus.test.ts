@@ -2,6 +2,7 @@ import { vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import restaurants from '../mockData/restaurants.json';
 import MenusPage from '../pages/menus.vue';
+import currencies from '../mockData/currecyMock.json'
 vi.mock('../store/restaurant.ts', () => {
 	return {
 		useRestaurantStore: vi.fn(() => {
@@ -12,7 +13,15 @@ vi.mock('../store/restaurant.ts', () => {
 		}),
 	};
 });
-
+vi.mock('../store/currency.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                currencyGetter: currencies[0],
+            };
+        }),
+    };
+});
 it('renders menus page', () => {
 	const wrapper = mount(MenusPage);
 	expect(wrapper.exists()).toBe(true);
