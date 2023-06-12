@@ -216,10 +216,10 @@ function changeCurrencyGlobally() {
 					</div>
 					<div class="details">
 						<div id="mailIdPrefix" class="prefix">Currency:</div>
-						<div style="width: 10%">
+						<div style="width: 20%">
 							<el-select
 								v-model="selectedCurrency"
-								class="special-select-item"
+								class="currency-select-item"
 								collapse-tags
 								filterable
 								default-first-option
@@ -418,5 +418,6 @@ h1 {
 	border-color: #ed5087;
 	color: white;
 }
+
 
 </style>
