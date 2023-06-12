@@ -104,6 +104,48 @@ The Menus page has a clearly delimited structure, in order to have a clear separ
 
 ### **Products Page**
 *todo*
+### **Edit Category Page**
+The Edit Category Page page allows restaurant managers to manage and customize the categories and subcategories of their restaurant. It provides a user interface for:
+- adding, editing, and deleting categories
+- adding, editing, and deleting subcategories
+- adding, editing, and deleting images for categories and subcategories
+
+
+To access the Edit Category page, you can click on the "+ Add Category" button available in the sidebar. It's default URL is `http://localhost:3000/editCategoryView`. You can also access the page in the 'Edit mode' when you click on a Category card from the Products page. A possible URL is `http://localhost:3000/editCategoryView/24`
+
+#### **Dependencies**
+
+The Menus page component imports several dependencies and custom components from external libraries or files. These dependencies include:
+
+- `element-plus`: A Vue.js CSS library that provides various UI components used in the Menus page.
+- `PageTitle`: A custom component for displaying the page title (used on every page for consistency).
+- `NameNeededPopUp`: A custom component for informing the user that he has to add a name before requesting an AI generated dexcription.
+- `SubCategory`: Interfaces or types used in the Menus page, constructed in accordance to the database structure.
+
+#### **Variables and Methods**
+
+The Menus page component defines several reactive variables and data properties using the `ref` and `computed` functions provided by Vue.js. It also defines some methods and watchers for handling events and updating data.
+
+- `restaurantStore` and `restaurant`: Store and getter for accessing restaurant data from the Pinia Store.
+- `currentCategory`, `selectedMenuName`: Reactive variables for managing the state of the menu and category selection.
+- `selectedMenu`, `selectedCategories`, `selectedSubcategories`: Computed properties for accessing the selected menu, categories, and subcategories.
+- `addItemInMenu`, `addMenu`, `editMenu`, `editPopupKey`: Reactive variables for managing the state of the add item, add menu, and edit menu dialogs.
+- `instructions`, `steps`: Strings used for displaying instructions and steps on the Menus page.
+- `forceCollapse`: String used to force displaying items that have no subcategory, without collapsing them in the "fake" subcategory component.
+- `createItemWrapper`: A method that creates an item wrapper object from an item, used for creating independent entries in a subcategory component.
+- `watch(selectedMenuName)`: A watcher that triggers when the selected menu name changes and updates the current category.
+
+#### **Page structure**
+
+The Menus page has a clearly delimited structure, in order to have a clear separation between the page functionalities.
+
+- The main template consists of a `PageTitle` component for displaying the page title and a `el-scrollbar` component that wraps the content of the Menus page.
+- **Header**: the content contains an `el-header` section with menu selection, create new menu button, edit menu button and add item in menu button.
+- **Main body**: the `el-main` section displays the selected menu's categories and subcategories using `el-tabs` and `el-tab-pane` components. The `tabs` represent each category of the menu, clicking on them will display the corresponding subcategories.
+- **Subcategories**: the subcategory component is esentially a very customized `el-collapse` component, which contains all items in the selected menu corresponding to that subcategory. All items have a `"Remove from menu"` button for easy management. The subcategory component is searchable.
+- **Pop-ups**: the adding, editing an placing an item in a menu are all done via suggestive pop-ups, accessible by pressing their corresponding button.
+
+*Note: This documentation provides an overview of the Menus page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
 
 ### **Tables Page**
 *todo*
