@@ -1,15 +1,19 @@
 <script lang = "ts" setup>
+import { ElOption, ElSelect, ElNotification, ElRow,ElCol,ElScrollbar,ElButton,ElDialog, ElImage, ElCheckbox} from 'element-plus';
+import { ref, onMounted, onUnmounted, defineProps} from 'vue';
 import allergens from "../mockData/allergens.json"
+import PageTitle from '../components/page-title.vue';
+import OptionComponent from '../components/option-component.vue';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
-import { SubCategory } from '~/interfaces/SubCategory';
-import { Category } from '~/interfaces/Category';
-import { Option } from '~/interfaces/Option';
-import { Choice } from '~/interfaces/Choice';
-import { Item } from '~/interfaces/Item';
+import { SubCategory } from '../interfaces/SubCategory';
+import { Category } from '../interfaces/Category';
+import { Option } from '../interfaces/Option';
+import { Choice } from '../interfaces/Choice';
+import { Item } from '../interfaces/Item';
 
-import { useRestaurantStore } from '~/store/restaurant'
-import { useCategoryStore } from '~/store/category'
-import { useItemStore } from '~/store/item'
+import { useRestaurantStore } from '../store/restaurant'
+import { useCategoryStore } from '../store/category'
+import { useItemStore } from '../store/item'
 
 
 
@@ -373,15 +377,6 @@ const editCategory = () => {
     }
 };
 
-
-onMounted(() => {
-    window.addEventListener('storage', handleStorageEvent);
-});
-
-onUnmounted(() => {
-    window.removeEventListener('storage', handleStorageEvent);
-});
-
 const handleStorageEvent = (event: StorageEvent) => {
     if (event.key === 'category') {
         categoryStore.$hydrate()
@@ -420,6 +415,15 @@ const handleStorageEvent = (event: StorageEvent) => {
         }
     }
 };
+
+onMounted(() => {
+    window.addEventListener('storage', handleStorageEvent);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('storage', handleStorageEvent);
+});
+
 
 const openNotification = (notifTitle: string) => {
     ElNotification({
@@ -487,7 +491,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
                 <div class="elementLeft">
                     <div class="box">
                         <div style="height: 40%; width: 100%;">
-                            <div class="fieldText">Name</div>
+                            <div id="item-name" class="fieldText">Name</div>
                             <input v-model="name" class="specialInput" style="height: 56.25%;" />
                         </div>
                     </div>
@@ -495,9 +499,9 @@ async function addAiDescription(neededLength: string, short: boolean) {
                 <div class="elementLeft">
                     <div class="box" style="">
                         <div class="div" style="display: flex; align-items: center;">
-                            <div class="fieldText" style="width: 30%; padding-bottom: 0.9%;">Description</div>
+                            <div id="item-description" class="fieldText" style="width: 30%; padding-bottom: 0.9%;">Description</div>
 
-                            <el-button class="aiButton" @click="addAiShortDescription">✨Write with AI</el-button>
+                            <el-button id="item-ai-description" class="aiButton" @click="addAiShortDescription">✨Write with AI</el-button>
 
                         </div>
                         <textarea v-model="description" class="specialTextArea"></textarea>
@@ -506,29 +510,29 @@ async function addAiDescription(neededLength: string, short: boolean) {
                 </div>
                 <div class="elementLeft">
                     <div class="box">
-                        <div class="fieldText">Category</div>
+                        <div id="item-category" class="fieldText">Category</div>
                         <el-select v-model="category" class="special-select-item" filterable @change="changeCategory">
                             <el-option v-for=" categoryOption in categories" :label="categoryOption.name"
                                 :value="categoryOption.id" />
                         </el-select>
-                        <el-button class="specialAddButton" @click="addCategory">Add Category</el-button>
+                        <el-button id="item-add-category" class="specialAddButton" @click="addCategory">Add Category</el-button>
                     </div>
                 </div>
                 <div class="elementLeft">
                     <div class="box">
-                        <div class="fieldText">Subcategory</div>
+                        <div id="item-subcategory" class="fieldText">Subcategory</div>
                         <el-select v-model="subCategory" class="special-select-item" filterable clearable
                             :class="{ 'disabled-element': disableSubCateg }" placeholder="No subcategory">
                             <el-option v-for=" subCategoryOption in subCategories" :label="subCategoryOption.name"
                                 :value="subCategoryOption.id" />
                         </el-select>
-                        <el-button class="specialAddButton" @click="editCategory">Add Subcategory</el-button>
+                        <el-button id="item-add-subcategory" class="specialAddButton" @click="editCategory">Add Subcategory</el-button>
                     </div>
                 </div>
                 <div class=elementLeft>
                     <div class="box" style="">
-                        <el-button v-if="props.addItem" class="specialExitButton" @click="cancelButton">Cancel</el-button>
-                        <el-button v-else class="specialExitButton" @click="deleteButton">Delete</el-button>
+                        <el-button v-if="props.addItem" id="item-cancel-button" class="specialExitButton" @click="cancelButton">Cancel</el-button>
+                        <el-button v-else id="item-delete-button" class="specialExitButton" @click="deleteButton">Delete</el-button>
                     </div>
                 </div>
             </div>
@@ -536,7 +540,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
                 <div class=elementLeft>
                     <div class="box" style="padding-left: 0%;">
                         <div style="height: 40%; width: 100%;">
-                            <div class="fieldText">Side-dishes</div>
+                            <div id="item-sidedishes" class="fieldText">Side-dishes</div>
                             <el-select v-model="sideItems" class="special-multiple-select-item special-select-item" multiple
                                 collapse-tags filterable @change="changeCategory">
                                 <el-option v-for=" sideItemOption in allItems" :label="sideItemOption.name"
@@ -546,7 +550,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
                     </div>
                 </div>
                 <div style="width: 100%;height: 75%;">
-                    <div class="fieldText">Options</div>
+                    <div id="item-options" class="fieldText">Options</div>
                     <div id="menus-wrapper">
                         <el-scrollbar>
                             <el-col>
@@ -557,7 +561,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
                                         @add-choice="handleAddChoiceEmit" @edit-option="handleEditOptionEmit" />
                                 </el-row>
                             </el-col>
-                            <el-button class="specialAddButton" style="margin-top: 1%;" @click="addOption()">Add
+                            <el-button id="item-add-option" class="specialAddButton" style="margin-top: 1%;" @click="addOption()">Add
                                 Option</el-button>
                         </el-scrollbar>
                     </div>
@@ -569,7 +573,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
                         <div style="width: 48%;height: 100%; display: flex; align-items: center;">
 
                             <div style="height: 40%; width: 100%;">
-                                <div class="fieldText">Presentation Order</div>
+                                <div id="item-presentation" class="fieldText">Presentation Order</div>
                                 <input v-model="presentationOrder" class="specialInput"
                                     style="height: 56.25%; width: 80%;" />
                             </div>
@@ -578,7 +582,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
                         <div style="width: 36.5%;height: 100%;  display: flex; align-items: center;">
 
                             <div style="height: 40%; width: 100%;">
-                                <div class="fieldText">Price</div>
+                                <div id="item-price" class="fieldText">Price</div>
                                 <input v-model="price" class="specialInput" style="height: 56.25%; width: 67%;" />
                             </div>
 
@@ -587,11 +591,9 @@ async function addAiDescription(neededLength: string, short: boolean) {
                 </div>
                 <div class="elementLeft">
                     <div class="box" style="">
-                        <!-- <div class="fieldText">Long Description</div> -->
                         <div class="div" style="display: flex; align-items: center; ">
-                            <div class="fieldText" style="width: 30%; padding-bottom: 0.9%;">Long Description</div>
-
-                            <el-button class="aiButton" style="height: 45%;" @click="addAiLongDescription">✨Write with AI
+                            <div id="item-long-description" class="fieldText" style="width: 30%; padding-bottom: 0.9%;">Long Description</div>
+                            <el-button id="item-ai-long-description" class="aiButton" style="height: 45%;" @click="addAiLongDescription">✨Write with AI
                                 </el-button>
 
                         </div>
@@ -600,19 +602,19 @@ async function addAiDescription(neededLength: string, short: boolean) {
                 </div>
                 <div class="elementLeft">
                     <div class="box" style="">
-                        <div class="fieldText">Photo</div>
+                        <div id="item-photo" class="fieldText">Photo</div>
                         <div style="width: 92%;height:90%;display: flex;">
                             <el-image :src="src" style="width:35%;height: 100%; border-radius: 40px;" />
                             <div class="photoButtonSpace">
-                                <el-button class="specialPhotoButton">Change</el-button>
-                                <el-button class="specialPhotoButton">Delete</el-button>
+                                <el-button id="item-photo-change" class="specialPhotoButton">Change</el-button>
+                                <el-button id="item-photo-delete" class="specialPhotoButton">Delete</el-button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="elementLeft">
                     <div class="box" style="justify-content: center;">
-                        <div class="fieldText">Alergens</div>
+                        <div id="item-allergens" class="fieldText">Alergens</div>
                         <el-select v-model="selectedAllergens" class="special-select-item" multiple collapse-tags filterable
                             default-first-option :reserve-keyword="false" placeholder="Please input allergens list">
                             <el-option v-for="allergenOption in allergens" :key="allergenOption.id"
@@ -622,7 +624,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
                 </div>
                 <div class=elementLeft>
                     <div class="box" style="width: 84% ;align-items: end; padding-left: 0%;">
-                        <el-button class="specialExitButton" style="width: 39.325%" @click="saveButton"> Save </el-button>
+                        <el-button id="item-save-button" class="specialExitButton" style="width: 39.325%" @click="saveButton"> Save </el-button>
                     </div>
                 </div>
             </div>

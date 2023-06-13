@@ -11,7 +11,7 @@ const currencyStore = useCurrencyStore();
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
-const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturnday', 'Sunday'];
+const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const name = ref(restaurant.name);
 const addresse = ref(restaurant.addresse);
 const description = ref(restaurant.description);
@@ -30,7 +30,6 @@ const checkIfChange = () => {
 const deepCopyHours = () => {
 	const opening = ['', '', '', '', '', '', ''];
 	const closing = ['', '', '', '', '', '', ''];
-	console.log(restaurant.id);
 	for (const [index, element] of restaurant.hoursSet.entries()) {
 		if (index < 7) {
 			opening[index] = element.opening;
@@ -94,52 +93,79 @@ async function addAiRestaurantDescription() {
 				'Content-Type': 'application/json',
 			},
 		});
-		console.log(response.data.value);
 
 		description.value = response.data.value;
 	}
 }
+const defaultSrc =
+	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
+const src = ref(restaurant.imageUrl || defaultSrc);
 function changeCurrencyGlobally() {
 	currencyStore.currencyGetter.currency = selectedCurrency.value;
 }
 </script>
 
 <template>
-	<div>
-		<PageTitle id="titleComponent" title="Restaurant Overview"></PageTitle>
-		<div class="All">
+	<PageTitle id="titleComponent" title="Restaurant Overview"></PageTitle>
+	<div class="container">
 			<ClientOnly>
 				<Teleport to="body">
 					<NameNeededPopUp
 						v-model="nameNeededPopUp"
 						:message="'restaurant'"
-						@closeNoName="nameNeededPopUp = false"
+						@close-no-name="nameNeededPopUp = false"
 					></NameNeededPopUp>
 				</Teleport>
 			</ClientOnly>
 			
 			<div id="firstHalf">
+			<div style="padding-left: 15%">
 				<!-- Container which contains the image, the name of the restaurant and it's address-->
 				<div id="imageNameAddress">
 					<img id="circleImage" :src="imageUrl" alt="" />
 					<!-- Container which contains the name of the restaurant and it's address-->
 					<div id="nameAddress">
 						<input
-							v-model="name"
 							id="nameId"
+							v-model="name"
 							class="specialInput"
-							style="font-size: 23px; width: 80%"
+							style="font-size: 1.3vw; width: 80%"
 							type="input"
 							placeholder="Please input"
 						/>
 						<input
-							v-model="addresse"
 							id="addressId"
+							v-model="addresse"
 							class="specialInput"
 							type="input"
-							style="font-size: 18px; text-align: start; width: 100%"
+							style="font-size: 1vw; width: 100%"
 							placeholder="Please input"
 						/>
+						<div style="width: 100%; padding-top: 1%">
+							<el-button
+								class="specialPhotoButton"
+								data-testid="changeLogoButton"
+								style="width: 35%; height: 3vh; font-size: 0.8vw; margin-right: 3%"
+								>Change logo</el-button
+							>
+							<el-button
+								class="specialPhotoButton"
+								data-testid="deleteLogoButton"
+								style="width: 35%; height: 3vh; font-size: 0.8vw"
+								>Delete logo</el-button
+							>
+						</div>
+					</div>
+				</div>
+				<div id="backgroundPrefix" class="prefix">Background Image:</div>
+				<div style="width: 92%; height: 100%; display: flex; padding-left: 1%">
+					<el-image
+						:src="src"
+						style="width: 100%; height: 15vh; object-fit: cover; border-radius: 40px"
+					/>
+					<div class="photoButtonSpace">
+						<el-button data-testid="changeBackButton" class="specialPhotoButton">Change</el-button>
+						<el-button data-testid="deleteBackButton" class="specialPhotoButton">Delete</el-button>
 					</div>
 				</div>
 				<!-- Container which the other information(description, phone number, email and category)-->
@@ -159,184 +185,183 @@ function changeCurrencyGlobally() {
 						>
 					</div>
 					<textarea
+						id="descriptionId"
 						v-model="description"
 						class="specialInput"
-						id="descriptionId"
 						autosize
 						style="
 							text-align: start;
-							width: 80%;
-							height: auto;
-							overflow: hidden;
+							width: 90%;
+							resize: none;
+							height: 10vh;
+							overflow: auto;
 							max-width: 80vw;
 							min-width: 300px;
-							border-radius: 45px;
+							border-radius: 30px;
 							padding-left: 1%;
+							padding-top: 1.2%;
 						"
 						placeholder="Please input"
 					/>
 					<!-- TODO -->
 					<!-- Opening Hours: <br> -->
 					<!-- <input type="text" id="restaurantDescriptionEdit" :value="restaurant."> <br> -->
-					<div class="details">
-						<div id="phoneIdPrefix" class="prefix">Phone Number:</div>
-						<!-- The input where the restaurant phone number can be changed by the restaurant owner-->
-						<input
-							v-model="phoneNumber"
-							class="specialInput"
-							id="phoneId"
-							style="width: 9%; text-align: center; min-width: 130px"
-							type="input"
-							placeholder="Please input"
-						/>
-					</div>
-					<div class="details">
-						<div id="mailIdPrefix" class="prefix">Email:</div>
-						<!-- The input where the restaurant email can be changed by the restaurant owner-->
-						<input
-							v-model="email"
-							class="specialInput"
-							id="mailId"
-							style="width: 15%; min-width: 200px"
-							type="input"
-							placeholder="Please input"
-						/>
-					</div>
-					<div class="details">
-						<div id="categoryIdPrefix" class="prefix">Category:</div>
-						<!-- The input where the restaurant category can be changed by the restaurant owner-->
-						<input
-							v-model="category"
-							class="specialInput"
-							id="categoryId"
-							style="width: 10%"
-							type="input"
-							placeholder="Please input"
-						/>
-					</div>
-					<div class="details">
-						<div id="mailIdPrefix" class="prefix">Currency:</div>
-						<div style="width: 20%">
-							<el-select
-								v-model="selectedCurrency"
-								class="currency-select-item"
-								collapse-tags
-								filterable
-								default-first-option
-								:reserve-keyword="false"
-							>
-								<el-option
-									v-for="currency in currencies"
-									:key="currency.id"
-									:label="currency.symbol"
-									:value="currency.symbol"
-								/>
-							</el-select>
-						</div>
-					</div>
 				</div>
 			</div>
-			<div id="secondHalf">
-				<br /><br />
-				<div class="box" style="">
-					<div id="hoursId" class="prefix">Working Hours:</div>
-					<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
-						<div class="dayName">{{ day }}</div>
-						<el-time-select
-							v-model="startTimes[index]"
-							style="width: 24%"
-							placeholder="Start time"
-							start="00:00"
-							step="00:30"
-							end="23:59"
-						/>
-						<el-time-select
-							v-model="endTimes[index]"
-							style="width: 24%"
-							placeholder="End time"
-							start="00:00"
-							step="00:30"
-							end="23:59"
-						/>
-					</div>
+		</div>
+		<div id="secondHalf">
+			<div style="padding-left: 10%; padding-top: 5%">
+				<div class="details">
+					<div id="phoneIdPrefix" class="prefix">Phone Number:</div>
+					<!-- The input where the restaurant phone number can be changed by the restaurant owner-->
+					<input
+						id="phoneId"
+						v-model="phoneNumber"
+						class="specialInput"
+						style="width: 20%; text-align: center"
+						type="input"
+						placeholder="Please input"
+					/>
 				</div>
-				<div id="buttonContainer">
-					<el-button color="#ED5087" plain round @click="checkIfChange()"> Save changes</el-button>
+				<div class="details">
+					<div id="mailIdPrefix" class="prefix">Email:</div>
+					<!-- The input where the restaurant email can be changed by the restaurant owner-->
+					<input
+						id="mailId"
+						v-model="email"
+						class="specialInput"
+						style="width: 30%"
+						type="input"
+						placeholder="Please input"
+					/>
 				</div>
-
-				<Teleport to="body">
-					<el-dialog
-						v-model="doubleCheck"
-						width="20%"
-						style="
-							font-family: 'Open Sans';
-							text-align: center;
-							font-size: 0.8vw;
-							font-weight: bold;
-							color: black;
-							border-radius: 40px;
-							border: 0.15vw solid #ed5087 !important;
-							top: 20%;
-						"
-					>
-						<div>
-							Are you sure you want to make these changes?
-							<div id="change-bottom-button">
-								<el-button color="#ED5087" plain round @click="saveChanges()">Yes</el-button>
-							</div>
-						</div>
-					</el-dialog>
-				</Teleport>
+				<div class="details">
+					<div id="categoryIdPrefix" class="prefix">Category:</div>
+					<!-- The input where the restaurant category can be changed by the restaurant owner-->
+					<input
+						id="categoryId"
+						v-model="category"
+						class="specialInput"
+						style="width: 20%"
+						type="input"
+						placeholder="Please input"
+					/>
+				</div>
+				<div id="hoursId" class="prefix">Working Hours:</div>
+				<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
+					<div class="dayName">{{ day }}</div>
+					<el-time-select
+						v-model="startTimes[index]"
+						style="width: 30%"
+						placeholder="Start time"
+						start="00:00"
+						step="00:30"
+						end="23:59"
+					/>
+					<el-time-select
+						v-model="endTimes[index]"
+						style="width: 30%"
+						placeholder="End time"
+						start="00:00"
+						step="00:30"
+						end="23:59"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
+	<el-button id="save-button" color="#ED5087" plain round @click="checkIfChange()">
+		Save changes</el-button
+	>
+
+	<Teleport to="body">
+		<el-dialog
+			v-model="doubleCheck"
+			width="20%"
+			style="
+				font-family: 'Open Sans';
+				text-align: center;
+				font-size: 0.8vw;
+				font-weight: bold;
+				color: black;
+				border-radius: 40px;
+				border: 0.15vw solid #ed5087 !important;
+				top: 20%;
+			"
+		>
+			<div>
+				Are you sure you want to make these changes?
+				<div id="change-bottom-button">
+					<el-button color="#ED5087" plain round @click="saveChanges()">Yes</el-button>
+				</div>
+			</div>
+		</el-dialog>
+	</Teleport>
 </template>
 
 <style scoped>
 /* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
-@import url('https://fonts.googleapis.com/css?family=Cairo');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 * {
-	font-family: 'Cairo';
+	font-family: 'Open Sans';
 }
 
 #firstHalf {
 	width: 50%;
 }
 #secondHalf {
-	position: relative;
 	width: 50%;
 }
-.All {
-	padding-top: 2%;
-	padding-left: 2%;
-	height: 81vh;
-	overflow: auto;
-	display: flex;
+
+textarea::-webkit-scrollbar {
+	display: none;
 }
-h1 {
-	padding-left: 2%;
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	margin-top: 3%;
 }
 
-#title::after {
-	content: '';
-	display: block;
-	height: 3px;
-	background-color: #727171;
-	margin-top: 10px;
+.specialPhotoButton {
+	border-radius: 25px;
+	font-size: 1vw;
+	border-color: #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 80%;
+	height: 30%;
+	margin-left: 0;
 }
+
+.specialPhotoButton:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
+
+.photoButtonSpace {
+	width: 30%;
+	padding-left: 5%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
 /*Styling for both the containers which formed of pairs of inputs and their descriptions*/
 .details {
 	display: flex;
 	align-items: center;
 	padding-top: 1%;
-	font-size: 20px;
 }
 
 /* Styling for the descriptions of the inputs */
 .prefix {
-	margin-right: 10px;
-	font-size: 20px;
-	padding-left: 3px;
+	margin-top: 1%;
+	margin-right: 3%;
+	font-size: 1.2vw;
+	font-weight: bolder;
+	padding-bottom: 1.5%;
 	color: #ed5087;
 }
 
@@ -348,20 +373,19 @@ h1 {
 #nameAddress {
 	display: flex;
 	flex-direction: column;
-	padding: 25px;
+	padding: 5%;
 }
 
 /*Styling for the inputs*/
 .specialInput {
 	color: black;
-	padding: 4px;
 	background-color: #dfdfdf;
 	border-radius: 15px;
 	margin: 0.2vh;
-	height: 20px;
-	font-size: 20px;
+	height: 3vh;
+	font-size: 1vw;
 	border: none;
-	font-family: 'Cairo';
+	font-family: 'Open Sans';
 	text-align: center;
 }
 #buttonContainer {
@@ -373,22 +397,28 @@ h1 {
 	padding-right: 5%;
 	align-items: center;
 }
+
+#save-button {
+	width: 10%;
+	height: 5%;
+	font-size: 1vw;
+	font-weight: bolder;
+	position: absolute;
+	right: 3%;
+	bottom: 3%;
+}
+
 .dayName {
 	width: 12%;
 	min-width: 80px;
+	padding-right: 3%;
 }
 .workingDay {
 	display: flex;
 	flex-direction: row;
-	padding-left: 0%;
-}
-.box {
-	top: 0;
-	left: 0;
-	height: auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
+	padding-bottom: 0.5%;
+	font-weight: bold;
+	font-size: 0.9vw;
 }
 
 #change-bottom-button {
@@ -398,18 +428,19 @@ h1 {
 }
 
 #circleImage {
-	width: 130px; /* set the width to whatever you need */
-	height: 130px; /* set the height to whatever you need */
-	border-radius: 50%; /* make the image circular */
-	box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.3);
+	width: 7vw;
+	height: 7vw;
+	border-radius: 50%;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 .aiButtonSubcatgory {
 	border-radius: 15px;
+	margin-top: 1%;
 	font-size: 0.9vw;
 	border-color: #ed5087;
 	background-color: white;
 	color: #ed5087;
-	width: 18%;
+	width: 20%;
 	height: 3vh;
 }
 

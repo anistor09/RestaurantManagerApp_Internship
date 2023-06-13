@@ -14,7 +14,7 @@ const route = useRoute();
 const path = computed(() => route.path);
 
 const active = computed(() => {
-	if (path.value === 'http://localhost:3000') return '1';
+	if (path.value.endsWith('/')) return '1';
 	if (path.value.includes('menus')) return '2';
 	if (path.value.includes('products')) return '3';
 	if (path.value.includes('tables')) return '4';

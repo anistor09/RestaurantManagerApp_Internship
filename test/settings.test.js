@@ -73,6 +73,13 @@ it('hoursPrefix', () => {
 	expect(name.text()).toBe('Working Hours:');
 });
 
+it('backgroundPrefix', () => {
+	const wrapper = mount(SettingsPage);
+	const name = wrapper.find('#backgroundPrefix');
+	expect(name.exists()).toBe(true);
+	expect(name.text()).toBe('Background Image:');
+});
+
 it('Name correct', () => {
     const wrapper = mount(SettingsPage);
     const name = wrapper.find('#nameId');
@@ -115,4 +122,20 @@ it('Category correct', () => {
     const category = wrapper.find('#categoryId');
 	expect(category.exists()).toBe(true)
     expect(category.element.value).toBe('italian');
+});
+
+it('Buttons for logo are rendered', () => {
+    const wrapper = mount(SettingsPage);
+    const changeButton = wrapper.find('[data-testid="changeLogoButton"]');
+	expect(changeButton.exists()).toBe(true)
+    const deleteButton = wrapper.find('[data-testid="deleteLogoButton"]');
+	expect(deleteButton.exists()).toBe(true)
+});
+
+it('Buttons for background are rendered', () => {
+    const wrapper = mount(SettingsPage);
+    const changeButton = wrapper.find('[data-testid="changeBackButton"]');
+	expect(changeButton.exists()).toBe(true)
+    const deleteButton = wrapper.find('[data-testid="deleteBackButton"]');
+	expect(deleteButton.exists()).toBe(true)
 });

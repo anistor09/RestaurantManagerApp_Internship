@@ -3,6 +3,7 @@ import { ElSelect } from 'element-plus';
 import { ref } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
 import { Carte } from '../interfaces/Carte';
+import { SubCategory } from '~/interfaces/SubCategory';
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
@@ -22,7 +23,6 @@ const categories = ref(restaurant.categorySet);
 const categoryName = ref('');
 
 // this represents the category object itself that is selected by the user
-// TODO: add interfaces to prevent the case when there are no filteredSubcategories.
 const selectedCategory = ref(categories.value[0]);
 
 // the category name that will be displayed on the bar
@@ -33,8 +33,7 @@ const subcategoryName = ref('');
 const filteredSubcategories = ref(restaurant.subCategorySet);
 
 // this represents the subcategory object itself that is selected by the user
-// TODO: add interfaces to prevent the case when there are no filteredSubcategories.
-const selectedSubcategory = ref(filteredSubcategories.value[0]);
+const selectedSubcategory = ref<SubCategory | null>(filteredSubcategories.value[0]);
 
 const restaurantItems = ref(restaurant.itemSet);
 
@@ -45,7 +44,6 @@ const filteredItems = ref(restaurant.itemSet);
 const itemName = ref('');
 
 // the object itself of the selected item (what the popup will return)
-// TODO: add interfaces to prevent the case when there are no filteredSubcategories.
 const selectedItem = ref(restaurantItems.value[0]);
 
 const enableSubcategory = ref(false);
@@ -77,7 +75,7 @@ const changeSubCategory = () => {
 	filteredItems.value = restaurantItems.value.filter(
 		(x) =>
 			x.category.id === selectedCategory.value.id &&
-			x.subCategory?.id === selectedSubcategory.value.id,
+			x.subCategory?.id === selectedSubcategory.value?.id,
 	);
 };
 
@@ -89,7 +87,7 @@ const changeItem = () => {
 	selectedCategory.value = selectedItem.value.category;
 	categoryName.value = selectedCategory.value.name;
 	selectedSubcategory.value = selectedItem.value.subCategory;
-	subcategoryName.value = selectedSubcategory.value.name;
+	subcategoryName.value = selectedSubcategory.value === null ? '' : selectedCategory.value.name;
 
 };
 
@@ -116,8 +114,8 @@ const addItemInMenu = async () => {
 			<h2 id="categoryIdPrefix" class="title">Category:</h2>
 
 			<el-select
-				v-model="categoryName"
 				id="categoryId"
+				v-model="categoryName"
 				filterable
 				clearable
 				class="specialSelect"
@@ -138,8 +136,8 @@ const addItemInMenu = async () => {
 			<h2 id="subcategoryIdPrefix" class="title">Subcategory:</h2>
 
 			<el-select
-				v-model="subcategoryName"
 				id="subcategoryId"
+				v-model="subcategoryName"
 				filterable
 				clearable
 				class="specialSelect"
@@ -161,8 +159,8 @@ const addItemInMenu = async () => {
 			<h2 id="itemIdPrefix" class="title">Item:</h2>
 
 			<el-select
-				v-model="itemName"
 				id="itemIdPrefix"
+				v-model="itemName"
 				filterable
 				clearable
 				class="specialSelect"
