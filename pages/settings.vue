@@ -267,6 +267,26 @@ function changeCurrencyGlobally() {
 						end="23:59"
 					/>
 				</div>
+				<div class="details" style="padding-top: 2%;">
+						<div id="mailIdPrefix" class="prefix">Currency:</div>
+						<div style="width: 20%">
+							<el-select
+								v-model="selectedCurrency"
+								class="currency-select-item"
+								collapse-tags
+								filterable
+								default-first-option
+								:reserve-keyword="false"
+							>
+								<el-option
+									v-for="currency in currencies"
+									:key="currency.id"
+									:label="currency.symbol"
+									:value="currency.symbol"
+								/>
+							</el-select>
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>
