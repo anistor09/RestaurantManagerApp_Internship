@@ -123,7 +123,7 @@ async function addAiMenuDescription() {
 				class="div"
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 			>
-				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%">
+				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%; padding-right: 3%;">
 					Description
 				</div>
 
@@ -249,7 +249,7 @@ async function addAiMenuDescription() {
 	border-color: #ed5087;
 	background-color: white;
 	color: #ed5087;
-	width: 20%;
+	width: 25%;
 	height: 3vh;
 }
 

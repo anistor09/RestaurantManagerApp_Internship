@@ -54,28 +54,30 @@ function signIn() {
 @import url('https://fonts.googleapis.com/css?family=Tourney');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-html,
-body {
+#wrapper {
+	position: relative;
+	height: 100vh;
 	overflow: hidden;
 }
 
 /* The images are sent in the back using z-index since they overlapped with the button */
 #imgUp {
 	position: fixed;
-	left: 60%;
-	width: 80%;
+	left: 65%;
+	width: 70%;
 	height: auto;
-	margin-top: -40%;
-	z-index: -1;
+	margin-top: -30%;
+	z-index: -100;
 }
 
 #imgDown {
-	position: fixed;
-	padding-top: 20vh;
-	right: 50%;
-	width: 80%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	transform: translate(-20%, 20%);
+	width: 40%;
 	height: auto;
-	z-index: -1;
+	z-index: -100;
 }
 
 #logoWrapper {

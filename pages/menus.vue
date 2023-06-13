@@ -309,7 +309,7 @@ function closeEditPopup() {
 #menus-instructions {
 	padding-top: 5%;
 	font-family: 'Open Sans' !important;
-	font-size: 2.5rem;
+	font-size: 2vw;
 	font-weight: bold;
 	color: #ed5087b9;
 	white-space: pre-wrap;
@@ -318,7 +318,7 @@ function closeEditPopup() {
 
 #menus-steps {
 	font-family: 'Open Sans' !important;
-	font-size: 2rem;
+	font-size: 1.5vw;
 	font-weight: bold;
 	color: #ed50876e;
 	white-space: pre-wrap;

@@ -37,7 +37,7 @@ defineEmits(['edit', 'delete', 'qr-code']);
 #card {
 	border-radius: 3vw;
 	width: 12vw;
-	height: 13vw;
+	height: 28vh;
 	font-family: 'Open Sans';
 	border-color: #ed5087;
 }
@@ -50,15 +50,14 @@ defineEmits(['edit', 'delete', 'qr-code']);
 
 #bottomButtons {
 	display: flex;
-	justify-content: space-between;
-	position: relative;
-	width: 80%;
-	left: 10%;
-	top: 3.5vh;
+	justify-content: center;
+	align-items: center;
+	height: 10vh;
+	width: 100%;
 }
 
 #bottomButtons .el-button {
-	width: 8vw;
+	width: 4.5vw;
 }
 
 #title {
