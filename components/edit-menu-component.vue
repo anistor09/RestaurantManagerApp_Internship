@@ -122,12 +122,7 @@ async function addAiMenuDescription() {
 		nameNeededPopUp.value = true;
 	} else {
 		description.value = 'The new description is loading...';
-
-		const requestBody = {
-			itemName: name,
-			length: 150,
-			target: 'menu',
-		};
+		const requestBody = {itemName: name, length: 150, target: 'menu',};
 		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
 			method: 'POST',
 			body: requestBody,
