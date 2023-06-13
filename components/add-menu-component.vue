@@ -75,7 +75,7 @@ async function addAiMenuDescription() {
 
 		const requestBody = {
 			itemName: name.value,
-			length: 200,
+			length: 150,
 			target: 'menu',
 		};
 		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {

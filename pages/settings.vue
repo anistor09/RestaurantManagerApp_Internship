@@ -80,7 +80,7 @@ async function addAiRestaurantDescription() {
 
 		const requestBody = {
 			itemName: name.value,
-			length: 300,
+			length: 200,
 			target: 'restaurant',
 		};
 		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
