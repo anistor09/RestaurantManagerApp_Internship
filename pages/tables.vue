@@ -153,22 +153,24 @@ watchEffect(() => {
 			</el-dialog>
 		</Teleport>
 	</ClientOnly>
-	<div>
+	<el-scrollbar>
 		<PageTitle title="Tables"></PageTitle>
 		<main>
 			<div id="buttonContainer">
 				<SearchBar v-model="selectedTable" :options="tables.map((x) => 'Table ' + x.number)" />
 				<el-button id="addTableButton" color="#ED5087" plain round @click="addPopup = true"
-					>Add Table</el-button
+					> + Add Table</el-button
 				>
 			</div>
 			<div id="tableContainer">
 				<TableComponent
 					v-for="table in filteredTables"
 					:id="table.id"
+					:key="table.id"
 					:number="table.number"
 					:capacity="table.capacity"
 					:url="table.url"
+					class="table-component"
 					@edit="
 						(x) => {
 							editPopup = true;
@@ -190,7 +192,7 @@ watchEffect(() => {
 				/>
 			</div>
 		</main>
-	</div>
+	</el-scrollbar>
 </template>
 
 <style scoped>
@@ -214,6 +216,12 @@ watchEffect(() => {
 #bottomButtons2 {
 	position: fixed;
 }
+
+#addTableButton {
+	font-weight: bold;
+	font-size: 1vw;
+}
+
 .edit {
 	display: flex;
 	flex-direction: column;
@@ -237,6 +245,11 @@ watchEffect(() => {
 	justify-content: center;
 	bottom: 2.5vh;
 }
+
+.table-component {
+	margin-top: 10%;
+}
+
 header {
 	height: 10vh;
 	display: flex;
@@ -248,7 +261,7 @@ header {
 }
 #buttonContainer {
 	display: flex;
-	padding-top: 1%;
+	padding-top: 2%;
 	padding-left: 5%;
 	padding-right: 5%;
 	justify-content: space-between;
@@ -259,9 +272,8 @@ header {
 	display: grid;
 	justify-items: center;
 	align-items: center;
-	height: 45.75vh;
 	grid-template-columns: repeat(5, 20%);
-	grid-auto-rows: 61%;
+	height: 60%;
 }
 .specialInput {
 	color: black;
