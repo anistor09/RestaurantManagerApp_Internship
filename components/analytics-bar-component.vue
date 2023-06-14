@@ -147,7 +147,7 @@ watch(selection, (newValue) => {
 		<ApexCharts
 			style="width: 100%"
 			type="bar"
-			height="400"
+			height="85%"
 			:options="chartOptions"
 			:series="series"
 		></ApexCharts>
