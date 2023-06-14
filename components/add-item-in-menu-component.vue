@@ -58,8 +58,7 @@ const changeCategory = () => {
 	itemName.value = '';
 	selectedCategory.value = categories.value.filter((x) => x.name === categoryName.value)[0];
 	filteredItems.value = restaurantItems.value.filter(
-		(x) =>
-			x.category.id === selectedCategory.value.id
+		(x) => x.category.id === selectedCategory.value.id,
 	);
 	filteredSubcategories.value = selectedCategory.value.subCategorySet;
 };
@@ -87,8 +86,7 @@ const changeItem = () => {
 	selectedCategory.value = selectedItem.value.category;
 	categoryName.value = selectedCategory.value.name;
 	selectedSubcategory.value = selectedItem.value.subCategory;
-	subcategoryName.value = selectedSubcategory.value === null ? '' : selectedCategory.value.name;
-
+	subcategoryName.value = selectedSubcategory.value === null ? '' : selectedSubcategory.value.name;
 };
 
 const addItemInMenu = async () => {
