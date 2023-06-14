@@ -241,4 +241,16 @@ const handleStorageEvent = (event: StorageEvent) => {
 	font-size: 0.8vw;
 	font-weight: bold;
 }
+
+.el-input .el-input__wrapper {
+	font-family: 'Open Sans';
+	font-size: 1vw;
+	font-weight: bolder;
+	height: auto;
+	border-radius: 30px;
+}
+
+.el-input {
+	--el-input-focus-border-color: #ed5087 !important;
+}
 </style>

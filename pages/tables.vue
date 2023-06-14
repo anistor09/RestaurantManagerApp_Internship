@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ElButton, ElDialog } from 'element-plus';
 import { ref, computed, watchEffect } from 'vue';
 import { Table } from '../interfaces/Table';
 import { useRestaurantStore } from '../store/restaurant';
@@ -158,8 +157,8 @@ watchEffect(() => {
 		<main>
 			<div id="buttonContainer">
 				<SearchBar v-model="selectedTable" :options="tables.map((x) => 'Table ' + x.number)" />
-				<el-button id="addTableButton" color="#ED5087" plain round @click="addPopup = true"
-					> + Add Table</el-button
+				<el-button id="addTableButton" color="#ED5087" plain round @click="addPopup = true">
+					+ Add Table</el-button
 				>
 			</div>
 			<div id="tableContainer">
