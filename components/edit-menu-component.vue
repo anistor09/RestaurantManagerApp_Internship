@@ -31,7 +31,7 @@ const emit = defineEmits(['close']);
 // eslint-disable-next-line prefer-const
 let name = selectedMenu.value.name;
 // eslint-disable-next-line prefer-const
-let description = selectedMenu.value.description;
+const description : Ref<string>= ref(selectedMenu.value.description);
 // eslint-disable-next-line prefer-const
 let src = selectedMenu.value.imageUrl;
 
@@ -57,11 +57,10 @@ const editMenu = async() => {
 			hoursSet.push(hour);
 		}
 	}
-
 	const carte: Carte = {
 		id: selectedMenu.value.id,
 		name,
-		description,
+		description : description.value,
 		version: 1,
 		active: true,
 		imageUrl: defaultSrc,
@@ -80,7 +79,7 @@ const editMenu = async() => {
 	restaurantRef.value.carteSet.filter((menu) => {
 		if (menu.id === selectedMenu.value.id) {
 			menu.name = name;
-			menu.description = description;
+			menu.description = description.value;
 			menu.imageUrl = src;
 			menu.hoursSet = hoursSet;
 		}
@@ -115,10 +114,38 @@ const checkIfChange = () => {
 const checkIfDelete = () => {
 	checkDelete.value = true;
 };
+
+const nameNeededPopUp = ref(false);
+
+async function addAiMenuDescription() {
+	if (name.length === 0) {
+		nameNeededPopUp.value = true;
+	} else {
+		description.value = 'The new description is loading...';
+		const requestBody = {itemName: name, length: 150, target: 'menu',};
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
+			method: 'POST',
+			body: requestBody,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		description.value = response.data.value;
+	}
+}
 </script>
 
 <template>
 	<div id="all">
+		<ClientOnly>
+			<Teleport to="body">
+				<NameNeededPopUp
+					v-model="nameNeededPopUp"
+					:message="'menu'"
+					@closeNoName="nameNeededPopUp = false"
+				></NameNeededPopUp>
+			</Teleport>
+		</ClientOnly>
 		<div class="box" style="height: 100%">
 			<div class="fieldText">Photo</div>
 			<div style="width: 92%; height: 100%; display: flex">
@@ -139,7 +166,19 @@ const checkIfDelete = () => {
 			</div>
 		</div>
 		<div class="box" style="">
-			<div id="descriptionIdPrefix" class="fieldText">Description</div>
+			<!-- <div id="descriptionIdPrefix" class="fieldText">Description</div> -->
+			<div
+				class="div"
+				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
+			>
+				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%">
+					Description
+				</div>
+
+				<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription"
+					>✨Write with AI</el-button
+				>
+			</div>
 			<textarea id="descriptionId" v-model="description" class="specialTextArea"></textarea>
 		</div>
 		<div class="box" style="">
@@ -265,7 +304,7 @@ const checkIfDelete = () => {
 	width: 50%;
 	height: 30%;
 }
-
+.aiButtonSubcatgory:hover,
 .specialPhotoButton:hover {
 	background-color: #ed5087;
 	border-color: darkgrey;
@@ -360,5 +399,17 @@ const checkIfDelete = () => {
 	display: flex;
 	padding-top: 8%;
 	justify-content: center;
+}
+.specialTextArea::-webkit-scrollbar {
+  width: 5px;
+}
+.aiButtonSubcatgory {
+	border-radius: 15px;
+	font-size: 0.9vw;
+	border-color: #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 20%;
+	height: 3vh;
 }
 </style>
