@@ -25,7 +25,7 @@ export default defineEventHandler((event) => {
           'model': 'gpt-3.5-turbo',  
           "messages": [{"role": "user", "content": prompt}],
           "temperature": 1.0,
-          'max_tokens': 300, // Adjust the number of tokens as per your requirement
+          'max_tokens': parseInt(data.length), // Adjust the number of tokens as per your requirement
         };
        
         const requestOptions = {
