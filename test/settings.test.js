@@ -15,6 +15,9 @@ vi.mock('../store/restaurant.ts', () => {
 		}),
 	};
 });
+
+const wrapper = mount(SettingsPage);
+
 vi.mock('../store/currency.ts', () => {
     return {
         useCurrencyStore: vi.fn(() => {
@@ -25,19 +28,16 @@ vi.mock('../store/currency.ts', () => {
     };
 });
 it('renders settings page', () => {
-	const wrapper = mount(SettingsPage);
 	expect(wrapper.exists()).toBe(true);
 });
 
 it('title works', () => {
-	const wrapper = mount(SettingsPage);
 	const title = wrapper.findComponent(PageTitle);
 	expect(title.exists()).toBe(true);
 	expect(title.props('title')).toBe('Restaurant Overview');
 });
 
 it('descriptionPrefix', () => {
-	const wrapper = mount(SettingsPage);
 	const name = wrapper.find('#descriptionIdPrefix');
 	expect(name.exists()).toBe(true);
 	expect(name.text()).toBe('Description:');
@@ -45,7 +45,6 @@ it('descriptionPrefix', () => {
 
 
 it('phonePrefix', () => {
-	const wrapper = mount(SettingsPage);
 	const name = wrapper.find('#phoneIdPrefix');
 	expect(name.exists()).toBe(true);
 	expect(name.text()).toBe('Phone Number:');
@@ -53,35 +52,30 @@ it('phonePrefix', () => {
 
 
 it('emailPrefix', () => {
-	const wrapper = mount(SettingsPage);
 	const name = wrapper.find('#mailIdPrefix');
 	expect(name.exists()).toBe(true);
 	expect(name.text()).toBe('Email:');
 });
 
 it('categoryPrefix', () => {
-	const wrapper = mount(SettingsPage);
 	const name = wrapper.find('#categoryIdPrefix');
 	expect(name.exists()).toBe(true);
 	expect(name.text()).toBe('Category:');
 });
 
 it('hoursPrefix', () => {
-	const wrapper = mount(SettingsPage);
 	const name = wrapper.find('#hoursId');
 	expect(name.exists()).toBe(true);
 	expect(name.text()).toBe('Working Hours:');
 });
 
 it('backgroundPrefix', () => {
-	const wrapper = mount(SettingsPage);
 	const name = wrapper.find('#backgroundPrefix');
 	expect(name.exists()).toBe(true);
 	expect(name.text()).toBe('Background Image:');
 });
 
 it('Name correct', () => {
-    const wrapper = mount(SettingsPage);
     const name = wrapper.find('#nameId');
 	expect(name.exists()).toBe(true)
     expect(name.element.value).toBe('Mocked Restaurant');
@@ -89,14 +83,12 @@ it('Name correct', () => {
 
 
 it('Address correct', () => {
-    const wrapper = mount(SettingsPage);
     const address = wrapper.find('#addressId');
 	expect(address.exists()).toBe(true)
     expect(address.element.value).toBe('Address of Mocked Restaurant');
 });
 
 it('Description correct', () => {
-    const wrapper = mount(SettingsPage);
     const description = wrapper.find('#descriptionId');
 	expect(description.exists()).toBe(true)
     expect(description.element.value).toBe('The Commons is a central spot where all members of our TSH family can come to together to share drinks, food and the things they have in common.');
@@ -104,28 +96,24 @@ it('Description correct', () => {
 
 
 it('Phone correct', () => {
-    const wrapper = mount(SettingsPage);
     const phone = wrapper.find('#phoneId');
 	expect(phone.exists()).toBe(true)
     expect(phone.element.value).toBe('0123456789');
 });
 
 it('Email correct', () => {
-    const wrapper = mount(SettingsPage);
     const mail = wrapper.find('#mailId');
 	expect(mail.exists()).toBe(true)
     expect(mail.element.value).toBe('mocked@gmail.com');
 });
 
 it('Category correct', () => {
-    const wrapper = mount(SettingsPage);
     const category = wrapper.find('#categoryId');
 	expect(category.exists()).toBe(true)
     expect(category.element.value).toBe('italian');
 });
 
 it('Buttons for logo are rendered', () => {
-    const wrapper = mount(SettingsPage);
     const changeButton = wrapper.find('[data-testid="changeLogoButton"]');
 	expect(changeButton.exists()).toBe(true)
     const deleteButton = wrapper.find('[data-testid="deleteLogoButton"]');
@@ -133,7 +121,6 @@ it('Buttons for logo are rendered', () => {
 });
 
 it('Buttons for background are rendered', () => {
-    const wrapper = mount(SettingsPage);
     const changeButton = wrapper.find('[data-testid="changeBackButton"]');
 	expect(changeButton.exists()).toBe(true)
     const deleteButton = wrapper.find('[data-testid="deleteBackButton"]');

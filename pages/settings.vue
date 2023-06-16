@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import {ElTimeSelect} from 'element-plus';
+import { ElTimeSelect } from 'element-plus';
 import { useRestaurantStore } from '../store/restaurant';
 import { Hours } from '../interfaces/Hours';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
@@ -109,17 +109,17 @@ function changeCurrencyGlobally() {
 <template>
 	<PageTitle id="titleComponent" title="Restaurant Overview"></PageTitle>
 	<div class="container">
-			<ClientOnly>
-				<Teleport to="body">
-					<NameNeededPopUp
-						v-model="nameNeededPopUp"
-						:message="'restaurant'"
-						@close-no-name="nameNeededPopUp = false"
-					></NameNeededPopUp>
-				</Teleport>
-			</ClientOnly>
-			
-			<div id="firstHalf">
+		<ClientOnly>
+			<Teleport to="body">
+				<NameNeededPopUp
+					v-model="nameNeededPopUp"
+					:message="'restaurant'"
+					@close-no-name="nameNeededPopUp = false"
+				></NameNeededPopUp>
+			</Teleport>
+		</ClientOnly>
+
+		<div id="firstHalf">
 			<div style="padding-left: 15%">
 				<!-- Container which contains the image, the name of the restaurant and it's address-->
 				<div id="imageNameAddress">
@@ -162,7 +162,13 @@ function changeCurrencyGlobally() {
 				<div style="width: 92%; height: 100%; display: flex; padding-left: 1%">
 					<img
 						:src="src"
-						style="width: 100%; height: 15vh; object-fit: contain; border: solid #ed5087; border-radius: 40px"
+						style="
+							width: 100%;
+							height: 15vh;
+							object-fit: contain;
+							border: solid #ed5087;
+							border-radius: 40px;
+						"
 					/>
 					<div class="photoButtonSpace">
 						<el-button data-testid="changeBackButton" class="specialPhotoButton">Change</el-button>
