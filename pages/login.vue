@@ -1,20 +1,40 @@
 <script lang="ts" setup>
-	definePageMeta({
-  		layout: "empty",
-	});
+definePageMeta({
+	layout: 'empty',
+});
+
+const config = useRuntimeConfig();
+
+function signIn() {
+	const token = useCookie('token');
+	if (token.value !== undefined && token.value !== null) navigateTo('/');
+	else {
+		// Redirect the user to the authorization endpoint
+		const authorizeUrl = 'https://auth.ewai.fr/oauth2/authorize';
+		const responseType = 'code';
+		const clientId = config.public.clientId;
+		const redirectUri = config.public.callback;
+
+		const url = `${authorizeUrl}?response_type=${responseType}&client_id=${clientId}&redirect_uri=${redirectUri}`;
+
+		navigateTo(url, {
+			external: true,
+		});
+	}
+}
 </script>
 
 <!-- The login page. Can be accessed at: http://localhost:3000/login -->
 <template>
 	<div id="wrapper">
-        <!-- Styling images for the background. For now, they are stored on client, but they should be moved on the server. -->
+		<!-- Styling images for the background. For now, they are stored on client, but they should be moved on the server. -->
 		<img id="imgDown" src="../uploads/loginImage1.png" />
 		<img id="imgUp" src="../uploads/loginImage2.png" />
 
-        <!-- The logo and subtitle are wrapped together for resizing purposes -->
+		<!-- The logo and subtitle are wrapped together for resizing purposes -->
 		<div id="logoWrapper">
 			<img id="logo" src="../uploads/ewai-logo.png" />
-            <!-- The slogan has multiple colors, thus the need of "capitalLetters" class -->
+			<!-- The slogan has multiple colors, thus the need of "capitalLetters" class -->
 			<div id="subtitle">
 				The <span class="capitalLetters">E</span>lectronic
 				<span class="capitalLetters">WAI</span>ter. Without the
@@ -22,39 +42,42 @@
 			</div>
 		</div>
 
-        <!-- Similarly, the button and the welcome text are wrapped and, thus, resized, together -->
+		<!-- Similarly, the button and the welcome text are wrapped and, thus, resized, together -->
 		<div id="buttonWrapper">
 			<div id="welcome">WELCOME BACK!</div>
-			<el-button id="button" color="#ED5087" plain round> Login </el-button>
+			<el-button id="button" color="#ED5087" plain round data-testid="login-button" @click="signIn()"> Login </el-button>
 		</div>
 	</div>
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Tourney');
-@import url('https://fonts.googleapis.com/css?family=Cairo');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-html, body {
-    overflow: hidden;
+#wrapper {
+	position: relative;
+	height: 100vh;
+	overflow: hidden;
 }
 
 /* The images are sent in the back using z-index since they overlapped with the button */
 #imgUp {
 	position: fixed;
-	left: 60%;
-	width: 80%;
+	left: 65%;
+	width: 70%;
 	height: auto;
-	margin-top: -40%;
-	z-index: -1;
+	margin-top: -30%;
+	z-index: -100;
 }
 
 #imgDown {
 	position: absolute;
-	padding-top: 20vh;
-	right: 50%;
-	width: 80%;
+	bottom: 0;
+	left: 0;
+	transform: translate(-20%, 20%);
+	width: 40%;
 	height: auto;
-	z-index: -1;
+	z-index: -100;
 }
 
 #logoWrapper {
@@ -81,7 +104,7 @@ html, body {
 }
 
 #welcome {
-	font-family: 'Cairo';
+	font-family: 'Open Sans';
 	font-weight: bolder;
 	font-size: 3vw;
 	color: #727171;
@@ -92,7 +115,7 @@ html, body {
 
 /* The styling of the Element Plus is overwritten to fit our Figma design */
 #button {
-	font-family: 'Cairo' !important;
+	font-family: 'Open Sans' !important;
 	font-size: 2vw;
 	font-weight: bolder;
 	width: 25% !important;

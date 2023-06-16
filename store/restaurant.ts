@@ -1,35 +1,27 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 import { Restaurant } from '~/interfaces/Restaurant';
 
-interface RestaurantState{
-    id: Number,
-    restaurant: Restaurant,
-    loading: boolean
+interface RestaurantState {
+	restaurant: Restaurant;
 }
 
 export const useRestaurantStore = defineStore({
-    id: 'restaurant-store',
-    state: (): RestaurantState => ({
-        id: 1,
-        restaurant: null,
-        loading: true,
-    }),
-    actions: {
-        async getRestaurant() {
-            try {
-                const response = await fetch(`https://dev-api.ewai.fr/restaurant/${this.id}`, { mode: 'no-cors' });
-                const data = await response.json();
-                this.restaurant = data;
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.loading = false;
-            }
-        }
-    },
-    getters: {
-        restaurantGetter: state => state.restaurant,
-        restaurantIdGetter: state => state.id,
-        loadingGetter: state => state.loading
-    }
-})
+	id: 'restaurant-store',
+	state: (): RestaurantState => ({
+		restaurant: {} as Restaurant,
+	}),
+	actions: {
+		async getRestaurant() {
+			try {
+				const response = await useFetch('/api/store');
+				const data = await response.data.value;
+				this.restaurant = data;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+	},
+	getters: {
+		restaurantGetter: (state) => state.restaurant,
+	},
+});

@@ -1,8 +1,12 @@
 <script lang="ts" setup>
+import { ElButton, ElCard } from 'element-plus';
 defineProps<{
+	url: String;
 	number: Number;
 	capacity: Number;
+	id: Number;
 }>();
+defineEmits(['edit', 'delete', 'qr-code']);
 </script>
 
 <template>
@@ -11,11 +15,13 @@ defineProps<{
 			<div id="title">Table {{ number }}</div>
 			<div id="capacity">{{ capacity }} seats</div>
 			<div id="QRButton">
-				<el-button color="#ED5087" plain round size="large">See QR Code</el-button>
+				<el-button color="#ED5087" plain round size="large" @click="$emit('qr-code', url)"
+					>See QR Code</el-button
+				>
 			</div>
 			<div id="bottomButtons">
-				<el-button color="#ED5087" plain round>Edit</el-button>
-				<el-button color="#ED5087" plain round>Delete</el-button>
+				<el-button color="#ED5087" plain round @click="$emit('edit', id)">Edit</el-button>
+				<el-button color="#ED5087" plain round @click="$emit('delete', id)">Delete</el-button>
 			</div>
 		</div>
 	</el-card>
@@ -31,7 +37,7 @@ defineProps<{
 #card {
 	border-radius: 3vw;
 	width: 12vw;
-	height: 13vw;
+	height: 28vh;
 	font-family: 'Open Sans';
 	border-color: #ed5087;
 }
@@ -44,15 +50,14 @@ defineProps<{
 
 #bottomButtons {
 	display: flex;
-	justify-content: space-between;
-	position: relative;
-	width: 80%;
-	left: 10%;
-	top: 3.5vh;
+	justify-content: center;
+	align-items: center;
+	height: 10vh;
+	width: 100%;
 }
 
 #bottomButtons .el-button {
-	width: 8vw;
+	width: 4.5vw;
 }
 
 #title {

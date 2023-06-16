@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "name": "The commons",
+        "name": "Mocked Restaurant",
         "imageUrl": "https://ewai-restaurant-manager-image-repo.s3.eu-central-1.amazonaws.com/restaurant/file/1200px-Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg",
         "latitude": 52.006653613926844,
         "longitude": 4.356486959049088,
@@ -12,9 +12,9 @@
         "font_color": "#1976D2FF",
         "description": "The Commons is a central spot where all members of our TSH family can come to together to share drinks, food and the things they have in common.",
         "logoUrl": "data:image/png;base64,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",
-        "addresse": null,
-        "phoneNumber": null,
-        "email": null,
+        "addresse": "Address of Mocked Restaurant",
+        "phoneNumber": "0123456789",
+        "email": "mocked@gmail.com",
         "averageWaitingTime": 2.0,
         "categorySet": [
             {
@@ -44,21 +44,49 @@
                     "name": "Japanese Whiskey",
                     "description": "Japanese Whiskey",
                     "presentationOrder": 0.0,
-                    "imageUrl": "test"
+                    "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
                 },
                 {
                     "id": 2,
                     "name": "Biere ",
                     "description": "biere ",
                     "presentationOrder": 0.0,
-                    "imageUrl": "biere"
+                    "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
                 },
                 {
                     "id": 1,
                     "name": "Vins",
                     "description": "Les meilleurs vins de France",
                     "presentationOrder": 0.0,
-                    "imageUrl": "test"
+                    "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+                },
+                {
+                    "id": 1,
+                    "name": "Vins",
+                    "description": "Les meilleurs vins de France",
+                    "presentationOrder": 0.0,
+                    "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+                },
+                {
+                    "id": 1,
+                    "name": "Vins",
+                    "description": "Les meilleurs vins de France",
+                    "presentationOrder": 0.0,
+                    "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+                },
+                {
+                    "id": 1,
+                    "name": "Vins",
+                    "description": "Les meilleurs vins de France",
+                    "presentationOrder": 0.0,
+                    "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
+                },
+                {
+                    "id": 1,
+                    "name": "Vins",
+                    "description": "Les meilleurs vins de France",
+                    "presentationOrder": 0.0,
+                    "imageUrl": "https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg"
                 }]
             },
             {

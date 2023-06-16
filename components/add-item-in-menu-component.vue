@@ -1,15 +1,28 @@
 <script lang="ts" setup>
-import restaurants from '../mockData/restaurants.json';
+import { ElSelect } from 'element-plus';
+import { ref } from 'vue';
+import { useRestaurantStore } from '../store/restaurant';
+import { Carte } from '../interfaces/Carte';
+import { SubCategory } from '~/interfaces/SubCategory';
+const restaurantStore = useRestaurantStore();
+const restaurant = restaurantStore.restaurantGetter;
 
-const restaurant = ref(restaurants.filter((x) => x.id === 1)[0]);
+const emit = defineEmits(['close']);
 
-const categories = ref(restaurant.value.categorySet);
+const props = defineProps({
+	menu: {
+		type: Object as () => Carte,
+		required: true,
+	},
+});
+const menuRef = ref(props.menu);
+
+const categories = ref(restaurant.categorySet);
 
 // the category name that will be displayed on the bar
 const categoryName = ref('');
 
 // this represents the category object itself that is selected by the user
-// TODO: add interfaces to prevent the case when there are no filteredSubcategories.
 const selectedCategory = ref(categories.value[0]);
 
 // the category name that will be displayed on the bar
@@ -17,26 +30,23 @@ const subcategoryName = ref('');
 
 // this represents the array of subcategories
 // It is dynamically changed in order to display only the subcategories that are from the selected category
-const filteredSubcategories = ref(restaurant.value.subCategorySet);
+const filteredSubcategories = ref(restaurant.subCategorySet);
 
 // this represents the subcategory object itself that is selected by the user
-// TODO: add interfaces to prevent the case when there are no filteredSubcategories.
-const selectedSubcategory = ref(filteredSubcategories.value[0]);
+const selectedSubcategory = ref<SubCategory | null>(filteredSubcategories.value[0]);
 
-const restaurantItems = ref(restaurant.value.itemSet);
+const restaurantItems = ref(restaurant.itemSet);
 
 // the items that have the category and subcategory selected
-const filteredItems = ref(restaurant.value.itemSet);
+const filteredItems = ref(restaurant.itemSet);
 
 // the name of the item which is displayed on the bar
 const itemName = ref('');
 
 // the object itself of the selected item (what the popup will return)
-// TODO: add interfaces to prevent the case when there are no filteredSubcategories.
 const selectedItem = ref(restaurantItems.value[0]);
 
 const enableSubcategory = ref(false);
-const enableItems = ref(false);
 
 /*
   This method applies when the user choose the category. It enables the subcategories and make the filtering. 
@@ -45,9 +55,11 @@ const enableItems = ref(false);
 const changeCategory = () => {
 	enableSubcategory.value = true;
 	subcategoryName.value = '';
-	enableItems.value = false;
 	itemName.value = '';
 	selectedCategory.value = categories.value.filter((x) => x.name === categoryName.value)[0];
+	filteredItems.value = restaurantItems.value.filter(
+		(x) => x.category.id === selectedCategory.value.id,
+	);
 	filteredSubcategories.value = selectedCategory.value.subCategorySet;
 };
 
@@ -55,7 +67,6 @@ const changeCategory = () => {
   This method applies when the user choose the subcategory. It enables the items and make the filtering.
 */
 const changeSubCategory = () => {
-	enableItems.value = true;
 	itemName.value = '';
 	selectedSubcategory.value = filteredSubcategories.value.filter(
 		(x) => x.name === subcategoryName.value,
@@ -63,7 +74,7 @@ const changeSubCategory = () => {
 	filteredItems.value = restaurantItems.value.filter(
 		(x) =>
 			x.category.id === selectedCategory.value.id &&
-			x.subCategory?.id === selectedSubcategory.value.id,
+			x.subCategory?.id === selectedSubcategory.value?.id,
 	);
 };
 
@@ -72,103 +83,120 @@ const changeSubCategory = () => {
 */
 const changeItem = () => {
 	selectedItem.value = filteredItems.value.filter((x) => x.name === itemName.value)[0];
+	selectedCategory.value = selectedItem.value.category;
+	categoryName.value = selectedCategory.value.name;
+	selectedSubcategory.value = selectedItem.value.subCategory;
+	subcategoryName.value = selectedSubcategory.value === null ? '' : selectedSubcategory.value.name;
+};
+
+const addItemInMenu = async () => {
+	const data = {
+		carteId: menuRef.value.id,
+		itemId: selectedItem.value.id,
+	};
+	await useFetch('/api/menus/addItemInMenu', {
+		method: 'POST',
+		body: data,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+	menuRef.value.itemSet.push(selectedItem.value);
+	emit('close');
 };
 </script>
 
 <template>
-	<div id="popup">
-		<div id="all">
-			<div class="div">
-				<h1 class="title">Category:</h1>
+	<div id="all">
+		<div class="div">
+			<h2 id="categoryIdPrefix" class="title">Category:</h2>
 
-				<el-select
-					v-model="categoryName"
-					class="specialSelect"
-					placeholder="Select category"
-					size="large"
-					@change="changeCategory"
-				>
-					<el-option
-						v-for="category in categories"
-						:key="category.id"
-						:label="category.name"
-						:value="category.name"
-					/>
-				</el-select>
-			</div>
+			<el-select
+				id="categoryId"
+				v-model="categoryName"
+				filterable
+				clearable
+				class="specialSelect"
+				placeholder="Select category"
+				size="large"
+				@change="changeCategory"
+			>
+				<el-option
+					v-for="category in categories"
+					:key="category.id"
+					:label="category.name"
+					:value="category.name"
+				/>
+			</el-select>
+		</div>
 
-			<div class="div">
-				<h1 class="title">SubCategory:</h1>
+		<div class="div">
+			<h2 id="subcategoryIdPrefix" class="title">Subcategory:</h2>
 
-				<el-select
-					v-model="subcategoryName"
-					class="specialSelect"
-					:disabled="!enableSubcategory"
-					placeholder="Select subcategory"
-					size="large"
-					@change="changeSubCategory"
-				>
-					<el-option
-						v-for="subcategory in filteredSubcategories"
-						:key="subcategory.id"
-						:label="subcategory.name"
-						:value="subcategory.name"
-					/>
-				</el-select>
-			</div>
+			<el-select
+				id="subcategoryId"
+				v-model="subcategoryName"
+				filterable
+				clearable
+				class="specialSelect"
+				:disabled="!enableSubcategory"
+				placeholder="Select subcategory"
+				size="large"
+				@change="changeSubCategory"
+			>
+				<el-option
+					v-for="subcategory in filteredSubcategories"
+					:key="subcategory.id"
+					:label="subcategory.name"
+					:value="subcategory.name"
+				/>
+			</el-select>
+		</div>
 
-			<div class="div">
-				<h1 class="title">Item:</h1>
+		<div class="div">
+			<h2 id="itemIdPrefix" class="title">Item:</h2>
 
-				<el-select
-					v-model="itemName"
-					class="specialSelect"
-					placeholder="Select item"
-					size="large"
-					:disabled="!enableItems"
-					@change="changeItem"
-				>
-					<el-option
-						v-for="item in filteredItems"
-						:key="item.id"
-						:label="item.name"
-						:value="item.name"
-					/>
-				</el-select>
-			</div>
-			<div id="buttonContainer">
-				<el-button color="#ED5087" plain round> Add</el-button>
-			</div>
+			<el-select
+				id="itemIdPrefix"
+				v-model="itemName"
+				filterable
+				clearable
+				class="specialSelect"
+				placeholder="Select item"
+				size="large"
+				@change="changeItem"
+			>
+				<el-option
+					v-for="item in filteredItems"
+					:key="item.id"
+					:label="item.name"
+					:value="item.name"
+				/>
+			</el-select>
+		</div>
+		<div id="buttonContainer">
+			<el-button color="#ED5087" plain round @click="addItemInMenu()"> Add</el-button>
 		</div>
 	</div>
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Cairo');
-
-#popup {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+#all {
 	width: 100%;
 	height: 100%;
-	font-family: 'Cairo';
-}
-#all {
-	width: 35%;
-	height: 60%;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	justify-content: space-around;
-	border: 10px solid #ed5087;
-	border-radius: 100px;
-	padding: 20px;
+	justify-content: center;
+	font-family: 'Open Sans';
+	position: relative;
+	bottom: 2vh;
 }
 #buttonContainer {
 	display: flex;
 	justify-content: center;
-	padding: 5%;
+	padding-top: 2.5vh;
 	align-items: center;
 }
 
@@ -194,9 +222,10 @@ const changeItem = () => {
 	height: 100%;
 }
 .div {
-	width: 60%;
+	width: 100%;
 }
 .title {
+	font-size: 1.1vw;
 	color: #ed5087;
 }
 .specialSelect >>> .el-input {

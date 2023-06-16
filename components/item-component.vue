@@ -1,95 +1,116 @@
 <script lang="ts" setup>
-// Hardcoded information, will be extracted from the restaurant global object later on
-const itemName = 'Fries';
-const imageSource =
-	'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9orIJR7zMICOYAZ3bZ_Y9IGKJmDrD4Zk9Dw&usqp=CAU';
-const category = 'Side Dish';
-const subcategory = 'None';
-const description = 'Crunchy and delicious, our fries are the perfect addition to any meal.';
-const price = 2;
-const currency = '$';
+import { Item } from '~/interfaces/Item';
+
+const props = defineProps({
+	item: {
+		type: Object as () => Item,
+		required: true,
+	},
+});
+
+const editItem = () => {
+	window.open(`/editItemView/${props.item.id}`, '_blank');
+};
 </script>
 
 <!-- Item card component containing basic information, including image, description and edit/delete buttons-->
 <template>
-	<el-card id="card" shadow="always" :body-style="{ padding: '0px' }">
+	<el-card id="card" shadow="always" :body-style="{ padding: '0px' }" @click="editItem">
 		<!-- The background image of the card -->
-		<img id="image" :src="imageSource" />
+		<div style="width: 100%; height: 100%">
+			<img
+				id="image"
+				:src="
+					props.item.imageUrl ||
+					'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png'
+				"
+			/>
 
-		<!-- The text part of the card -->
-		<div style="height: 10vh">
-			<!-- The name of the restaurant -->
-			<div id="title">{{ itemName }}</div>
-
-			<!-- The information of the item, which gives a general overview -->
+			<div id="title">{{ props.item.name }}</div>
 			<div class="info">
-				<div><b>Category:</b> {{ category }}</div>
-				<div><b>Subcategory:</b> {{ subcategory }}</div>
+				<div id="category">
+					<b>Category:</b> {{ props.item.category == null ? 'None' : props.item.category.name }}
+				</div>
+				<div id="subcategory">
+					<b>Subcategory:</b>
+					{{ props.item.subCategory == null ? 'None' : props.item.subCategory.name }}
+				</div>
 			</div>
-			<div id="description" class="info"><b>Description:</b> {{ description }}</div>
-			<div class="info"><b>Price:</b> {{ price }} {{ currency }}</div>
+
+			<div class="description">
+				<el-scrollbar>
+					<b>Description:</b> {{ props.item.description == '' ? 'None' : props.item.description }}
+				</el-scrollbar>
+			</div>
+
+			<div class="price"><b>Price:</b> {{ props.item.price }}</div>
 		</div>
 	</el-card>
 </template>
 
 <style scoped>
-/* Imported font used in Figma, may be changed when we receive the brand identity docs from Ewai */
-@import url('https://fonts.googleapis.com/css?family=Cairo');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+#card >>> .el-card__body {
+	height: 100%;
+}
 
 #card {
 	border-radius: 3vw;
+	font-family: 'Open Sans';
 	width: 15vw;
-	height: 20vw;
-	font-family: 'Cairo';
+	height: 40vh;
+	cursor: pointer;
+}
+
+#card:hover {
+	box-shadow: 1px 3px 3px 3px #ed508786;
 }
 
 #image {
 	display: block;
 	width: 100%;
-	height: 6vw;
+	height: 30%;
+	object-fit: cover;
 }
 
 #title {
-	font-size: 1.7vw;
+	font-size: 1.5vw;
+	padding-left: 5%;
+	padding-right: 5%;
 	font-weight: bolder;
 	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	height: 15%;
 }
 
-#description {
-	padding: 5% 10% 3% 10%;
-}
-
-#buttons {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding-top: 0.5vh;
-	font-family: 'Cairo';
+#category,
+#subcategory {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .info {
 	line-height: 1.5;
 	text-align: center;
+	height: 15%;
 	font-size: 0.8vw;
 }
 
-@media only screen and (max-width: 500px) {
-	#card {
-		border-radius: 9vw;
-		width: 65vw;
-		height: 78vw;
-	}
+.description {
+	text-align: center;
+	padding-left: 10%;
+	padding-right: 10%;
+	height: 30%;
+	font-size: 0.8vw;
+}
 
-	#image {
-		height: 25vw;
-	}
-
-	.info {
-		font-size: 4vw;
-	}
-
-	#title {
-		font-size: 1.5rem;
-	}
+.price {
+	text-align: center;
+	font-size: 0.8vw;
+	height: 10%;
 }
 </style>

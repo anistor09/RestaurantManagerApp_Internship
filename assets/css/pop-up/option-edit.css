@@ -1,0 +1,94 @@
+.option-edit-popup{
+    height: 50vh !important;
+    width: 30vw !important;
+    border-radius: 40px !important;
+    border: 0.15vw solid #ed5087 !important;
+}
+
+.choiceFieldText {
+  color: #ED5087;
+  font-size: 1.3vw;
+}
+
+.option-edit-popup .el-dialog__headerbtn{
+  height: 40% !important;
+  width: 4% !important;
+  display:flex;
+  position:relative;
+  top: 0%;
+}
+
+.option-edit-popup .el-dialog__header{
+  height: 10% !important;
+  width: 90% !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  margin-left: 5%;
+}
+
+.option-edit-popup .el-dialog__headerbtn .el-dialog__close:hover{
+  color: #ED5087;
+}
+
+.option-edit-popup .el-dialog__body {
+  padding: 0 !important;
+  height: 90% !important;
+  width: 100% !important;
+}
+
+.option-edit-popup-button {
+	width:25% !important;
+	height:40% !important;
+	border-radius: 25px !important;
+    font-size: 0.9vw !important;
+    border-color: #ED5087 !important;
+    color: #ED5087 !important;
+	background-color: rgb(253, 238, 243) !important;
+}
+
+.option-edit-popup-button:hover{
+	background-color: #ED5087 !important;
+    color: white !important;
+}
+
+.option-edit-popup-button:focus{
+	background-color: rgb(253, 238, 243);
+    color: #ED5087;
+}
+
+.specialOptionInput {
+  color: black;
+  padding-left: 3%;
+  padding-right: 3%;
+  background-color: #D9D9D9;
+  border-radius: 25px;
+  font-size: 0.9vw;
+  font-weight: normal !important;
+  border: none;
+  width: 70%;
+  height: 4vh;
+}
+.specialOptionTextArea {
+  color: black;
+  font-weight: lighter !important;
+  padding: 3%;
+  font-size: 0.9vw;
+  background-color: #D9D9D9;
+  border-radius: 25px;
+  border: none;
+  resize: none;
+  width: 70%;
+  height: 15vh;
+}
+
+.option-checkbox .el-checkbox__input.is-checked+.el-checkbox__label{
+	color:#ED5087 !important
+}
+.option-checkbox .el-checkbox__input.is-checked .el-checkbox__inner{
+	background-color: #ED5087 !important;
+	color: #ED5087 !important;
+	border-color: #ED5087 !important;
+}
