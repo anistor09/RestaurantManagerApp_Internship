@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, defineAsyncComponent, computed, watch } from "vue"
+import { ref, defineAsyncComponent, computed, watch } from 'vue';
 
 const ApexCharts = defineAsyncComponent(() => import('vue3-apexcharts'));
 const props = defineProps({
@@ -60,6 +60,16 @@ const chartOptions = computed(() => ({
 	yaxis: {
 		labels: {
 			show: false,
+		},
+	},
+	noData: {
+		text: 'No data for selected period',
+		align: 'center',
+		verticalAlign: 'middle',
+		style: {
+			color: '#ED5087',
+			fontSize: '30px',
+			fontFamily: 'Open Sans',
 		},
 	},
 	title: {
