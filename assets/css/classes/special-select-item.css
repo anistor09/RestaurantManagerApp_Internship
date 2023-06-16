@@ -1,17 +1,20 @@
+.currency-select-item .select-trigger,
 .special-select-item .select-trigger {
     width: 100% !important;
     height: 100% !important;
 }
 
+.currency-select-item .el-input,
 .special-select-item .el-input {
     width: 100% !important;
     height: 100% !important;
 }
-
+.currency-select-item .el-select__input,
 .special-select-item .el-select__input {
     margin-left: 4.4% !important;
 }
 
+.currency-select-item .el-input__wrapper,
 .special-select-item .el-input__wrapper {
     border-radius: 25px !important;
     background-color: #D9D9D9 !important;
@@ -23,10 +26,23 @@
 .special-select-item .el-input__inner {
     color: black !important;
     font-size: 0.9vw !important;
+ 
 }
+.currency-select-item .el-input__inner {
+    color: black !important;
+    font-size: 0.9vw !important;  
+    text-align: center !important;
+    text-indent: 50% !important;      
+}
+
 
 .special-select-item {
     width: 76% !important;
+    height: 22.5% !important;
+
+}
+.currency-select-item{
+    width: 50% !important;
     height: 22.5% !important;
 
 }

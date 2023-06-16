@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
+import { useCurrencyStore } from '../store/currency';
 import { ItemWrapper } from '~/interfaces/ItemWrapper';
 import { Restaurant } from '~/interfaces/Restaurant';
 
+const currencyStore = useCurrencyStore();
+const computedCurrency = computed(() => currencyStore.currencyGetter.currency);
 const props = defineProps({
 	restaurant: {
 		type: Object as () => Restaurant,
@@ -77,6 +80,9 @@ watch(
 		localItems.value = newItems;
 	},
 );
+function formatPrice(price: any) {
+	return `${price} ${computedCurrency.value}`;
+}
 </script>
 
 <!-- Card component containing the subcategory, along with a list of items -->
@@ -97,9 +103,19 @@ watch(
 							/>
 						</template>
 					</el-table-column>
-					<el-table-column align="center" label="Name" prop="item.name" data-testid="item-name-column"/>
+					<el-table-column
+						align="center"
+						label="Name"
+						prop="item.name"
+						data-testid="item-name-column"
+					/>
 					<el-table-column align="center" label="Description" prop="item.description" />
-					<el-table-column align="center" label="Price" prop="item.price" />
+					<!-- <el-table-column align="center" label="Price" prop="item.price" /> -->
+					<el-table-column align="center" label="Price">
+						<template #default="{ row }">
+							<span>{{ formatPrice(row.item.price) }}</span>
+						</template>
+					</el-table-column>
 					<el-table-column align="center">
 						<template #header>
 							<el-input v-model="search" size="default" placeholder="Search by item" />

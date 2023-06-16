@@ -1,5 +1,9 @@
 <script lang="ts" setup>
+import { useCurrencyStore } from '../store/currency';
 import { Item } from '~/interfaces/Item';
+const currencyStore = useCurrencyStore();
+
+const computedCurrency = computed(() => currencyStore.currencyGetter.currency);
 
 const props = defineProps({
 	item: {
@@ -43,7 +47,7 @@ const editItem = () => {
 				</el-scrollbar>
 			</div>
 
-			<div class="price"><b>Price:</b> {{ props.item.price }}</div>
+			<div class="price"><b>Price:</b> {{ props.item.price }}{{ computedCurrency }}</div>
 		</div>
 	</el-card>
 </template>
