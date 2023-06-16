@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils';
 import restaurants from '../mockData/restaurants.json';
 import SettingsPage from '../pages/settings.vue';
 import PageTitle from '../components/page-title.vue';
+import currencies from '../mockData/currecyMock.json'
 
 vi.mock('../store/restaurant.ts', () => {
 	return {
@@ -17,6 +18,15 @@ vi.mock('../store/restaurant.ts', () => {
 
 const wrapper = mount(SettingsPage);
 
+vi.mock('../store/currency.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                currencyGetter: currencies[0],
+            };
+        }),
+    };
+});
 it('renders settings page', () => {
 	expect(wrapper.exists()).toBe(true);
 });

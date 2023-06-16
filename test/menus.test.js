@@ -4,6 +4,7 @@ import { mount } from '@vue/test-utils';
 
 
 import Menus from '../pages/menus.vue';
+import currencies from '../mockData/currecyMock.json'
 
 import AddMenuComponent from '../components/add-menu-component.vue';
 import PageTitle from '../components/page-title.vue';
@@ -19,6 +20,15 @@ vi.mock('../store/restaurant.ts', () => {
 			};
 		}),
 	};
+});
+vi.mock('../store/currency.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                currencyGetter: currencies[0],
+            };
+        }),
+    };
 });
 
 // Basic UI tests

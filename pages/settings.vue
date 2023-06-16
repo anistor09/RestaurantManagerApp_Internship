@@ -5,7 +5,10 @@ import { useRestaurantStore } from '../store/restaurant';
 import { Hours } from '../interfaces/Hours';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import PageTitle from '../components/page-title.vue';
+import currencies from '../mockData/currency.json';
+import { useCurrencyStore } from '../store/currency';
 
+const currencyStore = useCurrencyStore();
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
@@ -19,6 +22,7 @@ const email = ref(restaurant.email);
 const category = ref(restaurant.category);
 const doubleCheck = ref(false);
 const nameNeededPopUp = ref(false);
+const selectedCurrency = ref(currencyStore.currencyGetter.currency);
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -42,7 +46,7 @@ const startTimes = ref(times[0]);
 const endTimes = ref(times[1]);
 
 const saveChanges = async () => {
-	// console.log(restaurant.hoursSet);
+	changeCurrencyGlobally();
 	restaurant.hoursSet = [];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
@@ -97,6 +101,9 @@ async function addAiRestaurantDescription() {
 const defaultSrc =
 	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
 const src = ref(restaurant.imageUrl || defaultSrc);
+function changeCurrencyGlobally() {
+	currencyStore.currencyGetter.currency = selectedCurrency.value;
+}
 </script>
 
 <template>
@@ -269,6 +276,26 @@ const src = ref(restaurant.imageUrl || defaultSrc);
 						end="23:59"
 					/>
 				</div>
+				<div class="details" style="padding-top: 2%;">
+						<div id="mailIdPrefix" class="prefix">Currency:</div>
+						<div style="width: 20%">
+							<el-select
+								v-model="selectedCurrency"
+								class="currency-select-item"
+								collapse-tags
+								filterable
+								default-first-option
+								:reserve-keyword="false"
+							>
+								<el-option
+									v-for="currency in currencies"
+									:key="currency.id"
+									:label="currency.symbol"
+									:value="currency.symbol"
+								/>
+							</el-select>
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>
