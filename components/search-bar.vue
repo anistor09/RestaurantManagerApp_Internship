@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { ElOption, ElSelect } from 'element-plus';
 import { ref } from 'vue';
 const value = ref('');
 defineProps({
-	options:{
+	options: {
 		type: Array as () => String[],
-		required: true
-	}
+		required: true,
+	},
 });
 </script>
 
@@ -37,5 +36,4 @@ defineProps({
 	height: auto;
 	border-radius: 30px;
 }
-
 </style>

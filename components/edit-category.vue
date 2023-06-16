@@ -285,11 +285,11 @@ const hasSubcategoriesComputed = computed(() => {
 });
 // Adds AI-generated category description.
 async function addAiCategoryDescription() {
-	await addAiDescription('250', true);
+	await addAiDescription('150', true);
 }
 // Adds AI-generated subcategory description.
 async function addAiSubcategoryDescription() {
-	await addAiDescription('150', false);
+	await addAiDescription('80', false);
 }
 // Adds AI-generated description for category or subcategory.
 async function addAiDescription(neededLength: string, forCategory: boolean) {

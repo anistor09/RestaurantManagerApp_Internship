@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import {ElTimeSelect} from 'element-plus';
 import { useRestaurantStore } from '../store/restaurant';
 import { Hours } from '../interfaces/Hours';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
@@ -83,7 +84,7 @@ async function addAiRestaurantDescription() {
 
 		const requestBody = {
 			itemName: name.value,
-			length: 300,
+			length: 200,
 			target: 'restaurant',
 		};
 		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
@@ -159,9 +160,9 @@ function changeCurrencyGlobally() {
 				</div>
 				<div id="backgroundPrefix" class="prefix">Background Image:</div>
 				<div style="width: 92%; height: 100%; display: flex; padding-left: 1%">
-					<el-image
+					<img
 						:src="src"
-						style="width: 100%; height: 15vh; object-fit: cover; border-radius: 40px"
+						style="width: 100%; height: 15vh; object-fit: contain; border: solid #ed5087; border-radius: 40px"
 					/>
 					<div class="photoButtonSpace">
 						<el-button data-testid="changeBackButton" class="specialPhotoButton">Change</el-button>
@@ -253,6 +254,7 @@ function changeCurrencyGlobally() {
 					<el-time-select
 						v-model="startTimes[index]"
 						style="width: 30%"
+						class="time-selector"
 						placeholder="Start time"
 						start="00:00"
 						step="00:30"
@@ -261,6 +263,7 @@ function changeCurrencyGlobally() {
 					<el-time-select
 						v-model="endTimes[index]"
 						style="width: 30%"
+						class="time-selector"
 						placeholder="End time"
 						start="00:00"
 						step="00:30"
@@ -470,5 +473,15 @@ textarea::-webkit-scrollbar {
 	color: white;
 }
 
+.time-selector :deep(.el-input__wrapper) {
+	font-family: 'Open Sans';
+	font-size: 1vw;
+	font-weight: bolder;
+	height: auto;
+	border-radius: 30px;
+}
 
+.el-select {
+	--el-select-input-focus-border-color: #ed5087 !important;
+}
 </style>

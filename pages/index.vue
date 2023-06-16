@@ -50,7 +50,7 @@ const graphValues = [
 ];
 
 // Props for graph chart (average order price)
-const graphTitle2 = 'Average Order Price per Person';
+const graphTitle2 = 'Average Basket Price';
 const graphShortTitle2 = 'price';
 // Mock data, will be deleted once server is ready
 const graphValues2 = [
