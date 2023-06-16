@@ -18,7 +18,7 @@ To also have access to the analytics, the backend needs to be started with Gradl
 ## Features
 Now, we will provide a comprehensive overview of the various functionalities and capabilities offered by our application. We divided each of the key features in a separate section.
 
-### **Authentication and Login Page**
+### **1. Authentication and Login Page**
 The Login Page component enables users to authenticate themselves and gain access to the application's features. It offers a user-friendly interface with a logo, slogan, welcome message, and a login button. The page utilizes various design elements and styling to create an appealing visual experience. 
 
 It's default URL is `http://localhost:3000/login`.
@@ -53,8 +53,8 @@ The Login Page has a well-structured layout to ensure a seamless user experience
 
 *Note: This documentation provides an overview of the Login Page component and its functionality. To fully understand the implementation and integration within the larger application, reviewing the code implementation is recommended.*
 
-### **Sidebar menu**
-The Sidebar Menu component provides a sidebar navigation menu for the application. It allows users to easily navigate between different sections of the application. The component is implemented using Vue.js and utilizes various UI components from the Element Plus library.
+### **2. Sidebar menu**
+The Sidebar Menu component provides a sidebar navigation menu for the application. It allows users to easily navigate between different sections of the application. The component is implemented using Vue.js and utilizes various UI components from the Element Plus library. This component is available by default on all pages, apart from the login page.
 
 #### **Dependencies**
 
@@ -87,7 +87,7 @@ The Sidebar Menu component has the following structure:
 
 *Note: This documentation provides an overview of the Sidebar Menu component and its functionality. To understand the complete implementation and integration within the broader application, it is recommended to review the code implementation.*
 
-### **Home Page**
+### **3. Home Page**
 The Home page is the main landing page of the application, providing an overview of restaurant information and some analytics. It includes various components and functionalities to display data and provide a rich user experience.
 
 #### **Dependencies**
@@ -123,7 +123,7 @@ More details related to how the analytics work and their dependencies can be fou
 
 *Note: This documentation provides an overview of the Home page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
 
-### **Menus Page**
+### **4. Menus Page**
 The Menus page allows restaurant managers to manage and customize the menus of their restaurant. It provides a user interface for:
 - selecting and visualizing menus, along with their categories, subcategories and items
 - adding, editing, and deleting menus
@@ -168,7 +168,7 @@ The Menus page has a clearly delimited structure, in order to have a clear separ
 
 *Note: This documentation provides an overview of the Menus page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
 
-### **Products Page**
+### **5. Products Page**
 The Products page allows restaurant managers to manage and customize the items and categories of their restaurant. It provides a user interface for:
 - selecting and visualizing items, along with their name, image, description, category, Subcategory and price
 - selecting and visualizing categories, along with their name, image, description
@@ -211,8 +211,10 @@ The Products page has a clearly delimited structure, in order to have a clear se
 
 *Note: This documentation provides an overview of the Menus page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
 
+### **6. Edit Item Page**
+*todo*
 
-### **Edit Category Page**
+### **7. Edit Category Page**
 The Edit Category Page page allows restaurant managers to manage and customize the Categories and Subcategories of their restaurant. It provides a user interface for:
 - adding, editing, and deleting categories
 - adding, editing, and deleting Subcategories
@@ -263,25 +265,65 @@ The Edit Category page has a clearly delimited structure, in order to have a cle
 
 *Note: This documentation provides an overview of the Edit Category page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
 
-### **Tables Page**
+### **8. Tables Page**
 *todo*
 
-### **Settings Page**
+### **9. Settings Page**
 *todo*
 
-### **Analyics**
-*todo - not implemented*
+### **10. Analytics**
 
-### **AI Autocompletion**
+The Analytics are a very powerful tool to analyse the performance of a restaurant. Frontend-wise, the analytics visualization is possible using two components: `analytics-bar-component` and `analytics-graph-component`. These components utilize ApexCharts library to display data processed and collected on the Analytics Backend in the form of bar charts and area graphs respectively. ApexCharts is a powerful and extensible charting library that supports various chart types and customization options. 
+
+#### **Dependencies**
+
+Before using the Analytics components, make sure you have the following dependency installed:
+
+- 'vue3-apexcharts': A wrapper for ApexCharts library that integrates it with Vue 3.
+
+#### **`Analytics Bar Component`**
+
+The `analytics-bar-component` is a Vue component that displays analytics data using a bar chart.
+
+Props:
+
+- `title` (String, required): The title of the analytics card.
+- `itemNames` (Array of Array of Strings, required): An array containing the names of the items displayed on the chart. Each inner array represents a different set of items that were most popular in a specific timeframe. There are 4 timeframes: last week, last month, six months, last year.
+- `itemValues` (Array of Array of Numbers, required): An array containing the values of the items displayed on the chart. Each inner array corresponds to the values of the corresponding items.
+
+The timeframes can be accessed through the four buttons available at the end of the chart in the Home Page.
+
+
+#### **`Analytics Graph Component`**
+
+The `analytics-graph-component` is a Vue component that displays analytics data using an area graph.
+
+Props:
+
+- `title` (String, required): The title of the analytics card.
+- `shortTitle` (String, required): A shorter version of the title used as a label in the graph.
+- `graphValues` (Array of Array of Numbers, required): An array containing the values for the graph. Each inner array represents a data point with the first element being the timestamp and the second element being the value.
+
+The timeframes can be accessed through the five buttons available at the end of the chart in the Home Page.
+
+#### **Extensibility**
+
+Both `analytics-bar-component` and `analytics-graph-component` leverage the ApexCharts library, which provides a wide range of options for customizing the charts. You can refer to the [ApexCharts documentation](https://apexcharts.com/docs/) to explore the available configuration options and extend the components further to suit your specific needs.
+
+On the Analytics Backend, each of the current analytics has a corresponding processing algorithm, which are structured into a Strategy Design Pattern again for extensibility purposes.
+
+*Note: The usage examples above assume that you have registered and imported the `AnalyticsBarComponent` and `AnalyticsGraphComponent` components correctly.*
+
+### **11. AI Autocompletion**
 On every page where we can find a `Description` field, we can also input the decription by pressing on the `Write with AI` button which will make a request to ChatGPT in order to retrieve a AI generated description of a preset length, using the name of the item/category/subcategory/menu/restaurant.
 
 - **Pop-ups**:
 - `NameNeededPopUp`: This pop-up prevents sending an AI genearated request without having a name for the desired Item/Subcategory/ Category/Menu/Restaurant.
 
 
-### **Languages**
+### **12. Languages**
 *todo - not implemented*
 
-### **Currency**
+### **13. Currency**
 *todo - not implemented*
 
