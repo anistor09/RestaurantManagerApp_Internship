@@ -11,8 +11,8 @@ defineProps({
 
 <template>
 	<el-select
-		data-testid="select"
 		v-model="value"
+		data-testid="select"
 		class="specialSelect"
 		filterable
 		placeholder="Select"

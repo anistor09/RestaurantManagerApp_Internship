@@ -1,74 +1,106 @@
 <script lang="ts" setup>
+import { ref, onBeforeMount } from 'vue';
 import PageTitle from '../components/page-title.vue';
 import AnalyticsBarComponent from '../components/analytics-bar-component.vue';
 import AnalyticsGraphComponent from '../components/analytics-graph-component.vue';
 import RestaurantComponent from '../components/restaurant-component.vue';
+import { MostSoldItems } from '~/interfaces/MostSoldItems';
+import { TimePrice } from '~/interfaces/TimePrice';
 
-// Props for bar chart (most sold item), hardcoded until server is ready
 const barTitle = 'Most Sold Items';
-// Mock data, will be deleted once server is ready
-const itemValues = [
-	[1, 2, 3, 4, 5, 6, 7],
-	[8, 9, 10, 11, 12, 13, 14],
-	[15, 16, 17, 18, 19, 20, 21],
-	[22, 23, 24, 25, 26, 27, 28],
-];
-const itemNames = [
-	['Burger', 'Cheeseburger', 'Chicken Sandwich', 'Fish and Chips', 'Salad', 'Pasta', 'Pizza'],
-	['Coca Cola', 'Sprite', 'Fanta', 'Iced Tea', 'Lemonade', 'Mojito', 'Water'],
-	['Wine', 'Beer', 'Cocktail', 'Mocktail', 'Whiskey', 'Rum', 'Vodka'],
-	[
-		'French Fries',
-		'Onion Rings',
-		'Mozzarella Sticks',
-		'Chicken Wings',
-		'Nachos',
-		'Garlic Bread',
-		'Bruschetta',
-	],
-];
+
+const itemNames = ref<string[][]>([]);
+const itemValues = ref<number[][]>([]);
+const isLoading = ref(true); // Loading state
+const isLoading1 = ref(true); // Loading state
+const isLoading2 = ref(true); // Loading state
+
+onBeforeMount(async () => {
+	await loadMostSoldItems();
+	await loadTotalRevenue();
+	await loadAveragePerPerson();
+});
 
 // Props for graph chart (total revenue)
 const graphTitle = 'Total Generated Revenue';
 const graphShortTitle = 'revenue';
-// Mock data, will be deleted once server is ready
-const graphValues = [
-	[1660191600000, 41.28],
-	[1660278000000, 37.89],
-	[1660537200000, 43.12],
-	[1660623600000, 38.45],
-	[1660710000000, 39.72],
-	[1660796400000, 42.61],
-	[1660882800000, 40.83],
-	[1661228400000, 37.99],
-	[1661314800000, 41.77],
-	[1661401200000, 43.34],
-	[1661487600000, 39.55],
-	[1661746800000, 42.11],
-	[1661833200000, 38.59],
-	[1661919600000, 40.6],
-];
+
+const graphValues = ref<number[][]>([]);
 
 // Props for graph chart (average order price)
 const graphTitle2 = 'Average Basket Price';
 const graphShortTitle2 = 'price';
-// Mock data, will be deleted once server is ready
-const graphValues2 = [
-	[1660191600000, 34.12],
-	[1660278000000, 36.78],
-	[1660537200000, 35.65],
-	[1660623600000, 33.92],
-	[1660710000000, 32.76],
-	[1660796400000, 37.21],
-	[1660882800000, 36.43],
-	[1661228400000, 35.67],
-	[1661314800000, 37.89],
-	[1661401200000, 34.98],
-	[1661487600000, 32.54],
-	[1661746800000, 36.78],
-	[1661833200000, 33.91],
-	[1661919600000, 35.42],
-];
+
+const graphValues2 = ref<number[][]>([]);
+
+async function loadAveragePerPerson() {
+	try {
+		const response = await fetch('/api/analytics/averagePerPerson');
+		if (response.ok) {
+			const responseData = (await response.json()) as TimePrice[];
+			graphValues2.value = responseData.map((x) =>
+				Array.of(x.time * 1000, parseFloat(x.price.toFixed(2))),
+			);
+		} else {
+			throw new Error('Failed to fetch data');
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		isLoading2.value = false; // Set loading state to false after data is fetched
+	}
+}
+
+async function loadTotalRevenue() {
+	try {
+		const response = await fetch('/api/analytics/totalRevenue');
+		if (response.ok) {
+			const responseData = (await response.json()) as TimePrice[];
+			graphValues.value = responseData.map((x) =>
+				Array.of(x.time * 1000, parseFloat(x.price.toFixed(2))),
+			);
+		} else {
+			throw new Error('Failed to fetch data');
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		isLoading1.value = false; // Set loading state to false after data is fetched
+	}
+}
+
+async function loadMostSoldItems() {
+	try {
+		const response = await fetch('/api/analytics/mostSoldItems');
+		if (response.ok) {
+			const responseData = (await response.json()) as MostSoldItems;
+			itemNames.value = Array.of(
+				responseData.lastWeek.map((x) => x.name),
+				responseData.lastMonth.map((x) => x.name),
+				responseData.last6Months.map((x) => x.name),
+				responseData.lastYear.map((x) => x.name),
+			);
+			itemValues.value = Array.of(
+				responseData.lastWeek.map((x) => x.count),
+				responseData.lastMonth.map((x) => x.count),
+				responseData.last6Months.map((x) => x.count),
+				responseData.lastYear.map((x) => x.count),
+			);
+		} else {
+			throw new Error('Failed to fetch data');
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		isLoading.value = false; // Set loading state to false after data is fetched
+	}
+}
+
+const svg = `
+		<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<circle cx="50" cy="50" r="45"/>
+		</svg>
+      `;
 </script>
 
 <template>
@@ -84,26 +116,53 @@ const graphValues2 = [
 		arrow="always"
 		style="padding-top: 3vw; margin-left: 4vw; margin-right: 4vw"
 	>
-		<el-carousel-item>
-			<AnalyticsGraphComponent
-				:title="graphTitle"
-				:short-title="graphShortTitle"
-				:graph-values="graphValues"
-			/>
+		<el-carousel-item v-loading="isLoading1" :element-loading-spinner="svg">
+			<template v-if="!isLoading1">
+				<AnalyticsGraphComponent
+					:title="graphTitle"
+					:short-title="graphShortTitle"
+					:graph-values="graphValues"
+				/>
+			</template>
+			<template v-else>
+				<AnalyticsGraphComponent
+					:title="graphTitle"
+					:short-title="graphShortTitle"
+					:graph-values="graphValues"
+				/>
+			</template>
 		</el-carousel-item>
-		<el-carousel-item>
-			<AnalyticsBarComponent
-				:item-names="itemNames"
-				:item-values="itemValues"
-				:title="barTitle"
-			></AnalyticsBarComponent>
+		<el-carousel-item v-loading="isLoading" :element-loading-spinner="svg">
+			<template v-if="!isLoading">
+				<AnalyticsBarComponent
+					:item-names="itemNames"
+					:item-values="itemValues"
+					:title="barTitle"
+				></AnalyticsBarComponent>
+			</template>
+			<template v-else>
+				<AnalyticsBarComponent
+					:item-names="itemNames"
+					:item-values="itemValues"
+					:title="barTitle"
+				></AnalyticsBarComponent>
+			</template>
 		</el-carousel-item>
-		<el-carousel-item>
-			<AnalyticsGraphComponent
-				:title="graphTitle2"
-				:short-title="graphShortTitle2"
-				:graph-values="graphValues2"
-			/>
+		<el-carousel-item v-loading="isLoading2" :element-loading-spinner="svg">
+			<template v-if="!isLoading2">
+				<AnalyticsGraphComponent
+					:title="graphTitle2"
+					:short-title="graphShortTitle2"
+					:graph-values="graphValues2"
+				/>
+			</template>
+			<template v-else>
+				<AnalyticsGraphComponent
+					:title="graphTitle2"
+					:short-title="graphShortTitle2"
+					:graph-values="graphValues2"
+				/>
+			</template>
 		</el-carousel-item>
 	</el-carousel>
 </template>
