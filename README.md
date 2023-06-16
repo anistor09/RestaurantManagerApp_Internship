@@ -13,6 +13,8 @@ Make sure to install the dependencies using `npm install`.
 
 You can use `npm run` to see all possible scripts.
 
+To also have access to the analytics, the backend needs to be started with Gradle Boot Run.
+
 ## Features
 Now, we will provide a comprehensive overview of the various functionalities and capabilities offered by our application. We divided each of the key features in a separate section.
 
@@ -52,10 +54,74 @@ The Login Page has a well-structured layout to ensure a seamless user experience
 *Note: This documentation provides an overview of the Login Page component and its functionality. To fully understand the implementation and integration within the larger application, reviewing the code implementation is recommended.*
 
 ### **Sidebar menu**
-*todo*
+The Sidebar Menu component provides a sidebar navigation menu for the application. It allows users to easily navigate between different sections of the application. The component is implemented using Vue.js and utilizes various UI components from the Element Plus library.
+
+#### **Dependencies**
+
+The Sidebar Menu component relies on the following dependencies:
+
+- `vue`: The core Vue.js library.
+- `vue-router`: A Vue.js routing library used for handling navigation within the application.
+- `element-plus`: A Vue.js CSS library that provides UI components used in the Sidebar Menu.
+
+#### **Variables and Methods**
+
+The Sidebar Menu component defines several variables and methods to handle navigation and manage the active menu item. These include:
+
+- `useRoute`: A function from `vue-router` used to access the current route information.
+- `imageURL`: A string representing the URL of the EWAI logo image.
+- `restaurant`: A variable to store the restaurant data retrieved from the store.
+- `route`: A variable to store the current route information.
+- `path`: A computed property that returns the path of the current route.
+- `active`: A computed property that determines the active menu item based on the current route.
+
+#### **Page structure**
+
+The Sidebar Menu component has the following structure:
+
+- The main template is divided into an `el-aside` element for the sidebar and an `el-main` element for the main content area.
+- **Sidebar**: The sidebar contains an `el-menu` component that displays the navigation menu items. It includes a logo image and menu items for each section of the application (Home, Menus, Products, Tables, and Settings).
+- **Navigation**: Each menu item is an `el-menu-item` component with an associated index. The `active` property is used to determine the active menu item based on the current route.
+- **Logo**: The logo image is displayed within the sidebar using the `img` tag and the `logo` class.
+- **Styling**: The component has scoped CSS styles to customize the appearance of the sidebar menu. The styles include font settings, item layout, background colors, and logo styling.
+
+*Note: This documentation provides an overview of the Sidebar Menu component and its functionality. To understand the complete implementation and integration within the broader application, it is recommended to review the code implementation.*
 
 ### **Home Page**
-*todo*
+The Home page is the main landing page of the application, providing an overview of restaurant information and some analytics. It includes various components and functionalities to display data and provide a rich user experience.
+
+#### **Dependencies**
+The Home page component imports several custom components and interfaces from external files. These dependencies include:
+
+- `PageTitle`: A custom component for displaying the page title (used on every page for consistency).
+- `AnalyticsBarComponent`: A custom component for displaying a bar chart of the most sold items.
+- `AnalyticsGraphComponent`: A custom component for displaying a line graph of total generated revenue and average basket.
+- `RestaurantComponent`: A custom component for displaying restaurant information.
+- `MostSoldItems`: An interface representing the most sold items data structure.
+- `TimePrice`: An interface representing the time and price data structure.
+
+#### **Variables and Methods**
+The Home page component defines several reactive variables and data properties using the `ref` function provided by Vue.js. It also defines asynchronous methods for fetching and loading data from the server.
+
+- `barTitle`, `graphTitle`, `graphShortTitle`, `graphTitle2`, `graphShortTitle2`: Strings used for displaying titles in the analytics components.
+- `itemNames`, `itemValues`, `graphValues`, `graphValues2`: Reactive variables for storing and managing the analytics graph and bar data.
+- `isLoading`, `isLoading1`, `isLoading2`: Reactive variables for storing and managing loading states.
+- `loadAveragePerPerson()`, `loadTotalRevenue()`, `loadMostSoldItems()`: Asynchronous methods for fetching and loading the average per person, total revenue, and most sold items data from the server.
+- `svg`: A string containing an SVG element used as a loading spinner.
+
+#### **Page Structure**
+The Home page has a structured layout that includes various components and sections to display restaurant analytics and information.
+
+- The main template consists of a `PageTitle` component for displaying the page title and a `<div>` element for layout purposes.
+- **Restaurant Component**: The `RestaurantComponent` displays information about the restaurant, such as its name, logo, and other details.
+- **Analytics Components**: The Home page includes three carousel items, each containing an `AnalyticsBarComponent` or `AnalyticsGraphComponent` to display different types of analytics data. The carousel, as well as the analytic compnents, are build in a very extensible manner and can be enriched with other analytics in the future.
+  - `AnalyticsGraphComponent` displays a line graph of total generated revenue over time.
+  - `AnalyticsBarComponent` displays a bar chart of the most sold items.
+  - `AnalyticsGraphComponent` displays a line graph of the average basket price over time.
+
+More details related to how the analytics work and their dependencies can be found in the dedicated "Analytics" feature section.
+
+*Note: This documentation provides an overview of the Home page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
 
 ### **Menus Page**
 The Menus page allows restaurant managers to manage and customize the menus of their restaurant. It provides a user interface for:
