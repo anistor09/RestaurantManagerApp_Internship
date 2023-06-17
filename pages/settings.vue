@@ -6,13 +6,16 @@ import { Hours } from '../interfaces/Hours';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import PageTitle from '../components/page-title.vue';
 import currencies from '../mockData/currency.json';
+import languages from '../mockData/languages.json';
+import translations from '~/mockData/translations.json'
 import { useCurrencyStore } from '../store/currency';
+import { useLanguageStore } from '../store/language';
 
 const currencyStore = useCurrencyStore();
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
+const languageStore = useLanguageStore();
 
-const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const name = ref(restaurant.name);
 const addresse = ref(restaurant.addresse);
 const description = ref(restaurant.description);
@@ -23,6 +26,14 @@ const category = ref(restaurant.category);
 const doubleCheck = ref(false);
 const nameNeededPopUp = ref(false);
 const selectedCurrency = ref(currencyStore.currencyGetter.currency);
+const selectedLanguage = ref(languageStore.languageGetter.language);
+
+const computedLanguageId = computed(() => languageStore.idGetter);
+
+const workingDays = computed(() => [translations[computedLanguageId.value].monday, translations[computedLanguageId.value].tuesday, 
+translations[computedLanguageId.value].wednesday, translations[computedLanguageId.value].thursday, translations[computedLanguageId.value].friday,
+translations[computedLanguageId.value].saturday, translations[computedLanguageId.value].sunday]);
+
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -47,6 +58,7 @@ const endTimes = ref(times[1]);
 
 const saveChanges = async () => {
 	changeCurrencyGlobally();
+	changeLanguageGlobally();
 	restaurant.hoursSet = [];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
@@ -104,10 +116,14 @@ const src = ref(restaurant.imageUrl || defaultSrc);
 function changeCurrencyGlobally() {
 	currencyStore.currencyGetter.currency = selectedCurrency.value;
 }
+
+function changeLanguageGlobally() {
+	languageStore.languageGetter.language = selectedLanguage.value;
+}
 </script>
 
 <template>
-	<PageTitle id="titleComponent" title="Restaurant Overview"></PageTitle>
+	<PageTitle id="titleComponent" :title=translations[computedLanguageId].settings></PageTitle>
 	<div class="container">
 		<ClientOnly>
 			<Teleport to="body">
@@ -147,18 +163,18 @@ function changeCurrencyGlobally() {
 								class="specialPhotoButton"
 								data-testid="changeLogoButton"
 								style="width: 35%; height: 3vh; font-size: 0.8vw; margin-right: 3%"
-								>Change logo</el-button
+								>{{translations[computedLanguageId].changeLogo}}</el-button
 							>
 							<el-button
 								class="specialPhotoButton"
 								data-testid="deleteLogoButton"
 								style="width: 35%; height: 3vh; font-size: 0.8vw"
-								>Delete logo</el-button
+								>{{translations[computedLanguageId].deleteLogo}}</el-button
 							>
 						</div>
 					</div>
 				</div>
-				<div id="backgroundPrefix" class="prefix">Background Image:</div>
+				<div id="backgroundPrefix" class="prefix">{{translations[computedLanguageId].backgroundImage}}</div>
 				<div style="width: 92%; height: 100%; display: flex; padding-left: 1%">
 					<img
 						:src="src"
@@ -171,8 +187,8 @@ function changeCurrencyGlobally() {
 						"
 					/>
 					<div class="photoButtonSpace">
-						<el-button data-testid="changeBackButton" class="specialPhotoButton">Change</el-button>
-						<el-button data-testid="deleteBackButton" class="specialPhotoButton">Delete</el-button>
+						<el-button data-testid="changeBackButton" class="specialPhotoButton">{{translations[computedLanguageId].change}}</el-button>
+						<el-button data-testid="deleteBackButton" class="specialPhotoButton">{{translations[computedLanguageId].delete}}</el-button>
 					</div>
 				</div>
 				<!-- Container which the other information(description, phone number, email and category)-->
@@ -184,11 +200,11 @@ function changeCurrencyGlobally() {
 						style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 					>
 						<div id="descriptionIdPrefix" class="prefix" style="width: 18%; padding-bottom: 0.7%">
-							Description:
+							{{translations[computedLanguageId].description}}
 						</div>
 
 						<el-button class="aiButtonSubcatgory" @click="addAiRestaurantDescription"
-							>✨Write with AI</el-button
+							>✨{{translations[computedLanguageId].writeAi}}</el-button
 						>
 					</div>
 					<textarea
@@ -219,7 +235,7 @@ function changeCurrencyGlobally() {
 		<div id="secondHalf">
 			<div style="padding-left: 10%; padding-top: 5%">
 				<div class="details">
-					<div id="phoneIdPrefix" class="prefix">Phone Number:</div>
+					<div id="phoneIdPrefix" class="prefix">{{translations[computedLanguageId].phoneNumber}}</div>
 					<!-- The input where the restaurant phone number can be changed by the restaurant owner-->
 					<input
 						id="phoneId"
@@ -231,7 +247,7 @@ function changeCurrencyGlobally() {
 					/>
 				</div>
 				<div class="details">
-					<div id="mailIdPrefix" class="prefix">Email:</div>
+					<div id="mailIdPrefix" class="prefix">{{translations[computedLanguageId].email}}</div>
 					<!-- The input where the restaurant email can be changed by the restaurant owner-->
 					<input
 						id="mailId"
@@ -243,7 +259,7 @@ function changeCurrencyGlobally() {
 					/>
 				</div>
 				<div class="details">
-					<div id="categoryIdPrefix" class="prefix">Category:</div>
+					<div id="categoryIdPrefix" class="prefix">{{translations[computedLanguageId].category}}</div>
 					<!-- The input where the restaurant category can be changed by the restaurant owner-->
 					<input
 						id="categoryId"
@@ -254,7 +270,7 @@ function changeCurrencyGlobally() {
 						placeholder="Please input"
 					/>
 				</div>
-				<div id="hoursId" class="prefix">Working Hours:</div>
+				<div id="hoursId" class="prefix">{{translations[computedLanguageId].workingHours}}</div>
 				<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 					<div class="dayName">{{ day }}</div>
 					<el-time-select
@@ -277,7 +293,7 @@ function changeCurrencyGlobally() {
 					/>
 				</div>
 				<div class="details" style="padding-top: 2%;">
-						<div id="mailIdPrefix" class="prefix">Currency:</div>
+						<div id="mailIdPrefix" class="prefix">{{translations[computedLanguageId].currency}}</div>
 						<div style="width: 20%">
 							<el-select
 								v-model="selectedCurrency"
@@ -295,12 +311,30 @@ function changeCurrencyGlobally() {
 								/>
 							</el-select>
 						</div>
+						<div id="mailIdPrefix" class="prefix">{{translations[computedLanguageId].language}}</div>
+						<div style="width: 50%">
+							<el-select
+								v-model="selectedLanguage"
+								class="currency-select-item"
+								collapse-tags
+								filterable
+								default-first-option
+								:reserve-keyword="false"
+							>
+								<el-option
+									v-for="language in languages"
+									:key="language.id"
+									:label="language.symbol"
+									:value="language.symbol"
+								/>
+							</el-select>
+						</div>
 					</div>
 			</div>
 		</div>
 	</div>
 	<el-button id="save-button" color="#ED5087" plain round @click="checkIfChange()">
-		Save changes</el-button
+		{{translations[computedLanguageId].saveChanges}}</el-button
 	>
 
 	<Teleport to="body">
@@ -319,9 +353,9 @@ function changeCurrencyGlobally() {
 			"
 		>
 			<div>
-				Are you sure you want to make these changes?
+				{{translations[computedLanguageId].settingsScript}}
 				<div id="change-bottom-button">
-					<el-button color="#ED5087" plain round @click="saveChanges()">Yes</el-button>
+					<el-button color="#ED5087" plain round @click="saveChanges()">{{translations[computedLanguageId].yes}}</el-button>
 				</div>
 			</div>
 		</el-dialog>

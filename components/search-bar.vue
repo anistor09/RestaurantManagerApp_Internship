@@ -1,5 +1,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 const value = ref('');
 defineProps({
 	options: {
@@ -15,7 +22,7 @@ defineProps({
 		data-testid="select"
 		class="specialSelect"
 		filterable
-		placeholder="Select"
+		:placeholder=translations[computedLanguageId].select
 		clearable
 	>
 		<el-option v-for="item in options" :value="item" />

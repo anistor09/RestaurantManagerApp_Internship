@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import { ElButton, ElCard } from 'element-plus';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 defineProps<{
 	url: String;
 	number: Number;
@@ -12,16 +18,16 @@ defineEmits(['edit', 'delete', 'qr-code']);
 <template>
 	<el-card id="card" shadow="always" :body-style="{ padding: '0px' }">
 		<div>
-			<div id="title">Table {{ number }}</div>
-			<div id="capacity">{{ capacity }} seats</div>
+			<div id="title">{{translations[computedLanguageId].table}} {{ number }}</div>
+			<div id="capacity">{{ capacity }} {{translations[computedLanguageId].seats}}</div>
 			<div id="QRButton">
 				<el-button color="#ED5087" plain round size="large" @click="$emit('qr-code', url)"
-					>See QR Code</el-button
+					>{{translations[computedLanguageId].seeQrCode}}</el-button
 				>
 			</div>
 			<div id="bottomButtons">
-				<el-button color="#ED5087" plain round @click="$emit('edit', id)">Edit</el-button>
-				<el-button color="#ED5087" plain round @click="$emit('delete', id)">Delete</el-button>
+				<el-button color="#ED5087" plain round @click="$emit('edit', id)">{{translations[computedLanguageId].edit}}</el-button>
+				<el-button color="#ED5087" plain round @click="$emit('delete', id)">{{translations[computedLanguageId].delete}}</el-button>
 			</div>
 		</div>
 	</el-card>

@@ -1,6 +1,15 @@
 <script lang="ts" setup>
 import { ref, defineAsyncComponent, computed, watch } from 'vue';
 
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
+
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
+
+
 const ApexCharts = defineAsyncComponent(() => import('vue3-apexcharts'));
 const props = defineProps({
 	title: {
@@ -17,7 +26,7 @@ const props = defineProps({
 	},
 });
 
-const selection = ref('This week');
+const selection = ref(translations[computedLanguageId.value].thisWeek);
 
 const chartOptions = computed(() => ({
 	chart: {
@@ -162,19 +171,19 @@ watch(selection, (newValue) => {
 			:series="series"
 		></ApexCharts>
 		<div class="button-container">
-			<el-button default-active="true" color="#ED5087" plain round @click="updateDate('This week')">
-				This Week
+			<el-button default-active="true" color="#ED5087" plain round @click="updateDate(translations[computedLanguageId].thisWeek)">
+				{{ translations[computedLanguageId].thisWeek }}
 			</el-button>
-			<el-button color="#ED5087" plain round @click="updateDate('This month')">
-				This Month
-			</el-button>
-
-			<el-button color="#ED5087" plain round @click="updateDate('Six months')">
-				Six Months
+			<el-button color="#ED5087" plain round @click="updateDate(translations[computedLanguageId].thisMonth)">
+				{{ translations[computedLanguageId].thisMonth }}
 			</el-button>
 
-			<el-button color="#ED5087" plain round @click="updateDate('This year')">
-				This Year
+			<el-button color="#ED5087" plain round @click="updateDate(translations[computedLanguageId].sixMonths)">
+				{{ translations[computedLanguageId].sixMonths }}
+			</el-button>
+
+			<el-button color="#ED5087" plain round @click="updateDate(translations[computedLanguageId].thisYear)">
+				{{ translations[computedLanguageId].thisYear }}
 			</el-button>
 		</div>
 	</ClientOnly>

@@ -1,6 +1,14 @@
 <script lang="ts" setup>
 import { Category } from '~/interfaces/Category';
 
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
+
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
+
 const props = defineProps({
 	category: {
 		type: Object as () => Category,
@@ -34,7 +42,7 @@ const editCategory = () => {
 				<!-- The description of the category, which gives a general overview -->
 				<div id="description">
 					<el-scrollbar>
-						<b>Description:</b>
+						<b>{{translations[computedLanguageId].description}}</b>
 						{{ props.category.description == '' ? 'None' : props.category.description }}
 					</el-scrollbar>
 				</div>

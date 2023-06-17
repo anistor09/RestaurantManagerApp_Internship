@@ -4,7 +4,13 @@ import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 
 const emit = defineEmits(['close']);
 
@@ -20,10 +26,15 @@ const defaultSrc =
 const src = ref(defaultSrc);
 const name = ref('');
 const description = ref('');
-const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 const startTimes = ref(['', '', '', '', '', '', '']);
 const endTimes = ref(['', '', '', '', '', '', '']);
+
+
+const workingDays = computed(() => [translations[computedLanguageId.value].monday, translations[computedLanguageId.value].tuesday, 
+translations[computedLanguageId.value].wednesday, translations[computedLanguageId.value].thursday, translations[computedLanguageId.value].friday,
+translations[computedLanguageId.value].saturday, translations[computedLanguageId.value].sunday]);
+
 
 const doubleCheck = ref(false);
 
@@ -93,21 +104,21 @@ async function addAiMenuDescription() {
 <template>
 	<div id="all">
 		<div class="box" style="height: 100%">
-			<div class="fieldText">Photo</div>
+			<div class="fieldText">{{ translations[computedLanguageId].photo }}</div>
 			<div style="width: 92%; height: 100%; display: flex">
 				<el-image
 					:src="src"
 					style="width: 13vw; height: 15vh; object-fit: cover; border-radius: 40px"
 				/>
 				<div class="photoButtonSpace">
-					<el-button class="specialPhotoButton">Change</el-button>
-					<el-button class="specialPhotoButton">Delete</el-button>
+					<el-button class="specialPhotoButton">{{ translations[computedLanguageId].change }}</el-button>
+					<el-button class="specialPhotoButton">{{ translations[computedLanguageId].delete }}</el-button>
 				</div>
 			</div>
 		</div>
 		<div class="box">
 			<div id="addName">
-				<div id="nameIdPrefix" class="fieldText">Name</div>
+				<div id="nameIdPrefix" class="fieldText">{{ translations[computedLanguageId].name }}</div>
 				<input
 					id="nameId"
 					v-model="name"
@@ -124,23 +135,23 @@ async function addAiMenuDescription() {
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 			>
 				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%; padding-right: 3%;">
-					Description
+					{{ translations[computedLanguageId].description }}
 				</div>
 
 				<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription"
-					>✨Write with AI</el-button
+					>✨{{ translations[computedLanguageId].writeAi }}</el-button
 				>
 			</div>
 			<textarea id="descriptionIdPrefix" v-model="description" class="specialTextArea"></textarea>
 		</div>
 		<div class="box" style="">
-			<div class="fieldText">Menu periods</div>
+			<div class="fieldText">{{ translations[computedLanguageId].menuPeriods }}</div>
 			<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 				<div class="dayName">{{ day }}</div>
 				<el-time-select
 					v-model="startTimes[index]"
 					style="width: 25%"
-					placeholder="Start time"
+					:placeholder=translations[computedLanguageId].startTime
 					start="00:00"
 					step="00:30"
 					end="23:59"
@@ -148,7 +159,7 @@ async function addAiMenuDescription() {
 				<el-time-select
 					v-model="endTimes[index]"
 					style="width: 25%"
-					placeholder="End time"
+					:placeholder=translations[computedLanguageId].endTime
 					start="00:00"
 					step="00:30"
 					end="23:59"
@@ -161,7 +172,7 @@ async function addAiMenuDescription() {
 				style="width: 15%; height: 50%"
 				data-testid="add-button"
 				@click="checkIfChange()"
-				>Add</el-button
+				>{{ translations[computedLanguageId].add}}</el-button
 			>
 		</div>
 		<ClientOnly>
@@ -189,10 +200,10 @@ async function addAiMenuDescription() {
 				"
 			>
 				<div>
-					Are you sure you want to add this menu?
+					{{ translations[computedLanguageId]['areYouSureYouWantToAddThisMenu?']}}
 					<div id="change-bottom-button">
 						<el-button color="#ED5087" plain round data-testid="confirm-add" @click="addMenu()"
-							>Yes</el-button
+							>{{ translations[computedLanguageId].yes}}</el-button
 						>
 					</div>
 				</div>

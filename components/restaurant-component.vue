@@ -1,7 +1,14 @@
 <script lang="ts" setup>
 import { useRestaurantStore } from '../store/restaurant';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
+
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 </script>
 
 <!-- Card component containing basic information related to the restaurant, including logo and background image -->
@@ -24,8 +31,8 @@ const restaurant = restaurantStore.restaurantGetter;
 			</div>
 			<!-- The information of the restaurant, which gives a general overview -->
 			<div id="info">
-				<div>Phone number: {{ restaurant.phoneNumber == null ? 'None' : restaurant.phoneNumber  }}</div>
-				<div>Email: {{ restaurant.email == null ? 'None' : restaurant.email }}</div>
+				<div>{{ translations[computedLanguageId].phoneNumber }} {{ restaurant.phoneNumber == null ? 'None' : restaurant.phoneNumber  }}</div>
+				<div>{{ translations[computedLanguageId].email }} {{ restaurant.email == null ? 'None' : restaurant.email }}</div>
 			</div>
 		</div>
 	</el-card>
