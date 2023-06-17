@@ -13,8 +13,6 @@ Make sure to install the dependencies using `npm install`.
 
 You can use `npm run` to see all possible scripts.
 
-To also have access to the analytics, the backend needs to be started with Gradle Boot Run.
-
 ## Features
 Now, we will provide a comprehensive overview of the various functionalities and capabilities offered by our application. We divided each of the key features in a separate section.
 
