@@ -1,4 +1,4 @@
-import { it, expect } from 'vitest';
+import { vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import languages from '../mockData/languages.json';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
