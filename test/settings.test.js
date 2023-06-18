@@ -114,15 +114,11 @@ it('Category correct', () => {
 });
 
 it('Buttons for logo are rendered', () => {
-    const changeButton = wrapper.find('[data-testid="changeLogoButton"]');
-	expect(changeButton.exists()).toBe(true)
     const deleteButton = wrapper.find('[data-testid="deleteLogoButton"]');
 	expect(deleteButton.exists()).toBe(true)
 });
 
 it('Buttons for background are rendered', () => {
-    const changeButton = wrapper.find('[data-testid="changeBackButton"]');
-	expect(changeButton.exists()).toBe(true)
     const deleteButton = wrapper.find('[data-testid="deleteBackButton"]');
 	expect(deleteButton.exists()).toBe(true)
 });

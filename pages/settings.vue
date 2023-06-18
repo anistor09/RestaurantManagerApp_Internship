@@ -13,6 +13,8 @@ const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
 const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const defaultSrc ='https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
+const src = ref(restaurant.imageUrl || defaultSrc);
 const name = ref(restaurant.name);
 const addresse = ref(restaurant.addresse);
 const description = ref(restaurant.description);
@@ -23,6 +25,93 @@ const category = ref(restaurant.category);
 const doubleCheck = ref(false);
 const nameNeededPopUp = ref(false);
 const selectedCurrency = ref(currencyStore.currencyGetter.currency);
+
+const acceptedTypes = ['image/jpeg', 'image/png'];
+const logoEdited: Ref<File | null> = ref(null);
+const backgroundEdited: Ref<File | null> = ref(null);
+
+/// function to handle the upload of a logo to a restaurant
+function handleFileUploadLogo(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else logoEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+			imageUrl.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(logoEdited.value)
+		reader.readAsDataURL(logoEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected logo for a restaurant
+function deleteImgLogo(){
+	logoEdited.value=null
+	imageUrl.value=defaultSrc
+}
+
+/// function to handle the upload of a background to a restaurant
+function handleFileUploadBackground(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else backgroundEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+				src.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(backgroundEdited.value)
+		reader.readAsDataURL(backgroundEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected image for a menu
+function deleteImgBackground(){
+	backgroundEdited.value=null
+	src.value=defaultSrc
+}
+
+
+// Function to display a error notification
+const openErrorNotification = (notifTitle: string) => {
+	ElNotification({
+		title: notifTitle,
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'Please try with a diffrent file.',
+		),
+		customClass: 'notif',
+	});
+};
+
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -74,6 +163,26 @@ const saveChanges = async () => {
 		},
 	});
 
+	// if(logoEdited.value){
+	// 	const formData = new FormData();
+	// 	formData.append('file', logoEdited.value);
+	// 	formData.append('id', restaurant.id.toString())
+	// 	await useFetch(`/api/photos/photoLogo`, {
+	// 		method: 'POST',
+	// 		body: formData,
+	// 	});
+	// }
+
+	if(backgroundEdited.value){
+		const formData = new FormData();
+		formData.append('file', backgroundEdited.value);
+		formData.append('id', restaurant.id.toString())
+		await useFetch(`/api/photos/photoBackground`, {
+			method: 'POST',
+			body: formData,
+		});
+	}
+
 	doubleCheck.value = false;
 };
 async function addAiRestaurantDescription() {
@@ -98,9 +207,6 @@ async function addAiRestaurantDescription() {
 		description.value = response.data.value;
 	}
 }
-const defaultSrc =
-	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
-const src = ref(restaurant.imageUrl || defaultSrc);
 function changeCurrencyGlobally() {
 	currencyStore.currencyGetter.currency = selectedCurrency.value;
 }
@@ -142,17 +248,14 @@ function changeCurrencyGlobally() {
 							style="font-size: 1vw; width: 100%"
 							placeholder="Please input"
 						/>
-						<div style="width: 100%; padding-top: 1%">
-							<el-button
-								class="specialPhotoButton"
-								data-testid="changeLogoButton"
-								style="width: 35%; height: 3vh; font-size: 0.8vw; margin-right: 3%"
-								>Change logo</el-button
-							>
+						<div style="width: 100%; padding-top: 1%; display: flex;">
+							<label for="changePhotoLogo" class="specialPhotoLabel" style="width: 35%; height: 3vh; font-size: 0.8vw; margin-right: 3%">Change logo</label>
+							<input id="changePhotoLogo" type="file" style="display: none;" @change="handleFileUploadLogo"/>
 							<el-button
 								class="specialPhotoButton"
 								data-testid="deleteLogoButton"
 								style="width: 35%; height: 3vh; font-size: 0.8vw"
+								@click="deleteImgLogo()"
 								>Delete logo</el-button
 							>
 						</div>
@@ -171,8 +274,9 @@ function changeCurrencyGlobally() {
 						"
 					/>
 					<div class="photoButtonSpace">
-						<el-button data-testid="changeBackButton" class="specialPhotoButton">Change</el-button>
-						<el-button data-testid="deleteBackButton" class="specialPhotoButton">Delete</el-button>
+						<label for="changePhotoBackground" class="specialPhotoLabel">Change</label>
+						<input id="changePhotoBackground" type="file" style="display: none;" @change="handleFileUploadBackground"/>
+						<el-button data-testid="deleteBackButton" class="specialPhotoButton" @click="deleteImgBackground()">Delete</el-button>
 					</div>
 				</div>
 				<!-- Container which the other information(description, phone number, email and category)-->
@@ -369,6 +473,25 @@ textarea::-webkit-scrollbar {
 	color: white;
 }
 
+.specialPhotoLabel {
+	border-radius: 25px;
+	font-size: 1vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 80%;
+	height: 30%;
+	margin-left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.specialPhotoLabel:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
 .photoButtonSpace {
 	width: 30%;
 	padding-left: 5%;
