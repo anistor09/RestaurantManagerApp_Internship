@@ -17,12 +17,12 @@ const props = defineProps({
 	},
 });
 
-const selection = ref('This week');
+const selection = ref('This year');
 
 const chartOptions = computed(() => ({
 	chart: {
 		type: 'bar',
-		height: 400,
+		height: '80%'
 	},
 	plotOptions: {
 		bar: {
@@ -55,7 +55,7 @@ const chartOptions = computed(() => ({
 		colors: ['#fff'],
 	},
 	xaxis: {
-		categories: props.itemNames[0],
+		categories: props.itemNames[3],
 	},
 	yaxis: {
 		labels: {
@@ -68,7 +68,7 @@ const chartOptions = computed(() => ({
 		verticalAlign: 'middle',
 		style: {
 			color: '#ED5087',
-			fontSize: '30px',
+			fontSize: '25',
 			fontFamily: 'Open Sans',
 		},
 	},
@@ -109,7 +109,7 @@ const chartOptions = computed(() => ({
 
 const series = ref([
 	{
-		data: props.itemValues[0],
+		data: props.itemValues[3],
 	},
 ]);
 
@@ -157,7 +157,7 @@ watch(selection, (newValue) => {
 		<ApexCharts
 			style="width: 100%"
 			type="bar"
-			height="85%"
+			height="80%"
 			:options="chartOptions"
 			:series="series"
 		></ApexCharts>
