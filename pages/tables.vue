@@ -164,7 +164,7 @@ watchEffect(() => {
 		<PageTitle :title=translations[computedLanguageId].tables></PageTitle>
 		<main>
 			<div id="buttonContainer">
-				<SearchBar v-model="selectedTable" :options="tables.map((x) => 'Table ' + x.number)" />
+				<SearchBar v-model="selectedTable" :options="tables.map((x) => (translations[computedLanguageId].table + ' ') + x.number)" />
 				<el-button id="addTableButton" color="#ED5087" plain round @click="addPopup = true">
 					+ {{translations[computedLanguageId].addTable}}</el-button
 				>

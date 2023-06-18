@@ -89,7 +89,8 @@
         "alergens": "Alergens",
         "pleaseInputAlergens": "Please input alergens list",
         "noSubcategory": "No subcategory",
-        "subcategories": "Subcategories"
+        "subcategories": "Subcategories",
+        "removeFromMenu": "Remove from menu"
     },
     {
         "home": "Acasa",
@@ -181,6 +182,7 @@
         "alergens": "Alergeni",
         "pleaseInputAlergens": "Selecteaza alergenii",
         "noSubcategory": "Fara subcategorie",
-        "subcategories": "Subcategorii"
+        "subcategories": "Subcategorii",
+        "removeFromMenu": "Elimina din meniu"
     }
 ]

@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useCurrencyStore } from '../store/currency';
+import { useLanguageStore } from '../store/language';
 import { ItemWrapper } from '~/interfaces/ItemWrapper';
 import { Restaurant } from '~/interfaces/Restaurant';
+import translations from '../mockData/translations.json';
 
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 const currencyStore = useCurrencyStore();
 const computedCurrency = computed(() => currencyStore.currencyGetter.currency);
 const props = defineProps({
@@ -118,11 +124,11 @@ function formatPrice(price: any) {
 					</el-table-column>
 					<el-table-column align="center">
 						<template #header>
-							<el-input v-model="search" size="default" placeholder="Search by item" />
+							<el-input v-model="search" size="default" :placeholder=translations[computedLanguageId].searchByItem />
 						</template>
 						<template #default="{ row }">
 							<el-button id="button" color="#ED5087" plain round @click="deleteItem(row.item.id)"
-								>Remove from menu</el-button
+								>{{translations[computedLanguageId].removeFromMenu}}</el-button
 							>
 							<Teleport to="body">
 								<el-dialog v-model="row.showDelete" width="20%" class="subcategory-delete-popup">
