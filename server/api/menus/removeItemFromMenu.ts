@@ -1,7 +1,6 @@
 export default defineEventHandler((event) => {
 	readBody(event).then(async (data) => {
-		console.log(JSON.stringify(data));
-		const response = await fetch(
+		await fetch(
 			`https://dev-api.ewai.fr/carte/removeitem?carteId=${data.id}&itemId=${data.itemId}`,
 			{
 				method: 'POST',
@@ -11,7 +10,5 @@ export default defineEventHandler((event) => {
 				},
 			},
 		);
-		const responseData = await response.json();
-		console.log(responseData);
 	});
 });

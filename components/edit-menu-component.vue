@@ -41,9 +41,9 @@ const emit = defineEmits(['close']);
 
 // eslint-disable-next-line prefer-const
 let name = selectedMenu.value.name;
-// eslint-disable-next-line prefer-const
+ 
 const description : Ref<string>= ref(selectedMenu.value.description);
-// eslint-disable-next-line prefer-const
+ 
 const src = ref(selectedMenu.value.imageUrl);
 
 /// function to handle the upload of a image to a menu

@@ -7,8 +7,7 @@ import translations from '../mockData/translations.json';
 import PageTitle from '../components/page-title.vue';
 import { SubCategory } from '../interfaces/SubCategory';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
-import {ImageWrapper} from '~/interfaces/ImageWrapper'
-
+import { ImageWrapper } from '~/interfaces/ImageWrapper';
 
 const languageStore = useLanguageStore();
 
@@ -63,10 +62,10 @@ if (props.addCategory === false) {
 	if (category.subCategorySet !== undefined)
 		if (category.subCategorySet.length > 0) {
 			subCategories.value = category.subCategorySet;
-			imageSubCategories.value = category.subCategorySet.map(x=>{
-				const rez:ImageWrapper={id:x.id, img:null}
-				return rez
-			})
+			imageSubCategories.value = category.subCategorySet.map((x) => {
+				const rez: ImageWrapper = { id: x.id, img: null };
+				return rez;
+			});
 			hasSubcategories.value = true;
 		}
 }
@@ -74,67 +73,53 @@ if (props.addCategory === false) {
 function handleFileUpload(event: any) {
 	const file = event.target.files[0];
 	event.target.value = null;
-  	if(!file||!acceptedTypes.includes(file.type)){
-		openErrorNotification("Wrong image type")
-		return
-	}
-	else selectedFile.value=file
-	
+	if (!file || !acceptedTypes.includes(file.type)) {
+		openErrorNotification('Wrong image type');
+		return;
+	} else selectedFile.value = file;
+
 	const reader = new FileReader();
 	reader.onload = (event) => {
-		if(event.target){
+		if (event.target) {
 			const x = event.target.result;
-			if(typeof x === "string")
-				src.value=x
-			else 
-				openErrorNotification("Something went wrong!")
-		}
-		else 
-			openErrorNotification("Something went wrong!")
+			if (typeof x === 'string') src.value = x;
+			else openErrorNotification('Something went wrong!');
+		} else openErrorNotification('Something went wrong!');
 	};
-	if(selectedFile.value)
-		reader.readAsDataURL(selectedFile.value);
-	else 
-		openErrorNotification("Something went wrong!")	
+	if (selectedFile.value) reader.readAsDataURL(selectedFile.value);
+	else openErrorNotification('Something went wrong!');
 }
 
 /// function to handle the upload of a image to a subcategory
 function handleFileUploadSubCategory(event: any) {
 	const file = event.target.files[0];
 	event.target.value = null;
-  	if(!file||!acceptedTypes.includes(file.type)){
-		openErrorNotification("Wrong image type")
-		return
-	}
-	else imageEdited.value=file
+	if (!file || !acceptedTypes.includes(file.type)) {
+		openErrorNotification('Wrong image type');
+		return;
+	} else imageEdited.value = file;
 	const reader = new FileReader();
 	reader.onload = (event) => {
-		if(event.target){
+		if (event.target) {
 			const x = event.target.result;
-			if(typeof x === "string")
-				newSubcategorySrc.value=x
-			else 
-				openErrorNotification("Something went wrong!")
-		}
-		else 
-			openErrorNotification("Something went wrong!")
+			if (typeof x === 'string') newSubcategorySrc.value = x;
+			else openErrorNotification('Something went wrong!');
+		} else openErrorNotification('Something went wrong!');
 	};
-	if(imageEdited.value)
-		reader.readAsDataURL(imageEdited.value);
-	else 
-		openErrorNotification("Something went wrong!")	
+	if (imageEdited.value) reader.readAsDataURL(imageEdited.value);
+	else openErrorNotification('Something went wrong!');
 }
 
 // Function to delete the selected image for a category
-function deleteImg(){
-	selectedFile.value=null
-	src.value=defaultSrc
+function deleteImg() {
+	selectedFile.value = null;
+	src.value = defaultSrc;
 }
 
 // Function to delete the selected image for a subcategory
-function deleteImgSubCategory(){
-	imageEdited.value=null
-	newSubcategorySrc.value=defaultSrc
+function deleteImgSubCategory() {
+	imageEdited.value = null;
+	newSubcategorySrc.value = defaultSrc;
 }
 
 // Function to display a error notification
@@ -186,8 +171,8 @@ function saveNewSubcategoryLocally() {
 			imageUrl: newSubcategorySrc.value,
 		};
 		subCategories.value.push(newSubcategory);
-		const aux:ImageWrapper = {id:newSubcategory.id, img:imageEdited.value}
-		imageSubCategories.value.push(aux)
+		const aux: ImageWrapper = { id: newSubcategory.id, img: imageEdited.value };
+		imageSubCategories.value.push(aux);
 
 		addSubcategoryPopUp.value = false;
 		refreshDetails();
@@ -215,9 +200,9 @@ function editSubcategoryLocally() {
 		presentationOrder: presentationSubcategoryOrder.value,
 		imageUrl: newSubcategorySrc.value,
 	});
-	const aux = imageSubCategories.value.find(x=>x.id===editedSubcategoryId.value)
-	if(aux){
-		aux.img=imageEdited.value
+	const aux = imageSubCategories.value.find((x) => x.id === editedSubcategoryId.value);
+	if (aux) {
+		aux.img = imageEdited.value;
 	}
 	if (editedSubcategoryId.value >= 0) {
 		toBeEditedSubcat.value.add(editedSubcategoryId.value);
@@ -267,9 +252,8 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 			averageWaitingTime: 0,
 		},
 	};
-	const aux = imageSubCategories.value.filter(x=>x.id===subcategory.id)[0]
-	if(aux.img)
-		requestBody.imageUrl=""
+	const aux = imageSubCategories.value.filter((x) => x.id === subcategory.id)[0];
+	if (aux.img) requestBody.imageUrl = '';
 	if (!editMode) {
 		const response = await useFetch('/api/subcategory/add', {
 			method: 'POST',
@@ -278,12 +262,11 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 				'Content-Type': 'application/json',
 			},
 		});
-		const newId = response.data.value
-		console.log('added the subcategory with id ' + newId);
-		if(aux.img&&newId){
+		const newId = response.data.value;
+		if (aux.img && newId) {
 			const formData = new FormData();
 			formData.append('file', aux.img);
-			formData.append('id', newId.toString())
+			formData.append('id', newId.toString());
 			await useFetch(`/api/photos/photoSubCategory`, {
 				method: 'POST',
 				body: formData,
@@ -302,12 +285,10 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 			},
 		});
 
-		console.log('edited the subcategory with id ' + subcategory.id);
-
-		if(aux.img){
+		if (aux.img) {
 			const formData = new FormData();
 			formData.append('file', aux.img);
-			formData.append('id', subcategory.id.toString())
+			formData.append('id', subcategory.id.toString());
 			await useFetch(`/api/photos/photoSubCategory`, {
 				method: 'POST',
 				body: formData,
@@ -322,8 +303,9 @@ const changeSubcategory = (idSubcat: number) => {
 	newSubcategoryName.value = editedSubcategory === undefined ? '' : editedSubcategory.name;
 	newSubcategoryDescription.value =
 		editedSubcategory === undefined ? '' : editedSubcategory.description;
-	newSubcategorySrc.value = editedSubcategory === undefined ? defaultSrc : editedSubcategory.imageUrl;
-	imageEdited.value=imageSubCategories.value.filter((x) => x.id === idSubcat)[0].img;
+	newSubcategorySrc.value =
+		editedSubcategory === undefined ? defaultSrc : editedSubcategory.imageUrl;
+	imageEdited.value = imageSubCategories.value.filter((x) => x.id === idSubcat)[0].img;
 	presentationSubcategoryOrder.value =
 		editedSubcategory === undefined
 			? subCategories.value.length
@@ -331,7 +313,6 @@ const changeSubcategory = (idSubcat: number) => {
 	addSubcategoryPopUp.value = true;
 	editedSubcategoryId.value = idSubcat;
 	editSubcategory.value = true;
-	
 };
 // Handles the deletion of a subcategory.
 async function handleDeleteSubcategory(idSubcat: number) {
@@ -390,8 +371,7 @@ async function handleAddEditCategory() {
 			averageWaitingTime: 0,
 		},
 	};
-	if(selectedFile.value)
-		requestBody.imageUrl=""
+	if (selectedFile.value) requestBody.imageUrl = '';
 	if (props.addCategory) {
 		const response = await useFetch('/api/category/add', {
 			method: 'POST',
@@ -411,10 +391,10 @@ async function handleAddEditCategory() {
 				subCategorySet: subCategories.value,
 			});
 		}
-		if(selectedFile.value){
+		if (selectedFile.value) {
 			const formData = new FormData();
 			formData.append('file', selectedFile.value);
-			formData.append('id', categoryId?.toString() as string)
+			formData.append('id', categoryId?.toString() as string);
 			await useFetch(`/api/photos/photoCategory`, {
 				method: 'POST',
 				body: formData,
@@ -446,10 +426,10 @@ async function handleAddEditCategory() {
 				subCategorySet: subCategories.value,
 			});
 		}
-		if(selectedFile.value&&props.categoryId){
+		if (selectedFile.value && props.categoryId) {
 			const formData = new FormData();
 			formData.append('file', selectedFile.value);
-			formData.append('id', props.categoryId.toString())
+			formData.append('id', props.categoryId.toString());
 			await useFetch(`/api/photos/photoCategory`, {
 				method: 'POST',
 				body: formData,
@@ -579,7 +559,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 										style="padding-bottom: 1%"
 										data-testid="subcategory-name-title"
 									>
-										{{translations[computedLanguageId].name}}
+										{{ translations[computedLanguageId].name }}
 									</div>
 									<input
 										id="subcategory-name-input"
@@ -591,11 +571,11 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 								<div data-testid="subcategory-description-title" style="padding-top: 2%">
 									<div class="div" style="display: flex; align-items: center; padding-bottom: 1%">
 										<div id="subcategory-description" style="width: 30%; padding-bottom: 0.9%">
-											{{translations[computedLanguageId].description}}
+											{{ translations[computedLanguageId].description }}
 										</div>
 
 										<el-button class="aiButtonSubcatgory" @click="addAiSubcategoryDescription"
-											>✨{{translations[computedLanguageId].writeAi}}</el-button
+											>✨{{ translations[computedLanguageId].writeAi }}</el-button
 										>
 									</div>
 
@@ -608,7 +588,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 								</div>
 								<div data-testid="subcategory-presentation-order-title" style="padding-top: 2%">
 									<div id="subcategory-presentationorder" style="padding-bottom: 1%">
-										{{translations[computedLanguageId].presentationOrder}}
+										{{ translations[computedLanguageId].presentationOrder }}
 									</div>
 									<input
 										v-model.number="presentationSubcategoryOrder"
@@ -629,10 +609,21 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 										:src="newSubcategorySrc"
 										style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover"
 									/>
-									<div class="photoButtonSpace" style="height: 12vh;">
-										<label for="changeSubCategoryPhoto" class="specialPhotoLabelSubcategory" >{{translations[computedLanguageId].change}}</label>
-										<input id="changeSubCategoryPhoto" type="file" style="display: none;" @change="handleFileUploadSubCategory" />
-										<el-button class="specialPhotoButtonSubcategory" @click="deleteImgSubCategory()">{{translations[computedLanguageId].delete}}</el-button> 
+									<div class="photoButtonSpace" style="height: 12vh">
+										<label for="changeSubCategoryPhoto" class="specialPhotoLabelSubcategory">{{
+											translations[computedLanguageId].change
+										}}</label>
+										<input
+											id="changeSubCategoryPhoto"
+											type="file"
+											style="display: none"
+											@change="handleFileUploadSubCategory"
+										/>
+										<el-button
+											class="specialPhotoButtonSubcategory"
+											@click="deleteImgSubCategory()"
+											>{{ translations[computedLanguageId].delete }}</el-button
+										>
 									</div>
 								</div>
 								<div>
@@ -643,7 +634,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 											plain
 											round
 											@click="cancelNewSubcategory()"
-											>{{translations[computedLanguageId].cancel}}</el-button
+											>{{ translations[computedLanguageId].cancel }}</el-button
 										>
 										<el-button
 											data-testid="save-subcategory-button"
@@ -651,7 +642,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 											plain
 											round
 											@click="saveNewSubcategoryLocally()"
-											>{{translations[computedLanguageId].save}}</el-button
+											>{{ translations[computedLanguageId].save }}</el-button
 										>
 									</div>
 								</div>
@@ -703,7 +694,9 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					<div class="elementLeft">
 						<div class="box">
 							<div style="height: 40%; width: 100%">
-								<div id="category-name" class="fieldText" style="padding-bottom: 2%">{{translations[computedLanguageId].name}}</div>
+								<div id="category-name" class="fieldText" style="padding-bottom: 2%">
+									{{ translations[computedLanguageId].name }}
+								</div>
 								<input
 									id="input-category-name"
 									v-model="name"
@@ -722,11 +715,11 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									class="fieldText"
 									style="width: 20%; padding-bottom: 0.9%"
 								>
-									{{translations[computedLanguageId].description}}
+									{{ translations[computedLanguageId].description }}
 								</div>
 
 								<el-button class="aiButton" @click="addAiCategoryDescription"
-									>✨{{translations[computedLanguageId].writeAi}}</el-button
+									>✨{{ translations[computedLanguageId].writeAi }}</el-button
 								>
 							</div>
 							<textarea
@@ -738,7 +731,9 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					</div>
 					<div class="elementLeft" style="padding-bottom: 5%">
 						<div class="box" style="padding-top: 10%">
-							<div class="fieldText" style="padding-bottom: 2%">{{translations[computedLanguageId].photo}}</div>
+							<div class="fieldText" style="padding-bottom: 2%">
+								{{ translations[computedLanguageId].photo }}
+							</div>
 							<div style="width: 92%; height: 90%; display: flex; padding-bottom: 10%">
 								<el-image
 									:src="src"
@@ -746,7 +741,12 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 								/>
 								<div class="photoButtonSpace" style="padding-top: 0.9%">
 									<label for="changeCategoryPhoto" class="specialPhotoLabel">Change</label>
-									<input id="changeCategoryPhoto" type="file" style="display: none;" @change="handleFileUpload" />
+									<input
+										id="changeCategoryPhoto"
+										type="file"
+										style="display: none"
+										@change="handleFileUpload"
+									/>
 									<el-button class="specialPhotoButton" @click="deleteImg()">Delete</el-button>
 								</div>
 							</div>
@@ -756,7 +756,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 						<div class="box" style="">
 							<div style="height: 40%; width: 100%">
 								<div id="category-orderinmenu" class="fieldText" style="padding-bottom: 2%">
-									{{translations[computedLanguageId].presentationOrder}}
+									{{ translations[computedLanguageId].presentationOrder }}
 								</div>
 								<input
 									id="input-category-order"
@@ -782,7 +782,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					<div class="elementLeft" style="padding-top: 5%; height: 10% !important">
 						<div style="width: 100%; height: 90%; display: flex; padding-bottom: 10%">
 							<div class="box">
-								<div class="fieldText">{{translations[computedLanguageId].subcategories}}</div>
+								<div class="fieldText">{{ translations[computedLanguageId].subcategories }}</div>
 							</div>
 							<div class="box" style="padding-left: 20%">
 								<el-button
@@ -793,7 +793,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									round
 									style="width: 8vw; font-size: 0.8vw; font-weight: bolder"
 									@click="addSubcategoryPopUp = true"
-									>{{translations[computedLanguageId].addSubcategory}}</el-button
+									>{{ translations[computedLanguageId].addSubcategory }}</el-button
 								>
 							</div>
 						</div>
@@ -842,14 +842,14 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							id="saveCategoryButton"
 							class="specialExitButton"
 							@click="handleAddEditCategory()"
-							>{{translations[computedLanguageId].save}}</el-button
+							>{{ translations[computedLanguageId].save }}</el-button
 						>
 						<el-button
 							v-else
 							id="addSubcategoryButton"
 							class="specialExitButton"
 							@click="handleAddEditCategory()"
-							>{{translations[computedLanguageId].save}}</el-button
+							>{{ translations[computedLanguageId].save }}</el-button
 						>
 					</div>
 				</div>
@@ -1034,7 +1034,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	height: 30%;
 }
 
-.specialPhotoLabel{
+.specialPhotoLabel {
 	border-radius: 25px;
 	font-size: 1vw;
 	border: 1px solid #ed5087;
@@ -1109,7 +1109,6 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	border-color: darkgrey;
 	color: white;
 }
-
 
 .el-button + .el-button {
 	margin-left: 0;

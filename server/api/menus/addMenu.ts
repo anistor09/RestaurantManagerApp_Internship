@@ -10,9 +10,8 @@ export default defineEventHandler((event) => {
 				Authorization: `Bearer ${token}`,
 			},
 		});
-		const responseString = await response.text()
-		const id = parseInt(responseString.split(" ")[2])
-		console.log(id)
+		const responseString = await response.text();
+		const id = parseInt(responseString.split(' ')[2]);
 		return id;
 	});
 });
