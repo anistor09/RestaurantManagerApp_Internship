@@ -2,12 +2,12 @@
 import { ref, computed } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
 import { useCategoryStore } from '../store/category';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import PageTitle from '../components/page-title.vue';
 import { SubCategory } from '../interfaces/SubCategory';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import {ImageWrapper} from '~/interfaces/ImageWrapper'
-import { useLanguageStore } from '../store/language';
-import translations from '../mockData/translations.json';
 
 
 const languageStore = useLanguageStore();
@@ -745,8 +745,9 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									style="width: 35%; height: 15vh; object-fit: cover; border-radius: 40px"
 								/>
 								<div class="photoButtonSpace" style="padding-top: 0.9%">
-									<el-button class="specialPhotoButton">Change</el-button>
-									<el-button class="specialPhotoButton">Delete</el-button>
+									<label for="changeCategoryPhoto" class="specialPhotoLabel">Change</label>
+									<input id="changeCategoryPhoto" type="file" style="display: none;" @change="handleFileUpload" />
+									<el-button class="specialPhotoButton" @click="deleteImg()">Delete</el-button>
 								</div>
 							</div>
 						</div>
