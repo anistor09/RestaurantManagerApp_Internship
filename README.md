@@ -39,7 +39,9 @@ The Login Page component defines the following variables and methods:
 
 #### **Authentication details**
 
-_todo_
+The application uses the OAuth2 standard to authenticate users. It boils down to 2 exchanges with the authenticating service: exchange user credentials for code, then exchange code for token. After the user enters his username and password in the login protal, he is redirected to `localhost:3000/callback`, which runs a script that exchanged the code for the token. Now the user is authenticated for one hour, which is the lifespan of the token. For conviniency, the token is stored in a cookie, so closing the application will not lose the token.
+
+In order to prevent users from accessing the application without a token, there is a middleware that, on each request, checks whether the user has the token cookie set in his browser. Here there is possible concern: users can set a cookie with the name token in their browser and bypass this middleware. However, this has minimal impact, because the server from which the restaurant's details are retrieved, uses the token set in the cookie to get the restaurant id. Meaning that if the token is not valid, the user can't access any details of any restaurant.
 
 #### **Page Structure**
 
