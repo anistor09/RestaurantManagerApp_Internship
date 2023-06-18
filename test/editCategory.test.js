@@ -5,6 +5,8 @@ import restaurants from '../mockData/restaurants.json';
 import categories from '../mockData/categories.json';
 import AddCategory from '../pages/editCategoryView/index.vue';
 import EditCategoryComponent from '../components/edit-category.vue';
+import languages from '../mockData/languages.json';
+
 
 vi.mock('../store/restaurant.ts', () => {
     return {
@@ -22,6 +24,16 @@ vi.mock('../store/category.ts', () => {
             return {
                 categoryGetter: categories,
                 // getCategory: vi.fn(),
+            };
+        }),
+    };
+});
+vi.mock('../store/language.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
             };
         }),
     };

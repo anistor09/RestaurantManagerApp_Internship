@@ -1,6 +1,7 @@
 import { vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import restaurants from '../mockData/restaurants.json';
+import languages from '../mockData/languages.json';
 import MenusPage from '../pages/menus.vue';
 import currencies from '../mockData/currecyMock.json'
 vi.mock('../store/restaurant.ts', () => {
@@ -18,6 +19,16 @@ vi.mock('../store/currency.ts', () => {
         useCurrencyStore: vi.fn(() => {
             return {
                 currencyGetter: currencies[0],
+            };
+        }),
+    };
+});
+vi.mock('../store/language.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
             };
         }),
     };

@@ -5,6 +5,7 @@ import AddMenu from '../components/add-menu-component.vue';
 
 
 import restaurants from '../mockData/restaurants.json';
+import languages from '../mockData/languages.json';
 
 
 vi.mock('../store/restaurant.ts', () => {
@@ -16,6 +17,17 @@ vi.mock('../store/restaurant.ts', () => {
 			};
 		}),
 	};
+});
+
+vi.mock('../store/language.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
 });
 
 it('Renders popup', () => {

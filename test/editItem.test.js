@@ -4,6 +4,8 @@ import { ElSelect } from 'element-plus';
 import restaurants from '../mockData/restaurants.json';
 import AddItem from '../pages/editItemView/index.vue';
 import EditItemComponent from '../components/edit-item.vue';
+import languages from '../mockData/languages.json';
+
 // import optionComponent from '../components/option-component.vue';
 
 vi.mock('../store/restaurant.ts', () => {
@@ -36,7 +38,16 @@ vi.mock('../store/item.ts', () => {
         }),
     };
 });
-
+vi.mock('../store/language.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
 it('Renders add Item page', () => {
     const wrapper = mount(AddItem);
     expect(wrapper.exists()).toBe(true);

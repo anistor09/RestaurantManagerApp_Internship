@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 
 import AddItemInMenu from '../components/add-item-in-menu-component.vue';
 
-
+import languages from '../mockData/languages.json';
 import restaurants from '../mockData/restaurants.json';
 
 
@@ -16,6 +16,17 @@ vi.mock('../store/restaurant.ts', () => {
 			};
 		}),
 	};
+});
+
+vi.mock('../store/language.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
 });
 
 it('Renders popup', () => {

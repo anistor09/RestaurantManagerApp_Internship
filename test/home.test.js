@@ -8,6 +8,8 @@ import AnalyticsBarComponent from '../components/analytics-bar-component.vue';
 import AnalyticsGraphComponent from '../components/analytics-graph-component.vue';
 import RestaurantComponent from '../components/restaurant-component.vue';
 import restaurants from '../mockData/restaurants.json';
+import languages from '../mockData/languages.json';
+
 
 vi.mock('../store/restaurant.ts', () => {
 	return {
@@ -18,6 +20,16 @@ vi.mock('../store/restaurant.ts', () => {
 			};
 		}),
 	};
+});
+vi.mock('../store/language.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
 });
 
 vi.mock('vue3-apexcharts')
