@@ -71,7 +71,7 @@ it('Description subtitle', () => {
 	});
 	const description = wrapper.find('#descriptionIdPrefix');
 	expect(description.exists()).toBe(true);
-	expect(description.text()).toBe('Description');
+	expect(description.text()).toBe('Description:');
 });
 
 it('Name', () => {

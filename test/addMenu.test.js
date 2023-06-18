@@ -55,5 +55,5 @@ it('Description subtitle', () => {
     const wrapper = mount(AddMenu);
 	const description = wrapper.find('#descriptionIdPrefix');
     expect(description.exists()).toBe(true);
-    expect(description.text()).toBe("Description")
+    expect(description.text()).toBe("Description:")
 });

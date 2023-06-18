@@ -78,7 +78,7 @@ it('Check if category description is displayed', () => {
         }
       });
     const name = wrapper.find('#category-description');
-    expect(name.text()).toBe('Description');
+    expect(name.text()).toBe('Description:');
 });
 it('Check if category order in menu  is displayed', () => {
     const wrapper = mount(EditCategoryComponent,{
@@ -88,7 +88,7 @@ it('Check if category order in menu  is displayed', () => {
         }
       });
     const name = wrapper.find('#category-orderinmenu');
-    expect(name.text()).toBe('Order in Menu');
+    expect(name.text()).toBe('Presentation Order');
 });
 // it('Check if subcategory name  is displayed in pop up', () => {
 //     const wrapper = mount(EditCategoryComponent,{

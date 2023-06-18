@@ -146,7 +146,7 @@ it('Check if item subcategory is displayed', () => {
         }
       });
     const name = wrapper.find('#item-subcategory');
-    expect(name.text()).toBe('Subcategory');
+    expect(name.text()).toBe('Subcategory:');
 });
 
 it('Check if item add subcategory button is displayed', () => {
@@ -157,7 +157,7 @@ it('Check if item add subcategory button is displayed', () => {
         }
       });
     const button = wrapper.find('#item-add-subcategory');
-    expect(button.text()).toBe('Add Subcategory');
+    expect(button.text()).toBe('Add subcategory');
 });
 
 it('Check if item delete button is displayed', () => {
@@ -212,7 +212,7 @@ it('Check if item add option button is displayed', () => {
         }
       });
     const button = wrapper.find('#item-add-option');
-    expect(button.text()).toBe('Add Option');
+    expect(button.text()).toBe('Add option');
 });
 
 it('Check if item presentation is displayed', () => {
