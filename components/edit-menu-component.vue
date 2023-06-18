@@ -26,6 +26,9 @@ const defaultSrc =
 const checkEdit = ref(false);
 const checkDelete = ref(false);
 
+const imageEdited: Ref<File | null> = ref(null);
+const acceptedTypes = ['image/jpeg', 'image/png'];
+
 const emit = defineEmits(['close']);
 
 // eslint-disable-next-line prefer-const
@@ -33,7 +36,54 @@ let name = selectedMenu.value.name;
 // eslint-disable-next-line prefer-const
 const description : Ref<string>= ref(selectedMenu.value.description);
 // eslint-disable-next-line prefer-const
-let src = selectedMenu.value.imageUrl;
+const src = ref(selectedMenu.value.imageUrl);
+
+/// function to handle the upload of a image to a menu
+function handleFileUpload(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else imageEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+				src.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(imageEdited.value)
+		reader.readAsDataURL(imageEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected image for a menu
+function deleteImg(){
+	imageEdited.value=null
+	src.value=defaultSrc
+}
+
+// Function to display a error notification
+const openErrorNotification = (notifTitle: string) => {
+	ElNotification({
+		title: notifTitle,
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'Please try with a diffrent file.',
+		),
+		customClass: 'notif',
+	});
+};
 
 // Deep copy the two arrays and ref them
 const startTimes = ref(
@@ -63,10 +113,12 @@ const editMenu = async() => {
 		description : description.value,
 		version: 1,
 		active: true,
-		imageUrl: defaultSrc,
+		imageUrl: src.value,
 		itemSet: [],
 		hoursSet
 	};
+	if(imageEdited.value) 
+		carte.imageUrl=""
 	await useFetch('/api/menus/editMenu', {
 		method: 'PUT',
 		body: carte,
@@ -74,13 +126,22 @@ const editMenu = async() => {
 			'Content-Type': 'application/json',
 		},
 	});
+	if(imageEdited.value){
+		const formData = new FormData();
+		formData.append('file', imageEdited.value);
+		formData.append('id', selectedMenu.value.id.toString())
+		await useFetch(`/api/photos/photoMenu`, {
+			method: 'POST',
+			body: formData,
+		});
+	}
 	checkEdit.value = false;
 	// Adjust locally
 	restaurantRef.value.carteSet.filter((menu) => {
 		if (menu.id === selectedMenu.value.id) {
 			menu.name = name;
 			menu.description = description.value;
-			menu.imageUrl = src;
+			menu.imageUrl = src.value;
 			menu.hoursSet = hoursSet;
 		}
 		return true;
@@ -154,8 +215,9 @@ async function addAiMenuDescription() {
 					style="width: 13vw; height: 15vh; object-fit: cover; border-radius: 40px"
 				/>
 				<div class="photoButtonSpace">
-					<el-button class="specialPhotoButton">Change</el-button>
-					<el-button class="specialPhotoButton">Delete</el-button>
+					<label for="changePhoto" class="specialPhotoLabel" >Change</label>
+					<input id="changePhoto" type="file" style="display: none;" @change="handleFileUpload"/>
+					<el-button class="specialPhotoButton" @click="deleteImg()">Delete</el-button>
 				</div>
 			</div>
 		</div>
@@ -306,6 +368,25 @@ async function addAiMenuDescription() {
 }
 .aiButtonSubcatgory:hover,
 .specialPhotoButton:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
+
+
+.specialPhotoLabel {
+	border-radius: 25px;
+	font-size: 1vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 50%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.specialPhotoLabel:hover {
 	background-color: #ed5087;
 	border-color: darkgrey;
 	color: white;
