@@ -13,7 +13,6 @@ await restaurantStore.getRestaurant();
 const restaurant = restaurantStore.restaurantGetter;
 const computedLanguageId = computed(() => languageStore.idGetter);
 
-
 const route = useRoute();
 
 const path = computed(() => route.path);

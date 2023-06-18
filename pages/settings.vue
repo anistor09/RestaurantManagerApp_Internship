@@ -312,7 +312,7 @@ function changeLanguageGlobally() {
 							</el-select>
 						</div>
 						<div id="mailIdPrefix" class="prefix">{{translations[computedLanguageId].language}}</div>
-						<div style="width: 50%">
+						<div style="width: 27%">
 							<el-select
 								v-model="selectedLanguage"
 								class="currency-select-item"

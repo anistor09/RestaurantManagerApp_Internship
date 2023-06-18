@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 
 const map = (s : String) => {
-    if (s === 'English')
+    if (s === 'EN')
         return 0
-    else if (s === 'Romanian')
+    else if (s === 'RO')
         return 1
     else 
         return -1
@@ -15,7 +15,7 @@ interface LanguageState {
 export const useLanguageStore = defineStore({
     id: 'language-store',
     state: (): LanguageState => ({
-        language: 'English',
+        language: 'EN',
     }), 
     persist: {
         key: 'language',
