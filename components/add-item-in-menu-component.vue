@@ -35,7 +35,7 @@ const filteredSubcategories = ref(restaurant.subCategorySet);
 // this represents the subcategory object itself that is selected by the user
 const selectedSubcategory = ref<SubCategory | null>(filteredSubcategories.value[0]);
 
-const restaurantItems = ref(restaurant.itemSet);
+const restaurantItems = restaurant.itemSet;
 
 // the items that have the category and subcategory selected
 const filteredItems = ref(restaurant.itemSet);
@@ -44,8 +44,9 @@ const filteredItems = ref(restaurant.itemSet);
 const itemName = ref('');
 
 // the object itself of the selected item (what the popup will return)
-const selectedItem = ref(restaurantItems.value[0]);
+const selectedItem = ref(restaurantItems[0]);
 
+console.log(filteredItems.value.length)
 const enableSubcategory = ref(false);
 
 /*
@@ -53,40 +54,75 @@ const enableSubcategory = ref(false);
   Moreover, it disables the items because the user didn't choose the subcategory. 
 */
 const changeCategory = () => {
-	enableSubcategory.value = true;
-	subcategoryName.value = '';
-	itemName.value = '';
-	selectedCategory.value = categories.value.filter((x) => x.name === categoryName.value)[0];
-	filteredItems.value = restaurantItems.value.filter(
-		(x) => x.category.id === selectedCategory.value.id,
-	);
-	filteredSubcategories.value = selectedCategory.value.subCategorySet;
+	if (categoryName.value.length > 0) {
+		enableSubcategory.value = true;
+		subcategoryName.value = '';
+		itemName.value = '';
+		selectedCategory.value = categories.value.filter((x) => x.name === categoryName.value)[0];
+		filteredItems.value = restaurantItems.filter(
+			(x) => {
+				if (x === null)
+					return false;
+				if (x.category === null)
+					return false;
+				if (x.category.id === null)
+					return false;
+				return x.category.id === selectedCategory.value.id
+			}
+		);
+		console.log(filteredItems.value.length)
+		filteredSubcategories.value = selectedCategory.value.subCategorySet;
+	} else {
+		enableSubcategory.value = false;
+		subcategoryName.value = '';
+		itemName.value = '';
+		selectedCategory.value = categories.value[0];
+		filteredItems.value = restaurantItems;
+		filteredSubcategories.value = restaurant.subCategorySet;
+	}
 };
 
 /*
   This method applies when the user choose the subcategory. It enables the items and make the filtering.
 */
 const changeSubCategory = () => {
-	itemName.value = '';
-	selectedSubcategory.value = filteredSubcategories.value.filter(
-		(x) => x.name === subcategoryName.value,
-	)[0];
-	filteredItems.value = restaurantItems.value.filter(
-		(x) =>
-			x.category.id === selectedCategory.value.id &&
-			x.subCategory?.id === selectedSubcategory.value?.id,
-	);
+	if (subcategoryName.value.length > 0) {
+		itemName.value = '';
+		selectedSubcategory.value = filteredSubcategories.value.filter(
+			(x) => x.name === subcategoryName.value,
+		)[0];
+		filteredItems.value = restaurantItems.filter(
+			(x) => {
+				if (x.category === null)
+					return false;
+				if (x.subCategory === null)
+					return false;
+				if (selectedCategory.value === null)
+					return false;
+				return x.category.id === selectedCategory.value.id && x.subCategory.id === selectedSubcategory?.value?.id
+				x.category.id === selectedCategory.value.id &&
+				x.subCategory?.id === selectedSubcategory.value?.id
+			}
+		);
+	} else {
+		changeCategory();
+	}
 };
 
 /*
   This method applies when the user choose the item. It updated the object.
 */
 const changeItem = () => {
-	selectedItem.value = filteredItems.value.filter((x) => x.name === itemName.value)[0];
-	selectedCategory.value = selectedItem.value.category;
-	categoryName.value = selectedCategory.value.name;
-	selectedSubcategory.value = selectedItem.value.subCategory;
-	subcategoryName.value = selectedSubcategory.value === null ? '' : selectedSubcategory.value.name;
+	if (itemName.value === '') {
+		categoryName.value = '';
+		subcategoryName.value = '';
+	} else {
+		selectedItem.value = filteredItems.value.filter((x) => x.name === itemName.value)[0];
+		selectedCategory.value = selectedItem.value.category;
+		categoryName.value = selectedCategory.value.name;
+		selectedSubcategory.value = selectedItem.value.subCategory;
+		subcategoryName.value = selectedSubcategory.value === null ? '' : selectedSubcategory.value.name;
+	}
 };
 
 const addItemInMenu = async () => {
