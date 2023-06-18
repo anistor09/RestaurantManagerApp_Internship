@@ -38,10 +38,9 @@ it('Renders popup', () => {
 it('Buttons', () => {
     const wrapper = mount(AddMenu);
 	const buttons = wrapper.findAll(".specialPhotoButton");
-    expect(buttons.length).toBe(3);
-    expect(buttons[0].text()).toBe("Change")
-    expect(buttons[1].text()).toBe("Delete")
-    expect(buttons[2].text()).toBe("Add")
+    expect(buttons.length).toBe(2);
+    expect(buttons[0].text()).toBe("Delete")
+    expect(buttons[1].text()).toBe("Add")
 });
 
 it('Name subtitle', () => {

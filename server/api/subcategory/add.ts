@@ -1,3 +1,5 @@
+import { SubCategory } from "~/interfaces/SubCategory";
+
 export default defineEventHandler((event) => {
 	// Reads the body of the event and returns a promise
 	return readBody(event).then(async (data) => {
@@ -36,11 +38,7 @@ export default defineEventHandler((event) => {
 		});
 	
 		const responseData = await response;
-		const responseString = await responseData.text()
-		const splitString =  responseString.split(" ")
-		// Extracts the new ID from the response
-		const newId =splitString[splitString.length - 1];
-		// Returns the new ID
-		return newId;
+		const responseString = await responseData.json() as SubCategory
+		return responseString.id;
 	});
 });

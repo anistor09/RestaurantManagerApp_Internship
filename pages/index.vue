@@ -102,10 +102,20 @@ async function loadMostSoldItems() {
 }
 
 const svg = `
-		<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<circle cx="50" cy="50" r="45"/>
-		</svg>
-      `;
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <circle class="loadingCircle" cx="50" cy="50" r="45" style="
+    animation: 1.4s ease-in-out infinite both circle-animation1 !important;
+    display: block !important;
+    fill: transparent !important;
+    stroke: #ed5087 !important;
+    stroke-linecap: round !important;
+    stroke-dasharray: 283 !important;
+    stroke-dashoffset: 100 !important;
+    stroke-width: 5px !important;
+    transform-origin: 50% 50% !important;
+  "/>
+</svg>
+`;
 </script>
 
 <template>

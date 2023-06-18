@@ -88,6 +88,7 @@ function closeEditPopup() {
 	editMenu.value = false;
 	editPopupKey.value++;
 }
+
 </script>
 
 <template>

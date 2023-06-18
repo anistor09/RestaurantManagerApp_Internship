@@ -16,6 +16,8 @@ const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 const languageStore = useLanguageStore();
 
+const defaultSrc ='https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
+const src = ref(restaurant.imageUrl || defaultSrc);
 const name = ref(restaurant.name);
 const addresse = ref(restaurant.addresse);
 const description = ref(restaurant.description);
@@ -86,6 +88,26 @@ const saveChanges = async () => {
 		},
 	});
 
+	// if(logoEdited.value){
+	// 	const formData = new FormData();
+	// 	formData.append('file', logoEdited.value);
+	// 	formData.append('id', restaurant.id.toString())
+	// 	await useFetch(`/api/photos/photoLogo`, {
+	// 		method: 'POST',
+	// 		body: formData,
+	// 	});
+	// }
+
+	if(backgroundEdited.value){
+		const formData = new FormData();
+		formData.append('file', backgroundEdited.value);
+		formData.append('id', restaurant.id.toString())
+		await useFetch(`/api/photos/photoBackground`, {
+			method: 'POST',
+			body: formData,
+		});
+	}
+
 	doubleCheck.value = false;
 };
 async function addAiRestaurantDescription() {
@@ -110,9 +132,6 @@ async function addAiRestaurantDescription() {
 		description.value = response.data.value;
 	}
 }
-const defaultSrc =
-	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
-const src = ref(restaurant.imageUrl || defaultSrc);
 function changeCurrencyGlobally() {
 	currencyStore.currencyGetter.currency = selectedCurrency.value;
 }
@@ -158,17 +177,14 @@ function changeLanguageGlobally() {
 							style="font-size: 1vw; width: 100%"
 							placeholder="Please input"
 						/>
-						<div style="width: 100%; padding-top: 1%">
-							<el-button
-								class="specialPhotoButton"
-								data-testid="changeLogoButton"
-								style="width: 35%; height: 3vh; font-size: 0.8vw; margin-right: 3%"
-								>{{translations[computedLanguageId].changeLogo}}</el-button
-							>
+						<div style="width: 100%; padding-top: 1%; display: flex;">
+							<label for="changePhotoLogo" class="specialPhotoLabel" style="width: 35%; height: 3vh; font-size: 0.8vw; margin-right: 3%">{{translations[computedLanguageId].changeLogo}}</label>
+							<input id="changePhotoLogo" type="file" style="display: none;" @change="handleFileUploadLogo"/>
 							<el-button
 								class="specialPhotoButton"
 								data-testid="deleteLogoButton"
 								style="width: 35%; height: 3vh; font-size: 0.8vw"
+								@click="deleteImgLogo()"
 								>{{translations[computedLanguageId].deleteLogo}}</el-button
 							>
 						</div>
@@ -187,8 +203,9 @@ function changeLanguageGlobally() {
 						"
 					/>
 					<div class="photoButtonSpace">
-						<el-button data-testid="changeBackButton" class="specialPhotoButton">{{translations[computedLanguageId].change}}</el-button>
-						<el-button data-testid="deleteBackButton" class="specialPhotoButton">{{translations[computedLanguageId].delete}}</el-button>
+						<label for="changePhotoBackground" class="specialPhotoLabel">{{translations[computedLanguageId].change}}</label>
+						<input id="changePhotoBackground" type="file" style="display: none;" @change="handleFileUploadBackground"/>
+						<el-button data-testid="deleteBackButton" class="specialPhotoButton" @click="deleteImgBackground()">{{translations[computedLanguageId].delete}}</el-button>
 					</div>
 				</div>
 				<!-- Container which the other information(description, phone number, email and category)-->
@@ -403,6 +420,25 @@ textarea::-webkit-scrollbar {
 	color: white;
 }
 
+.specialPhotoLabel {
+	border-radius: 25px;
+	font-size: 1vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 80%;
+	height: 30%;
+	margin-left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.specialPhotoLabel:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
 .photoButtonSpace {
 	width: 30%;
 	padding-left: 5%;

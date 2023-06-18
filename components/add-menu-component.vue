@@ -21,8 +21,7 @@ const props = defineProps({
 	},
 });
 const restaurantRef = ref(props.restaurant);
-const defaultSrc =
-	'https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg';
+const defaultSrc = 'https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg';
 const src = ref(defaultSrc);
 const name = ref('');
 const description = ref('');
@@ -39,12 +38,64 @@ translations[computedLanguageId.value].saturday, translations[computedLanguageId
 const doubleCheck = ref(false);
 
 const nameNeededPopUp = ref(false);
+const imageEdited: Ref<File | null> = ref(null);
+const acceptedTypes = ['image/jpeg', 'image/png'];
+
+/// function to handle the upload of a image to a menu
+function handleFileUpload(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else imageEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+				src.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(imageEdited.value)
+		reader.readAsDataURL(imageEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected image for a menu
+function deleteImg(){
+	imageEdited.value=null
+	src.value=defaultSrc
+}
+
+
+// Function to display a error notification
+const openErrorNotification = (notifTitle: string) => {
+	ElNotification({
+		title: notifTitle,
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'Please try with a diffrent file.',
+		),
+		customClass: 'notif',
+	});
+};
+
+
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
 };
 
-const addMenu = async () => {
+async function addMenu() {
 	const hoursSet = [];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
@@ -63,18 +114,35 @@ const addMenu = async () => {
 		description: description.value,
 		version: 1,
 		active: true,
-		imageUrl: defaultSrc,
+		imageUrl: src.value,
 		itemSet: [],
 		hoursSet,
 	};
-	await useFetch('/api/menus/addMenu', {
+	if(imageEdited.value) 
+		carte.imageUrl=""
+	const response = await useFetch('/api/menus/addMenu', {
 		method: 'POST',
 		body: carte,
 		headers: {
 			'Content-Type': 'application/json',
 		},
 	});
-	restaurantRef.value.carteSet.push(carte);
+	const carteId=response.data.value
+	if(carteId)
+	{
+		carte.id=carteId
+		carte.imageUrl=src.value
+		restaurantRef.value.carteSet.push(carte);
+		if(imageEdited.value){
+			const formData = new FormData();
+			formData.append('file', imageEdited.value);
+			formData.append('id', carteId.toString())
+			await useFetch(`/api/photos/photoMenu`, {
+				method: 'POST',
+				body: formData,
+			});
+		}
+	}
 	doubleCheck.value = false;
 	emit('close');
 };
@@ -111,8 +179,9 @@ async function addAiMenuDescription() {
 					style="width: 13vw; height: 15vh; object-fit: cover; border-radius: 40px"
 				/>
 				<div class="photoButtonSpace">
-					<el-button class="specialPhotoButton">{{ translations[computedLanguageId].change }}</el-button>
-					<el-button class="specialPhotoButton">{{ translations[computedLanguageId].delete }}</el-button>
+					<label for="changePhoto" class="specialPhotoLabel" >{{ translations[computedLanguageId].change }}</label>
+					<input id="changePhoto" type="file" style="display: none;" @change="handleFileUpload"/>
+					<el-button class="specialPhotoButton" @click="deleteImg()">{{ translations[computedLanguageId].delete }}</el-button>
 				</div>
 			</div>
 		</div>
@@ -254,6 +323,20 @@ async function addAiMenuDescription() {
 	width: 50%;
 	height: 30%;
 }
+
+.specialPhotoLabel {
+	border-radius: 25px;
+	font-size: 1vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 50%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .aiButtonSubcatgory {
 	border-radius: 15px;
 	font-size: 0.9vw;
@@ -271,6 +354,11 @@ async function addAiMenuDescription() {
 	color: white;
 }
 
+.specialPhotoLabel:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
 .el-button + .el-button {
 	margin-left: 0;
 }

@@ -43,11 +43,10 @@ it('Buttons', () => {
 		},
 	});
 	const buttons = wrapper.findAll('.specialPhotoButton');
-	expect(buttons.length).toBe(4);
-	expect(buttons[0].text()).toBe('Change');
-	expect(buttons[1].text()).toBe('Delete');
-	expect(buttons[2].text()).toBe('Save menu');
-	expect(buttons[3].text()).toBe('Delete menu');
+	expect(buttons.length).toBe(3);
+	expect(buttons[0].text()).toBe('Delete');
+	expect(buttons[1].text()).toBe('Save menu');
+	expect(buttons[2].text()).toBe('Delete menu');
 });
 
 it('Name subtitle', () => {
