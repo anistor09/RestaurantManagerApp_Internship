@@ -216,7 +216,7 @@ function changeLanguageGlobally() {
 							text-align: start;
 							width: 90%;
 							resize: none;
-							height: 10vh;
+							height: 12vh;
 							overflow: auto;
 							max-width: 80vw;
 							min-width: 300px;

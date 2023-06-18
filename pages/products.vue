@@ -16,7 +16,7 @@ const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
 const currentProduct = ref('Items');
-const selectedProducts = ['Items', 'Categories'];
+const selectedProducts = computed(() => [translations[computedLanguageId.value].items, translations[computedLanguageId.value].categories]);
 
 const searchItems = ref('');
 const searchCategories = ref('');
@@ -130,7 +130,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 					:name="product"
 					class="products-individual-tab"
 				>
-					<el-row v-if="currentProduct === 'Items'" class="up-buttons-products">
+					<el-row v-if="currentProduct === selectedProducts[0]" class="up-buttons-products">
 						<el-col :span="2" :offset="1">
 							<el-input
 								v-model="searchItems"
@@ -164,7 +164,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 							>
 						</el-col>
 					</el-row>
-					<div v-if="currentProduct === 'Items'">
+					<div v-if="currentProduct === selectedProducts[0]">
 						<el-row
 							v-for="rowIndex in Math.ceil(filterItems.length / 3)"
 							:key="rowIndex"
@@ -244,7 +244,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 }
 
 .products-button {
-	width: 7vw;
+	width: 9vw;
 	font-size: 0.8vw;
 	font-weight: bold;
 }
