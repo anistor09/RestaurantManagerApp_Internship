@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { computed } from "vue";
 import { useRestaurantStore } from '../store/restaurant';
 import { useLanguageStore } from '../store/language';
 import translations from '../mockData/translations.json';

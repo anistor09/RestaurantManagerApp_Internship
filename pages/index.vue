@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 import PageTitle from '../components/page-title.vue';
 import { useLanguageStore } from '../store/language';
 import AnalyticsBarComponent from '../components/analytics-bar-component.vue';
 import AnalyticsGraphComponent from '../components/analytics-graph-component.vue';
 import RestaurantComponent from '../components/restaurant-component.vue';
-import { MostSoldItems } from '~/interfaces/MostSoldItems';
-import { TimePrice } from '~/interfaces/TimePrice';
-import translations from '~/mockData/translations.json'
+import { MostSoldItems } from '../interfaces/MostSoldItems';
+import { TimePrice } from '../interfaces/TimePrice';
+import translations from '../mockData/translations.json'
 
 const languageStore = useLanguageStore();
 const computedLanguageId = computed(() => languageStore.idGetter);

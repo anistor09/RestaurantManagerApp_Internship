@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ElSelect } from 'element-plus';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useLanguageStore } from '../store/language';
 import { useRestaurantStore } from '../store/restaurant';
 import translations from '../mockData/translations.json';

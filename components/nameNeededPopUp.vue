@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineEmits } from 'vue';
+import { comnputed, defineEmits } from 'vue';
 
 defineEmits(['close-no-name']);
 

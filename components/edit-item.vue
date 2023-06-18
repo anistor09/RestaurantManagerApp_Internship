@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ElSelect } from 'element-plus';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 import allergens from '../mockData/allergens.json';
 import PageTitle from '../components/page-title.vue';
 import OptionComponent from '../components/option-component.vue';

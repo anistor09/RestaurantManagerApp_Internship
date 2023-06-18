@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { computed } from "vue";
 import { Choice } from '~/interfaces/Choice';
 import { Option } from '~/interfaces/Option';
 import { ChoiceWrapper } from '~/interfaces/ChoiceWrapper';

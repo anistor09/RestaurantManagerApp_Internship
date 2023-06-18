@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { computed } from "vue";
 import { Search } from '@element-plus/icons-vue';
 import { useLanguageStore } from '../store/language';
 import translations from '../mockData/translations.json';

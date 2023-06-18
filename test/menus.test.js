@@ -32,7 +32,7 @@ vi.mock('../store/currency.ts', () => {
 });
 vi.mock('../store/language.ts', () => {
     return {
-        useCurrencyStore: vi.fn(() => {
+        useLanguageStore: vi.fn(() => {
             return {
                 languageGetter: languages[0],
 				idGetter: 0

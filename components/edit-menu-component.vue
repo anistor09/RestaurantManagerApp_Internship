@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useLanguageStore } from '../store/language';
 import translations from '../mockData/translations.json';
 import { Carte } from '~/interfaces/Carte';

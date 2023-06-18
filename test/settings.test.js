@@ -5,7 +5,6 @@ import languages from '../mockData/languages.json';
 import SettingsPage from '../pages/settings.vue';
 import PageTitle from '../components/page-title.vue';
 import currencies from '../mockData/currecyMock.json';
-import languages from '../mockData/languages.json';
 
 vi.mock('../store/restaurant.ts', () => {
 	return {
@@ -31,7 +30,7 @@ vi.mock('../store/currency.ts', () => {
 
 vi.mock('../store/language.ts', () => {
     return {
-        useCurrencyStore: vi.fn(() => {
+        useLanguageStore: vi.fn(() => {
             return {
                 languageGetter: languages[0],
 				idGetter: 0
@@ -48,7 +47,7 @@ it('renders settings page', () => {
 it('title works', () => {
 	const title = wrapper.findComponent(PageTitle);
 	expect(title.exists()).toBe(true);
-	expect(title.props('title')).toBe('Restaurant Overview');
+	expect(title.props('title')).toBe('Settings');
 });
 
 it('descriptionPrefix', () => {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { ElTimeSelect } from 'element-plus';
 import { useRestaurantStore } from '../store/restaurant';
 import { Hours } from '../interfaces/Hours';
@@ -9,7 +9,7 @@ import currencies from '../mockData/currency.json';
 import languages from '../mockData/languages.json';
 import { useCurrencyStore } from '../store/currency';
 import { useLanguageStore } from '../store/language';
-import translations from '~/mockData/translations.json'
+import translations from '../mockData/translations.json'
 
 const currencyStore = useCurrencyStore();
 const restaurantStore = useRestaurantStore();
