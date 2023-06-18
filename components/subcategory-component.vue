@@ -2,9 +2,9 @@
 import { computed, ref } from 'vue';
 import { useCurrencyStore } from '../store/currency';
 import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { ItemWrapper } from '~/interfaces/ItemWrapper';
 import { Restaurant } from '~/interfaces/Restaurant';
-import translations from '../mockData/translations.json';
 
 
 const languageStore = useLanguageStore();

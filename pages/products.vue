@@ -15,7 +15,7 @@ const itemStore = useItemStore();
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
-const currentProduct = ref('Items');
+const currentProduct = ref(translations[computedLanguageId.value].items);
 const selectedProducts = computed(() => [translations[computedLanguageId.value].items, translations[computedLanguageId.value].categories]);
 
 const searchItems = ref('');
