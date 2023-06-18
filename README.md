@@ -1,26 +1,27 @@
 # EWAI group - Restaurant Manager App
 
-
 ## Setup and commands
 
 Make sure to install the dependencies using `npm install`.
+
 - To **run the project**, use the command `npm run dev`. By default, the project runs on `http://localhost:3000/`, when not authenticated you are redirected to the login portal.
 - To run the **checkstyle**, use the command `npm run lint`.
 - To run the **unit tests**, use either:
-    -  `npm run test` for the basic version: useful for quick checks, shows the coverage and only runs tests once
-    - `npm run test:ui` for the UI version: useful for development, the tests are rerun after each update and there are easy to analyse using the UI
+  - `npm run test` for the basic version: useful for quick checks, shows the coverage and only runs tests once
+  - `npm run test:ui` for the UI version: useful for development, the tests are rerun after each update and there are easy to analyse using the UI
 - To run the **integration/e2e (Cypress) tests**, use the command `npm run cypress`
 
 You can use `npm run` to see all possible scripts.
 
 ## Features
+
 Now, we will provide a comprehensive overview of the various functionalities and capabilities offered by our application. We divided each of the key features in a separate section.
 
 ### **1. Authentication and Login Page**
-The Login Page component enables users to authenticate themselves and gain access to the application's features. It offers a user-friendly interface with a logo, slogan, welcome message, and a login button. The page utilizes various design elements and styling to create an appealing visual experience. 
+
+The Login Page component enables users to authenticate themselves and gain access to the application's features. It offers a user-friendly interface with a logo, slogan, welcome message, and a login button. The page utilizes various design elements and styling to create an appealing visual experience.
 
 It's default URL is `http://localhost:3000/login`.
-
 
 #### **Dependencies**
 
@@ -37,7 +38,8 @@ The Login Page component defines the following variables and methods:
 - `signIn()`: A method triggered when the login button is clicked. It handles the authentication process by redirecting the user to the authorization endpoint.
 
 #### **Authentication details**
-*todo*
+
+_todo_
 
 #### **Page Structure**
 
@@ -49,9 +51,10 @@ The Login Page has a well-structured layout to ensure a seamless user experience
 - **Button and Welcome Text**: The login button and welcome text are wrapped together to maintain a consistent layout. The welcome text serves as a friendly greeting to the user.
 - **Styling**: Custom styling is applied to various elements to match the desired design. This includes font styles, button appearance, and responsive design for different screen sizes.
 
-*Note: This documentation provides an overview of the Login Page component and its functionality. To fully understand the implementation and integration within the larger application, reviewing the code implementation is recommended.*
+_Note: This documentation provides an overview of the Login Page component and its functionality. To fully understand the implementation and integration within the larger application, reviewing the code implementation is recommended._
 
 ### **2. Sidebar menu**
+
 The Sidebar Menu component provides a sidebar navigation menu for the application. It allows users to easily navigate between different sections of the application. The component is implemented using Vue.js and utilizes various UI components from the Element Plus library. This component is available by default on all pages, apart from the login page.
 
 #### **Dependencies**
@@ -83,12 +86,14 @@ The Sidebar Menu component has the following structure:
 - **Logo**: The logo image is displayed within the sidebar using the `img` tag and the `logo` class.
 - **Styling**: The component has scoped CSS styles to customize the appearance of the sidebar menu. The styles include font settings, item layout, background colors, and logo styling.
 
-*Note: This documentation provides an overview of the Sidebar Menu component and its functionality. To understand the complete implementation and integration within the broader application, it is recommended to review the code implementation.*
+_Note: This documentation provides an overview of the Sidebar Menu component and its functionality. To understand the complete implementation and integration within the broader application, it is recommended to review the code implementation._
 
 ### **3. Home Page**
+
 The Home page is the main landing page of the application, providing an overview of restaurant information and some analytics. It includes various components and functionalities to display data and provide a rich user experience.
 
 #### **Dependencies**
+
 The Home page component imports several custom components and interfaces from external files. These dependencies include:
 
 - `PageTitle`: A custom component for displaying the page title (used on every page for consistency).
@@ -99,6 +104,7 @@ The Home page component imports several custom components and interfaces from ex
 - `TimePrice`: An interface representing the time and price data structure.
 
 #### **Variables and Methods**
+
 The Home page component defines several reactive variables and data properties using the `ref` function provided by Vue.js. It also defines asynchronous methods for fetching and loading data from the server.
 
 - `barTitle`, `graphTitle`, `graphShortTitle`, `graphTitle2`, `graphShortTitle2`: Strings used for displaying titles in the analytics components.
@@ -108,6 +114,7 @@ The Home page component defines several reactive variables and data properties u
 - `svg`: A string containing an SVG element used as a loading spinner.
 
 #### **Page Structure**
+
 The Home page has a structured layout that includes various components and sections to display restaurant analytics and information.
 
 - The main template consists of a `PageTitle` component for displaying the page title and a `<div>` element for layout purposes.
@@ -119,10 +126,12 @@ The Home page has a structured layout that includes various components and secti
 
 More details related to how the analytics work and their dependencies can be found in the dedicated "Analytics" feature section.
 
-*Note: This documentation provides an overview of the Home page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
+_Note: This documentation provides an overview of the Home page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application._
 
 ### **4. Menus Page**
+
 The Menus page allows restaurant managers to manage and customize the menus of their restaurant. It provides a user interface for:
+
 - selecting and visualizing menus, along with their categories, subcategories and items
 - adding, editing, and deleting menus
 - adding items to menus and removing them from the menu
@@ -136,7 +145,7 @@ The Menus page component imports several dependencies and custom components from
 - `element-plus`: A Vue.js CSS library that provides various UI components used in the Menus page.
 - `SubcategoryComponent`: A custom component for displaying and managing the items within a subcategory.
 - `EditMenuComponent`: A custom component pop=up for editing menu details.
-- `AddItemInMenuComponent`: A custom component  pop-up for adding items to a menu.
+- `AddItemInMenuComponent`: A custom component pop-up for adding items to a menu.
 - `AddMenuComponent`: A custom component for creating a new menu.
 - `PageTitle`: A custom component for displaying the page title (used on every page for consistency).
 - `Carte`, `Category`, `Item`, `ItemWrapper`, and `SubCategory`: Interfaces or types used in the Menus page, constructed in accordance to the database structure.
@@ -164,10 +173,12 @@ The Menus page has a clearly delimited structure, in order to have a clear separ
 - **Subcategories**: the subcategory component is esentially a very customized `el-collapse` component, which contains all items in the selected menu corresponding to that subcategory. All items have a `"Remove from menu"` button for easy management. The subcategory component is searchable.
 - **Pop-ups**: the adding, editing an placing an item in a menu are all done via suggestive pop-ups, accessible by pressing their corresponding button.
 
-*Note: This documentation provides an overview of the Menus page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
+_Note: This documentation provides an overview of the Menus page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application._
 
 ### **5. Products Page**
+
 The Products page allows restaurant managers to manage and customize the items and categories of their restaurant. It provides a user interface for:
+
 - selecting and visualizing items, along with their name, image, description, category, Subcategory and price
 - selecting and visualizing categories, along with their name, image, description
 
@@ -201,23 +212,24 @@ The Products page component defines several reactive variables and data properti
 The Products page has a clearly delimited structure, in order to have a clear separation between the page functionalities.
 
 - The main template consists of a `PageTitle` component for displaying the page title and a `el-scrollbar` component that wraps the content of the Producs page.
-- **Main body**: 
+- **Main body**:
 - The body encapsualtes two `tabs`, which represent the items and categories sections. Clicking on them will display the corresponding section.
 - When the `Items` tab is clicked (also the default tab), all items stored in the database will be shown as `ItemComponent` cards, which can be clicked for performing edit operations on the item. Adding a new item can be achieve by pressing on the `+Add item` button, which redirects the user to the Edit Item Page(`http://localhost:3000/editItemView`)
-- When the `Categories` tab is clicked, all items stored in the database will be shown as `CategoryComponent` cards, which can be clicked for performing edit operations on the category. Adding a new category can be achieve by pressing on the `+Add category` button, which will redirect the user to the Edit Category Page(`http://localhost:3000/editCategoryView`). 
+- When the `Categories` tab is clicked, all items stored in the database will be shown as `CategoryComponent` cards, which can be clicked for performing edit operations on the category. Adding a new category can be achieve by pressing on the `+Add category` button, which will redirect the user to the Edit Category Page(`http://localhost:3000/editCategoryView`).
 
-
-*Note: This documentation provides an overview of the Menus page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
+_Note: This documentation provides an overview of the Menus page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application._
 
 ### **6. Edit Item Page**
-*todo*
+
+_todo_
 
 ### **7. Edit Category Page**
+
 The Edit Category Page page allows restaurant managers to manage and customize the Categories and Subcategories of their restaurant. It provides a user interface for:
+
 - adding, editing, and deleting categories
 - adding, editing, and deleting Subcategories
 - adding, editing, and deleting images for categories and Subcategories
-
 
 To access the Edit Category page, you can click on the "+Add Category" button available on the Producs page, after choosing the categories tab. It's default URL is `http://localhost:3000/editCategoryView`. You can also access the page in the 'Edit mode' when you click on a Category card from the Products page(`http://localhost:3000/editCategoryView/[categoryId]`).
 
@@ -233,11 +245,12 @@ The Edit Category page component imports several dependencies and custom compone
 #### **Variables and Methods**
 
 The Edit Category page component defines several reactive variables and data properties using the `ref` and `computed` functions provided by Vue.js. It also defines some methods and watchers for handling events and updating data.
+
 - `addCategory`, `categoryId`: Component's props for indicating whether a new category is being added or an existing one is being edited, along with the corresponding categoryId property.
 - `restaurantStore` and `restaurantGetter`: Store and getter for accessing restaurant data from the Pinia Store.
 - `name`,`description`, `src`,`presentationOrder`, `subCategories`: Reactive variables for storing the attributes of the new/selected Category.
 - `newSubcategoryName`,`newSubcategoryDescription`, `newSubcategorySrc`,`presentationSubcategoryOrder`: Reactive variables for storing the attributes of the new/selected Subcategory
-- `tobeDeletedSubcat`, `toBeEditedSubcat`:  Reactive variables for storing the ids of the Subcategories that have to be edited/deleted in the database for the current Category
+- `tobeDeletedSubcat`, `toBeEditedSubcat`: Reactive variables for storing the ids of the Subcategories that have to be edited/deleted in the database for the current Category
 - `nameNeededPopUp`, `deleteCategoryPopup`, `deleteSubcategoryPopup`: Reactive variables for managing the visibility of the pop-ups
 - `filteredSubcategories`, `hasSubcategoriesComputed`: Computed properties for ordering the Subcategories and managing their visibility.
 - `saveNewSubcategoryLocally`, `editSubcategoryLocally`, `deleteSubcategoryLocally`: Methods that modify the Subcategories locally, without triggering request to the database.
@@ -253,7 +266,7 @@ The Edit Category page has a clearly delimited structure, in order to have a cle
 
 - **Main body**: In the main body, there are two columns. The left column includes the Category's name, description,`Write with AI` button, image (wrapped in an el-image component), and presentation order, while the right column contains the scrollbar for Subcategories and the `add-subcategory-button`, wrapped in an `el-button` component and the `Save` which redirects the user to the Products Page(`http://localhost:3000/products`).
 
-- **Subcategories**: 
+- **Subcategories**:
 - the content of the subcategorie are wrapped in an `el-scrollbar` component. The name and image of each Subcategory are displayed, with the image wrapped in an `el-image` component.
 
 - **Pop-ups**:
@@ -261,17 +274,58 @@ The Edit Category page has a clearly delimited structure, in order to have a cle
 - `safetyPopUpDeleteSubcategory`,`deleteCategoryPopup`: The safety pop-ups prevent the accidental deletion of a Category or Subcategory.
 - `NameNeededPopUp`: This pop-up prevents sending an AI genearated request without having a name for the desired Category/ Subcategory.
 
-*Note: This documentation provides an overview of the Edit Category page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application.*
+_Note: This documentation provides an overview of the Edit Category page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application._
 
 ### **8. Tables Page**
-*todo*
+
+The Tables Page page allows restaurant managers to manage the tables their restaurant. It provides a user interface for adding, editing, and deleting tables, as well as see their QR code.
+
+To access the Tables page, you can click on the "Tables" button available in the sidebar. It's default URL is http://localhost:3000/tables.
+
+#### **Dependencies**
+
+The page imports several dependencies and custom components from external libraries or files. These dependencies include:
+
+- `element-plus`: A Vue.js CSS library that provides various UI components used in the Edit Category page.
+- `PageTitle`: A custom component for displaying the page title (used on every page for consistency).
+- `TableComponent`: A custom component for displaying the different tables in a nice card view structure.
+- `SearchBar`: A custom component used to encapsulate the search bar used in the page to search for tables for faster access.
+
+#### **Variables and Methods**
+
+The page defines several reactive variables and data properties using the `ref` and `computed` functions provided by Vue.js. It also defines some methods and watchers for handling events and updating data.
+
+- `restaurantStore` and `restaurantGetter`: Store and getter for accessing restaurant data from the Pinia Store.
+- `tables`: This variable is a reference (ref) to the tableRestaurantSet property of the restaurant object. It contains an array of tables in the restaurant.
+- `selectedTable`: This variable is a reference to an empty string (''). It is used to track the currently selected table.
+- `addPopup`, `editPopup`, `deletePopup`, `qrcodePopup`: These variables are references (ref) that control the visibility of pop-ups or dialogs. They are initially set to false and can be toggled to true to show the corresponding pop-up.
+- `qrcodeUrl`: This variable is a reference to an empty string (''). It holds the URL of a QR code associated with a table.
+- `tableId`, `tableNumber`, `tableCapacity`: These variables are references to numeric values (0). They store the ID, number, and capacity of the currently selected table.
+- `filteredTables`: This computed property filters the tables based on the selectedTable value. If selectedTable is empty, it returns all the tables; otherwise, it filters the tables to match the selected table number.
+- `handleDelete()`: This asynchronous function handles the deletion of a table. It makes a useFetch request to the specified API endpoint to delete the table with the tableId value. After successful deletion, it updates the tables by removing the deleted table from the array, and sets deletePopup to false to hide the delete pop-up.
+- `getTable`: This computed property retrieves the table object that matches the tableId value from the tables array.
+- `tableUrl`: This computed property retrieves the url property of the selected table using the getTable computed property.
+- `handleEdit()`: This asynchronous function handles the editing of a table. It creates a requestBody object with the updated table information and makes a useFetch request to update the table data in the API. After a successful update, it finds the index of the edited table in the tables array and replaces it with the updated table information. Finally, it sets editPopup to false to hide the edit pop-up.
+- `handleAdd()`: This function handles the addition of a new table. It creates a requestBody object with the new table information and makes a useFetch request to add the table data in the API. Upon a successful response, it pushes the new table object (including the assigned id, number, capacity, and url) to the tables array. It also sets addPopup to false to hide the add pop-up.
+- `watchEffect()`: This function establishes a reactive effect that runs whenever the getTable computed property changes. It updates the tableNumber and tableCapacity variables to match the currently selected table's number and capacity.
+
+#### **Page structure**
+
+The Tables page has a clearly delimited structure, in order to have a clear separation between the page functionalities.
+
+- The main template consists of a `PageTitle` component for displaying the page title and the Main body.
+
+- **Main body**: In the main body, there is a search bar, a button to add new tables and a grid of tables. Th grid's cells are table components, which are used to display the details of a table in a card style.
+
+_Note: This documentation provides an overview of the Tables page and its functionality. To understand the complete functionality and usage of the page, it is necessary to review the code implementation and its integration within the broader application._
 
 ### **9. Settings Page**
-*todo*
+
+_todo_
 
 ### **10. Analytics**
 
-The Analytics are a very powerful tool to analyse the performance of a restaurant. Frontend-wise, the analytics visualization is possible using two components: `analytics-bar-component` and `analytics-graph-component`. These components utilize ApexCharts library to display data processed and collected on the Analytics Backend in the form of bar charts and area graphs respectively. ApexCharts is a powerful and extensible charting library that supports various chart types and customization options. 
+The Analytics are a very powerful tool to analyse the performance of a restaurant. Frontend-wise, the analytics visualization is possible using two components: `analytics-bar-component` and `analytics-graph-component`. These components utilize ApexCharts library to display data processed and collected on the Analytics Backend in the form of bar charts and area graphs respectively. ApexCharts is a powerful and extensible charting library that supports various chart types and customization options.
 
 #### **Dependencies**
 
@@ -291,7 +345,6 @@ Props:
 
 The timeframes can be accessed through the four buttons available at the end of the chart in the Home Page.
 
-
 #### **`Analytics Graph Component`**
 
 The `analytics-graph-component` is a Vue component that displays analytics data using an area graph.
@@ -310,22 +363,23 @@ Both `analytics-bar-component` and `analytics-graph-component` leverage the Apex
 
 On the Analytics Backend, each of the current analytics has a corresponding processing algorithm, which are structured into a Strategy Design Pattern again for extensibility purposes.
 
-*Note: The usage examples above assume that you have registered and imported the `AnalyticsBarComponent` and `AnalyticsGraphComponent` components correctly.*
+_Note: The usage examples above assume that you have registered and imported the `AnalyticsBarComponent` and `AnalyticsGraphComponent` components correctly._
 
 ### **11. AI Autocompletion**
+
 On every page where we can find a `Description` field, we can also input the decription by pressing on the `Write with AI` button which will make a request to ChatGPT in order to retrieve a AI generated description of a preset length, using the name of the item/category/subcategory/menu/restaurant.
 
-The prompt that we use has the follwoing format `Please give me a description of around ${data.length} characters for an ${data.target} named ${data.itemName}, which is part of a restaurant menu. Please make sure each sentence is coherent and is finished.` where data.length is the  desired length of the description, data.target is the type for which we want a description(i.e. item/category/subcategory/menu/restaurant) and data.itemName is the name of the target(i.e. sweets, french fries).
+The prompt that we use has the follwoing format `Please give me a description of around ${data.length} characters for an ${data.target} named ${data.itemName}, which is part of a restaurant menu. Please make sure each sentence is coherent and is finished.` where data.length is the desired length of the description, data.target is the type for which we want a description(i.e. item/category/subcategory/menu/restaurant) and data.itemName is the name of the target(i.e. sweets, french fries).
 
 The request is made to `gpt-3.5-turbo` and it uses `"temperature": 1.0` as a parameter for the request in order to have diverse(high randomization) responses for our requests. The price for the requests made to `https://api.openai.com/v1/chat/completions`, using the `Davinci model`(most powerful), is `$0.0200 / 1K tokens`, which is supported by our client, who provides us with private token. If the server experiences an unexpected overload, the user will be provided with a response advising them to retry after a short wait.
 
 - **Pop-ups**:
 - `NameNeededPopUp`: This pop-up prevents sending an AI genearated request without having a name for the desired Item/Subcategory/ Category/Menu/Restaurant.
 
-
 ### **12. Languages**
-*todo - not implemented*
+
+_todo - not implemented_
 
 ### **13. Currency**
-*todo - not implemented*
 
+_todo - not implemented_
