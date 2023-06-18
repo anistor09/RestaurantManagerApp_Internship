@@ -43,6 +43,95 @@ const workingDays = computed(() => [
 	translations[computedLanguageId.value].sunday,
 ]);
 
+const acceptedTypes = ['image/jpeg', 'image/png'];
+const logoEdited: Ref<File | null> = ref(null);
+const backgroundEdited: Ref<File | null> = ref(null);
+
+/// function to handle the upload of a logo to a restaurant
+function handleFileUploadLogo(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else logoEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+			imageUrl.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(logoEdited.value)
+		reader.readAsDataURL(logoEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected logo for a restaurant
+function deleteImgLogo(){
+	logoEdited.value=null
+	imageUrl.value=defaultSrc
+}
+
+/// function to handle the upload of a background to a restaurant
+function handleFileUploadBackground(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else backgroundEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+				src.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(backgroundEdited.value)
+		reader.readAsDataURL(backgroundEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected image for a menu
+function deleteImgBackground(){
+	backgroundEdited.value=null
+	src.value=defaultSrc
+}
+
+
+// Function to display a error notification
+const openErrorNotification = (notifTitle: string) => {
+	ElNotification({
+		title: notifTitle,
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'Please try with a diffrent file.',
+		),
+		customClass: 'notif',
+	});
+};
+
+
+
+
 const checkIfChange = () => {
 	doubleCheck.value = true;
 };
