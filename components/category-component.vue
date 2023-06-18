@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import { Category } from '~/interfaces/Category';
 
 import { useLanguageStore } from '../store/language';
 import translations from '../mockData/translations.json';
-
+import { Category } from '~/interfaces/Category';
 
 const languageStore = useLanguageStore();
 

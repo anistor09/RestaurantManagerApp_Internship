@@ -2,9 +2,8 @@
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
-import translations from '~/mockData/translations.json'
 import { useLanguageStore } from '../store/language';
-import restaurant1 from '~/mockData/restaurants.json'
+import translations from '~/mockData/translations.json'
 
 const imageURL = '/_nuxt/assets/images/Logo.png';
 

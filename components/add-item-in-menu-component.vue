@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import { ElSelect } from 'element-plus';
 import { ref } from 'vue';
+import { useLanguageStore } from '../store/language';
 import { useRestaurantStore } from '../store/restaurant';
+import translations from '../mockData/translations.json';
 import { Carte } from '../interfaces/Carte';
 import { SubCategory } from '~/interfaces/SubCategory';
-import { useLanguageStore } from '../store/language';
-import translations from '../mockData/translations.json';
 
 const languageStore = useLanguageStore();
-
 const computedLanguageId = computed(() => languageStore.idGetter);
 
 const restaurantStore = useRestaurantStore();

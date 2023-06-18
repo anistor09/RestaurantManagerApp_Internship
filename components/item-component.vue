@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { useCurrencyStore } from '../store/currency';
-import { Item } from '~/interfaces/Item';
 import { useLanguageStore } from '../store/language';
 import translations from '../mockData/translations.json';
-
+import { Item } from '~/interfaces/Item';
 
 const languageStore = useLanguageStore();
 

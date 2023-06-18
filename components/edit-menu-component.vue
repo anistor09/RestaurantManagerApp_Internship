@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
-import { useLanguageStore } from '../store/language';
-import translations from '../mockData/translations.json';
 
 const languageStore = useLanguageStore();
 

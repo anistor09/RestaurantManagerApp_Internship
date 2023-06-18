@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 
 const map = (s : String) => {
-    if (s == 'English')
+    if (s === 'English')
         return 0
-    else if (s == 'Romanian')
+    else if (s === 'Romanian')
         return 1
     else 
         return -1

@@ -7,9 +7,9 @@ import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import PageTitle from '../components/page-title.vue';
 import currencies from '../mockData/currency.json';
 import languages from '../mockData/languages.json';
-import translations from '~/mockData/translations.json'
 import { useCurrencyStore } from '../store/currency';
 import { useLanguageStore } from '../store/language';
+import translations from '~/mockData/translations.json'
 
 const currencyStore = useCurrencyStore();
 const restaurantStore = useRestaurantStore();

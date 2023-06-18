@@ -14,6 +14,14 @@ import { Item } from '../interfaces/Item';
 import { useRestaurantStore } from '../store/restaurant';
 import { useCategoryStore } from '../store/category';
 import { useItemStore } from '../store/item';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
+
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
+
 
 const restaurantStore = useRestaurantStore();
 const categoryStore = useCategoryStore();
@@ -498,14 +506,14 @@ async function addAiDescription(neededLength: string, short: boolean) {
 		</Teleport>
 	</ClientOnly>
 	<div class="container">
-		<page-title v-if="addItem" :title="'Add an item'" />
-		<page-title v-else :title="'Edit an item'" />
+		<page-title v-if="addItem" :title=translations[computedLanguageId].addAnItem />
+		<page-title v-else :title=translations[computedLanguageId].editAnItem />
 		<div class="bottom">
 			<div class="left">
 				<div class="elementLeft">
 					<div class="box">
 						<div style="height: 40%; width: 100%">
-							<div id="item-name" class="fieldText">Name</div>
+							<div id="item-name" class="fieldText">{{translations[computedLanguageId].name}}</div>
 							<input v-model="name" class="specialInput" style="height: 56.25%" />
 						</div>
 					</div>
@@ -514,11 +522,11 @@ async function addAiDescription(neededLength: string, short: boolean) {
 					<div class="box" style="">
 						<div class="div" style="display: flex; align-items: center">
 							<div id="item-description" class="fieldText" style="width: 30%; padding-bottom: 0.9%">
-								Description
+								{{translations[computedLanguageId].description}}
 							</div>
 
 							<el-button id="item-ai-description" class="aiButton" @click="addAiShortDescription"
-								>✨Write with AI</el-button
+								>✨{{translations[computedLanguageId].writeAi}}</el-button
 							>
 						</div>
 						<textarea v-model="description" class="specialTextArea"></textarea>
@@ -526,10 +534,11 @@ async function addAiDescription(neededLength: string, short: boolean) {
 				</div>
 				<div class="elementLeft">
 					<div class="box">
-						<div id="item-category" class="fieldText">Category</div>
+						<div id="item-category" class="fieldText">{{translations[computedLanguageId].category}}</div>
 						<el-select
 							v-model="category"
 							class="special-select-item"
+							:placeholder=translations[computedLanguageId].select
 							filterable
 							@change="changeCategory"
 						>
@@ -540,20 +549,20 @@ async function addAiDescription(neededLength: string, short: boolean) {
 							/>
 						</el-select>
 						<el-button id="item-add-category" class="specialAddButton" @click="addCategory"
-							>Add Category</el-button
+							>{{translations[computedLanguageId].addCategory}}</el-button
 						>
 					</div>
 				</div>
 				<div class="elementLeft">
 					<div class="box">
-						<div id="item-subcategory" class="fieldText">Subcategory</div>
+						<div id="item-subcategory" class="fieldText">{{translations[computedLanguageId].subcategory}}</div>
 						<el-select
 							v-model="subCategory"
 							class="special-select-item"
 							filterable
 							clearable
 							:class="{ 'disabled-element': disableSubCateg }"
-							placeholder="No subcategory"
+							:placeholder=translations[computedLanguageId].noSubcategory
 						>
 							<el-option
 								v-for="subCategoryOption in subCategories"
@@ -562,7 +571,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 							/>
 						</el-select>
 						<el-button id="item-add-subcategory" class="specialAddButton" @click="editCategory"
-							>Add Subcategory</el-button
+							>{{translations[computedLanguageId].addSubcategory}}</el-button
 						>
 					</div>
 				</div>
@@ -580,7 +589,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 							id="item-delete-button"
 							class="specialExitButton"
 							@click="deleteButton"
-							>Delete</el-button
+							>{{translations[computedLanguageId].delete}}</el-button
 						>
 					</div>
 				</div>
@@ -589,11 +598,12 @@ async function addAiDescription(neededLength: string, short: boolean) {
 				<div class="elementLeft">
 					<div class="box" style="padding-left: 0%">
 						<div style="height: 40%; width: 100%">
-							<div id="item-sidedishes" class="fieldText">Side-dishes</div>
+							<div id="item-sidedishes" class="fieldText">{{translations[computedLanguageId].sideDishes}}</div>
 							<el-select
 								v-model="sideItems"
 								class="special-multiple-select-item special-select-item"
 								multiple
+								:placeholder=translations[computedLanguageId].select
 								collapse-tags
 								filterable
 								@change="changeCategory"
@@ -608,7 +618,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 					</div>
 				</div>
 				<div style="width: 100%; height: 75%">
-					<div id="item-options" class="fieldText">Options</div>
+					<div id="item-options" class="fieldText">{{translations[computedLanguageId].options}}</div>
 					<div id="menus-wrapper">
 						<el-scrollbar>
 							<el-col>
@@ -631,7 +641,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 								class="specialAddButton"
 								style="margin-top: 1%"
 								@click="addOption()"
-								>Add Option</el-button
+								>{{translations[computedLanguageId].addOption}}</el-button
 							>
 						</el-scrollbar>
 					</div>
@@ -642,7 +652,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 					<div class="box" style="flex-direction: row; justify-content: left">
 						<div style="width: 48%; height: 100%; display: flex; align-items: center">
 							<div style="height: 40%; width: 100%">
-								<div id="item-presentation" class="fieldText">Presentation Order</div>
+								<div id="item-presentation" class="fieldText">{{translations[computedLanguageId].presentationOrder}}</div>
 								<input
 									v-model="presentationOrder"
 									class="specialInput"
@@ -652,7 +662,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 						</div>
 						<div style="width: 36.5%; height: 100%; display: flex; align-items: center">
 							<div style="height: 40%; width: 100%">
-								<div id="item-price" class="fieldText">Price</div>
+								<div id="item-price" class="fieldText">{{translations[computedLanguageId].price}}</div>
 								<input v-model="price" class="specialInput" style="height: 56.25%; width: 67%" />
 							</div>
 						</div>
@@ -666,14 +676,14 @@ async function addAiDescription(neededLength: string, short: boolean) {
 								class="fieldText"
 								style="width: 30%; padding-bottom: 0.9%"
 							>
-								Long Description
+								{{translations[computedLanguageId].longDescription}}
 							</div>
 							<el-button
 								id="item-ai-long-description"
 								class="aiButton"
 								style="height: 45%"
 								@click="addAiLongDescription"
-								>✨Write with AI
+								>✨{{translations[computedLanguageId].writeAi}}
 							</el-button>
 						</div>
 						<textarea v-model="longDescription" class="specialTextArea"></textarea>
@@ -681,19 +691,19 @@ async function addAiDescription(neededLength: string, short: boolean) {
 				</div>
 				<div class="elementLeft">
 					<div class="box" style="">
-						<div id="item-photo" class="fieldText">Photo</div>
+						<div id="item-photo" class="fieldText">{{translations[computedLanguageId].photo}}</div>
 						<div style="width: 92%; height: 90%; display: flex">
 							<el-image :src="src" style="width: 35%; height: 100%; border-radius: 40px" />
 							<div class="photoButtonSpace">
-								<el-button id="item-photo-change" class="specialPhotoButton">Change</el-button>
-								<el-button id="item-photo-delete" class="specialPhotoButton">Delete</el-button>
+								<el-button id="item-photo-change" class="specialPhotoButton">{{translations[computedLanguageId].change}}</el-button>
+								<el-button id="item-photo-delete" class="specialPhotoButton">{{translations[computedLanguageId].delete}}</el-button>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="elementLeft">
 					<div class="box" style="justify-content: center">
-						<div id="item-allergens" class="fieldText">Alergens</div>
+						<div id="item-allergens" class="fieldText">{{translations[computedLanguageId].alergens}}</div>
 						<el-select
 							v-model="selectedAllergens"
 							class="special-select-item"
@@ -702,7 +712,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 							filterable
 							default-first-option
 							:reserve-keyword="false"
-							placeholder="Please input allergens list"
+							:placeholder=translations[computedLanguageId].pleaseInputAlergens
 						>
 							<el-option
 								v-for="allergenOption in allergens"
@@ -721,7 +731,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 							style="width: 39.325%"
 							@click="saveButton"
 						>
-							Save
+						{{translations[computedLanguageId].save}}
 						</el-button>
 					</div>
 				</div>
@@ -733,20 +743,20 @@ async function addAiDescription(neededLength: string, short: boolean) {
 			<el-dialog v-model="addOptionPopUp" class="choice-edit-popup">
 				<template #header>
 					<div class="my-header">
-						<div class="choiceFieldText">Add an option</div>
+						<div class="choiceFieldText">{{translations[computedLanguageId].addOption}}</div>
 					</div>
 				</template>
 				<div style="width: 100%; height: 70%">
 					<div style="width: 100%; height: 100%; padding-left: 15%">
-						<div class="choiceFieldText">Name</div>
+						<div class="choiceFieldText">{{translations[computedLanguageId].name}}</div>
 						<input v-model="optionNameField" class="specialOptionInput" />
-						<div class="choiceFieldText">Description</div>
+						<div class="choiceFieldText">{{translations[computedLanguageId].description}}</div>
 						<textarea v-model="optionDescriptionField" class="specialOptionTextArea"></textarea>
 						<div class="choiceFieldText">
 							<el-checkbox
 								v-model="optionMandatory"
 								class="option-checkbox"
-								label="Mandatory"
+								:label=translations[computedLanguageId].mandatory
 								size="large"
 							/>
 						</div>
@@ -762,7 +772,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 					"
 				>
 					<el-button class="choice-edit-popup-button" @click="handleAddOption()"
-						>Add option</el-button
+						>{{translations[computedLanguageId].addOption}}</el-button
 					>
 				</div>
 			</el-dialog>

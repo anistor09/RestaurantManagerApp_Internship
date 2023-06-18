@@ -1,15 +1,12 @@
 <script lang="ts" setup>
 import { Search } from '@element-plus/icons-vue';
-import { useRestaurantStore } from '~/store/restaurant';
-import { useCategoryStore } from '~/store/category';
-import { useItemStore } from '~/store/item';
-
 import { useLanguageStore } from '../store/language';
 import translations from '../mockData/translations.json';
-
+import { useCategoryStore } from '~/store/category';
+import { useItemStore } from '~/store/item';
+import { useRestaurantStore } from '~/store/restaurant';
 
 const languageStore = useLanguageStore();
-
 const computedLanguageId = computed(() => languageStore.idGetter);
 
 const categoryStore = useCategoryStore();
@@ -19,7 +16,6 @@ const restaurant = restaurantStore.restaurantGetter;
 
 const currentProduct = ref('Items');
 const selectedProducts = ['Items', 'Categories'];
-//const selectedProducts = computed(() => [translations[computedLanguageId.value].items, translations[computedLanguageId.value].categories]);
 
 const searchItems = ref('');
 const searchCategories = ref('');

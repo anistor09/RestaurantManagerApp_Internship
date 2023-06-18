@@ -76,7 +76,20 @@
         "searchByItem": "Search by item",
         "searchByCategory": "Search by category",
         "price": "Price",
-        "addCategory": "Add category"
+        "addCategory": "Add category",
+        "addAnItem": "Add an item",
+        "editAnItem": "Edit an item",
+        "addSubcategory": "Add subcategory",
+        "sideDishes": "Side-dishes",
+        "options": "Options",
+        "addOption": "Add option",
+        "mandatory": "Mandatory",
+        "presentationOrder": "Presentation Order",
+        "longDescription": "Long Description",
+        "alergens": "Alergens",
+        "pleaseInputAlergens": "Please input alergens list",
+        "noSubcategory": "No subcategory",
+        "subcategories": "Subcategories"
     },
     {
         "home": "Acasa",
@@ -155,6 +168,19 @@
         "searchByItem": "Cauta dupa produs",
         "searchByCategory": "Cauta dupa categorie",
         "price": "Pret",
-        "addCategory": "Adauga categorie"
+        "addCategory": "Adauga categorie",
+        "addAnItem": "Adauga un produs",
+        "editAnItem": "Editeaza un produs",
+        "addSubcategory": "Adauga subcategorie",
+        "sideDishes": "Garnituri",
+        "options": "Optiuni",
+        "addOption": "Adauga optiune",
+        "mandatory": "Obligatoriu",
+        "presentationOrder": "Ordine de prezentare",
+        "longDescription": "Descriere detaliata",
+        "alergens": "Alergeni",
+        "pleaseInputAlergens": "Selecteaza alergenii",
+        "noSubcategory": "Fara subcategorie",
+        "subcategories": "Subcategorii"
     }
 ]
