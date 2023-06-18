@@ -458,7 +458,6 @@ async function addAiDescription(neededLength: string, short: boolean) {
 	if (name.value.length === 0) {
 		nameNeededPopUp.value = true;
 	} else {
-		console.log(name.value);
 		if (short) {
 			description.value = 'The new description is loading...';
 		} else {
@@ -476,7 +475,6 @@ async function addAiDescription(neededLength: string, short: boolean) {
 				'Content-Type': 'application/json',
 			},
 		});
-		console.log(response.data.value);
 
 		if (short) {
 			description.value = response.data.value;
