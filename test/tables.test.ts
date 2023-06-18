@@ -38,7 +38,7 @@ it('Check if search bar and add table buttons exist', () => {
 	const wrapper = mount(TablesPage);
 	const buttonContainer = wrapper.find('#buttonContainer');
 	expect(buttonContainer.exists()).toBe(true);
-	expect(buttonContainer.text()).toContain('Add Table');
+	expect(buttonContainer.text()).toContain('Add table');
 });
 
 it('Check if title is passed correctly', () => {
