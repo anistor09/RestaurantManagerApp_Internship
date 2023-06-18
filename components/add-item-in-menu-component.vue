@@ -99,15 +99,10 @@ const changeSubCategory = () => {
 		)[0];
 		filteredItems.value = restaurantItems.filter(
 			(x) => {
-				if (x.category === null)
+				if (x.category === null || x.subCategory === null || selectedCategory.value === null)
 					return false;
-				if (x.subCategory === null)
-					return false;
-				if (selectedCategory.value === null)
-					return false;
-				return x.category.id === selectedCategory.value.id && x.subCategory.id === selectedSubcategory?.value?.id
-				x.category.id === selectedCategory.value.id &&
-				x.subCategory?.id === selectedSubcategory.value?.id
+				else
+					return x.category.id === selectedCategory.value.id && x.subCategory.id === selectedSubcategory?.value?.id
 			}
 		);
 	} else {
