@@ -25,6 +25,7 @@ const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
 const editPopupKey = ref(0);
+const addItemPopUpKey = ref(0);
 const currentCategory = ref('');
 const selectedMenuName = ref('');
 const forceCollapse = ['1'];
@@ -190,13 +191,14 @@ function closeEditPopup() {
 							plain
 							round
 							data-testid="place-item-button"
-							@click="addItemInMenu = true"
+							@click="addItemInMenu = true; addItemPopUpKey++;"
 						>
 							Add item to menu
 						</el-button>
 						<ClientOnly>
 							<Teleport to="body">
 								<el-dialog
+									:key="addItemPopUpKey"
 									v-model="addItemInMenu"
 									:style="{
 										width: '20%',
@@ -211,6 +213,7 @@ function closeEditPopup() {
 								>
 									<AddItemInMenuComponent
 										:menu="selectedMenu"
+										:dummy="''"
 										@close="addItemInMenu = false"
 									></AddItemInMenuComponent>
 								</el-dialog>

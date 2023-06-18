@@ -14,19 +14,25 @@ const props = defineProps({
 		type: Object as () => Carte,
 		required: true,
 	},
+	dummy: {
+		type: String,
+		required: true
+	}
 });
+
+console.log(props.dummy);
 const menuRef = ref(props.menu);
 
 const categories = ref(restaurant.categorySet);
 
 // the category name that will be displayed on the bar
-const categoryName = ref('');
+const categoryName = ref(props.dummy);
 
 // this represents the category object itself that is selected by the user
 const selectedCategory = ref(categories.value[0]);
 
 // the category name that will be displayed on the bar
-const subcategoryName = ref('');
+const subcategoryName = ref(props.dummy);
 
 // this represents the array of subcategories
 // It is dynamically changed in order to display only the subcategories that are from the selected category
@@ -41,7 +47,7 @@ const restaurantItems = restaurant.itemSet;
 const filteredItems = ref(restaurant.itemSet);
 
 // the name of the item which is displayed on the bar
-const itemName = ref('');
+const itemName = ref(props.dummy);
 
 // the object itself of the selected item (what the popup will return)
 const selectedItem = ref(restaurantItems[0]);
