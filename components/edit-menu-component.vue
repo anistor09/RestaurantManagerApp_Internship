@@ -31,7 +31,7 @@ const emit = defineEmits(['close']);
 // eslint-disable-next-line prefer-const
 let name = selectedMenu.value.name;
 // eslint-disable-next-line prefer-const
-const description : Ref<string>= ref(selectedMenu.value.description);
+const description: Ref<string> = ref(selectedMenu.value.description);
 // eslint-disable-next-line prefer-const
 let src = selectedMenu.value.imageUrl;
 
@@ -43,7 +43,7 @@ const endTimes = ref(JSON.parse(JSON.stringify(selectedMenu.value.hoursSet.map((
 if (startTimes.value.length === 0) startTimes.value = ['', '', '', '', '', '', ''];
 if (endTimes.value.length === 0) endTimes.value = ['', '', '', '', '', '', ''];
 
-const editMenu = async() => {
+const editMenu = async () => {
 	// Adjust in the database
 	const hoursSet = [] as Hours[];
 	for (let i = 0; i < 7; i++) {
@@ -60,12 +60,12 @@ const editMenu = async() => {
 	const carte: Carte = {
 		id: selectedMenu.value.id,
 		name,
-		description : description.value,
+		description: description.value,
 		version: 1,
 		active: true,
 		imageUrl: defaultSrc,
 		itemSet: [],
-		hoursSet
+		hoursSet,
 	};
 	await useFetch('/api/menus/editMenu', {
 		method: 'PUT',
@@ -122,7 +122,7 @@ async function addAiMenuDescription() {
 		nameNeededPopUp.value = true;
 	} else {
 		description.value = 'The new description is loading...';
-		const requestBody = {itemName: name, length: 150, target: 'menu',};
+		const requestBody = { itemName: name, length: 150, target: 'menu' };
 		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
 			method: 'POST',
 			body: requestBody,
@@ -146,9 +146,9 @@ async function addAiMenuDescription() {
 				></NameNeededPopUp>
 			</Teleport>
 		</ClientOnly>
-		<div class="box" style="height: 100%">
+		<div class="box">
 			<div class="fieldText">Photo</div>
-			<div style="width: 92%; height: 100%; display: flex">
+			<div style="width: 92%; display: flex">
 				<el-image
 					:src="src || defaultSrc"
 					style="width: 13vw; height: 15vh; object-fit: cover; border-radius: 40px"
@@ -166,22 +166,25 @@ async function addAiMenuDescription() {
 			</div>
 		</div>
 		<div class="box" style="">
-			<!-- <div id="descriptionIdPrefix" class="fieldText">Description</div> -->
 			<div
 				class="div"
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 			>
-				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%">
+				<div
+					id="descriptionIdPrefix"
+					class="fieldText"
+					style="width: 18%; padding-bottom: 0.7%; padding-right: 3%"
+				>
 					Description
 				</div>
 
-				<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription"
+				<el-button class="aiButtonSubcatgory" style="width: 8vw" @click="addAiMenuDescription"
 					>✨Write with AI</el-button
 				>
 			</div>
-			<textarea id="descriptionId" v-model="description" class="specialTextArea"></textarea>
+			<textarea v-model="description" style="padding-top: 0" class="specialTextArea"></textarea>
 		</div>
-		<div class="box" style="">
+		<div class="box" style="padding-top: 1%">
 			<div class="fieldText">Menu periods</div>
 			<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 				<div class="dayName">{{ day }}</div>
@@ -204,11 +207,15 @@ async function addAiMenuDescription() {
 			</div>
 		</div>
 		<div id="buttonContainer">
-			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" @click="checkIfChange()"
+			<el-button class="specialPhotoButton" style="width: 22%; height: 20%" @click="checkIfChange()"
 				>Save menu</el-button
 			>
 			<div style="margin-left: 1vw"></div>
-			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" data-testId="delete-button" @click="checkIfDelete()"
+			<el-button
+				class="specialPhotoButton"
+				style="width: 22%; height: 20%"
+				data-testId="delete-button"
+				@click="checkIfDelete()"
 				>Delete menu</el-button
 			>
 		</div>
@@ -253,7 +260,14 @@ async function addAiMenuDescription() {
 					<div>
 						Are you sure you want to delete this menu?
 						<div id="change-bottom-button">
-							<el-button color="#ED5087" plain round data-testId="confirm-delete" @click="deleteMenu()">Yes</el-button>
+							<el-button
+								color="#ED5087"
+								plain
+								round
+								data-testId="confirm-delete"
+								@click="deleteMenu()"
+								>Yes</el-button
+							>
 						</div>
 					</div>
 				</el-dialog>
@@ -353,9 +367,7 @@ async function addAiMenuDescription() {
 #buttonContainer {
 	display: flex;
 	justify-content: center;
-	align-items: center;
 	padding-top: 5%;
-	/*padding-right: 15%;*/
 	align-items: center;
 	height: 10%;
 	width: 100%;
@@ -401,7 +413,7 @@ async function addAiMenuDescription() {
 	justify-content: center;
 }
 .specialTextArea::-webkit-scrollbar {
-  width: 5px;
+	width: 5px;
 }
 .aiButtonSubcatgory {
 	border-radius: 15px;

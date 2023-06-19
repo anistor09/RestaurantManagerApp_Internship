@@ -5,7 +5,6 @@ import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
 
-
 const emit = defineEmits(['close']);
 
 const props = defineProps({
@@ -92,9 +91,9 @@ async function addAiMenuDescription() {
 
 <template>
 	<div id="all">
-		<div class="box" style="height: 100%">
+		<div class="box">
 			<div class="fieldText">Photo</div>
-			<div style="width: 92%; height: 100%; display: flex">
+			<div style="width: 92%; display: flex">
 				<el-image
 					:src="src"
 					style="width: 13vw; height: 15vh; object-fit: cover; border-radius: 40px"
@@ -118,12 +117,15 @@ async function addAiMenuDescription() {
 			</div>
 		</div>
 		<div class="box" style="">
-			<!-- <div id="descriptionIdPrefix" class="fieldText">Description</div> -->
 			<div
 				class="div"
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 			>
-				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%; padding-right: 3%;">
+				<div
+					id="descriptionIdPrefix"
+					class="fieldText"
+					style="width: 18%; padding-bottom: 0.7%; padding-right: 3%"
+				>
 					Description
 				</div>
 
@@ -131,9 +133,14 @@ async function addAiMenuDescription() {
 					>✨Write with AI</el-button
 				>
 			</div>
-			<textarea id="descriptionIdPrefix" v-model="description" class="specialTextArea"></textarea>
+			<textarea
+				id="descriptionIdPrefix"
+				v-model="description"
+				style="padding-top: 0"
+				class="specialTextArea"
+			></textarea>
 		</div>
-		<div class="box" style="">
+		<div class="box" style="padding-top: 1%">
 			<div class="fieldText">Menu periods</div>
 			<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 				<div class="dayName">{{ day }}</div>
@@ -304,8 +311,6 @@ async function addAiMenuDescription() {
 	justify-content: center;
 	align-items: center;
 	padding-top: 5%;
-	/*padding-right: 15%;*/
-	align-items: center;
 	height: 10%;
 	width: 100%;
 }
@@ -350,7 +355,6 @@ async function addAiMenuDescription() {
 	justify-content: center;
 }
 .specialTextArea::-webkit-scrollbar {
-  width: 5px;
+	width: 5px;
 }
-
 </style>
