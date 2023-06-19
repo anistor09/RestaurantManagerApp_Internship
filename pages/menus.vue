@@ -30,6 +30,8 @@ const languageStore = useLanguageStore();
 const computedLanguageId = computed(() => languageStore.idGetter);
 
 const editPopupKey = ref(0);
+const addItemPopUpKey = ref(0);
+const addPopupKey = ref(0);
 const currentCategory = ref('');
 const selectedMenuName = ref('');
 const forceCollapse = ['1'];
@@ -89,6 +91,10 @@ function closeEditPopup() {
 	editPopupKey.value++;
 }
 
+function closeAddPopup() {
+	addMenu.value = false;
+	addPopupKey.value++;
+}
 </script>
 
 <template>
@@ -122,12 +128,13 @@ function closeEditPopup() {
 						<ClientOnly>
 							<Teleport to="body">
 								<el-dialog
+									:key="addPopupKey"
 									v-model="addMenu"
+									:before-close="closeAddPopup"
 									:style="{
-										top: '-10%',
+										marginTop: '2% !important',
 										width: '40%',
-										height: '85%',
-										minHeight: '750px',
+										height: '90% !important',
 										display: 'flex',
 										alignItems: 'center',
 										justifyContent: 'center',
@@ -165,10 +172,9 @@ function closeEditPopup() {
 									v-model="editMenu"
 									:before-close="closeEditPopup"
 									:style="{
-										top: '-10%',
+										marginTop: '2% !important',
 										width: '40%',
-										height: '85%',
-										minHeight: '750px',
+										height: '90% !important',
 										display: 'flex',
 										alignItems: 'center',
 										justifyContent: 'center',
@@ -195,13 +201,17 @@ function closeEditPopup() {
 							plain
 							round
 							data-testid="place-item-button"
-							@click="addItemInMenu = true"
+							@click="
+								addItemInMenu = true;
+								addItemPopUpKey++;
+							"
 						>
 							{{ translations[computedLanguageId].addItemToMenu }}
 						</el-button>
 						<ClientOnly>
 							<Teleport to="body">
 								<el-dialog
+									:key="addItemPopUpKey"
 									v-model="addItemInMenu"
 									:style="{
 										width: '20%',
@@ -216,6 +226,7 @@ function closeEditPopup() {
 								>
 									<AddItemInMenuComponent
 										:menu="selectedMenu"
+										:dummy="''"
 										@close="addItemInMenu = false"
 									></AddItemInMenuComponent>
 								</el-dialog>

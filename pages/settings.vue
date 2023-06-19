@@ -178,7 +178,7 @@ const saveChanges = async () => {
 	restaurant.category = category.value;
 
 	await useFetch('/api/restaurant/editRestaurant', {
-		method: 'PUT',
+		method: 'POST',
 		body: restaurant,
 		headers: {
 			'Content-Type': 'application/json',
@@ -499,7 +499,7 @@ function changeLanguageGlobally() {
 			<div>
 				{{ translations[computedLanguageId].settingsScript }}
 				<div id="change-bottom-button">
-					<el-button color="#ED5087" plain round @click="saveChanges()">{{
+					<el-button id="confirmButton" color="#ED5087" plain round @click="saveChanges()">{{
 						translations[computedLanguageId].yes
 					}}</el-button>
 				</div>

@@ -41,10 +41,10 @@ const emit = defineEmits(['close']);
 
 // eslint-disable-next-line prefer-const
 let name = selectedMenu.value.name;
- 
-const description : Ref<string>= ref(selectedMenu.value.description);
- 
-const src = ref(selectedMenu.value.imageUrl);
+// eslint-disable-next-line prefer-const
+const description: Ref<string> = ref(selectedMenu.value.description);
+// eslint-disable-next-line prefer-const
+let src = selectedMenu.value.imageUrl;
 
 /// function to handle the upload of a image to a menu
 function handleFileUpload(event: any) {
@@ -101,7 +101,7 @@ const endTimes = ref(JSON.parse(JSON.stringify(selectedMenu.value.hoursSet.map((
 if (startTimes.value.length === 0) startTimes.value = ['', '', '', '', '', '', ''];
 if (endTimes.value.length === 0) endTimes.value = ['', '', '', '', '', '', ''];
 
-const editMenu = async() => {
+const editMenu = async () => {
 	// Adjust in the database
 	const hoursSet = [] as Hours[];
 	for (let i = 0; i < 7; i++) {
@@ -118,12 +118,12 @@ const editMenu = async() => {
 	const carte: Carte = {
 		id: selectedMenu.value.id,
 		name,
-		description : description.value,
+		description: description.value,
 		version: 1,
 		active: true,
 		imageUrl: src.value,
 		itemSet: [],
-		hoursSet
+		hoursSet,
 	};
 	if(imageEdited.value) 
 		carte.imageUrl=""
@@ -191,7 +191,7 @@ async function addAiMenuDescription() {
 		nameNeededPopUp.value = true;
 	} else {
 		description.value = 'The new description is loading...';
-		const requestBody = {itemName: name, length: 150, target: 'menu',};
+		const requestBody = { itemName: name, length: 150, target: 'menu' };
 		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
 			method: 'POST',
 			body: requestBody,
@@ -236,7 +236,6 @@ async function addAiMenuDescription() {
 			</div>
 		</div>
 		<div class="box" style="">
-			<!-- <div id="descriptionIdPrefix" class="fieldText">Description</div> -->
 			<div
 				class="div"
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
@@ -249,7 +248,7 @@ async function addAiMenuDescription() {
 					>✨{{translations[computedLanguageId].writeAi}}</el-button
 				>
 			</div>
-			<textarea id="descriptionId" v-model="description" class="specialTextArea"></textarea>
+			<textarea id="descriptionId" v-model="description" style="padding-top: 0" class="specialTextArea"></textarea>
 		</div>
 		<div class="box" style="">
 			<div class="fieldText">{{translations[computedLanguageId].menuPeriods}}</div>
@@ -323,7 +322,14 @@ async function addAiMenuDescription() {
 					<div>
 						Are you sure you want to delete this menu?
 						<div id="change-bottom-button">
-							<el-button color="#ED5087" plain round data-testId="confirm-delete" @click="deleteMenu()">Yes</el-button>
+							<el-button
+								color="#ED5087"
+								plain
+								round
+								data-testId="confirm-delete"
+								@click="deleteMenu()"
+								>Yes</el-button
+							>
 						</div>
 					</div>
 				</el-dialog>
@@ -442,9 +448,7 @@ async function addAiMenuDescription() {
 #buttonContainer {
 	display: flex;
 	justify-content: center;
-	align-items: center;
 	padding-top: 5%;
-	/*padding-right: 15%;*/
 	align-items: center;
 	height: 10%;
 	width: 100%;
@@ -490,7 +494,7 @@ async function addAiMenuDescription() {
 	justify-content: center;
 }
 .specialTextArea::-webkit-scrollbar {
-  width: 5px;
+	width: 5px;
 }
 .aiButtonSubcatgory {
 	border-radius: 15px;

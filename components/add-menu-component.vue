@@ -198,7 +198,6 @@ async function addAiMenuDescription() {
 			</div>
 		</div>
 		<div class="box" style="">
-			<!-- <div id="descriptionIdPrefix" class="fieldText">Description</div> -->
 			<div
 				class="div"
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
@@ -211,7 +210,12 @@ async function addAiMenuDescription() {
 					>✨{{ translations[computedLanguageId].writeAi }}</el-button
 				>
 			</div>
-			<textarea id="descriptionIdPrefix" v-model="description" class="specialTextArea"></textarea>
+			<textarea
+				id="descriptionIdPrefix"
+				v-model="description"
+				style="padding-top: 0"
+				class="specialTextArea"
+			></textarea>
 		</div>
 		<div class="box" style="">
 			<div class="fieldText">{{ translations[computedLanguageId].menuPeriods }}</div>
@@ -403,8 +407,6 @@ async function addAiMenuDescription() {
 	justify-content: center;
 	align-items: center;
 	padding-top: 5%;
-	/*padding-right: 15%;*/
-	align-items: center;
 	height: 10%;
 	width: 100%;
 }
@@ -449,7 +451,6 @@ async function addAiMenuDescription() {
 	justify-content: center;
 }
 .specialTextArea::-webkit-scrollbar {
-  width: 5px;
+	width: 5px;
 }
-
 </style>
