@@ -182,7 +182,7 @@ async function addAiMenuDescription() {
 					>✨Write with AI</el-button
 				>
 			</div>
-			<textarea v-model="description" style="padding-top: 0" class="specialTextArea"></textarea>
+			<textarea id="descriptionId" v-model="description" style="padding-top: 0" class="specialTextArea"></textarea>
 		</div>
 		<div class="box" style="padding-top: 1%">
 			<div class="fieldText">Menu periods</div>
