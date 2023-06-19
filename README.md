@@ -323,7 +323,15 @@ _Note: This documentation provides an overview of the Tables page and its functi
 
 ### **9. Settings Page**
 
-_todo_
+The Settings page ...
+
+#### **Dependencies**
+
+The Settings page imports several dependencies and custom components from external libraries or files. These dependencies include:
+
+- `element-plus`: A Vue.js CSS library that provides various UI components used in the Edit Category page.
+- `PageTitle`: A custom component for displaying the page title (used on every page for consistency).
+- `NameNeededPopUp`: A custom component for informing the user that he has to add a name before requesting an AI generated description.
 
 ### **10. Analytics**
 
