@@ -323,7 +323,14 @@ _Note: This documentation provides an overview of the Tables page and its functi
 
 ### **9. Settings Page**
 
-The Settings page ...
+The Settings page allows restaurant managers to change the details of their restaurant, such as the name, description, working hours, address, phone number or email. This page also allows the managers to change the currency and language of the app.  It provides a user interface for:
+
+- Editing and saving changes to the restaurant details
+- Uploading and deleting the restaurant logo and background image
+- Adding an AI-generated description for the restaurant
+- Changing the currency and language of the application
+
+To access the Settings page, you can click on the "Settings" button available in the sidebar. Its default URL is http://localhost:3000/settings.
 
 #### **Dependencies**
 
@@ -332,6 +339,37 @@ The Settings page imports several dependencies and custom components from extern
 - `element-plus`: A Vue.js CSS library that provides various UI components used in the Edit Category page.
 - `PageTitle`: A custom component for displaying the page title (used on every page for consistency).
 - `NameNeededPopUp`: A custom component for informing the user that he has to add a name before requesting an AI generated description.
+
+#### **Variables and Methods**
+
+
+The Settings page component defines several reactive variables and data properties using the ref and computed functions provided by Vue.js. It also defines some methods for handling events and updating data.
+
+- `currencyStore`, `restaurantStore`, `languageStore`: Store hooks for accessing currency, restaurant, and language data from the Pinia Store.
+- `restaurant`: Getter for accessing the restaurant data.
+- `src`, `name`, `addresse`, `description`, `imageUrl`, `phoneNumber`, `email`, `category`: Reactive variables for managing the restaurant details.
+- `selectedCurrency`, `selectedLanguage`: Reactive variables for managing the selected currency and language.
+- `computedLanguageId`: Computed property for accessing the ID of the selected language.
+- `workingDays`: Computed property for accessing the translated names of the weekdays.
+- `acceptedTypes`: An array of accepted image types for logo and background image uploads.
+- `logoEdited`, `backgroundEdited`: Reactive variables for managing the edited logo and background image files.
+- `handleFileUploadLogo`, `deleteImgLogo`, `handleFileUploadBackground`, `deleteImgBackground`: Methods for handling logo and background image uploads and deletions.
+- `openErrorNotification`: A method for displaying an error notification.
+- `doubleCheck`: A reactive variable for managing the confirmation dialog for saving changes.
+- `deepCopyHours`: A method for creating a deep copy of the restaurant's working hours.
+- `startTimes`, `endTimes`: Reactive variables for managing the opening and closing times of each day.
+- `saveChanges`: A method for saving the changes made to the restaurant details and working hours.
+- `addAiRestaurantDescription`: A method for generating an AI-generated description for the restaurant.
+- `changeCurrencyGlobally`, `changeLanguageGlobally`: Methods for changing the currency and language settings globally.
+
+#### **Page structure**
+The Settings page has a structured layout to present the different settings and functionalities clearly.
+
+- The main template consists of a PageTitle component for displaying the page title.
+- `First half`: The first half of the page contains the name, address and description. It includes an option to see, upload or delete the restaurant logo and background image.
+- `Second half`: The second half of the page contains the phone number, email, category, working hours, currency and the language. Here all this information can be edited.
+- `Save changes`: Button to save all the changed information. If this button is not pressed, when changing the page, all the information will be loss.
+
 
 ### **10. Analytics**
 
@@ -388,7 +426,22 @@ The request is made to `gpt-3.5-turbo` and it uses `"temperature": 1.0` as a par
 
 ### **12. Languages**
 
-_todo - not implemented_
+Our app supports multiple languages. Is it possible to choose the desired language from the settings page. 
+
+For implementing the language, we used several steps: 
+
+- `translations.json`: In this file we store language-specific translations for different components or text elements used in the application.
+- `languages.json`: In this file we store the languages supported by our app along with their IDs.
+- `Language store`: Every page imports useLanguageStore from the ../store/language module, indicating the usage of a language store to manage language-related data and state.
+- `Language Id`: The computedLanguageId variable is defined using the computed function from Vue's composition API. It computes the current language ID from the idGetter property of the language store.
+
+To write the text for a specific component we used the structure: `translations[computedLanguageId].desiredText`. This means that the app use the translation of the `desiredText` with the computed ID which represent the ID of the selected language. 
+
+To add a new language, follow the steps:
+
+- add the language and a new ID in `languages.json`
+- complete the map from the `store/language.ts` with the new language
+- extend `translation.json` by adding another object with all the translation.
 
 ### **13. Currency**
 
