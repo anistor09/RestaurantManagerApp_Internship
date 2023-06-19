@@ -657,7 +657,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							style="border-radius: 5%"
 						>
 							<div class="delete">
-								Are you sure you want to delete this subcategory?
+								{{ translations[computedLanguageId].areYouSureYouWantToDeleteSubCategory }}
 								<div id="bottomButtons">
 									<el-button color="#ED5087" plain round @click="deleteSubcategoryPopup = false"
 										>No</el-button
@@ -677,7 +677,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					<Teleport to="body">
 						<el-dialog v-model="deleteCategoryPopup" width="20%" style="border-radius: 5%">
 							<div class="delete">
-								Are you sure you want to delete category {{ name }}?
+								{{translations[computedLanguageId].areYouSureYouWantToDeleteCategory}} {{ name }}?
 								<div id="bottomButtons">
 									<el-button color="#ED5087" plain round @click="deleteCategoryPopup = false"
 										>No</el-button
@@ -740,14 +740,14 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									style="width: 35%; height: 15vh; object-fit: cover; border-radius: 40px"
 								/>
 								<div class="photoButtonSpace" style="padding-top: 0.9%">
-									<label for="changeCategoryPhoto" class="specialPhotoLabel">Change</label>
+									<label for="changeCategoryPhoto" class="specialPhotoLabel">{{translations[computedLanguageId].change}}</label>
 									<input
 										id="changeCategoryPhoto"
 										type="file"
 										style="display: none"
 										@change="handleFileUpload"
 									/>
-									<el-button class="specialPhotoButton" @click="deleteImg()">Delete</el-button>
+									<el-button class="specialPhotoButton" @click="deleteImg()">{{translations[computedLanguageId].delete}}</el-button>
 								</div>
 							</div>
 						</div>
@@ -774,7 +774,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							id="deleteCategoryButton"
 							class="specialExitButton"
 							@click="deleteCategoryPopup = true"
-							>Delete Category</el-button
+							>{{translations[computedLanguageId].deleteCategory}}</el-button
 						>
 					</div>
 				</div>
@@ -821,13 +821,13 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 													class="specialPhotoButton"
 													style="margin-bottom: 3vh"
 													@click="changeSubcategory(subcategory.id)"
-													>Edit</el-button
+													>{{translations[computedLanguageId].edit}}</el-button
 												>
 												<el-button
 													id="deleteSubcategory"
 													class="specialPhotoButton"
 													@click="popUpDeleteSubcategoryLocally(subcategory.id)"
-													>Delete</el-button
+													>{{translations[computedLanguageId].delete}}</el-button
 												>
 											</div>
 										</div>

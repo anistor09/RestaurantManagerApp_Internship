@@ -787,7 +787,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 						align-items: center;
 					"
 				>
-					Are you sure you want to delete "{{ selectedOptionName }}"?
+					{{translations[computedLanguageId].areYouSureYouWantToDelete}} "{{ selectedOptionName }}"?
 				</div>
 				<div
 					style="
@@ -816,7 +816,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 						align-items: center;
 					"
 				>
-					Are you sure you want to delete "{{ item.name }}"?
+					{{translations[computedLanguageId].areYouSureYouWantToDelete}} "{{ item.name }}"?
 				</div>
 				<div
 					style="

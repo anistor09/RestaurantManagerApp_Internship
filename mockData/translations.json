@@ -90,7 +90,11 @@
         "pleaseInputAlergens": "Please input alergens list",
         "noSubcategory": "No subcategory",
         "subcategories": "Subcategories",
-        "removeFromMenu": "Remove from menu"
+        "removeFromMenu": "Remove from menu",
+        "areYouSureYouWantToDelete": "Are you sure you want to delete",
+        "areYouSureYouWantToDeleteCategory": "Are you sure you want to delete category",
+        "areYouSureYouWantToDeleteSubCategory": "Are you sure you want to delete this subcategory?",
+        "deleteCategory": "Delete category"
     },
     {
         "home": "Acasa",
@@ -183,6 +187,10 @@
         "pleaseInputAlergens": "Selecteaza alergenii",
         "noSubcategory": "Fara subcategorie",
         "subcategories": "Subcategorii",
-        "removeFromMenu": "Elimina din meniu"
+        "removeFromMenu": "Elimina din meniu",
+        "areYouSureYouWantToDelete": "Sigur vrei sa stergi",
+        "areYouSureYouWantToDeleteCategory": "Sigur vrei sa stergi categoria",
+        "areYouSureYouWantToDeleteSubCategory": "Sigur vrei sa stergi aceasta subcategorie?",
+        "deleteCategory": "Sterge categorie"
     }
 ]
