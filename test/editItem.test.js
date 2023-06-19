@@ -4,6 +4,8 @@ import { ElSelect } from 'element-plus';
 import restaurants from '../mockData/restaurants.json';
 import AddItem from '../pages/editItemView/index.vue';
 import EditItemComponent from '../components/edit-item.vue';
+import languages from '../mockData/languages.json';
+
 // import optionComponent from '../components/option-component.vue';
 
 vi.mock('../store/restaurant.ts', () => {
@@ -36,7 +38,16 @@ vi.mock('../store/item.ts', () => {
         }),
     };
 });
-
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
 it('Renders add Item page', () => {
     const wrapper = mount(AddItem);
     expect(wrapper.exists()).toBe(true);
@@ -79,7 +90,7 @@ it('Check if item description is displayed', () => {
         }
       });
     const name = wrapper.find('#item-description');
-    expect(name.text()).toBe('Description');
+    expect(name.text()).toBe('Description:');
 });
 
 it('Check if item ai button description is displayed', () => {
@@ -101,7 +112,7 @@ it('Check if item category is displayed', () => {
         }
       });
     const name = wrapper.find('#item-category');
-    expect(name.text()).toBe('Category');
+    expect(name.text()).toBe('Category:');
 });
 
 
@@ -124,7 +135,7 @@ it('Check if item add category button is displayed', () => {
         }
       });
     const button = wrapper.find('#item-add-category');
-    expect(button.text()).toBe('Add Category');
+    expect(button.text()).toBe('Add category');
 });
 
 it('Check if item subcategory is displayed', () => {
@@ -135,7 +146,7 @@ it('Check if item subcategory is displayed', () => {
         }
       });
     const name = wrapper.find('#item-subcategory');
-    expect(name.text()).toBe('Subcategory');
+    expect(name.text()).toBe('Subcategory:');
 });
 
 it('Check if item add subcategory button is displayed', () => {
@@ -146,7 +157,7 @@ it('Check if item add subcategory button is displayed', () => {
         }
       });
     const button = wrapper.find('#item-add-subcategory');
-    expect(button.text()).toBe('Add Subcategory');
+    expect(button.text()).toBe('Add subcategory');
 });
 
 it('Check if item delete button is displayed', () => {
@@ -201,7 +212,7 @@ it('Check if item add option button is displayed', () => {
         }
       });
     const button = wrapper.find('#item-add-option');
-    expect(button.text()).toBe('Add Option');
+    expect(button.text()).toBe('Add option');
 });
 
 it('Check if item presentation is displayed', () => {

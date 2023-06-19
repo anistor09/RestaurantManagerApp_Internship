@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 import { ElSelect } from 'element-plus';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useLanguageStore } from '../store/language';
 import { useRestaurantStore } from '../store/restaurant';
+import translations from '../mockData/translations.json';
 import { Carte } from '../interfaces/Carte';
 import { SubCategory } from '~/interfaces/SubCategory';
+
+const languageStore = useLanguageStore();
+const computedLanguageId = computed(() => languageStore.idGetter);
+
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
@@ -146,7 +152,7 @@ const addItemInMenu = async () => {
 <template>
 	<div id="all">
 		<div class="div">
-			<h2 id="categoryIdPrefix" class="title">Category:</h2>
+			<h2 id="categoryIdPrefix" class="title">{{ translations[computedLanguageId].category }}</h2>
 
 			<el-select
 				id="categoryId"
@@ -154,7 +160,7 @@ const addItemInMenu = async () => {
 				filterable
 				clearable
 				class="specialSelect"
-				placeholder="Select category"
+				:placeholder=translations[computedLanguageId].selectCategory
 				size="large"
 				@change="changeCategory"
 			>
@@ -168,7 +174,7 @@ const addItemInMenu = async () => {
 		</div>
 
 		<div class="div">
-			<h2 id="subcategoryIdPrefix" class="title">Subcategory:</h2>
+			<h2 id="subcategoryIdPrefix" class="title">{{ translations[computedLanguageId].subcategory }}</h2>
 
 			<el-select
 				id="subcategoryId"
@@ -177,7 +183,7 @@ const addItemInMenu = async () => {
 				clearable
 				class="specialSelect"
 				:disabled="!enableSubcategory"
-				placeholder="Select subcategory"
+				:placeholder=translations[computedLanguageId].selectSubcategory
 				size="large"
 				@change="changeSubCategory"
 			>
@@ -191,7 +197,7 @@ const addItemInMenu = async () => {
 		</div>
 
 		<div class="div">
-			<h2 id="itemIdPrefix" class="title">Item:</h2>
+			<h2 id="itemIdPrefix" class="title">{{ translations[computedLanguageId].item }}</h2>
 
 			<el-select
 				id="itemIdPrefix"
@@ -199,7 +205,7 @@ const addItemInMenu = async () => {
 				filterable
 				clearable
 				class="specialSelect"
-				placeholder="Select item"
+				:placeholder=translations[computedLanguageId].selectItem
 				size="large"
 				@change="changeItem"
 			>

@@ -1,10 +1,18 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
 
-const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
+
+const workingDays = computed(() => [translations[computedLanguageId.value].monday, translations[computedLanguageId.value].tuesday, 
+translations[computedLanguageId.value].wednesday, translations[computedLanguageId.value].thursday, translations[computedLanguageId.value].friday,
+translations[computedLanguageId.value].saturday, translations[computedLanguageId.value].sunday]);
 
 const props = defineProps({
 	restaurant: {
@@ -26,6 +34,9 @@ const defaultSrc =
 const checkEdit = ref(false);
 const checkDelete = ref(false);
 
+const imageEdited: Ref<File | null> = ref(null);
+const acceptedTypes = ['image/jpeg', 'image/png'];
+
 const emit = defineEmits(['close']);
 
 // eslint-disable-next-line prefer-const
@@ -34,6 +45,53 @@ let name = selectedMenu.value.name;
 const description: Ref<string> = ref(selectedMenu.value.description);
 // eslint-disable-next-line prefer-const
 let src = selectedMenu.value.imageUrl;
+
+/// function to handle the upload of a image to a menu
+function handleFileUpload(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else imageEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+				src.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(imageEdited.value)
+		reader.readAsDataURL(imageEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected image for a menu
+function deleteImg(){
+	imageEdited.value=null
+	src.value=defaultSrc
+}
+
+// Function to display a error notification
+const openErrorNotification = (notifTitle: string) => {
+	ElNotification({
+		title: notifTitle,
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'Please try with a diffrent file.',
+		),
+		customClass: 'notif',
+	});
+};
 
 // Deep copy the two arrays and ref them
 const startTimes = ref(
@@ -63,10 +121,12 @@ const editMenu = async () => {
 		description: description.value,
 		version: 1,
 		active: true,
-		imageUrl: defaultSrc,
+		imageUrl: src.value,
 		itemSet: [],
 		hoursSet,
 	};
+	if(imageEdited.value) 
+		carte.imageUrl=""
 	await useFetch('/api/menus/editMenu', {
 		method: 'PUT',
 		body: carte,
@@ -74,13 +134,22 @@ const editMenu = async () => {
 			'Content-Type': 'application/json',
 		},
 	});
+	if(imageEdited.value){
+		const formData = new FormData();
+		formData.append('file', imageEdited.value);
+		formData.append('id', selectedMenu.value.id.toString())
+		await useFetch(`/api/photos/photoMenu`, {
+			method: 'POST',
+			body: formData,
+		});
+	}
 	checkEdit.value = false;
 	// Adjust locally
 	restaurantRef.value.carteSet.filter((menu) => {
 		if (menu.id === selectedMenu.value.id) {
 			menu.name = name;
 			menu.description = description.value;
-			menu.imageUrl = src;
+			menu.imageUrl = src.value;
 			menu.hoursSet = hoursSet;
 		}
 		return true;
@@ -146,22 +215,23 @@ async function addAiMenuDescription() {
 				></NameNeededPopUp>
 			</Teleport>
 		</ClientOnly>
-		<div class="box">
-			<div class="fieldText">Photo</div>
-			<div style="width: 92%; display: flex">
+		<div class="box" style="height: 100%">
+			<div class="fieldText">{{translations[computedLanguageId].photo}}</div>
+			<div style="width: 92%; height: 100%; display: flex">
 				<el-image
 					:src="src || defaultSrc"
 					style="width: 13vw; height: 15vh; object-fit: cover; border-radius: 40px"
 				/>
 				<div class="photoButtonSpace">
-					<el-button class="specialPhotoButton">Change</el-button>
-					<el-button class="specialPhotoButton">Delete</el-button>
+					<label for="changePhoto" class="specialPhotoLabel" >{{translations[computedLanguageId].change}}</label>
+					<input id="changePhoto" type="file" style="display: none;" @change="handleFileUpload"/>
+					<el-button class="specialPhotoButton" @click="deleteImg()">{{translations[computedLanguageId].delete}}</el-button>
 				</div>
 			</div>
 		</div>
 		<div class="box">
 			<div id="addName">
-				<div id="nameIdPrefix" class="fieldText">Name</div>
+				<div id="nameIdPrefix" class="fieldText">{{translations[computedLanguageId].name}}</div>
 				<input id="nameId" v-model="name" class="specialInput" style="height: 100%" />
 			</div>
 		</div>
@@ -170,28 +240,24 @@ async function addAiMenuDescription() {
 				class="div"
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 			>
-				<div
-					id="descriptionIdPrefix"
-					class="fieldText"
-					style="width: 18%; padding-bottom: 0.7%; padding-right: 3%"
-				>
-					Description
+				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%">
+					{{translations[computedLanguageId].description}}
 				</div>
 
-				<el-button class="aiButtonSubcatgory" style="width: 8vw" @click="addAiMenuDescription"
-					>✨Write with AI</el-button
+				<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription"
+					>✨{{translations[computedLanguageId].writeAi}}</el-button
 				>
 			</div>
 			<textarea id="descriptionId" v-model="description" style="padding-top: 0" class="specialTextArea"></textarea>
 		</div>
-		<div class="box" style="padding-top: 1%">
-			<div class="fieldText">Menu periods</div>
+		<div class="box" style="">
+			<div class="fieldText">{{translations[computedLanguageId].menuPeriods}}</div>
 			<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 				<div class="dayName">{{ day }}</div>
 				<el-time-select
 					v-model="startTimes[index]"
 					style="width: 25%"
-					placeholder="Start time"
+					:placeholder=translations[computedLanguageId].startTime
 					start="00:00"
 					step="00:30"
 					end="23:59"
@@ -199,7 +265,7 @@ async function addAiMenuDescription() {
 				<el-time-select
 					v-model="endTimes[index]"
 					style="width: 25%"
-					placeholder="End time"
+					:placeholder=translations[computedLanguageId].endTime
 					start="00:00"
 					step="00:30"
 					end="23:59"
@@ -207,16 +273,12 @@ async function addAiMenuDescription() {
 			</div>
 		</div>
 		<div id="buttonContainer">
-			<el-button class="specialPhotoButton" style="width: 22%; height: 20%" @click="checkIfChange()"
-				>Save menu</el-button
+			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" @click="checkIfChange()"
+				>{{translations[computedLanguageId].saveMenu}}</el-button
 			>
 			<div style="margin-left: 1vw"></div>
-			<el-button
-				class="specialPhotoButton"
-				style="width: 22%; height: 20%"
-				data-testId="delete-button"
-				@click="checkIfDelete()"
-				>Delete menu</el-button
+			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" data-testId="delete-button" @click="checkIfDelete()"
+				>{{translations[computedLanguageId].deleteMenu}}</el-button
 			>
 		</div>
 		<Teleport to="body">
@@ -320,6 +382,25 @@ async function addAiMenuDescription() {
 }
 .aiButtonSubcatgory:hover,
 .specialPhotoButton:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
+
+
+.specialPhotoLabel {
+	border-radius: 25px;
+	font-size: 1vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 50%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.specialPhotoLabel:hover {
 	background-color: #ed5087;
 	border-color: darkgrey;
 	color: white;

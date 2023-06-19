@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
-import { useRestaurantStore } from '~/store/restaurant';
+import { useRestaurantStore } from '../store/restaurant';
+import { useLanguageStore } from '../store/language';
+import translations from '~/mockData/translations.json'
 
 const imageURL = '/_nuxt/assets/images/Logo.png';
 
 const restaurantStore = useRestaurantStore();
+const languageStore = useLanguageStore();
 await restaurantStore.getRestaurant();
 const restaurant = restaurantStore.restaurantGetter;
+const computedLanguageId = computed(() => languageStore.idGetter);
 
 const route = useRoute();
 
@@ -30,23 +34,23 @@ const active = computed(() => {
 				<el-menu :default-active="active" text-color="white" active-text-color="#696969">
 					<img class="logo" :src="imageURL" />
 					<el-menu-item index="1" @click="navigateTo('/')">
-						<span>Home</span>
+						<span> {{ translations[computedLanguageId].home }} </span>
 					</el-menu-item>
 					<el-menu-item index="2" @click="navigateTo('/menus')">
-						<span>Menus</span>
+						<span>{{ translations[computedLanguageId].menus }}</span>
 					</el-menu-item>
 					<el-menu-item index="3" @click="navigateTo('/products')">
-						<span>Products</span>
+						<span>{{ translations[computedLanguageId].products }}</span>
 					</el-menu-item>
 					<el-menu-item index="4" @click="navigateTo('/tables')">
-						<span>Tables</span>
+						<span>{{ translations[computedLanguageId].tables }}</span>
 					</el-menu-item>
 					<el-menu-item class="settings" index="5" @click="navigateTo('/settings')">
 						<img
 							class="icon"
 							:src="restaurant.logoUrl || 'https://cdn.onlinewebfonts.com/svg/img_574534.png'"
 						/>
-						<span id="setting">Settings</span>
+						<span id="setting">{{ translations[computedLanguageId].settings }}</span>
 					</el-menu-item>
 				</el-menu>
 			</el-aside>

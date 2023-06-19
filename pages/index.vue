@@ -1,13 +1,18 @@
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 import PageTitle from '../components/page-title.vue';
+import { useLanguageStore } from '../store/language';
 import AnalyticsBarComponent from '../components/analytics-bar-component.vue';
 import AnalyticsGraphComponent from '../components/analytics-graph-component.vue';
 import RestaurantComponent from '../components/restaurant-component.vue';
-import { MostSoldItems } from '~/interfaces/MostSoldItems';
-import { TimePrice } from '~/interfaces/TimePrice';
+import { MostSoldItems } from '../interfaces/MostSoldItems';
+import { TimePrice } from '../interfaces/TimePrice';
+import translations from '../mockData/translations.json'
 
-const barTitle = 'Most Sold Items';
+const languageStore = useLanguageStore();
+const computedLanguageId = computed(() => languageStore.idGetter);
+
+const barTitle = computed(() => translations[computedLanguageId.value].mostSoldItems);
 
 const itemNames = ref<string[][]>([]);
 const itemValues = ref<number[][]>([]);
@@ -22,14 +27,14 @@ onBeforeMount(async () => {
 });
 
 // Props for graph chart (total revenue)
-const graphTitle = 'Total Generated Revenue';
-const graphShortTitle = 'revenue';
+const graphTitle = computed(() => translations[computedLanguageId.value].totalGeneratedRevenue);
+const graphShortTitle = computed(() => translations[computedLanguageId.value].revenue);
 
 const graphValues = ref<number[][]>([]);
 
 // Props for graph chart (average order price)
-const graphTitle2 = 'Average Basket Price';
-const graphShortTitle2 = 'price';
+const graphTitle2 = computed(() => translations[computedLanguageId.value].averageBasketPrice);
+const graphShortTitle2 = computed(() => translations[computedLanguageId.value].price);
 
 const graphValues2 = ref<number[][]>([]);
 
@@ -114,7 +119,7 @@ const svg = `
 </script>
 
 <template>
-	<PageTitle title="Home"></PageTitle>
+	<PageTitle :title=translations[computedLanguageId].home></PageTitle>
 	<div style="padding-top: 0.5vh; padding-left: 2vw; padding-right: 2vw">
 		<RestaurantComponent></RestaurantComponent>
 	</div>

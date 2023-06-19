@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useCurrencyStore } from '../store/currency';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { ItemWrapper } from '~/interfaces/ItemWrapper';
 import { Restaurant } from '~/interfaces/Restaurant';
 
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 const currencyStore = useCurrencyStore();
 const computedCurrency = computed(() => currencyStore.currencyGetter.currency);
 const props = defineProps({
@@ -91,7 +97,7 @@ function formatPrice(price: any) {
 		<el-collapse v-model="isCollapsed">
 			<el-collapse-item :title="subcategoryName" name="1">
 				<el-table id="subcategory-table" :data="filterTableData">
-					<el-table-column align="center" label="Image">
+					<el-table-column align="center" :label="translations[computedLanguageId].photo">
 						<template #default="{ row }">
 							<img
 								id="subcategory-image"
@@ -105,24 +111,24 @@ function formatPrice(price: any) {
 					</el-table-column>
 					<el-table-column
 						align="center"
-						label="Name"
+						:label="translations[computedLanguageId].name"
 						prop="item.name"
 						data-testid="item-name-column"
 					/>
-					<el-table-column align="center" label="Description" prop="item.description" />
+					<el-table-column align="center" :label="translations[computedLanguageId].descriptionW" prop="item.description" />
 					<!-- <el-table-column align="center" label="Price" prop="item.price" /> -->
-					<el-table-column align="center" label="Price">
+					<el-table-column align="center" :label="translations[computedLanguageId].price">
 						<template #default="{ row }">
 							<span>{{ formatPrice(row.item.price) }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column align="center">
 						<template #header>
-							<el-input v-model="search" size="default" placeholder="Search by item" />
+							<el-input v-model="search" size="default" :placeholder=translations[computedLanguageId].searchByItem />
 						</template>
 						<template #default="{ row }">
 							<el-button id="button" color="#ED5087" plain round @click="deleteItem(row.item.id)"
-								>Remove from menu</el-button
+								>{{translations[computedLanguageId].removeFromMenu}}</el-button
 							>
 							<Teleport to="body">
 								<el-dialog v-model="row.showDelete" width="20%" class="subcategory-delete-popup">

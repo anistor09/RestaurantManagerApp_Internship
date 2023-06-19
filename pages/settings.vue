@@ -1,18 +1,24 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { ElTimeSelect } from 'element-plus';
 import { useRestaurantStore } from '../store/restaurant';
 import { Hours } from '../interfaces/Hours';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
 import PageTitle from '../components/page-title.vue';
 import currencies from '../mockData/currency.json';
+import languages from '../mockData/languages.json';
 import { useCurrencyStore } from '../store/currency';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 
 const currencyStore = useCurrencyStore();
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
+const languageStore = useLanguageStore();
 
-const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const defaultSrc =
+	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
+const src = ref(restaurant.imageUrl || defaultSrc);
 const name = ref(restaurant.name);
 const addresse = ref(restaurant.addresse);
 const description = ref(restaurant.description);
@@ -23,6 +29,108 @@ const category = ref(restaurant.category);
 const doubleCheck = ref(false);
 const nameNeededPopUp = ref(false);
 const selectedCurrency = ref(currencyStore.currencyGetter.currency);
+const selectedLanguage = ref(languageStore.languageGetter.language);
+
+const computedLanguageId = computed(() => languageStore.idGetter);
+
+const workingDays = computed(() => [
+	translations[computedLanguageId.value].monday,
+	translations[computedLanguageId.value].tuesday,
+	translations[computedLanguageId.value].wednesday,
+	translations[computedLanguageId.value].thursday,
+	translations[computedLanguageId.value].friday,
+	translations[computedLanguageId.value].saturday,
+	translations[computedLanguageId.value].sunday,
+]);
+
+const acceptedTypes = ['image/jpeg', 'image/png'];
+const logoEdited: Ref<File | null> = ref(null);
+const backgroundEdited: Ref<File | null> = ref(null);
+
+/// function to handle the upload of a logo to a restaurant
+function handleFileUploadLogo(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else logoEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+			imageUrl.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(logoEdited.value)
+		reader.readAsDataURL(logoEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected logo for a restaurant
+function deleteImgLogo(){
+	logoEdited.value=null
+	imageUrl.value=defaultSrc
+}
+
+/// function to handle the upload of a background to a restaurant
+function handleFileUploadBackground(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else backgroundEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+				src.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(backgroundEdited.value)
+		reader.readAsDataURL(backgroundEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected image for a menu
+function deleteImgBackground(){
+	backgroundEdited.value=null
+	src.value=defaultSrc
+}
+
+
+// Function to display a error notification
+const openErrorNotification = (notifTitle: string) => {
+	ElNotification({
+		title: notifTitle,
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'Please try with a diffrent file.',
+		),
+		customClass: 'notif',
+	});
+};
+
+
+
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -46,7 +154,10 @@ const startTimes = ref(times[0]);
 const endTimes = ref(times[1]);
 
 const saveChanges = async () => {
+	doubleCheck.value = false;
+
 	changeCurrencyGlobally();
+	changeLanguageGlobally();
 	restaurant.hoursSet = [];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
@@ -74,7 +185,25 @@ const saveChanges = async () => {
 		},
 	});
 
-	doubleCheck.value = false;
+	// if(logoEdited.value){
+	// 	const formData = new FormData();
+	// 	formData.append('file', logoEdited.value);
+	// 	formData.append('id', restaurant.id.toString())
+	// 	await useFetch(`/api/photos/photoLogo`, {
+	// 		method: 'POST',
+	// 		body: formData,
+	// 	});
+	// }
+
+	if (backgroundEdited.value) {
+		const formData = new FormData();
+		formData.append('file', backgroundEdited.value);
+		formData.append('id', restaurant.id.toString());
+		await useFetch(`/api/photos/photoBackground`, {
+			method: 'POST',
+			body: formData,
+		});
+	}
 };
 async function addAiRestaurantDescription() {
 	if (name.value.length === 0) {
@@ -98,16 +227,17 @@ async function addAiRestaurantDescription() {
 		description.value = response.data.value;
 	}
 }
-const defaultSrc =
-	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
-const src = ref(restaurant.imageUrl || defaultSrc);
 function changeCurrencyGlobally() {
 	currencyStore.currencyGetter.currency = selectedCurrency.value;
+}
+
+function changeLanguageGlobally() {
+	languageStore.languageGetter.language = selectedLanguage.value;
 }
 </script>
 
 <template>
-	<PageTitle id="titleComponent" title="Restaurant Overview"></PageTitle>
+	<PageTitle id="titleComponent" :title="translations[computedLanguageId].settings"></PageTitle>
 	<div class="container">
 		<ClientOnly>
 			<Teleport to="body">
@@ -142,23 +272,32 @@ function changeCurrencyGlobally() {
 							style="font-size: 1vw; width: 100%"
 							placeholder="Please input"
 						/>
-						<div style="width: 100%; padding-top: 1%">
-							<el-button
-								class="specialPhotoButton"
-								data-testid="changeLogoButton"
+						<div style="width: 100%; padding-top: 1%; display: flex">
+							<label
+								for="changePhotoLogo"
+								class="specialPhotoLabel"
 								style="width: 35%; height: 3vh; font-size: 0.8vw; margin-right: 3%"
-								>Change logo</el-button
+								>{{ translations[computedLanguageId].changeLogo }}</label
 							>
+							<input
+								id="changePhotoLogo"
+								type="file"
+								style="display: none"
+								@change="handleFileUploadLogo"
+							/>
 							<el-button
 								class="specialPhotoButton"
 								data-testid="deleteLogoButton"
 								style="width: 35%; height: 3vh; font-size: 0.8vw"
-								>Delete logo</el-button
+								@click="deleteImgLogo()"
+								>{{ translations[computedLanguageId].deleteLogo }}</el-button
 							>
 						</div>
 					</div>
 				</div>
-				<div id="backgroundPrefix" class="prefix">Background Image:</div>
+				<div id="backgroundPrefix" class="prefix">
+					{{ translations[computedLanguageId].backgroundImage }}
+				</div>
 				<div style="width: 92%; height: 100%; display: flex; padding-left: 1%">
 					<img
 						:src="src"
@@ -171,8 +310,21 @@ function changeCurrencyGlobally() {
 						"
 					/>
 					<div class="photoButtonSpace">
-						<el-button data-testid="changeBackButton" class="specialPhotoButton">Change</el-button>
-						<el-button data-testid="deleteBackButton" class="specialPhotoButton">Delete</el-button>
+						<label for="changePhotoBackground" class="specialPhotoLabel">{{
+							translations[computedLanguageId].change
+						}}</label>
+						<input
+							id="changePhotoBackground"
+							type="file"
+							style="display: none"
+							@change="handleFileUploadBackground"
+						/>
+						<el-button
+							data-testid="deleteBackButton"
+							class="specialPhotoButton"
+							@click="deleteImgBackground()"
+							>{{ translations[computedLanguageId].delete }}</el-button
+						>
 					</div>
 				</div>
 				<!-- Container which the other information(description, phone number, email and category)-->
@@ -184,11 +336,11 @@ function changeCurrencyGlobally() {
 						style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 					>
 						<div id="descriptionIdPrefix" class="prefix" style="width: 18%; padding-bottom: 0.7%">
-							Description:
+							{{ translations[computedLanguageId].description }}
 						</div>
 
 						<el-button class="aiButtonSubcatgory" @click="addAiRestaurantDescription"
-							>✨Write with AI</el-button
+							>✨{{ translations[computedLanguageId].writeAi }}</el-button
 						>
 					</div>
 					<textarea
@@ -200,7 +352,7 @@ function changeCurrencyGlobally() {
 							text-align: start;
 							width: 90%;
 							resize: none;
-							height: 10vh;
+							height: 12vh;
 							overflow: auto;
 							max-width: 80vw;
 							min-width: 300px;
@@ -219,7 +371,9 @@ function changeCurrencyGlobally() {
 		<div id="secondHalf">
 			<div style="padding-left: 10%; padding-top: 5%">
 				<div class="details">
-					<div id="phoneIdPrefix" class="prefix">Phone Number:</div>
+					<div id="phoneIdPrefix" class="prefix">
+						{{ translations[computedLanguageId].phoneNumber }}
+					</div>
 					<!-- The input where the restaurant phone number can be changed by the restaurant owner-->
 					<input
 						id="phoneId"
@@ -231,7 +385,7 @@ function changeCurrencyGlobally() {
 					/>
 				</div>
 				<div class="details">
-					<div id="mailIdPrefix" class="prefix">Email:</div>
+					<div id="mailIdPrefix" class="prefix">{{ translations[computedLanguageId].email }}</div>
 					<!-- The input where the restaurant email can be changed by the restaurant owner-->
 					<input
 						id="mailId"
@@ -243,7 +397,9 @@ function changeCurrencyGlobally() {
 					/>
 				</div>
 				<div class="details">
-					<div id="categoryIdPrefix" class="prefix">Category:</div>
+					<div id="categoryIdPrefix" class="prefix">
+						{{ translations[computedLanguageId].category }}
+					</div>
 					<!-- The input where the restaurant category can be changed by the restaurant owner-->
 					<input
 						id="categoryId"
@@ -254,7 +410,7 @@ function changeCurrencyGlobally() {
 						placeholder="Please input"
 					/>
 				</div>
-				<div id="hoursId" class="prefix">Working Hours:</div>
+				<div id="hoursId" class="prefix">{{ translations[computedLanguageId].workingHours }}</div>
 				<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 					<div class="dayName">{{ day }}</div>
 					<el-time-select
@@ -276,31 +432,53 @@ function changeCurrencyGlobally() {
 						end="23:59"
 					/>
 				</div>
-				<div class="details" style="padding-top: 2%;">
-						<div id="mailIdPrefix" class="prefix">Currency:</div>
-						<div style="width: 20%">
-							<el-select
-								v-model="selectedCurrency"
-								class="currency-select-item"
-								collapse-tags
-								filterable
-								default-first-option
-								:reserve-keyword="false"
-							>
-								<el-option
-									v-for="currency in currencies"
-									:key="currency.id"
-									:label="currency.symbol"
-									:value="currency.symbol"
-								/>
-							</el-select>
-						</div>
+				<div class="details" style="padding-top: 2%">
+					<div id="mailIdPrefix" class="prefix">
+						{{ translations[computedLanguageId].currency }}
 					</div>
+					<div style="width: 20%">
+						<el-select
+							v-model="selectedCurrency"
+							class="currency-select-item"
+							collapse-tags
+							filterable
+							default-first-option
+							:reserve-keyword="false"
+						>
+							<el-option
+								v-for="currency in currencies"
+								:key="currency.id"
+								:label="currency.symbol"
+								:value="currency.symbol"
+							/>
+						</el-select>
+					</div>
+					<div id="mailIdPrefix" class="prefix">
+						{{ translations[computedLanguageId].language }}
+					</div>
+					<div style="width: 27%">
+						<el-select
+							v-model="selectedLanguage"
+							class="currency-select-item"
+							collapse-tags
+							filterable
+							default-first-option
+							:reserve-keyword="false"
+						>
+							<el-option
+								v-for="language in languages"
+								:key="language.id"
+								:label="language.symbol"
+								:value="language.symbol"
+							/>
+						</el-select>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 	<el-button id="save-button" color="#ED5087" plain round @click="checkIfChange()">
-		Save changes</el-button
+		{{ translations[computedLanguageId].saveChanges }}</el-button
 	>
 
 	<Teleport to="body">
@@ -319,9 +497,11 @@ function changeCurrencyGlobally() {
 			"
 		>
 			<div>
-				Are you sure you want to make these changes?
+				{{ translations[computedLanguageId].settingsScript }}
 				<div id="change-bottom-button">
-					<el-button color="#ED5087" plain round @click="saveChanges()">Yes</el-button>
+					<el-button color="#ED5087" plain round @click="saveChanges()">{{
+						translations[computedLanguageId].yes
+					}}</el-button>
 				</div>
 			</div>
 		</el-dialog>
@@ -369,6 +549,25 @@ textarea::-webkit-scrollbar {
 	color: white;
 }
 
+.specialPhotoLabel {
+	border-radius: 25px;
+	font-size: 1vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 80%;
+	height: 30%;
+	margin-left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.specialPhotoLabel:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
 .photoButtonSpace {
 	width: 30%;
 	padding-left: 5%;

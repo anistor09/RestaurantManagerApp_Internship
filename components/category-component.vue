@@ -1,5 +1,13 @@
 <script lang="ts" setup>
+
+import { computed } from "vue"
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { Category } from '~/interfaces/Category';
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 
 const props = defineProps({
 	category: {
@@ -34,7 +42,7 @@ const editCategory = () => {
 				<!-- The description of the category, which gives a general overview -->
 				<div id="description">
 					<el-scrollbar>
-						<b>Description:</b>
+						<b>{{translations[computedLanguageId].description}}</b>
 						{{ props.category.description == '' ? 'None' : props.category.description }}
 					</el-scrollbar>
 				</div>
