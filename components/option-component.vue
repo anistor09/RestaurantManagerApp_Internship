@@ -1,7 +1,14 @@
 <script lang="ts" setup>
+
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { Choice } from '~/interfaces/Choice';
 import { Option } from '~/interfaces/Option';
 import { ChoiceWrapper } from '~/interfaces/ChoiceWrapper';
+
+
+const languageStore = useLanguageStore();
+const computedLanguageId = computed(() => languageStore.idGetter);
 
 const props = defineProps({
 	optionName: {
@@ -107,16 +114,16 @@ watch(props.choices, () => {
 					<el-table-column align="center" label="Description" prop="choice.description" />
 					<el-table-column align="center">
 						<template #header>
-							<el-button class="option-button"  @click="editOption()">Edit Option</el-button>
-							<el-button class="option-button"  @click="deleteOption()">Delete Option</el-button>
+							<el-button class="option-button"  @click="editOption()">{{ translations[computedLanguageId].editOption }}</el-button>
+							<el-button class="option-button"  @click="deleteOption()">{{ translations[computedLanguageId].deleteOption }}</el-button>
 						</template>
 						<template #default="{ row }">
-							<el-button class="table-button" @click="editChoice(row.choice.id)">Edit</el-button>
-							<el-button class="table-button" @click="deleteChoice(row.choice.id)" >Delete</el-button>
+							<el-button class="table-button" @click="editChoice(row.choice.id)">{{ translations[computedLanguageId].edit }}</el-button>
+							<el-button class="table-button" @click="deleteChoice(row.choice.id)" >{{ translations[computedLanguageId].delete }}</el-button>
 							<Teleport to="body">
 								<el-dialog v-model="row.showDelete" class="choice-delete-popup">
 									<div style="width: 100%;height: 70%;text-align: center; display: flex; justify-content: center; align-items: center; font-size: 1.0vw;">
-										Are you sure you want to delete "{{ row.choice.name }}" from this option?
+										{{ translations[computedLanguageId].areYouSureYouWantToDelete }} "{{ row.choice.name }}" {{ translations[computedLanguageId].fromThisOption }}?
 									</div>
 									<div style="display: flex; justify-content: center; align-items: center; width: 100%;height: 20%;">
 										<el-button class="choice-delete-popup-button" @click="handleDeleteChoice(row.choice.id)">Yes</el-button>
@@ -127,19 +134,19 @@ watch(props.choices, () => {
 								<el-dialog v-model="row.showEdit" class="choice-edit-popup">
 									<template #header>
 										<div class="my-header">
-											<div class="choiceFieldText">Edit a choice</div>
+											<div class="choiceFieldText">{{translations[computedLanguageId].editAChoice}}</div>
 										</div>
 									</template>
 									<div style="width:100%;height: 70%;">
 										<div style="width:100%;height: 100%;padding-left: 15%;">
-											<div class="choiceFieldText">Name</div>
+											<div class="choiceFieldText">{{ translations[computedLanguageId].name }}</div>
 											<input v-model="choiceName" class="specialChoiceInput"/>
-											<div class="choiceFieldText">Description</div>
+											<div class="choiceFieldText">{{ translations[computedLanguageId].description }}</div>
 											<textarea v-model="choiceDescription" class="specialChoiceTextArea"></textarea>
 										</div>	
 									</div>
 									<div style="width:100%;height: 30%;display: flex;justify-content: center;align-items: center;">
-										<el-button class="choice-edit-popup-button" @click="handleEditChoice(row.choice.id)">Save</el-button>
+										<el-button class="choice-edit-popup-button" @click="handleEditChoice(row.choice.id)">{{ translations[computedLanguageId].save }}</el-button>
 									</div>
 									
 								</el-dialog>
@@ -148,7 +155,7 @@ watch(props.choices, () => {
 					</el-table-column>
 				</el-table>
 				<div style="width: 100%; display: flex; justify-content: center; align-items: center;">
-					<el-button class="add-choice-button" color="#ED5087" pink round @click="addChoice()">Add choice</el-button>
+					<el-button class="add-choice-button" color="#ED5087" pink round @click="addChoice()">{{ translations[computedLanguageId].addChoice }}</el-button>
 				</div>
 				
 			</el-collapse-item>

@@ -799,7 +799,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 					"
 				>
 					<el-button class="choice-delete-popup-button" @click="handleDeleteOption()"
-						>Yes</el-button
+						>{{translations[computedLanguageId].yes}}</el-button
 					>
 				</div>
 			</el-dialog>
@@ -835,14 +835,14 @@ async function addAiDescription(neededLength: string, short: boolean) {
 			<el-dialog v-model="addChoicePopUp" class="choice-edit-popup">
 				<template #header>
 					<div class="my-header">
-						<div class="choiceFieldText">Add a choice</div>
+						<div class="choiceFieldText">{{translations[computedLanguageId].addAChoice}}</div>
 					</div>
 				</template>
 				<div style="width: 100%; height: 70%">
 					<div style="width: 100%; height: 100%; padding-left: 15%">
-						<div class="choiceFieldText">Name</div>
+						<div class="choiceFieldText">{{translations[computedLanguageId].name}}</div>
 						<input v-model="choiceName" class="specialChoiceInput" />
-						<div class="choiceFieldText">Description</div>
+						<div class="choiceFieldText">{{translations[computedLanguageId].description}}</div>
 						<textarea v-model="choiceDescription" class="specialChoiceTextArea"></textarea>
 					</div>
 				</div>
@@ -856,7 +856,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 					"
 				>
 					<el-button class="choice-edit-popup-button" @click="handleAddChoice()"
-						>Add Choice</el-button
+						>{{translations[computedLanguageId].addChoice}}</el-button
 					>
 				</div>
 			</el-dialog>
@@ -865,20 +865,20 @@ async function addAiDescription(neededLength: string, short: boolean) {
 			<el-dialog v-model="editOptionPopUp" class="option-edit-popup">
 				<template #header>
 					<div class="my-header">
-						<div class="choiceFieldText">Edit a option</div>
+						<div class="choiceFieldText">{{translations[computedLanguageId].editAnOption}}</div>
 					</div>
 				</template>
 				<div style="width: 100%; height: 70%">
 					<div style="width: 100%; height: 100%; padding-left: 15%">
-						<div class="choiceFieldText">Name</div>
+						<div class="choiceFieldText">{{translations[computedLanguageId].name}}</div>
 						<input v-model="optionNameField" class="specialOptionInput" />
-						<div class="choiceFieldText">Description</div>
+						<div class="choiceFieldText">{{translations[computedLanguageId].description}}</div>
 						<textarea v-model="optionDescriptionField" class="specialOptionTextArea"></textarea>
 						<div class="choiceFieldText">
 							<el-checkbox
 								v-model="optionMandatory"
 								class="option-checkbox"
-								label="Mandatory"
+								:label=translations[computedLanguageId].mandatory
 								size="large"
 							/>
 						</div>
@@ -894,7 +894,7 @@ async function addAiDescription(neededLength: string, short: boolean) {
 					"
 				>
 					<el-button class="option-edit-popup-button" @click="handleEditOption()"
-						>Update option</el-button
+						>{{translations[computedLanguageId].updateOption}}</el-button
 					>
 				</div>
 			</el-dialog>

@@ -94,7 +94,15 @@
         "areYouSureYouWantToDelete": "Are you sure you want to delete",
         "areYouSureYouWantToDeleteCategory": "Are you sure you want to delete category",
         "areYouSureYouWantToDeleteSubCategory": "Are you sure you want to delete this subcategory?",
-        "deleteCategory": "Delete category"
+        "deleteCategory": "Delete category",
+        "editOption": "Edit option",
+        "deleteOption": "Delete option",
+        "fromThisOption": "from this option",
+        "addChoice": "Add choice",
+        "editAChoice": "Edit a choice",
+        "addAChoice": "Add a choice",
+        "editAnOption": "Edit an option",
+        "updateOption": "Update option"
     },
     {
         "home": "Acasa",
@@ -191,6 +199,14 @@
         "areYouSureYouWantToDelete": "Sigur vrei sa stergi",
         "areYouSureYouWantToDeleteCategory": "Sigur vrei sa stergi categoria",
         "areYouSureYouWantToDeleteSubCategory": "Sigur vrei sa stergi aceasta subcategorie?",
-        "deleteCategory": "Sterge categorie"
+        "deleteCategory": "Sterge categorie",
+        "editOption": "Editeaza optiune",
+        "deleteOption": "Sterge optiune",
+        "fromThisOption": "din aceasta optiune",
+        "addChoice": "Adauga varianta",
+        "editAChoice": "Editeaza varianta",
+        "addAChoice": "Adauga varianta",
+        "editAnOption": "Editeaza optiune",
+        "updateOption": "Salveaza optiune"
     }
 ]
