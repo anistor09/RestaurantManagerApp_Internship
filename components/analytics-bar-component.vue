@@ -22,7 +22,7 @@ const selection = ref('This year');
 const chartOptions = computed(() => ({
 	chart: {
 		type: 'bar',
-		height: '80%'
+		height: '80%',
 	},
 	plotOptions: {
 		bar: {
@@ -55,7 +55,7 @@ const chartOptions = computed(() => ({
 		colors: ['#fff'],
 	},
 	xaxis: {
-		categories: props.itemNames[3],
+		categories: props.itemNames[3] === undefined ? [] : props.itemNames[3],
 	},
 	yaxis: {
 		labels: {
@@ -109,7 +109,7 @@ const chartOptions = computed(() => ({
 
 const series = ref([
 	{
-		data: props.itemValues[3],
+		data: props.itemValues[3] === undefined ? [] : props.itemValues[3],
 	},
 ]);
 
