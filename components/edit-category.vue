@@ -142,7 +142,7 @@ const openNotification = (notifTitle: string) => {
 		message: h(
 			'div',
 			{ style: 'color: #ed5087; font-family: "Open Sans"' },
-			'You will be redirected now.',
+			translations[computedLanguageId.value].youWillBeRedirectedNow,
 		),
 		customClass: 'notif',
 	});
@@ -401,7 +401,7 @@ async function handleAddEditCategory() {
 			});
 		}
 		if (categoryId !== null) await handleSubcategories(categoryId);
-		openNotification('Category was successfully added');
+		openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyAdded);
 	} else {
 		const putBody = {
 			requestBody,
@@ -436,7 +436,7 @@ async function handleAddEditCategory() {
 			});
 		}
 		if (props.categoryId !== undefined) await handleSubcategories(props.categoryId);
-		openNotification('Category was successfully edited');
+		openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyEdited);
 	}
 	setTimeout(() => {
 		window.close();
@@ -463,7 +463,7 @@ async function handleDeleteCategory() {
 		},
 	});
 	if (props.categoryId) categoryStore.deleteGetter.push(props.categoryId);
-	openNotification('Category was successfully deleted');
+	openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyDeleted);
 	window.close();
 }
 // Cancels adding a new subcategory.
@@ -532,7 +532,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 
 <template>
 	<ClientOnly>
-		<page-title v-if="addCategory" title="Add category"></page-title>
+		<page-title v-if="addCategory" :title="translations[computedLanguageId].addCategory"></page-title>
 		<page-title v-else title="Edit category"></page-title>
 		<div class="container">
 			<div id="add-Category-Info" class="bottom">
@@ -660,7 +660,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 								{{ translations[computedLanguageId].areYouSureYouWantToDeleteSubCategory }}
 								<div id="bottomButtons">
 									<el-button color="#ED5087" plain round @click="deleteSubcategoryPopup = false"
-										>No</el-button
+										>{{translations[computedLanguageId].no}}</el-button
 									>
 									<el-button
 										id="yessafetyPopUpDeleteSubcategory"
@@ -668,7 +668,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 										plain
 										round
 										@click="deleteSubcategoryLocally(deleteSubcatIdLocally)"
-										>Yes</el-button
+										>{{translations[computedLanguageId].yes}}</el-button
 									>
 								</div>
 							</div>
@@ -680,10 +680,10 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 								{{translations[computedLanguageId].areYouSureYouWantToDeleteCategory}} {{ name }}?
 								<div id="bottomButtons">
 									<el-button color="#ED5087" plain round @click="deleteCategoryPopup = false"
-										>No</el-button
+										>{{translations[computedLanguageId].no}}</el-button
 									>
 									<el-button color="#ED5087" plain round @click="handleDeleteCategory()"
-										>Yes</el-button
+										>{{translations[computedLanguageId].yes}}</el-button
 									>
 								</div>
 							</div>

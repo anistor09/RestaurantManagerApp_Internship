@@ -239,7 +239,7 @@ function handleAddOption() {
 
 function handleDeleteItem() {
 	itemStore.deleteGetter.push(props.itemId);
-	openNotification('Item was successfully deleted');
+	openNotification(translations[computedLanguageId.value].itemWasSuccessfullyDeleted);
 	setTimeout(() => {
 		window.close();
 	}, 2000);
@@ -356,7 +356,7 @@ const saveButton = () => {
 		restaurant.itemSet.push(item);
 		itemStore.itemGetter.push(item);
 		/// add item to database
-		openNotification('Item was successfully added');
+		openNotification(translations[computedLanguageId.value].itemWasSuccessfullyAdded);
 	} else {
 		const realItem = restaurant.itemSet.filter((x) => x.id === props.itemId)[0];
 		realItem.name = name.value;
@@ -383,7 +383,7 @@ const saveButton = () => {
 		realItem.presentationOrder = presentationOrder.value;
 		itemStore.itemGetter.push(realItem);
 		/// update item in the database
-		openNotification('Item was successfully edited');
+		openNotification(translations[computedLanguageId.value].itemWasSuccessfullyEdited);
 	}
 	setTimeout(() => {
 		window.close();
@@ -451,7 +451,7 @@ const openNotification = (notifTitle: string) => {
 		message: h(
 			'div',
 			{ style: 'color: #ed5087; font-family: "Open Sans"' },
-			'You will be redirected now.',
+			translations[computedLanguageId.value].youWillBeRedirectedNow,
 		),
 		customClass: 'notif',
 	});

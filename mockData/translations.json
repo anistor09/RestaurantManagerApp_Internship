@@ -14,6 +14,7 @@
         "delete": "Delete",
         "edit": "Edit",
         "description": "Description:",
+        "descriptionW": "Description",
         "writeAi": "Write with AI",
         "phoneNumber": "Phone Number:",
         "email": "Email:",
@@ -102,7 +103,14 @@
         "editAChoice": "Edit a choice",
         "addAChoice": "Add a choice",
         "editAnOption": "Edit an option",
-        "updateOption": "Update option"
+        "updateOption": "Update option",
+        "categoryWasSuccessfullyAdded": "Category was successfully added",
+        "categoryWasSuccessfullyEdited": "Category was successfully edited",
+        "categoryWasSuccessfullyDeleted": "Category was successfully deleted",
+        "youWillBeRedirectedNow": "You will be redirected now.",
+        "itemWasSuccessfullyDeleted": "Item was successfully deleted",
+        "itemWasSuccessfullyEdited": "Item was successfully edited",
+        "itemWasSuccessfullyAdded": "Item was successfully added"
     },
     {
         "home": "Acasa",
@@ -119,6 +127,7 @@
         "delete": "Sterge",
         "edit": "Editeaza",
         "description": "Descriere:",
+        "descriptionW": "Descriere",
         "writeAi": "Scrie cu AI",
         "phoneNumber": "Numar de telefon:",
         "email": "Email:",
@@ -207,6 +216,13 @@
         "editAChoice": "Editeaza varianta",
         "addAChoice": "Adauga varianta",
         "editAnOption": "Editeaza optiune",
-        "updateOption": "Salveaza optiune"
+        "updateOption": "Salveaza optiune",
+        "categoryWasSuccessfullyAdded": "Categorie adaugata cu succes",
+        "categoryWasSuccessfullyEdited": "Categorie editata cu succes",
+        "categoryWasSuccessfullyDeleted": "Categorie stearsa cu succes",
+        "youWillBeRedirectedNow": "O sa fii redirectionat acum.",
+        "itemWasSuccessfullyDeleted": "Produs sters cu succes",
+        "itemWasSuccessfullyEdited": "Produs editat cu succes",
+        "itemWasSuccessfullyAdded": "Produs adaugat cu succes"
     }
 ]

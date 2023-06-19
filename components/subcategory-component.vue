@@ -97,7 +97,7 @@ function formatPrice(price: any) {
 		<el-collapse v-model="isCollapsed">
 			<el-collapse-item :title="subcategoryName" name="1">
 				<el-table id="subcategory-table" :data="filterTableData">
-					<el-table-column align="center" label="Image">
+					<el-table-column align="center" :label="translations[computedLanguageId].photo">
 						<template #default="{ row }">
 							<img
 								id="subcategory-image"
@@ -111,13 +111,13 @@ function formatPrice(price: any) {
 					</el-table-column>
 					<el-table-column
 						align="center"
-						label="Name"
+						:label="translations[computedLanguageId].name"
 						prop="item.name"
 						data-testid="item-name-column"
 					/>
-					<el-table-column align="center" label="Description" prop="item.description" />
+					<el-table-column align="center" :label="translations[computedLanguageId].descriptionW" prop="item.description" />
 					<!-- <el-table-column align="center" label="Price" prop="item.price" /> -->
-					<el-table-column align="center" label="Price">
+					<el-table-column align="center" :label="translations[computedLanguageId].price">
 						<template #default="{ row }">
 							<span>{{ formatPrice(row.item.price) }}</span>
 						</template>
