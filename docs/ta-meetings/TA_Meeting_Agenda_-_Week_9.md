@@ -35,4 +35,12 @@
 - Go through the established arrangements one more time
 - Decide on scheduling next meeting
 - Is there anything else we should be aware of?
+
 # Meeting notes
+
+- user test: find a form on Google, send it to some people and discuss what features they liked and what they didn't
+- try to incorporate TW feedback when possible, but keep information related to client problems
+- aim for at least 80% + e2e and integration
+- we can have a lot less than 12000 words (e.g. 8000), references are only relevant for TW
+- break the requirements, doesn't matter if the distribution is not equal
+- be very specific
