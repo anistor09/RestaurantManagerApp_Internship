@@ -38,3 +38,11 @@
 - Is there anything else we should be aware of?
 
 # Meeting notes
+
+- Inject dependencies for server utills, not struggle too much to use powerMockito.
+- It’s wk 8, do not take to much time to debug the backend. Take time to write documentation, report, tests, etc.
+- Write everything about architecture and design pattern in reports (also do not forget to mention about the frameworks, why they are good for the project).
+- Mention in the report about the process (also in the presentation: issues, MR, etc.)
+- Final pres: 20 min without Q/A.
+- For next week same time and location.
+
