@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils';
 
 import EditMenu from '../components/edit-menu-component.vue';
 import restaurants from '../mockData/restaurants.json';
+import languages from '../mockData/languages.json';
 
 vi.mock('../store/restaurant.ts', () => {
 	return {
@@ -14,7 +15,16 @@ vi.mock('../store/restaurant.ts', () => {
 		}),
 	};
 });
-
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
 it('Renders popup', () => {
 	const wrapper = mount(EditMenu, {
 		propsData: {
@@ -60,7 +70,7 @@ it('Description subtitle', () => {
 	});
 	const description = wrapper.find('#descriptionIdPrefix');
 	expect(description.exists()).toBe(true);
-	expect(description.text()).toBe('Description');
+	expect(description.text()).toBe('Description:');
 });
 
 it('Name', () => {

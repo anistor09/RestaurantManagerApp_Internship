@@ -1,6 +1,7 @@
 import { vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import restaurants from '../mockData/restaurants.json';
+import languages from '../mockData/languages.json';
 import TablesPage from '../pages/tables.vue';
 import PageTitle from '../components/page-title.vue';
 import SearchBar from '../components/search-bar.vue';
@@ -16,6 +17,18 @@ vi.mock('../store/restaurant.ts', () => {
 	};
 });
 
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
+
+
 it('Renders tables page', () => {
 	const wrapper = mount(TablesPage);
 	expect(wrapper.exists()).toBe(true);
@@ -25,7 +38,7 @@ it('Check if search bar and add table buttons exist', () => {
 	const wrapper = mount(TablesPage);
 	const buttonContainer = wrapper.find('#buttonContainer');
 	expect(buttonContainer.exists()).toBe(true);
-	expect(buttonContainer.text()).toContain('Add Table');
+	expect(buttonContainer.text()).toContain('Add table');
 });
 
 it('Check if title is passed correctly', () => {

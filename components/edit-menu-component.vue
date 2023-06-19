@@ -1,10 +1,18 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
 
-const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
+
+const workingDays = computed(() => [translations[computedLanguageId.value].monday, translations[computedLanguageId.value].tuesday, 
+translations[computedLanguageId.value].wednesday, translations[computedLanguageId.value].thursday, translations[computedLanguageId.value].friday,
+translations[computedLanguageId.value].saturday, translations[computedLanguageId.value].sunday]);
 
 const props = defineProps({
 	restaurant: {
@@ -208,22 +216,22 @@ async function addAiMenuDescription() {
 			</Teleport>
 		</ClientOnly>
 		<div class="box" style="height: 100%">
-			<div class="fieldText">Photo</div>
+			<div class="fieldText">{{translations[computedLanguageId].photo}}</div>
 			<div style="width: 92%; height: 100%; display: flex">
 				<el-image
 					:src="src || defaultSrc"
 					style="width: 13vw; height: 15vh; object-fit: cover; border-radius: 40px"
 				/>
 				<div class="photoButtonSpace">
-					<label for="changePhoto" class="specialPhotoLabel" >Change</label>
+					<label for="changePhoto" class="specialPhotoLabel" >{{translations[computedLanguageId].change}}</label>
 					<input id="changePhoto" type="file" style="display: none;" @change="handleFileUpload"/>
-					<el-button class="specialPhotoButton" @click="deleteImg()">Delete</el-button>
+					<el-button class="specialPhotoButton" @click="deleteImg()">{{translations[computedLanguageId].delete}}</el-button>
 				</div>
 			</div>
 		</div>
 		<div class="box">
 			<div id="addName">
-				<div id="nameIdPrefix" class="fieldText">Name</div>
+				<div id="nameIdPrefix" class="fieldText">{{translations[computedLanguageId].name}}</div>
 				<input id="nameId" v-model="name" class="specialInput" style="height: 100%" />
 			</div>
 		</div>
@@ -234,23 +242,23 @@ async function addAiMenuDescription() {
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 			>
 				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%">
-					Description
+					{{translations[computedLanguageId].description}}
 				</div>
 
 				<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription"
-					>✨Write with AI</el-button
+					>✨{{translations[computedLanguageId].writeAi}}</el-button
 				>
 			</div>
 			<textarea id="descriptionId" v-model="description" class="specialTextArea"></textarea>
 		</div>
 		<div class="box" style="">
-			<div class="fieldText">Menu periods</div>
+			<div class="fieldText">{{translations[computedLanguageId].menuPeriods}}</div>
 			<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 				<div class="dayName">{{ day }}</div>
 				<el-time-select
 					v-model="startTimes[index]"
 					style="width: 25%"
-					placeholder="Start time"
+					:placeholder=translations[computedLanguageId].startTime
 					start="00:00"
 					step="00:30"
 					end="23:59"
@@ -258,7 +266,7 @@ async function addAiMenuDescription() {
 				<el-time-select
 					v-model="endTimes[index]"
 					style="width: 25%"
-					placeholder="End time"
+					:placeholder=translations[computedLanguageId].endTime
 					start="00:00"
 					step="00:30"
 					end="23:59"
@@ -267,11 +275,11 @@ async function addAiMenuDescription() {
 		</div>
 		<div id="buttonContainer">
 			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" @click="checkIfChange()"
-				>Save menu</el-button
+				>{{translations[computedLanguageId].saveMenu}}</el-button
 			>
 			<div style="margin-left: 1vw"></div>
 			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" data-testId="delete-button" @click="checkIfDelete()"
-				>Delete menu</el-button
+				>{{translations[computedLanguageId].deleteMenu}}</el-button
 			>
 		</div>
 		<Teleport to="body">

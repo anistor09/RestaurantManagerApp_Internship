@@ -1,9 +1,10 @@
 import { vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import restaurants from '../mockData/restaurants.json';
+import languages from '../mockData/languages.json';
 import SettingsPage from '../pages/settings.vue';
 import PageTitle from '../components/page-title.vue';
-import currencies from '../mockData/currecyMock.json'
+import currencies from '../mockData/currecyMock.json';
 
 vi.mock('../store/restaurant.ts', () => {
 	return {
@@ -16,7 +17,6 @@ vi.mock('../store/restaurant.ts', () => {
 	};
 });
 
-const wrapper = mount(SettingsPage);
 
 vi.mock('../store/currency.ts', () => {
     return {
@@ -27,6 +27,19 @@ vi.mock('../store/currency.ts', () => {
         }),
     };
 });
+
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
+const wrapper = mount(SettingsPage);
+
 it('renders settings page', () => {
 	expect(wrapper.exists()).toBe(true);
 });
@@ -34,7 +47,7 @@ it('renders settings page', () => {
 it('title works', () => {
 	const title = wrapper.findComponent(PageTitle);
 	expect(title.exists()).toBe(true);
-	expect(title.props('title')).toBe('Restaurant Overview');
+	expect(title.props('title')).toBe('Settings');
 });
 
 it('descriptionPrefix', () => {

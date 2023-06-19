@@ -5,6 +5,7 @@ import AddMenu from '../components/add-menu-component.vue';
 
 
 import restaurants from '../mockData/restaurants.json';
+import languages from '../mockData/languages.json';
 
 
 vi.mock('../store/restaurant.ts', () => {
@@ -16,6 +17,17 @@ vi.mock('../store/restaurant.ts', () => {
 			};
 		}),
 	};
+});
+
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
 });
 
 it('Renders popup', () => {
@@ -42,5 +54,5 @@ it('Description subtitle', () => {
     const wrapper = mount(AddMenu);
 	const description = wrapper.find('#descriptionIdPrefix');
     expect(description.exists()).toBe(true);
-    expect(description.text()).toBe("Description")
+    expect(description.text()).toBe("Description:")
 });

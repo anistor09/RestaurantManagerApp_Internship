@@ -1,7 +1,18 @@
-import { it, expect } from 'vitest';
+import { vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-
+import languages from '../mockData/languages.json';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
+
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
 it('Renders pop-up', () => {
     const wrapper = mount(NameNeededPopUp,{
         propsData: {
