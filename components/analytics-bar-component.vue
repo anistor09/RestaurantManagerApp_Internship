@@ -26,7 +26,7 @@ const props = defineProps({
 	},
 });
 
-const selection = ref(translations[computedLanguageId.value].thisWeek);
+const selection = ref(translations[computedLanguageId.value].thisYear);
 
 const chartOptions = computed(() => ({
 	chart: {
@@ -125,16 +125,16 @@ const series = ref([
 const updateDate = (timeline: string) => {
 	selection.value = timeline;
 	switch (timeline) {
-		case 'This week':
+		case translations[computedLanguageId.value].thisWeek:
 			series.value = [{ data: props.itemValues[0] }];
 			break;
-		case 'This month':
+		case translations[computedLanguageId.value].thisMonth:
 			series.value = [{ data: props.itemValues[1] }];
 			break;
-		case 'Six months':
+		case translations[computedLanguageId.value].sixMonths:
 			series.value = [{ data: props.itemValues[2] }];
 			break;
-		case 'This year':
+		case translations[computedLanguageId.value].thisYear:
 			series.value = [{ data: props.itemValues[3] }];
 			break;
 		default:
@@ -144,16 +144,16 @@ const updateDate = (timeline: string) => {
 watch(selection, (newValue) => {
 	chartOptions.value.subtitle.text = newValue;
 	switch (newValue) {
-		case 'This week':
+		case translations[computedLanguageId.value].thisWeek:
 			chartOptions.value.xaxis.categories = props.itemNames[0];
 			break;
-		case 'This month':
+		case translations[computedLanguageId.value].thisMonth:
 			chartOptions.value.xaxis.categories = props.itemNames[1];
 			break;
-		case 'Six months':
+		case translations[computedLanguageId.value].sixMonths:
 			chartOptions.value.xaxis.categories = props.itemNames[2];
 			break;
-		case 'This year':
+		case translations[computedLanguageId.value].thisYear:
 			chartOptions.value.xaxis.categories = props.itemNames[3];
 			break;
 	}

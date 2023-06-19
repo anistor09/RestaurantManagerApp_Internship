@@ -104,19 +104,19 @@ const updateDate = (timeline: string) => {
 	const total = props.graphValues.length;
 	const lastTime = props.graphValues[total - 1][0];
 	switch (timeline) {
-		case 'This week':
+		case translations[computedLanguageId.value].thisWeek:
 			chart.value.zoomX(lastTime - 604800000, lastTime);
 			break;
-		case 'This month':
+		case translations[computedLanguageId.value].thisMonth:
 			chart.value.zoomX(lastTime - 2629743000, lastTime);
 			break;
-		case 'Six months':
+		case translations[computedLanguageId.value].sixMonths:
 			chart.value.zoomX(lastTime - 15778463000, lastTime);
 			break;
-		case 'This year':
+		case translations[computedLanguageId.value].thisYear:
 			chart.value.zoomX(lastTime - 31556926000, lastTime);
 			break;
-		case 'All data this year':
+		case translations[computedLanguageId.value].allDataThisYear:
 			chart.value.zoomX(props.graphValues[0][0], lastTime);
 			break;
 		default:
