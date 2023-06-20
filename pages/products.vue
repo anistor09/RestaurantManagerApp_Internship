@@ -66,9 +66,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 				restaurant.categorySet[index].presentationOrder = newCategory.presentationOrder;
 				restaurant.categorySet[index].subCategorySet = newCategory.subCategorySet;
 			}
-			setTimeout(() => {
-				categoryStore.categoryReset();
-			}, 1000);
+			setTimeout(() => {categoryStore.categoryReset();}, 1000);
 		}
 		if (categoryStore.deleteGetter.length !== 0) {
 			const categoryId = categoryStore.deleteGetter[0];
@@ -76,9 +74,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 			if (index !== -1) {
 				restaurant.categorySet.splice(index, 1);
 			}
-			setTimeout(() => {
-				categoryStore.categoryReset();
-			}, 1000);
+			setTimeout(() => {categoryStore.categoryReset();}, 1000);
 		}
 	} else if (event.key === 'item') {
 		itemStore.$hydrate();
@@ -100,9 +96,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 				restaurant.itemSet[index].optionSet = newItem.optionSet;
 				restaurant.itemSet[index].sideItemSet = newItem.sideItemSet;
 			}
-			setTimeout(() => {
-				itemStore.itemReset();
-			}, 1000);
+			setTimeout(() => {itemStore.itemReset();}, 1000);
 		}
 		if (itemStore.deleteGetter.length !== 0) {
 			const itemId = itemStore.deleteGetter[0];
@@ -110,9 +104,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 			if (index !== -1) {
 				restaurant.itemSet.splice(index, 1);
 			}
-			setTimeout(() => {
-				itemStore.itemReset();
-			}, 1000);
+			setTimeout(() => {itemStore.itemReset();}, 1000);
 		}
 	}
 };
@@ -142,7 +134,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 							/>
 						</el-col>
 						<el-col :span="2" :offset="17">
-							<el-button class="products-button" color="#ED5087" plain round @click="addItem()"
+							<el-button id="addItemButtonProducts" class="products-button" color="#ED5087" plain round @click="addItem()"
 								>+ {{translations[computedLanguageId].addItem}}</el-button
 							>
 						</el-col>
@@ -150,6 +142,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 					<el-row v-else class="up-buttons-products">
 						<el-col :span="2" :offset="1">
 							<el-input
+								id="searchforitems"
 								v-model="searchCategories"
 								class="search-bar-products"
 								size="default"

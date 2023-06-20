@@ -245,10 +245,11 @@ async function addAiMenuDescription() {
 				style="width: 15%; height: 50%"
 				data-testid="add-button"
 				@click="checkIfChange()"
+				:disabled="name.length == 0"
 				>{{ translations[computedLanguageId].add}}</el-button
 			>
 		</div>
-		<ClientOnly>
+		<ClientOnly>	
 			<Teleport to="body">
 				<NameNeededPopUp
 					v-model="nameNeededPopUp"

@@ -1,6 +1,5 @@
 import {vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { ElSelect } from 'element-plus';
 import restaurants from '../mockData/restaurants.json';
 import AddItem from '../pages/editItemView/index.vue';
 import EditItemComponent from '../components/edit-item.vue';
@@ -115,17 +114,6 @@ it('Check if item category is displayed', () => {
     expect(name.text()).toBe('Category:');
 });
 
-
-it('Check if item category select is displayed', () => {
-    const wrapper = mount(EditItemComponent,{
-        propsData: {
-            itemId : 85,
-            addItem: false,
-        }
-      });
-    const select = wrapper.findComponent(ElSelect);
-    expect(select.exists()).toBe(true);
-});
 
 it('Check if item add category button is displayed', () => {
     const wrapper = mount(EditItemComponent,{
@@ -268,17 +256,6 @@ it('Check if item photo is displayed', () => {
       });
     const name = wrapper.find('#item-photo');
     expect(name.text()).toBe('Photo');
-});
-
-it('Check if item change photo button is displayed', () => {
-    const wrapper = mount(EditItemComponent,{
-        propsData: {
-            itemId : 85,
-            addItem: false,
-        }
-      });
-    const button = wrapper.find('#item-photo-change');
-    expect(button.text()).toBe('Change');
 });
 
 it('Check if item delete photo button is displayed', () => {

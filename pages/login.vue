@@ -17,9 +17,7 @@ function signIn() {
 
 		const url = `${authorizeUrl}?response_type=${responseType}&client_id=${clientId}&redirect_uri=${redirectUri}`;
 
-		navigateTo(url, {
-			external: true,
-		});
+		navigateTo(url, {external: true,});
 	}
 }
 </script>
@@ -101,6 +99,7 @@ function signIn() {
 
 #subtitle .capitalLetters {
 	color: #ed5087;
+	font-family: 'Tourney';
 }
 
 #welcome {

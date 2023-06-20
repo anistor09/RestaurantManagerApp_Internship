@@ -46,31 +46,37 @@ const workingDays = computed(() => [
 const acceptedTypes = ['image/jpeg', 'image/png'];
 const logoEdited: Ref<File | null> = ref(null);
 const backgroundEdited: Ref<File | null> = ref(null);
+const backroundImageData={imageEdited: backgroundEdited, src}
+const logoImageData={imageEdited: logoEdited, src:imageUrl}
 
-/// function to handle the upload of a logo to a restaurant
-function handleFileUploadLogo(event: any) {
+/// function to handle the upload of a photo to a restaurant
+function handleFileUpload(data: any, event: any) {
+	const imageEdited=data.imageEdited
+	const src=data.src
 	const file = event.target.files[0];
+	console.log(src)
 	event.target.value = null;
   	if(!file||!acceptedTypes.includes(file.type)){
 		openErrorNotification("Wrong image type")
 		return
 	}
-	else logoEdited.value=file
+	else imageEdited.value=file
 	
 	const reader = new FileReader();
 	reader.onload = (event) => {
 		if(event.target){
 			const x = event.target.result;
 			if(typeof x === "string")
-			imageUrl.value=x
+			src.value=x
 			else 
 				openErrorNotification("Something went wrong!")
+			console.log(src)
 		}
 		else 
 			openErrorNotification("Something went wrong!")
 	};
-	if(logoEdited.value)
-		reader.readAsDataURL(logoEdited.value);
+	if(imageEdited.value)
+		reader.readAsDataURL(imageEdited.value);
 	else 
 		openErrorNotification("Something went wrong!")	
 }
@@ -81,50 +87,17 @@ function deleteImgLogo(){
 	imageUrl.value=defaultSrc
 }
 
-/// function to handle the upload of a background to a restaurant
-function handleFileUploadBackground(event: any) {
-	const file = event.target.files[0];
-	event.target.value = null;
-  	if(!file||!acceptedTypes.includes(file.type)){
-		openErrorNotification("Wrong image type")
-		return
-	}
-	else backgroundEdited.value=file
-	
-	const reader = new FileReader();
-	reader.onload = (event) => {
-		if(event.target){
-			const x = event.target.result;
-			if(typeof x === "string")
-				src.value=x
-			else 
-				openErrorNotification("Something went wrong!")
-		}
-		else 
-			openErrorNotification("Something went wrong!")
-	};
-	if(backgroundEdited.value)
-		reader.readAsDataURL(backgroundEdited.value);
-	else 
-		openErrorNotification("Something went wrong!")	
-}
-
 // Function to delete the selected image for a menu
 function deleteImgBackground(){
 	backgroundEdited.value=null
 	src.value=defaultSrc
 }
 
-
 // Function to display a error notification
 const openErrorNotification = (notifTitle: string) => {
 	ElNotification({
 		title: notifTitle,
-		message: h(
-			'div',
-			{ style: 'color: #ed5087; font-family: "Open Sans"' },
-			'Please try with a diffrent file.',
-		),
+		message: h('div',{ style: 'color: #ed5087; font-family: "Open Sans"' },'Please try with a diffrent file.',),
 		customClass: 'notif',
 	});
 };
@@ -177,13 +150,7 @@ const saveChanges = async () => {
 	restaurant.email = email.value;
 	restaurant.category = category.value;
 
-	await useFetch('/api/restaurant/editRestaurant', {
-		method: 'POST',
-		body: restaurant,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	await useFetch('/api/restaurant/editRestaurant', {method: 'PUT',body: restaurant,headers: {'Content-Type': 'application/json',},});
 
 	// if(logoEdited.value){
 	// 	const formData = new FormData();
@@ -199,10 +166,7 @@ const saveChanges = async () => {
 		const formData = new FormData();
 		formData.append('file', backgroundEdited.value);
 		formData.append('id', restaurant.id.toString());
-		await useFetch(`/api/photos/photoBackground`, {
-			method: 'POST',
-			body: formData,
-		});
+		await useFetch(`/api/photos/photoBackground`, {method: 'POST',body: formData,});
 	}
 };
 async function addAiRestaurantDescription() {
@@ -211,18 +175,8 @@ async function addAiRestaurantDescription() {
 	} else {
 		description.value = 'The new description is loading...';
 
-		const requestBody = {
-			itemName: name.value,
-			length: 200,
-			target: 'restaurant',
-		};
-		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
-			method: 'POST',
-			body: requestBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const requestBody = {itemName: name.value,length: 200,target: 'restaurant',};
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
 
 		description.value = response.data.value;
 	}
@@ -283,7 +237,7 @@ function changeLanguageGlobally() {
 								id="changePhotoLogo"
 								type="file"
 								style="display: none"
-								@change="handleFileUploadLogo"
+								@change="handleFileUpload(logoImageData,$event)"
 							/>
 							<el-button
 								class="specialPhotoButton"
@@ -317,7 +271,7 @@ function changeLanguageGlobally() {
 							id="changePhotoBackground"
 							type="file"
 							style="display: none"
-							@change="handleFileUploadBackground"
+							@change="handleFileUpload(backroundImageData,$event)"
 						/>
 						<el-button
 							data-testid="deleteBackButton"
@@ -417,7 +371,7 @@ function changeLanguageGlobally() {
 						v-model="startTimes[index]"
 						style="width: 30%"
 						class="time-selector"
-						placeholder="Start time"
+						:placeholder= translations[computedLanguageId].startTimeRestaurant
 						start="00:00"
 						step="00:30"
 						end="23:59"
@@ -426,7 +380,7 @@ function changeLanguageGlobally() {
 						v-model="endTimes[index]"
 						style="width: 30%"
 						class="time-selector"
-						placeholder="End time"
+						:placeholder= translations[computedLanguageId].endTimeRestaurant
 						start="00:00"
 						step="00:30"
 						end="23:59"

@@ -35,16 +35,18 @@ describe('Settings e2e tests', () => {
       cy.wait(1000);
       cy.get('#confirmButton').should('exist')
       cy.get('#confirmButton').click()
-      cy.reload();
-      cy.wait(3000);
+	  cy.wait(1000); 
+	  cy.reload();
+      cy.wait(1000);
       cy.get('#nameId').should('have.value', 'NumeTest')
       cy.get('#nameId').clear().type('The commons')
       cy.get('#save-button').click();
       cy.wait(1000);
       cy.get('#confirmButton').should('exist')
       cy.get('#confirmButton').click()
-      cy.wait(3000);
+      cy.wait(1000); 
       cy.reload();
+	  cy.wait(1000);
       cy.get('#nameId').should('have.value', 'The commons')
     });
   

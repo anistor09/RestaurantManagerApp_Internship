@@ -31,10 +31,7 @@ const filteredTables = computed(() => {
 	if (!selectedTable.value) {
 		return tables.value;
 	}
-	return tables.value.filter(
-		(table) =>
-			`${translations[computedLanguageId.value].table} ${table.number}` === selectedTable.value,
-	);
+	return tables.value.filter((table) =>`${translations[computedLanguageId.value].table} ${table.number}` === selectedTable.value,);
 });
 async function handleDelete() {
 	await useFetch(`/api/table/${tableId.value}`);
@@ -42,9 +39,7 @@ async function handleDelete() {
 	deletePopup.value = false;
 }
 
-const getTable = computed<Table>(() => {
-	return tables.value.filter((x) => x.id === tableId.value)[0];
-});
+const getTable = computed<Table>(() => {return tables.value.filter((x) => x.id === tableId.value)[0];});
 
 const tableUrl = computed(() => getTable.value.url);
 
@@ -55,40 +50,17 @@ async function handleEdit() {
 		capacity: tableCapacity.value,
 		restaurantId: 1,
 	};
-	await useFetch(`/api/table/update`, {
-		method: 'PUT',
-		body: requestBody,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	await useFetch(`/api/table/update`, {method: 'PUT',body: requestBody,headers: {'Content-Type': 'application/json',},});
 	const index = tables.value.findIndex((x) => x.id === tableId.value);
-	tables.value.splice(index, 1, {
-		id: tableId.value,
-		number: tableNumber.value,
-		capacity: tableCapacity.value,
-		url: tableUrl.value,
-	});
+	tables.value.splice(index, 1, {id: tableId.value,number: tableNumber.value,capacity: tableCapacity.value,url: tableUrl.value,});
 	editPopup.value = false;
 }
 
 function handleAdd() {
-	const requestBody = {
-		number: tableNumber.value,
-		capacity: tableCapacity.value,
-		restaurantId: 1,
-	};
-	useFetch<Table>('/api/table/add', {
-		method: 'POST',
-		body: requestBody,
-		headers: {
-			'Content-Type': 'application/json',
-		},
+	const requestBody = {number: tableNumber.value,capacity: tableCapacity.value,restaurantId: 1,};
+	useFetch<Table>('/api/table/add', {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},
 	}).then((response) => {
-		tables.value.push({
-			id: tableId.value,
-			number: tableNumber.value,
-			capacity: tableCapacity.value,
+		tables.value.push({id: tableId.value,number: tableNumber.value,capacity: tableCapacity.value,
 			url: response.data.value?.url === undefined ? 'Not there yet' : response.data.value.url,
 		});
 		addPopup.value = false;
@@ -107,7 +79,7 @@ watchEffect(() => {
 <template>
 	<ClientOnly>
 		<Teleport to="body">
-			<el-dialog v-model="editPopup" width="20%" style="border-radius: 5%; height: 22%">
+			<el-dialog v-model="editPopup" width="20%" style="border-radius: 40px">
 				<div class="edit">
 					<div>
 						<span>{{ translations[computedLanguageId].tableNumber }} </span
@@ -129,7 +101,7 @@ watchEffect(() => {
 			</el-dialog>
 		</Teleport>
 		<Teleport to="body">
-			<el-dialog v-model="deletePopup" width="20%" style="border-radius: 5%; height: 20%">
+			<el-dialog v-model="deletePopup" width="20%" style="border-radius: 40px; height: 20%">
 				<div class="delete">
 					{{ translations[computedLanguageId].tableScript }}
 					<div id="bottomButtons">
@@ -144,12 +116,12 @@ watchEffect(() => {
 			</el-dialog>
 		</Teleport>
 		<Teleport to="body">
-			<el-dialog v-model="qrcodePopup" width="10%" style="border-radius: 10%; height: 20%">
+			<el-dialog v-model="qrcodePopup" width="10%" style="border-radius: 40px">
 				<div class="qrcode"><img :src="qrcodeUrl" /></div>
 			</el-dialog>
 		</Teleport>
 		<Teleport to="body">
-			<el-dialog v-model="addPopup" width="20%" style="border-radius: 5%; height: 22%">
+			<el-dialog v-model="addPopup" width="20%" style="border-radius: 40px">
 				<div id="addTablePopup" class="edit">
 					<div>
 						<span>{{ translations[computedLanguageId].tableNumber }}</span
@@ -252,6 +224,7 @@ watchEffect(() => {
 	display: flex;
 	flex-direction: column;
 	text-align: center;
+	align-items: center;
 	font-size: 1.2vw;
 	font-weight: 300;
 	color: black;
@@ -269,7 +242,6 @@ watchEffect(() => {
 	justify-self: center;
 	align-content: center;
 	justify-content: center;
-	bottom: 2.5vh;
 }
 
 .table-component {
@@ -312,4 +284,5 @@ header {
 	border: none;
 	width: 6%;
 }
+
 </style>

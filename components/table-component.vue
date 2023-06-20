@@ -7,12 +7,7 @@ import translations from '../mockData/translations.json';
 const languageStore = useLanguageStore();
 
 const computedLanguageId = computed(() => languageStore.idGetter);
-defineProps<{
-	url: String;
-	number: Number;
-	capacity: Number;
-	id: Number;
-}>();
+defineProps<{url: String;number: Number;capacity: Number;id: Number;}>();
 defineEmits(['edit', 'delete', 'qr-code']);
 </script>
 

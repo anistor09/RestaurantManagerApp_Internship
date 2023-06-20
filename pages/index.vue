@@ -43,9 +43,7 @@ async function loadAveragePerPerson() {
 		const response = await fetch('/api/analytics/averagePerPerson');
 		if (response.ok) {
 			const responseData = (await response.json()) as TimePrice[];
-			graphValues2.value = responseData.map((x) =>
-				Array.of(x.time * 1000, parseFloat(x.price.toFixed(2))),
-			);
+			graphValues2.value = responseData.map((x) => Array.of(x.time * 1000, parseFloat(x.price.toFixed(2))),);
 		} else {
 			throw new Error('Failed to fetch data');
 		}
