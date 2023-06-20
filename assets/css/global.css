@@ -5,3 +5,8 @@ body {
 .el-notification__title{
   font-family: 'Open Sans';
 }
+
+.el-dialog__headerbtn:focus .el-dialog__close,
+.el-dialog__headerbtn:hover .el-dialog__close {
+	color: #ed5087 !important;
+}

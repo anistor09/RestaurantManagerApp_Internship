@@ -63,13 +63,7 @@ const handleDelete = async () => {
 		id: props.menuId,
 		itemId: deletedItemId.value,
 	};
-	await useFetch('/api/menus/removeItemFromMenu', {
-		method: 'POST',
-		body: data,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	await useFetch('/api/menus/removeItemFromMenu', {method: 'POST',body: data,headers: {'Content-Type': 'application/json',},});
 
 	// Remove locally
 	localRestaurant.value.carteSet = localRestaurant.value.carteSet.filter((menu) => {

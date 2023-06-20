@@ -1,14 +1,5 @@
 <script lang="ts" setup>
-import {
-	ElScrollbar,
-	ElMain,
-	ElContainer,
-	ElOption,
-	ElButton,
-	ElDialog,
-	ElHeader,
-	ElSelect,
-} from 'element-plus';
+import {ElScrollbar,ElMain,ElContainer,ElOption,ElButton,ElDialog,ElHeader,ElSelect} from 'element-plus';
 import { ref, computed, watch } from 'vue';
 import SubcategoryComponent from '../components/subcategory-component.vue';
 import EditMenuComponent from '../components/edit-menu-component.vue';
@@ -66,10 +57,7 @@ const selectedSubcategories = computed<SubCategory[]>(() => {
 });
 
 function createItemWrapper(item: Item): ItemWrapper {
-	return {
-		item,
-		showDelete: false,
-	};
+	return {item,showDelete: false};
 }
 
 watch(selectedMenuName, () => {

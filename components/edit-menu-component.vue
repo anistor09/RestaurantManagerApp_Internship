@@ -44,7 +44,7 @@ let name = selectedMenu.value.name;
 // eslint-disable-next-line prefer-const
 const description: Ref<string> = ref(selectedMenu.value.description);
 // eslint-disable-next-line prefer-const
-let src = selectedMenu.value.imageUrl;
+let src = ref(selectedMenu.value.imageUrl);
 
 /// function to handle the upload of a image to a menu
 function handleFileUpload(event: any) {
@@ -60,18 +60,13 @@ function handleFileUpload(event: any) {
 	reader.onload = (event) => {
 		if(event.target){
 			const x = event.target.result;
-			if(typeof x === "string")
-				src.value=x
-			else 
-				openErrorNotification("Something went wrong!")
+			if(typeof x === "string")  src.value=x
+			else  openErrorNotification("Something went wrong!")
 		}
-		else 
-			openErrorNotification("Something went wrong!")
+		else  openErrorNotification("Something went wrong!")
 	};
-	if(imageEdited.value)
-		reader.readAsDataURL(imageEdited.value);
-	else 
-		openErrorNotification("Something went wrong!")	
+	if(imageEdited.value)  reader.readAsDataURL(imageEdited.value);
+	else   openErrorNotification("Something went wrong!")	
 }
 
 // Function to delete the selected image for a menu
@@ -84,11 +79,7 @@ function deleteImg(){
 const openErrorNotification = (notifTitle: string) => {
 	ElNotification({
 		title: notifTitle,
-		message: h(
-			'div',
-			{ style: 'color: #ed5087; font-family: "Open Sans"' },
-			'Please try with a diffrent file.',
-		),
+		message: h('div',{ style: 'color: #ed5087; font-family: "Open Sans"' },'Please try with a diffrent file.',),
 		customClass: 'notif',
 	});
 };
@@ -106,42 +97,18 @@ const editMenu = async () => {
 	const hoursSet = [] as Hours[];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
-			const hour: Hours = {
-				id: 1,
-				opening: startTimes.value[i],
-				closing: endTimes.value[i],
-				day: i,
-			};
-			hoursSet.push(hour);
+			const hour: Hours = {id: 1,opening: startTimes.value[i],closing: endTimes.value[i],day: i,};hoursSet.push(hour);
 		}
 	}
-	const carte: Carte = {
-		id: selectedMenu.value.id,
-		name,
-		description: description.value,
-		version: 1,
-		active: true,
-		imageUrl: src.value,
-		itemSet: [],
-		hoursSet,
-	};
+	const carte: Carte = {id: selectedMenu.value.id,name,description: description.value,version: 1,active: true,imageUrl: src.value,itemSet: [],hoursSet,};
 	if(imageEdited.value) 
 		carte.imageUrl=""
-	await useFetch('/api/menus/editMenu', {
-		method: 'PUT',
-		body: carte,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	await useFetch('/api/menus/editMenu', {method: 'PUT',body: carte,headers: {'Content-Type': 'application/json',},});
 	if(imageEdited.value){
 		const formData = new FormData();
 		formData.append('file', imageEdited.value);
 		formData.append('id', selectedMenu.value.id.toString())
-		await useFetch(`/api/photos/photoMenu`, {
-			method: 'POST',
-			body: formData,
-		});
+		await useFetch(`/api/photos/photoMenu`, {method: 'POST',body: formData,});
 	}
 	checkEdit.value = false;
 	// Adjust locally
@@ -160,12 +127,7 @@ const editMenu = async () => {
 
 const deleteMenu = async () => {
 	// Delete from database
-	await useFetch(`/api/menus/${selectedMenu.value.id}`, {
-		method: 'DELETE',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	await useFetch(`/api/menus/${selectedMenu.value.id}`, {method: 'DELETE',headers: {'Content-Type': 'application/json',},});
 	checkDelete.value = false;
 
 	// Delete locally
@@ -192,13 +154,7 @@ async function addAiMenuDescription() {
 	} else {
 		description.value = 'The new description is loading...';
 		const requestBody = { itemName: name, length: 150, target: 'menu' };
-		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
-			method: 'POST',
-			body: requestBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
 		description.value = response.data.value;
 	}
 }
@@ -216,22 +172,26 @@ async function addAiMenuDescription() {
 			</Teleport>
 		</ClientOnly>
 		<div class="box" style="height: 100%">
-			<div class="fieldText">{{translations[computedLanguageId].photo}}</div>
+			<div class="fieldText">{{ translations[computedLanguageId].photo }}</div>
 			<div style="width: 92%; height: 100%; display: flex">
 				<el-image
 					:src="src || defaultSrc"
 					style="width: 13vw; height: 15vh; object-fit: cover; border-radius: 40px"
 				/>
 				<div class="photoButtonSpace">
-					<label for="changePhoto" class="specialPhotoLabel" >{{translations[computedLanguageId].change}}</label>
-					<input id="changePhoto" type="file" style="display: none;" @change="handleFileUpload"/>
-					<el-button class="specialPhotoButton" @click="deleteImg()">{{translations[computedLanguageId].delete}}</el-button>
+					<label for="changePhoto" class="specialPhotoLabel">{{
+						translations[computedLanguageId].change
+					}}</label>
+					<input id="changePhoto" type="file" style="display: none" @change="handleFileUpload" />
+					<el-button class="specialPhotoButton" @click="deleteImg()">{{
+						translations[computedLanguageId].delete
+					}}</el-button>
 				</div>
 			</div>
 		</div>
 		<div class="box">
 			<div id="addName">
-				<div id="nameIdPrefix" class="fieldText">{{translations[computedLanguageId].name}}</div>
+				<div id="nameIdPrefix" class="fieldText">{{ translations[computedLanguageId].name }}</div>
 				<input id="nameId" v-model="name" class="specialInput" style="height: 100%" />
 			</div>
 		</div>
@@ -241,23 +201,28 @@ async function addAiMenuDescription() {
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 			>
 				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%">
-					{{translations[computedLanguageId].description}}
+					{{ translations[computedLanguageId].description }}
 				</div>
 
 				<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription"
-					>✨{{translations[computedLanguageId].writeAi}}</el-button
+					>✨{{ translations[computedLanguageId].writeAi }}</el-button
 				>
 			</div>
-			<textarea id="descriptionId" v-model="description" style="padding-top: 0" class="specialTextArea"></textarea>
+			<textarea
+				id="descriptionId"
+				v-model="description"
+				style="padding-top: 0"
+				class="specialTextArea"
+			></textarea>
 		</div>
 		<div class="box" style="">
-			<div class="fieldText">{{translations[computedLanguageId].menuPeriods}}</div>
+			<div class="fieldText">{{ translations[computedLanguageId].menuPeriods }}</div>
 			<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 				<div class="dayName">{{ day }}</div>
 				<el-time-select
 					v-model="startTimes[index]"
 					style="width: 25%"
-					:placeholder=translations[computedLanguageId].startTime
+					:placeholder="translations[computedLanguageId].startTime"
 					start="00:00"
 					step="00:30"
 					end="23:59"
@@ -265,7 +230,7 @@ async function addAiMenuDescription() {
 				<el-time-select
 					v-model="endTimes[index]"
 					style="width: 25%"
-					:placeholder=translations[computedLanguageId].endTime
+					:placeholder="translations[computedLanguageId].endTime"
 					start="00:00"
 					step="00:30"
 					end="23:59"
@@ -273,12 +238,19 @@ async function addAiMenuDescription() {
 			</div>
 		</div>
 		<div id="buttonContainer">
-			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" @click="checkIfChange()"
-				>{{translations[computedLanguageId].saveMenu}}</el-button
+			<el-button
+				class="specialPhotoButton"
+				style="width: 17%; height: 20%"
+				@click="checkIfChange()"
+				>{{ translations[computedLanguageId].saveMenu }}</el-button
 			>
 			<div style="margin-left: 1vw"></div>
-			<el-button class="specialPhotoButton" style="width: 17%; height: 20%" data-testId="delete-button" @click="checkIfDelete()"
-				>{{translations[computedLanguageId].deleteMenu}}</el-button
+			<el-button
+				class="specialPhotoButton"
+				style="width: 17%; height: 20%"
+				data-testId="delete-button"
+				@click="checkIfDelete()"
+				>{{ translations[computedLanguageId].deleteMenu }}</el-button
 			>
 		</div>
 		<Teleport to="body">
@@ -386,7 +358,6 @@ async function addAiMenuDescription() {
 	border-color: darkgrey;
 	color: white;
 }
-
 
 .specialPhotoLabel {
 	border-radius: 25px;

@@ -33,7 +33,6 @@ const chart = ref(Object() as ApexCharts);
 
 const chartOptions = computed(() => ({
 	chart: {
-		height: 400,
 		id: 'area-datetime',
 		type: 'area',
 		zoom: {
@@ -102,7 +101,7 @@ const series = reactive([
 const updateDate = (timeline: string) => {
 	selection.value = timeline;
 	const total = props.graphValues.length;
-	const lastTime = props.graphValues[total - 1][0];
+	const lastTime = Date.now();
 	switch (timeline) {
 		case translations[computedLanguageId.value].thisWeek:
 			chart.value.zoomX(lastTime - 604800000, lastTime);
@@ -117,7 +116,7 @@ const updateDate = (timeline: string) => {
 			chart.value.zoomX(lastTime - 31556926000, lastTime);
 			break;
 		case translations[computedLanguageId.value].allDataThisYear:
-			chart.value.zoomX(props.graphValues[0][0], lastTime);
+			chart.value.zoomX(props.graphValues[0][0], props.graphValues[total - 1][0]);
 			break;
 		default:
 	}

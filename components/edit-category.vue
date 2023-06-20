@@ -35,6 +35,7 @@ const selectedFile: Ref<File | null> = ref(null);
 const imageEdited: Ref<File | null> = ref(null);
 const description = ref('');
 const src = ref(defaultSrc);
+const categoryImageData={imageEdited:selectedFile,src}
 const hasSubcategories = ref(false);
 const presentationOrder = ref(0);
 const subCategories: Ref<SubCategory[]> = ref([]);
@@ -44,6 +45,7 @@ const newSubcategoryDescription = ref('');
 const addSubcategoryPopUp = ref(false);
 const presentationSubcategoryOrder = ref(0);
 const newSubcategorySrc = ref(defaultSrc);
+const subcategoryImageData={imageEdited,src:newSubcategorySrc}
 const editSubcategory = ref(false);
 const editedSubcategoryId = ref(0);
 const tobeDeletedSubcat: Ref<number[]> = ref([]);
@@ -52,6 +54,7 @@ const deleteSubcategoryPopup = ref(false);
 const deleteCategoryPopup = ref(false);
 const deleteSubcatIdLocally = ref(-1);
 const nameNeededPopUp = ref(false);
+const disableButtons = ref(false);
 
 if (props.addCategory === false) {
 	const category = restaurant.categorySet.filter((x) => x.id === props.categoryId)[0];
@@ -69,45 +72,37 @@ if (props.addCategory === false) {
 			hasSubcategories.value = true;
 		}
 }
-/// function to handle the upload of a image to a category
-function handleFileUpload(event: any) {
-	const file = event.target.files[0];
-	event.target.value = null;
-	if (!file || !acceptedTypes.includes(file.type)) {
-		openErrorNotification('Wrong image type');
-		return;
-	} else selectedFile.value = file;
 
+/// function to handle the upload of a image to a item
+function handleFileUpload(data: any, event: any) {
+	const imageEdited=data.imageEdited
+	const src=data.src
+	const file = event.target.files[0];
+	console.log(src)
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openNotification(translations[computedLanguageId.value].wrongImageType,translations[computedLanguageId.value].pleaseTryDifferentFile)
+		return
+	}
+	else imageEdited.value=file
+	
 	const reader = new FileReader();
 	reader.onload = (event) => {
 		if (event.target) {
 			const x = event.target.result;
-			if (typeof x === 'string') src.value = x;
-			else openErrorNotification('Something went wrong!');
-		} else openErrorNotification('Something went wrong!');
+			if(typeof x === "string")
+			src.value=x
+			else 
+				openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile)
+			console.log(src)
+		}
+		else 
+			openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile)
 	};
-	if (selectedFile.value) reader.readAsDataURL(selectedFile.value);
-	else openErrorNotification('Something went wrong!');
-}
-
-/// function to handle the upload of a image to a subcategory
-function handleFileUploadSubCategory(event: any) {
-	const file = event.target.files[0];
-	event.target.value = null;
-	if (!file || !acceptedTypes.includes(file.type)) {
-		openErrorNotification('Wrong image type');
-		return;
-	} else imageEdited.value = file;
-	const reader = new FileReader();
-	reader.onload = (event) => {
-		if (event.target) {
-			const x = event.target.result;
-			if (typeof x === 'string') newSubcategorySrc.value = x;
-			else openErrorNotification('Something went wrong!');
-		} else openErrorNotification('Something went wrong!');
-	};
-	if (imageEdited.value) reader.readAsDataURL(imageEdited.value);
-	else openErrorNotification('Something went wrong!');
+	if(imageEdited.value)
+		reader.readAsDataURL(imageEdited.value);
+	else 
+		openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile)	
 }
 
 // Function to delete the selected image for a category
@@ -122,28 +117,11 @@ function deleteImgSubCategory() {
 	newSubcategorySrc.value = defaultSrc;
 }
 
-// Function to display a error notification
-const openErrorNotification = (notifTitle: string) => {
-	ElNotification({
-		title: notifTitle,
-		message: h(
-			'div',
-			{ style: 'color: #ed5087; font-family: "Open Sans"' },
-			'Please try with a diffrent file.',
-		),
-		customClass: 'notif',
-	});
-};
-
 // Function to display a notification
-const openNotification = (notifTitle: string) => {
+const openNotification = (notifTitle: string, notifBody: string) => {
 	ElNotification({
 		title: notifTitle,
-		message: h(
-			'div',
-			{ style: 'color: #ed5087; font-family: "Open Sans"' },
-			translations[computedLanguageId.value].youWillBeRedirectedNow,
-		),
+		message: h('div',{ style: 'color: #ed5087; font-family: "Open Sans"' },notifBody,),
 		customClass: 'notif',
 	});
 };
@@ -160,6 +138,10 @@ const getUniqueId = () => {
 };
 // Function to save a new subcategory locally
 function saveNewSubcategoryLocally() {
+	if(newSubcategoryName.value===""){
+		openNotification(translations[computedLanguageId.value].youHaveNotInsertedNameSubcategory,translations[computedLanguageId.value].pleaseAddNameSubcategory)
+		return
+	}
 	if (editSubcategory.value) {
 		editSubcategoryLocally();
 	} else {
@@ -228,71 +210,29 @@ function hasSubcategoriesFct() {
 // Handles the addition or editing of a subcategory.
 async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, editMode: boolean) {
 	const requestBody = {
-		name: subcategory.name,
-		description: subcategory.description,
-		presentationOrder: subcategory.presentationOrder,
-		imageUrl: subcategory.imageUrl,
-		categoryId: cid,
-		restaurant: {
-			id: restaurant.id,
-			name: restaurant.name,
-			latitude: restaurant.latitude,
-			imageUrl: restaurant.imageUrl,
-			longitude: restaurant.longitude,
-			rating: restaurant.rating,
-			category: restaurant.category,
-			backgroundColor: restaurant.backgroundColor,
-			foregroundColor: restaurant.foregroundColor,
-			font_color: restaurant.font_color,
-			description: restaurant.description,
-			logoUrl: restaurant.logoUrl,
-			addresse: restaurant.addresse,
-			phoneNumber: restaurant.phoneNumber,
-			email: restaurant.email,
-			averageWaitingTime: 0,
-		},
+		name: subcategory.name,description: subcategory.description,presentationOrder: subcategory.presentationOrder,imageUrl: subcategory.imageUrl,categoryId: cid,
+		restaurant: {id: restaurant.id,name: restaurant.name,latitude: restaurant.latitude,imageUrl: restaurant.imageUrl,longitude: restaurant.longitude,rating: restaurant.rating,category: restaurant.category,backgroundColor: restaurant.backgroundColor,foregroundColor: restaurant.foregroundColor,font_color: restaurant.font_color,description: restaurant.description,logoUrl: restaurant.logoUrl,addresse: restaurant.addresse,phoneNumber: restaurant.phoneNumber,email: restaurant.email,averageWaitingTime: 0}
 	};
 	const aux = imageSubCategories.value.filter((x) => x.id === subcategory.id)[0];
 	if (aux.img) requestBody.imageUrl = '';
 	if (!editMode) {
-		const response = await useFetch('/api/subcategory/add', {
-			method: 'POST',
-			body: requestBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const response = await useFetch('/api/subcategory/add', {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
 		const newId = response.data.value;
 		if (aux.img && newId) {
 			const formData = new FormData();
 			formData.append('file', aux.img);
 			formData.append('id', newId.toString());
-			await useFetch(`/api/photos/photoSubCategory`, {
-				method: 'POST',
-				body: formData,
-			});
+			await useFetch(`/api/photos/photoSubCategory`, {method: 'POST',body: formData,});
 		}
 	} else {
-		const putBody = {
-			requestBody,
-			sid: subcategory.id,
-		};
-		await useFetch('/api/subcategory/update', {
-			method: 'PUT',
-			body: putBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const putBody = {requestBody,sid: subcategory.id,};
+		await useFetch('/api/subcategory/update', {method: 'PUT',body: putBody,headers: {'Content-Type': 'application/json',},});
 
 		if (aux.img) {
 			const formData = new FormData();
 			formData.append('file', aux.img);
 			formData.append('id', subcategory.id.toString());
-			await useFetch(`/api/photos/photoSubCategory`, {
-				method: 'POST',
-				body: formData,
-			});
+			await useFetch(`/api/photos/photoSubCategory`, {method: 'POST',body: formData,});
 		}
 	}
 }
@@ -316,16 +256,8 @@ const changeSubcategory = (idSubcat: number) => {
 };
 // Handles the deletion of a subcategory.
 async function handleDeleteSubcategory(idSubcat: number) {
-	const requestBody = {
-		id: idSubcat,
-	};
-	await useFetch('/api/subcategory/delete', {
-		method: 'DELETE',
-		body: requestBody,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	const requestBody = {id: idSubcat,};
+	await useFetch('/api/subcategory/delete', {method: 'DELETE',body: requestBody,headers: {'Content-Type': 'application/json',},});
 	addSubcategoryPopUp.value = false;
 	subCategories.value = subCategories.value.filter((x) => x.id !== idSubcat);
 	hasSubcategoriesFct();
@@ -347,39 +279,18 @@ async function handleSubcategories(categoryId: number) {
 }
 // Handles the addition or editing of a category.
 async function handleAddEditCategory() {
+	if(name.value===""){
+		openNotification(translations[computedLanguageId.value].youHaveNotInsertedNameCategory,translations[computedLanguageId.value].pleaseAddNameCategory)
+		return
+	}
+	disableButtons.value = true
 	const requestBody = {
-		name: name.value,
-		description: description.value,
-		presentationOrder: presentationOrder.value,
-		imageUrl: src.value,
-		restaurant: {
-			id: restaurant.id,
-			name: restaurant.name,
-			imageUrl: restaurant.imageUrl,
-			latitude: restaurant.latitude,
-			longitude: restaurant.longitude,
-			rating: restaurant.rating,
-			category: restaurant.category,
-			foregroundColor: restaurant.foregroundColor,
-			backgroundColor: restaurant.backgroundColor,
-			font_color: restaurant.font_color,
-			description: restaurant.description,
-			logoUrl: restaurant.logoUrl,
-			addresse: restaurant.addresse,
-			phoneNumber: restaurant.phoneNumber,
-			email: restaurant.email,
-			averageWaitingTime: 0,
-		},
+		name: name.value,description: description.value,presentationOrder: presentationOrder.value,imageUrl: src.value,
+		restaurant: {id: restaurant.id,name: restaurant.name,imageUrl: restaurant.imageUrl,latitude: restaurant.latitude,longitude: restaurant.longitude,rating: restaurant.rating,category: restaurant.category,foregroundColor: restaurant.foregroundColor,backgroundColor: restaurant.backgroundColor,font_color: restaurant.font_color,description: restaurant.description,logoUrl: restaurant.logoUrl,addresse: restaurant.addresse,phoneNumber: restaurant.phoneNumber,email: restaurant.email,averageWaitingTime: 0,},
 	};
 	if (selectedFile.value) requestBody.imageUrl = '';
 	if (props.addCategory) {
-		const response = await useFetch('/api/category/add', {
-			method: 'POST',
-			body: requestBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const response = await useFetch('/api/category/add', {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
 		const categoryId = response.data.value;
 		if (categoryId != null) {
 			categoryStore.categoryGetter.push({
@@ -395,25 +306,14 @@ async function handleAddEditCategory() {
 			const formData = new FormData();
 			formData.append('file', selectedFile.value);
 			formData.append('id', categoryId?.toString() as string);
-			await useFetch(`/api/photos/photoCategory`, {
-				method: 'POST',
-				body: formData,
-			});
+			await useFetch(`/api/photos/photoCategory`, {method: 'POST',body: formData,});
 		}
 		if (categoryId !== null) await handleSubcategories(categoryId);
-		openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyAdded);
+		openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyAdded,translations[computedLanguageId.value].youWillBeRedirectedNow);
 	} else {
-		const putBody = {
-			requestBody,
-			cid: props.categoryId,
-		};
+		const putBody = {requestBody,cid: props.categoryId,};
 		await useFetch('/api/category/update', {
-			method: 'PUT',
-			body: putBody,
-
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			method: 'PUT',body: putBody,headers: {'Content-Type': 'application/json',},
 		});
 		if (props.categoryId !== undefined) {
 			const index = categoryStore.categoryGetter.findIndex((x) => x.id === props.categoryId);
@@ -423,24 +323,18 @@ async function handleAddEditCategory() {
 				description: description.value,
 				presentationOrder: presentationOrder.value,
 				imageUrl: src.value,
-				subCategorySet: subCategories.value,
-			});
+				subCategorySet: subCategories.value,});
 		}
 		if (selectedFile.value && props.categoryId) {
 			const formData = new FormData();
 			formData.append('file', selectedFile.value);
 			formData.append('id', props.categoryId.toString());
-			await useFetch(`/api/photos/photoCategory`, {
-				method: 'POST',
-				body: formData,
-			});
+			await useFetch(`/api/photos/photoCategory`, {method: 'POST',body: formData,});
 		}
 		if (props.categoryId !== undefined) await handleSubcategories(props.categoryId);
-		openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyEdited);
+		openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyEdited,translations[computedLanguageId.value].youWillBeRedirectedNow);
 	}
-	setTimeout(() => {
-		window.close();
-	}, 2000);
+	setTimeout(() => {window.close();}, 2000);
 }
 // Opens a popup to confirm deleting a subcategory locally.
 function popUpDeleteSubcategoryLocally(subcatid: number) {
@@ -449,21 +343,16 @@ function popUpDeleteSubcategoryLocally(subcatid: number) {
 }
 // Handles the deletion of a category.
 async function handleDeleteCategory() {
+	disableButtons.value=true
 	for (const subcategory of subCategories.value) {
 		await handleDeleteSubcategory(subcategory.id);
 	}
 	const requestBody = {
 		id: props.categoryId,
 	};
-	await useFetch('/api/category/delete', {
-		method: 'DELETE',
-		body: requestBody,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	await useFetch('/api/category/delete', {method: 'DELETE',body: requestBody,headers: {'Content-Type': 'application/json',},});
 	if (props.categoryId) categoryStore.deleteGetter.push(props.categoryId);
-	openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyDeleted);
+	openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyDeleted,translations[computedLanguageId.value].youWillBeRedirectedNow);
 	window.close();
 }
 // Cancels adding a new subcategory.
@@ -509,18 +398,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 			newSubcategoryDescription.value = 'The new description is loading...';
 			queriedName = newSubcategoryName.value;
 		}
-		const requestBody = {
-			itemName: queriedName,
-			length: neededLength,
-			target: 'a category',
-		};
-		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
-			method: 'POST',
-			body: requestBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const requestBody = {itemName: queriedName,length: neededLength,target: 'a category',};
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
 		if (forCategory) {
 			description.value = response.data.value;
 		} else {
@@ -529,10 +408,12 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	}
 }
 </script>
-
 <template>
 	<ClientOnly>
-		<page-title v-if="addCategory" :title="translations[computedLanguageId].addCategory"></page-title>
+		<page-title
+			v-if="addCategory"
+			:title="translations[computedLanguageId].addCategory"
+		></page-title>
 		<page-title v-else title="Edit category"></page-title>
 		<div class="container">
 			<div id="add-Category-Info" class="bottom">
@@ -617,7 +498,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 											id="changeSubCategoryPhoto"
 											type="file"
 											style="display: none"
-											@change="handleFileUploadSubCategory"
+											@change="handleFileUpload(subcategoryImageData, $event)"
 										/>
 										<el-button
 											class="specialPhotoButtonSubcategory"
@@ -659,16 +540,16 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							<div class="delete">
 								{{ translations[computedLanguageId].areYouSureYouWantToDeleteSubCategory }}
 								<div id="bottomButtons">
-									<el-button color="#ED5087" plain round @click="deleteSubcategoryPopup = false"
-										>{{translations[computedLanguageId].no}}</el-button
-									>
+									<el-button color="#ED5087" plain round @click="deleteSubcategoryPopup = false">{{
+										translations[computedLanguageId].no
+									}}</el-button>
 									<el-button
 										id="yessafetyPopUpDeleteSubcategory"
 										color="#ED5087"
 										plain
 										round
 										@click="deleteSubcategoryLocally(deleteSubcatIdLocally)"
-										>{{translations[computedLanguageId].yes}}</el-button
+										>{{ translations[computedLanguageId].yes }}</el-button
 									>
 								</div>
 							</div>
@@ -677,14 +558,14 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					<Teleport to="body">
 						<el-dialog v-model="deleteCategoryPopup" width="20%" style="border-radius: 5%">
 							<div class="delete">
-								{{translations[computedLanguageId].areYouSureYouWantToDeleteCategory}} {{ name }}?
+								{{ translations[computedLanguageId].areYouSureYouWantToDeleteCategory }} {{ name }}?
 								<div id="bottomButtons">
-									<el-button color="#ED5087" plain round @click="deleteCategoryPopup = false"
-										>{{translations[computedLanguageId].no}}</el-button
-									>
-									<el-button color="#ED5087" plain round @click="handleDeleteCategory()"
-										>{{translations[computedLanguageId].yes}}</el-button
-									>
+									<el-button color="#ED5087" plain round @click="deleteCategoryPopup = false">{{
+										translations[computedLanguageId].no
+									}}</el-button>
+									<el-button color="#ED5087" plain round @click="handleDeleteCategory()">{{
+										translations[computedLanguageId].yes
+									}}</el-button>
 								</div>
 							</div>
 						</el-dialog>
@@ -740,14 +621,18 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									style="width: 35%; height: 15vh; object-fit: cover; border-radius: 40px"
 								/>
 								<div class="photoButtonSpace" style="padding-top: 0.9%">
-									<label for="changeCategoryPhoto" class="specialPhotoLabel">{{translations[computedLanguageId].change}}</label>
+									<label for="changeCategoryPhoto" class="specialPhotoLabel">{{
+										translations[computedLanguageId].change
+									}}</label>
 									<input
 										id="changeCategoryPhoto"
 										type="file"
 										style="display: none"
-										@change="handleFileUpload"
+										@change="handleFileUpload(categoryImageData, $event)"
 									/>
-									<el-button class="specialPhotoButton" @click="deleteImg()">{{translations[computedLanguageId].delete}}</el-button>
+									<el-button class="specialPhotoButton" @click="deleteImg()">{{
+										translations[computedLanguageId].delete
+									}}</el-button>
 								</div>
 							</div>
 						</div>
@@ -773,8 +658,9 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							v-if="!props.addCategory"
 							id="deleteCategoryButton"
 							class="specialExitButton"
+							:class="{ 'disabled-element': disableButtons }"
 							@click="deleteCategoryPopup = true"
-							>{{translations[computedLanguageId].deleteCategory}}</el-button
+							>{{ translations[computedLanguageId].deleteCategory }}</el-button
 						>
 					</div>
 				</div>
@@ -821,13 +707,13 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 													class="specialPhotoButton"
 													style="margin-bottom: 3vh"
 													@click="changeSubcategory(subcategory.id)"
-													>{{translations[computedLanguageId].edit}}</el-button
+													>{{ translations[computedLanguageId].edit }}</el-button
 												>
 												<el-button
 													id="deleteSubcategory"
 													class="specialPhotoButton"
 													@click="popUpDeleteSubcategoryLocally(subcategory.id)"
-													>{{translations[computedLanguageId].delete}}</el-button
+													>{{ translations[computedLanguageId].delete }}</el-button
 												>
 											</div>
 										</div>
@@ -841,6 +727,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							v-if="addCategory"
 							id="saveCategoryButton"
 							class="specialExitButton"
+							:class="{ 'disabled-element': disableButtons }"
 							@click="handleAddEditCategory()"
 							>{{ translations[computedLanguageId].save }}</el-button
 						>
@@ -848,6 +735,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							v-else
 							id="addSubcategoryButton"
 							class="specialExitButton"
+							:class="{ 'disabled-element': disableButtons }"
 							@click="handleAddEditCategory()"
 							>{{ translations[computedLanguageId].save }}</el-button
 						>
@@ -1164,5 +1052,10 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	background-color: #ed5087;
 	border-color: #ed5087;
 	color: white;
+}
+
+.disabled-element {
+	opacity: 0.2;
+	pointer-events: none;
 }
 </style>

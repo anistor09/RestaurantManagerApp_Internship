@@ -15,8 +15,9 @@ describe('Menus e2e tests', () => {
 	  
 		// Login on the test account
 		cy.visit('http://localhost:3000/login');
-		cy.get('[data-testid="login-button"]').click().click();
-		
+		cy.wait(1000)
+		cy.get('[data-testid="login-button"]').click();
+
 		cy.origin('https://auth.ewai.fr', async () => {
 			cy.get('#signInFormUsername').type('test@ewai.fr', {force: true});
 			cy.get('#signInFormPassword').type('9AFPz3DCT@', {force: true});
@@ -83,12 +84,13 @@ describe('Menus e2e tests', () => {
 		// Enter menu details and save
 		cy.get('[data-testid="add-name-to-menu"]').type('Cypress Test');
 		cy.get('[data-testid="add-button"]').click();
-		cy.intercept('POST', '/api/menus/addMenu', {
-      	  statusCode: 200,
-    	}).as('add-menu')
+		cy.intercept('POST', '/api/menus/addMenu').as('add-menu')
+		cy.wait(1000)
 		cy.get('[data-testid="confirm-add"]').click();
-		cy.wait('@add-menu')
-	  
+		cy.wait('@add-menu').then((interception) => {
+			const response = interception.response;
+			expect(response.statusCode).to.eq(200);
+		});
 		// Assert that only one menu is added
 		cy.get('[data-testid="select-menu"]').click();
 		cy.get('.el-select-dropdown__item')
@@ -100,12 +102,11 @@ describe('Menus e2e tests', () => {
 		cy.get('.menus-button').contains('Edit menu').click();
 		cy.get('.el-dialog').should('be.visible');
 		cy.get('[data-testid="delete-button"]').click();
-		cy.intercept('DELETE', '/api/menus/-1', {
-      	  statusCode: 200,
-    	}).as('delete-menu')
+		cy.intercept('DELETE', '/api/menus/*').as('delete-menu')
+		cy.wait(1000)
 		cy.get('[data-testid="confirm-delete"]').click();
 		cy.wait('@delete-menu')
-	  
+		
 		// Check that the menu was actually deleted
 		cy.get('[data-testid="select-menu"]').click();
 		cy.get('.el-select-dropdown__item')

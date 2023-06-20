@@ -223,8 +223,81 @@ _Note: This documentation provides an overview of the Menus page component and i
 
 ### **6. Edit Item Page**
 
-_todo_
+The edit item page allows restaurant managers to manage and customize the items of their restaurant. It provides a user interface for:
+* adding, editing, and deleting items
+* adding, editing, and deleting options
+* adding, editing, and deleting choices
 
+To access the Edit Item page, you can click on the "+Add Item" button available on the Producs page, after choosing the items tab. It's default URL is `http://localhost:3000/editItemView`. You can also access the page in the 'Edit mode' when you click on an Item card from the Products page(`http://localhost:3000/editItemView/[itemId]`).
+
+#### **Dependencies**
+
+The Edit Item page component imports several dependencies and custom components from external libraries or files. These dependencies include:
+
+- `element-plus`: A Vue.js CSS library that provides various UI components used in the Edit Category page.
+- `PageTitle`: A custom component for displaying the page title (used on every page for consistency).
+- `NameNeededPopUp`: A custom component for informing the user that he has to add a name before requesting an AI generated description.
+- `Option-Component`: A custom component used for dysplayin information about the options and the choices that are related to it.
+- `SubCategory`: Interface used in the Edit Item page, constructed in accordance to the database structure.
+- `Category`: Interface used in the Edit Item page, constructed in accordance to the database structure.
+- `Option`: Interface used in the Edit Item page, constructed in accordance to the database structure.
+- `Choice`: Interface used in the Edit Item page, constructed in accordance to the database structure.
+- `allergens`: Data used for storing all possible allergens
+
+#### **Variables and Methods**
+
+The Edit Item page component defines several reactive variables and data properties using the `ref` functions provided by Vue.js. It also defines some methods for handling events and updating data.
+
+- `addItem`, `itemId`: Component's props for indicating whether a new item is being added or an existing one is being edited, along with the corresponding itemId property.
+- `restaurantStore` and `restaurantGetter`: Store and getter for accessing restaurant data from the Pinia Store.
+- `categoryStore`, `categoryGetter`, `deleteGetter`: Store and getters for accesing updates made to categories from other tabs.
+- `itemStore`, `itemGetter`, `deleteGetter`: Store and getters for pushing updates to items to the products page.
+- `name`,`description`, `src`,`presentationOrder`, `price`, `longDescription`, `category`, `subCategory`, `sideItems`, `selectedAllergens`, `options`: Reactive variables for storing the attributes of the new/selected item.
+- `item`,`dummyItem`,`realItem`, `dummyCategory`: Variables used for storing item information and for initialization
+- `addOptionPopUp`,`delteteOptionPopUp`,`editOptionPopUp`,`ddChoicePopUp`,`deleteItemPopUp`,`nameNeededPopUp`: Reactive variables used for triggering pop-ups
+- `optionNameField`,`optionDescriptionField`,`optionMandatory`,`selectedOption`,`selectedOptionName`,`newOptionId`: Reactive variables used for field inputting in the option-related pop-ups
+- `choiceName`,`selectedOption`,`newChoiceId`: Reactive variables used for field inputting in the choice-related pop-ups
+- `defaultSrc`: Variable used to store a default image for items 
+- `acceptedTypes`: Variable used to store all accepted types of files for image upload
+- `categories`,`allItems`: Variables that encapsulate all categories or items that the restaurant has
+- `disableSubCateg`,`subCategories`: Variables used to manipulate the behavior of the subcategory selector
+- `allergen`: Variable used to maintain initial state of allergens of an item
+- `fetchHelper`: Function to handle server communication
+- `changeCategory`: Method that alters the displayed subcategories whenever the category selected for an item changes
+- `handleAddChoiceEmit`,`handleEditOptionEmit`,`handleDeleteOptionEmit`,`handleDeleteChoiceEmit`,`handleEditChoiceEmit`: Methods that handle emits sent from the Option-Component
+- `handleAddChoice`,`handleAddOption`,`handleEditOption`,`handleDeleteOption`,`handleAddOption`: Methods that handle local adding, deleting and editing of choices or options
+- `handleDeleteItem` - Method that handles the deletion of an item
+- `addOption` - Method that handles the opening of the add an option pop-up
+- `SubCategoryDeepCopy`, `CategoryDeepCopy`, `ChoiceDeepCopy`, `OptionDeepCopy`: Methods that make deep copies of different data structures used
+- `cancelButton`: Method that cancels the action of adding an item
+- `saveButton`: Method that either saves or edits an item in the database
+- `deleteButton`: Method that triggers the safety delete pop-up
+- `openNotification` : Method that displays a notification on the screen when a Category is successfully created, edited, or deleted.
+- `addCategory`,`editCategory` : Methods that trigger the opening of the add/edit category page
+- `handleStorageEvent`: Methods that scans and reacts to updates to the local storage
+- `addAiShortDescription`, `addAiLongDescription`, `addAiDescription`: Methods used for handling the ai generated descriptions
+- `handleFileUpload`: Method used for handling the uploads of files to the page 
+
+#### **Page structure**
+
+The Edit Item page has a clearly delimited structure, in order to have a clear separation between the page functionalities.
+
+- The main template consists of a `PageTitle` component for displaying the page title and the Main body.
+
+- **Main body**: In the main body, there are tree columns. The left column includes the items's name, description, category, subcategory, and the cancel/delete button. In the middle is the selector for the side-dishes and a table that contains card for each of the options that are atributed to the item. On the right there are fields for price, presentation number, long description, photo with the change and delete buttons, the allergens and finally the save button. 
+
+- **Option Table**:
+- the cards related to options are wrapped in an `el-scrollbar` component. Pressing one of the card will lead it to expand and show all the choices related to that option togheter with buttons that let the used add,edit,delete the choices and the options.
+
+- **Pop-ups**:
+- `addOptionPopUp`: - Pop-up that handles adding a options to an item
+- `delteteOptionPopUp`: Pop-up that handles deleting a option from an item
+- `editOptionPopUp`: Pop-up that handles editing a oprion of an item
+- `addChoicePopUp`: Pop-up that handles adding a choice to a option
+- `deleteItemPopUp`: Pop-up that handles the deletion of an an item 
+- `NameNeededPopUp`: This pop-up prevents sending an AI genearated request without having a name for the desired Category/ Subcategory.
+
+_Note: This documentation provides an overview of the Edit Item page component and its functionality. To understand the complete functionality and usage of the component, it is necessary to review the code implementation and its integration within the broader application._
 ### **7. Edit Category Page**
 
 The Edit Category Page page allows restaurant managers to manage and customize the Categories and Subcategories of their restaurant. It provides a user interface for:
