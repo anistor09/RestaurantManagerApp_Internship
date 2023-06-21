@@ -20,7 +20,6 @@ export default defineEventHandler((event) => {
 		});
         
 		const responseData = await response.text();
-        console.log(responseData)
 		return responseData.split(" ")[2];
 	});
 });

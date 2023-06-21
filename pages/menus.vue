@@ -86,6 +86,7 @@ function closeAddPopup() {
 </script>
 
 <template>
+	<title>{{translations[computedLanguageId].menus}}</title>
 	<el-scrollbar>
 		<PageTitle :title=translations[computedLanguageId].menus></PageTitle>
 		<el-container>
@@ -116,6 +117,7 @@ function closeAddPopup() {
 						<ClientOnly>
 							<Teleport to="body">
 								<el-dialog
+									class="add-menu-component"
 									:key="addPopupKey"
 									v-model="addMenu"
 									:before-close="closeAddPopup"
@@ -156,12 +158,13 @@ function closeAddPopup() {
 						<ClientOnly>
 							<Teleport to="body">
 								<el-dialog
+									class="edit-menu-component"
 									:key="editPopupKey"
 									v-model="editMenu"
 									:before-close="closeEditPopup"
 									:style="{
 										marginTop: '2% !important',
-										width: '40%',
+										width: '40% !important' ,
 										height: '90% !important',
 										display: 'flex',
 										alignItems: 'center',

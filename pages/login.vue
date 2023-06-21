@@ -24,6 +24,7 @@ function signIn() {
 
 <!-- The login page. Can be accessed at: http://localhost:3000/login -->
 <template>
+	<title>Login</title>
 	<div id="wrapper">
 		<!-- Styling images for the background. For now, they are stored on client, but they should be moved on the server. -->
 		<img id="imgDown" src="../uploads/loginImage1.png" />

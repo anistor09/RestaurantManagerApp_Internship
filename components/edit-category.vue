@@ -78,7 +78,6 @@ function handleFileUpload(data: any, event: any) {
 	const imageEdited=data.imageEdited
 	const src=data.src
 	const file = event.target.files[0];
-	console.log(src)
 	event.target.value = null;
   	if(!file||!acceptedTypes.includes(file.type)){
 		openNotification(translations[computedLanguageId.value].wrongImageType,translations[computedLanguageId.value].pleaseTryDifferentFile)
@@ -94,7 +93,6 @@ function handleFileUpload(data: any, event: any) {
 			src.value=x
 			else 
 				openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile)
-			console.log(src)
 		}
 		else 
 			openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile)
@@ -344,6 +342,11 @@ function popUpDeleteSubcategoryLocally(subcatid: number) {
 // Handles the deletion of a category.
 async function handleDeleteCategory() {
 	disableButtons.value=true
+	if(restaurant.itemSet.filter(x=>x.category.id===props.categoryId).length>0){
+		openNotification(translations[computedLanguageId.value].categoryCannotBeDeleted,translations[computedLanguageId.value].deleteAllItemAssigned)
+		setTimeout(() => {window.close();}, 3000);
+		return 
+	}
 	for (const subcategory of subCategories.value) {
 		await handleDeleteSubcategory(subcategory.id);
 	}
@@ -353,7 +356,7 @@ async function handleDeleteCategory() {
 	await useFetch('/api/category/delete', {method: 'DELETE',body: requestBody,headers: {'Content-Type': 'application/json',},});
 	if (props.categoryId) categoryStore.deleteGetter.push(props.categoryId);
 	openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyDeleted,translations[computedLanguageId.value].youWillBeRedirectedNow);
-	window.close();
+	setTimeout(() => {window.close();}, 2000);
 }
 // Cancels adding a new subcategory.
 const cancelNewSubcategory = () => {
@@ -409,6 +412,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 }
 </script>
 <template>
+	<title v-if="addCategory">{{translations[computedLanguageId].addACategory}}</title>
+	<title v-else> {{translations[computedLanguageId].editACategory}}</title>
 	<ClientOnly>
 		<page-title
 			v-if="addCategory"

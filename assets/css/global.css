@@ -10,3 +10,15 @@ body {
 .el-dialog__headerbtn:hover .el-dialog__close {
 	color: #ed5087 !important;
 }
+
+.edit-menu-component .el-dialog__body {
+  padding: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.add-menu-component .el-dialog__body {
+  padding: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}

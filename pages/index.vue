@@ -117,6 +117,7 @@ const svg = `
 </script>
 
 <template>
+	<title>{{translations[computedLanguageId].home}}</title>
 	<PageTitle :title=translations[computedLanguageId].home></PageTitle>
 	<div style="padding-top: 0.5vh; padding-left: 2vw; padding-right: 2vw">
 		<RestaurantComponent></RestaurantComponent>

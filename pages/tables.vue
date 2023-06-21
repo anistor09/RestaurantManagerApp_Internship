@@ -77,6 +77,7 @@ watchEffect(() => {
 </script>
 
 <template>
+	<title>{{translations[computedLanguageId].tables}}</title>
 	<ClientOnly>
 		<Teleport to="body">
 			<el-dialog v-model="editPopup" width="20%" style="border-radius: 40px">

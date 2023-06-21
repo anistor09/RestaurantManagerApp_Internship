@@ -427,11 +427,16 @@ async function addAiMenuDescription() {
 
 .el-select .el-input__wrapper {
 	font-family: 'Open Sans';
-	font-size: 1.1vw;
+	font-size: 1.1vw !important;
 	width: 12vw;
 	font-weight: bolder;
 	height: auto;
 	border-radius: 30px;
+}
+
+.el-select .el-input__inner {
+	font-family: 'Open Sans' !important;
+	font-size: 1.1vw !important;
 }
 
 .el-select .el-input.is-focus .el-input__wrapper {

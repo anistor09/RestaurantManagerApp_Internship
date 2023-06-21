@@ -9,6 +9,5 @@ export default defineEventHandler((event) => {
 				Authorization: `Bearer ${token}`,
 			},
 		});
-		// console.log(await response.text())
 	});
 });

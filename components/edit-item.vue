@@ -507,7 +507,6 @@ function handleFileUpload(data: any, event: any) {
 	const imageEdited=data.imageEdited
 	const src=data.src
 	const file = event.target.files[0];
-	console.log(src)
 	event.target.value = null;
   	if(!file||!acceptedTypes.includes(file.type)){
 		openNotification(translations[computedLanguageId.value].wrongImageType,translations[computedLanguageId.value].pleaseTryDifferentFile	)
@@ -523,7 +522,6 @@ function handleFileUpload(data: any, event: any) {
 			src.value=x
 			else 
 				openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile	)
-			console.log(src)
 		}
 		else 
 			openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile	)
@@ -539,9 +537,10 @@ function deleteImg(){
 	src.value=defaultSrc
 }
 
-
 </script>
 <template>
+	<title v-if="addItem">{{translations[computedLanguageId].addAnItem}}</title>
+	<title v-else> {{translations[computedLanguageId].editAnItem}}</title>
 	<ClientOnly>
 		<Teleport to="body">
 			<NameNeededPopUp

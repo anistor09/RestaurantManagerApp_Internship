@@ -79,6 +79,8 @@
         "searchByItem": "Search by item",
         "searchByCategory": "Search by category",
         "addCategory": "Add category",
+        "addACategory": "Add a category",
+        "editACategory": "Edit a category",
         "addAnItem": "Add an item",
         "editAnItem": "Edit an item",
         "addSubcategory": "Add subcategory",
@@ -122,7 +124,9 @@
         "youHaveNotInsertedNameSubcategory": "You have not inserted a name for the subcategory",
         "pleaseAddNameSubcategory": "Please add a name to the subcategory",
         "youHaveNotInsertedNameCategory": "You have not inserted a name for the category",
-        "pleaseAddNameCategory": "Please add a name to the category before saving"
+        "pleaseAddNameCategory": "Please add a name to the category before saving",
+        "categoryCannotBeDeleted": "The selected category cannot be deleted",
+        "deleteAllItemAssigned": "Please delete all item assigned to it before retrying"
     },
     {
         "home": "Acasa",
@@ -204,6 +208,8 @@
         "searchByItem": "Cauta dupa produs",
         "searchByCategory": "Cauta dupa categorie",
         "addCategory": "Adauga categorie",
+        "addACategory": "Adauga o categorie",
+        "editACategory": "Editeaza o categorie",
         "addAnItem": "Adauga un produs",
         "editAnItem": "Editeaza un produs",
         "addSubcategory": "Adauga subcategorie",
@@ -247,6 +253,8 @@
         "youHaveNotInsertedNameSubcategory": "Subcategoria nu are un nume",
         "pleaseAddNameSubcategory": "Adaugati un nume subcategoriei",
         "youHaveNotInsertedNameCategory": "Categoria nu are un nume",
-        "pleaseAddNameCategory": "Adaugati numele categoriei inainte de a salva"
+        "pleaseAddNameCategory": "Adaugati numele categoriei inainte de a salva",
+        "categoryCannotBeDeleted": "Categoria selectata nu poate fi stearsa",
+        "deleteAllItemAssigned": "Stergeti toate produsele atribuite categoriei inainte de a reincerca"
     }
 ]

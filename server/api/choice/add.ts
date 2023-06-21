@@ -4,7 +4,6 @@ export default defineEventHandler((event) => {
         const choice=data.choice
         const oid=data.id
         delete choice.id
-        console.log(choice)
 		const response = await fetch(`https://auth-api.ewai.fr/choice/?optionId=${parseInt(oid)}`, {
 			method: 'POST',
 			body: JSON.stringify(choice),
@@ -15,7 +14,6 @@ export default defineEventHandler((event) => {
 		});
         
 		const responseData = await response.text();
-        console.log(responseData)
 		return responseData.split(" ")[2];
 	});
 });

@@ -54,7 +54,6 @@ function handleFileUpload(data: any, event: any) {
 	const imageEdited=data.imageEdited
 	const src=data.src
 	const file = event.target.files[0];
-	console.log(src)
 	event.target.value = null;
   	if(!file||!acceptedTypes.includes(file.type)){
 		openErrorNotification("Wrong image type")
@@ -70,7 +69,6 @@ function handleFileUpload(data: any, event: any) {
 			src.value=x
 			else 
 				openErrorNotification("Something went wrong!")
-			console.log(src)
 		}
 		else 
 			openErrorNotification("Something went wrong!")
@@ -191,6 +189,7 @@ function changeLanguageGlobally() {
 </script>
 
 <template>
+	<title>{{translations[computedLanguageId].settings}}</title>
 	<PageTitle id="titleComponent" :title="translations[computedLanguageId].settings"></PageTitle>
 	<div class="container">
 		<ClientOnly>

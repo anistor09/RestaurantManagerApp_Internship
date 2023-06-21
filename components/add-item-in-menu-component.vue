@@ -26,7 +26,6 @@ const props = defineProps({
 	}
 });
 
-console.log(props.dummy);
 const menuRef = ref(props.menu);
 
 const categories = ref(restaurant.categorySet);
@@ -58,7 +57,6 @@ const itemName = ref(props.dummy);
 // the object itself of the selected item (what the popup will return)
 const selectedItem = ref(restaurantItems[0]);
 
-console.log(filteredItems.value.length)
 const enableSubcategory = ref(false);
 
 /*
@@ -82,7 +80,6 @@ const changeCategory = () => {
 				return x.category.id === selectedCategory.value.id
 			}
 		);
-		console.log(filteredItems.value.length)
 		filteredSubcategories.value = selectedCategory.value.subCategorySet;
 	} else {
 		enableSubcategory.value = false;

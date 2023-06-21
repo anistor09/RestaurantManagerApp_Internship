@@ -111,6 +111,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 </script>
 
 <template>
+	<title>{{translations[computedLanguageId].products}}</title>
 	<ClientOnly>
 		<el-scrollbar>
 			<PageTitle :title=translations[computedLanguageId].products></PageTitle>

@@ -34,18 +34,15 @@ const editCategory = () => {
 				"
 			/>
 
-			<!-- The text part of the card -->
-			<div>
-				<!-- The name of the restaurant -->
-				<div id="title">{{ props.category.name }}</div>
+			<!-- The name of the restaurant -->
+			<div id="title">{{ props.category.name }}</div>
 
-				<!-- The description of the category, which gives a general overview -->
-				<div id="description">
-					<el-scrollbar>
-						<b>{{translations[computedLanguageId].description}}</b>
-						{{ props.category.description == '' ? 'None' : props.category.description }}
-					</el-scrollbar>
-				</div>
+			<!-- The description of the category, which gives a general overview -->
+			<div id="description">
+				<el-scrollbar>
+					<b>{{translations[computedLanguageId].description}}</b>
+					{{ props.category.description == '' ? 'None' : props.category.description }}
+				</el-scrollbar>
 			</div>
 		</div>
 	</el-card>
@@ -87,7 +84,7 @@ const editCategory = () => {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	height: 20%;
+	height: 12.5%;
 }
 
 #description {
