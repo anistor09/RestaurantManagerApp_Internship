@@ -4,11 +4,9 @@ import { ref, defineAsyncComponent, computed, watch } from 'vue';
 import { useLanguageStore } from '../store/language';
 import translations from '../mockData/translations.json';
 
-
 const languageStore = useLanguageStore();
 
 const computedLanguageId = computed(() => languageStore.idGetter);
-
 
 const ApexCharts = defineAsyncComponent(() => import('vue3-apexcharts'));
 const props = defineProps({
@@ -72,7 +70,7 @@ const chartOptions = computed(() => ({
 		},
 	},
 	noData: {
-		text: 'No data for selected period',
+		text: translations[computedLanguageId.value].noData,
 		align: 'center',
 		verticalAlign: 'middle',
 		style: {
@@ -171,18 +169,39 @@ watch(selection, (newValue) => {
 			:series="series"
 		></ApexCharts>
 		<div class="button-container">
-			<el-button default-active="true" color="#ED5087" plain round @click="updateDate(translations[computedLanguageId].thisWeek)">
+			<el-button
+				default-active="true"
+				color="#ED5087"
+				plain
+				round
+				@click="updateDate(translations[computedLanguageId].thisWeek)"
+			>
 				{{ translations[computedLanguageId].thisWeek }}
 			</el-button>
-			<el-button color="#ED5087" plain round @click="updateDate(translations[computedLanguageId].thisMonth)">
+			<el-button
+				color="#ED5087"
+				plain
+				round
+				@click="updateDate(translations[computedLanguageId].thisMonth)"
+			>
 				{{ translations[computedLanguageId].thisMonth }}
 			</el-button>
 
-			<el-button color="#ED5087" plain round @click="updateDate(translations[computedLanguageId].sixMonths)">
+			<el-button
+				color="#ED5087"
+				plain
+				round
+				@click="updateDate(translations[computedLanguageId].sixMonths)"
+			>
 				{{ translations[computedLanguageId].sixMonths }}
 			</el-button>
 
-			<el-button color="#ED5087" plain round @click="updateDate(translations[computedLanguageId].thisYear)">
+			<el-button
+				color="#ED5087"
+				plain
+				round
+				@click="updateDate(translations[computedLanguageId].thisYear)"
+			>
 				{{ translations[computedLanguageId].thisYear }}
 			</el-button>
 		</div>
