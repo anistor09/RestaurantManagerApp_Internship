@@ -122,7 +122,8 @@
         "youHaveNotInsertedNameSubcategory": "You have not inserted a name for the subcategory",
         "pleaseAddNameSubcategory": "Please add a name to the subcategory",
         "youHaveNotInsertedNameCategory": "You have not inserted a name for the category",
-        "pleaseAddNameCategory": "Please add a name to the category before saving"
+        "pleaseAddNameCategory": "Please add a name to the category before saving",
+        "noData": "No data for selected period"
     },
     {
         "home": "Acasa",
@@ -247,6 +248,7 @@
         "youHaveNotInsertedNameSubcategory": "Subcategoria nu are un nume",
         "pleaseAddNameSubcategory": "Adaugati un nume subcategoriei",
         "youHaveNotInsertedNameCategory": "Categoria nu are un nume",
-        "pleaseAddNameCategory": "Adaugati numele categoriei inainte de a salva"
+        "pleaseAddNameCategory": "Adaugati numele categoriei inainte de a salva",
+        "noData": "Nu exista date pentru perioada selectata"
     }
 ]
