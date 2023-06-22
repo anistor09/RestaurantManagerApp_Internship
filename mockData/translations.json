@@ -125,7 +125,7 @@
         "pleaseAddNameSubcategory": "Please add a name to the subcategory",
         "youHaveNotInsertedNameCategory": "You have not inserted a name for the category",
         "pleaseAddNameCategory": "Please add a name to the category before saving",
-        "noData": "No data for selected period"
+        "noData": "No data for selected period",
         "categoryCannotBeDeleted": "The selected category cannot be deleted",
         "deleteAllItemAssigned": "Please delete all item assigned to it before retrying"
     },
@@ -255,7 +255,7 @@
         "pleaseAddNameSubcategory": "Adaugati un nume subcategoriei",
         "youHaveNotInsertedNameCategory": "Categoria nu are un nume",
         "pleaseAddNameCategory": "Adaugati numele categoriei inainte de a salva",
-        "noData": "Nu exista date pentru perioada selectata"
+        "noData": "Nu exista date pentru perioada selectata",
         "categoryCannotBeDeleted": "Categoria selectata nu poate fi stearsa",
         "deleteAllItemAssigned": "Stergeti toate produsele atribuite categoriei inainte de a reincerca"
     }
