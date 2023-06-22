@@ -45,7 +45,6 @@ let name = selectedMenu.value.name;
 const description: Ref<string> = ref(selectedMenu.value.description);
 // eslint-disable-next-line prefer-const
 let src = ref(selectedMenu.value.imageUrl);
-
 /// function to handle the upload of a image to a menu
 function handleFileUpload(event: any) {
 	const file = event.target.files[0];
@@ -103,12 +102,13 @@ const editMenu = async () => {
 	const carte: Carte = {id: selectedMenu.value.id,name,description: description.value,version: 1,active: true,imageUrl: src.value,itemSet: [],hoursSet,};
 	if(imageEdited.value) 
 		carte.imageUrl=""
-	await useFetch('/api/menus/editMenu', {method: 'PUT',body: carte,headers: {'Content-Type': 'application/json',},});
+	await useFetch('/api/menus/editMenu', {watch: false,method: 'PUT',body: carte,headers: {'Content-Type': 'application/json',},});
 	if(imageEdited.value){
 		const formData = new FormData();
 		formData.append('file', imageEdited.value);
 		formData.append('id', selectedMenu.value.id.toString())
-		await useFetch(`/api/photos/photoMenu`, {method: 'POST',body: formData,});
+		const response = await useFetch(`/api/photos/photoMenu`, {watch: false,method: 'POST',body: formData,});
+		src.value=response.data.value as string
 	}
 	checkEdit.value = false;
 	// Adjust locally

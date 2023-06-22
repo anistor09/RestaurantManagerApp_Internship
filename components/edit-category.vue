@@ -214,23 +214,23 @@ async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, e
 	const aux = imageSubCategories.value.filter((x) => x.id === subcategory.id)[0];
 	if (aux.img) requestBody.imageUrl = '';
 	if (!editMode) {
-		const response = await useFetch('/api/subcategory/add', {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
+		const response = await useFetch('/api/subcategory/add', {watch:false, method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
 		const newId = response.data.value;
 		if (aux.img && newId) {
 			const formData = new FormData();
 			formData.append('file', aux.img);
 			formData.append('id', newId.toString());
-			await useFetch(`/api/photos/photoSubCategory`, {method: 'POST',body: formData,});
+			await useFetch(`/api/photos/photoSubCategory`, {watch:false, method: 'POST',body: formData,});
 		}
 	} else {
 		const putBody = {requestBody,sid: subcategory.id,};
-		await useFetch('/api/subcategory/update', {method: 'PUT',body: putBody,headers: {'Content-Type': 'application/json',},});
+		await useFetch('/api/subcategory/update', {watch:false,method: 'PUT',body: putBody,headers: {'Content-Type': 'application/json',},});
 
 		if (aux.img) {
 			const formData = new FormData();
 			formData.append('file', aux.img);
 			formData.append('id', subcategory.id.toString());
-			await useFetch(`/api/photos/photoSubCategory`, {method: 'POST',body: formData,});
+			await useFetch(`/api/photos/photoSubCategory`, {watch:false, method: 'POST',body: formData,});
 		}
 	}
 }
@@ -288,7 +288,7 @@ async function handleAddEditCategory() {
 	};
 	if (selectedFile.value) requestBody.imageUrl = '';
 	if (props.addCategory) {
-		const response = await useFetch('/api/category/add', {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
+		const response = await useFetch('/api/category/add', {watch:false,method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
 		const categoryId = response.data.value;
 		if (categoryId != null) {
 			categoryStore.categoryGetter.push({
@@ -304,15 +304,14 @@ async function handleAddEditCategory() {
 			const formData = new FormData();
 			formData.append('file', selectedFile.value);
 			formData.append('id', categoryId?.toString() as string);
-			await useFetch(`/api/photos/photoCategory`, {method: 'POST',body: formData,});
+			await useFetch(`/api/photos/photoCategory`, {watch:false,method: 'POST',body: formData,});
+			
 		}
 		if (categoryId !== null) await handleSubcategories(categoryId);
 		openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyAdded,translations[computedLanguageId.value].youWillBeRedirectedNow);
 	} else {
 		const putBody = {requestBody,cid: props.categoryId,};
-		await useFetch('/api/category/update', {
-			method: 'PUT',body: putBody,headers: {'Content-Type': 'application/json',},
-		});
+		await useFetch('/api/category/update', {watch:false,method: 'PUT',body: putBody,headers: {'Content-Type': 'application/json',},});
 		if (props.categoryId !== undefined) {
 			const index = categoryStore.categoryGetter.findIndex((x) => x.id === props.categoryId);
 			categoryStore.categoryGetter.splice(index, 1, {
