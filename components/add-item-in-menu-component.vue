@@ -5,7 +5,7 @@ import { useLanguageStore } from '../store/language';
 import { useRestaurantStore } from '../store/restaurant';
 import translations from '../mockData/translations.json';
 import { Carte } from '../interfaces/Carte';
-import { SubCategory } from '~/interfaces/SubCategory';
+import { SubCategory } from '../interfaces/SubCategory';
 
 const languageStore = useLanguageStore();
 const computedLanguageId = computed(() => languageStore.idGetter);
@@ -22,8 +22,8 @@ const props = defineProps({
 	},
 	dummy: {
 		type: String,
-		required: true
-	}
+		required: true,
+	},
 });
 
 const menuRef = ref(props.menu);
@@ -69,17 +69,12 @@ const changeCategory = () => {
 		subcategoryName.value = '';
 		itemName.value = '';
 		selectedCategory.value = categories.value.filter((x) => x.name === categoryName.value)[0];
-		filteredItems.value = restaurantItems.filter(
-			(x) => {
-				if (x === null)
-					return false;
-				if (x.category === null)
-					return false;
-				if (x.category.id === null)
-					return false;
-				return x.category.id === selectedCategory.value.id
-			}
-		);
+		filteredItems.value = restaurantItems.filter((x) => {
+			if (x === null) return false;
+			if (x.category === null) return false;
+			if (x.category.id === null) return false;
+			return x.category.id === selectedCategory.value.id;
+		});
 		filteredSubcategories.value = selectedCategory.value.subCategorySet;
 	} else {
 		enableSubcategory.value = false;
@@ -100,14 +95,15 @@ const changeSubCategory = () => {
 		selectedSubcategory.value = filteredSubcategories.value.filter(
 			(x) => x.name === subcategoryName.value,
 		)[0];
-		filteredItems.value = restaurantItems.filter(
-			(x) => {
-				if (x.category === null || x.subCategory === null || selectedCategory.value === null)
-					return false;
-				else
-					return x.category.id === selectedCategory.value.id && x.subCategory.id === selectedSubcategory?.value?.id
-			}
-		);
+		filteredItems.value = restaurantItems.filter((x) => {
+			if (x.category === null || x.subCategory === null || selectedCategory.value === null)
+				return false;
+			else
+				return (
+					x.category.id === selectedCategory.value.id &&
+					x.subCategory.id === selectedSubcategory?.value?.id
+				);
+		});
 	} else {
 		changeCategory();
 	}
@@ -125,7 +121,8 @@ const changeItem = () => {
 		selectedCategory.value = selectedItem.value.category;
 		categoryName.value = selectedCategory.value.name;
 		selectedSubcategory.value = selectedItem.value.subCategory;
-		subcategoryName.value = selectedSubcategory.value === null ? '' : selectedSubcategory.value.name;
+		subcategoryName.value =
+			selectedSubcategory.value === null ? '' : selectedSubcategory.value.name;
 	}
 };
 
@@ -157,7 +154,7 @@ const addItemInMenu = async () => {
 				filterable
 				clearable
 				class="specialSelect"
-				:placeholder=translations[computedLanguageId].selectCategory
+				:placeholder="translations[computedLanguageId].selectCategory"
 				size="large"
 				@change="changeCategory"
 			>
@@ -171,7 +168,9 @@ const addItemInMenu = async () => {
 		</div>
 
 		<div class="div">
-			<h2 id="subcategoryIdPrefix" class="title">{{ translations[computedLanguageId].subcategory }}</h2>
+			<h2 id="subcategoryIdPrefix" class="title">
+				{{ translations[computedLanguageId].subcategory }}
+			</h2>
 
 			<el-select
 				id="subcategoryId"
@@ -180,7 +179,7 @@ const addItemInMenu = async () => {
 				clearable
 				class="specialSelect"
 				:disabled="!enableSubcategory"
-				:placeholder=translations[computedLanguageId].selectSubcategory
+				:placeholder="translations[computedLanguageId].selectSubcategory"
 				size="large"
 				@change="changeSubCategory"
 			>
@@ -202,7 +201,7 @@ const addItemInMenu = async () => {
 				filterable
 				clearable
 				class="specialSelect"
-				:placeholder=translations[computedLanguageId].selectItem
+				:placeholder="translations[computedLanguageId].selectItem"
 				size="large"
 				@change="changeItem"
 			>
@@ -215,7 +214,15 @@ const addItemInMenu = async () => {
 			</el-select>
 		</div>
 		<div id="buttonContainer">
-			<el-button color="#ED5087" plain round @click="addItemInMenu()"> Add</el-button>
+			<el-button
+				color="#ED5087"
+				plain
+				round
+				@click="addItemInMenu()"
+				:disabled="itemName.length === 0"
+			>
+				Add</el-button
+			>
 		</div>
 	</div>
 </template>
