@@ -3,9 +3,8 @@ import { useRoute } from 'vue-router';
 import { computed } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
 import { useLanguageStore } from '../store/language';
-import translations from '~/mockData/translations.json'
-
-const imageURL = '/_nuxt/assets/images/Logo.png';
+import translations from '../mockData/translations.json';
+import image from '../assets/images/Logo.png';
 
 const restaurantStore = useRestaurantStore();
 const languageStore = useLanguageStore();
@@ -32,7 +31,7 @@ const active = computed(() => {
 		<el-container style="position: fixed; width: 100%; height: 100%">
 			<el-aside style="overflow: hidden; width: 16vw">
 				<el-menu :default-active="active" text-color="white" active-text-color="#696969">
-					<img class="logo" :src="imageURL" />
+					<img class="logo" :src="image" />
 					<el-menu-item index="1" @click="navigateTo('/')">
 						<span> {{ translations[computedLanguageId].home }} </span>
 					</el-menu-item>
