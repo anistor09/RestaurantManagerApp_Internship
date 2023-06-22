@@ -29,27 +29,30 @@ vi.mock('../store/language.ts', () => {
     };
 });
 
+const wrapper = mount(AddItemInMenu,{
+    propsData: {
+        menu: {},
+        dummy: "",
+    },
+});
+
 it('Renders popup', () => {
-	const wrapper = mount(AddItemInMenu);
 	expect(wrapper.exists()).toBe(true);
 });
 
 it('Category subtitle', () => {
-    const wrapper = mount(AddItemInMenu);
 	const prefix = wrapper.find('#categoryIdPrefix');
     expect(prefix.exists()).toBe(true);
     expect(prefix.text()).toBe("Category:")
 });
 
 it('SubCategory subtitle', () => {
-    const wrapper = mount(AddItemInMenu);
 	const prefix = wrapper.find('#subcategoryIdPrefix');
     expect(prefix.exists()).toBe(true);
     expect(prefix.text()).toBe("Subcategory:")
 });
 
 it('Item subtitle', () => {
-    const wrapper = mount(AddItemInMenu);
 	const prefix = wrapper.find('#itemIdPrefix');
     expect(prefix.exists()).toBe(true);
     expect(prefix.text()).toBe("Item:")
