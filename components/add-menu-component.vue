@@ -217,7 +217,7 @@ async function addAiMenuDescription() {
 				<div class="dayName">{{ day }}</div>
 				<el-time-select
 					v-model="startTimes[index]"
-					style="width: 25%"
+					class="elTimeSelect"
 					:placeholder=translations[computedLanguageId].startTime
 					start="00:00"
 					step="00:30"
@@ -225,7 +225,7 @@ async function addAiMenuDescription() {
 				/>
 				<el-time-select
 					v-model="endTimes[index]"
-					style="width: 25%"
+					class="elTimeSelect"
 					:placeholder=translations[computedLanguageId].endTime
 					start="00:00"
 					step="00:30"
@@ -286,10 +286,35 @@ async function addAiMenuDescription() {
 	width: 40% !important;
 }
 
+.elTimeSelect{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 25%; height: 100%;
+}
+
+.elTimeSelect :deep(.select-trigger){
+	height: 90%;
+	width: 95%;
+}
+
+.elTimeSelect :deep(.el-input){
+	height: 100%;
+	width: 100%;
+}
+
+.elTimeSelect :deep(.el-input__wrapper) {
+	font-family: 'Open Sans';
+	font-size: 0.9vw;
+	font-weight: bolder;
+}
+
 .dayName {
-	width: 12%;
+	display: flex;
+	align-items: center;
+	width: 16%;
+	height: 100%;
 	font-size: 0.8vw;
-	min-width: 80px;
 }
 .box {
 	padding-left: 17%;
@@ -364,6 +389,8 @@ async function addAiMenuDescription() {
 }
 
 .workingDay {
+	width: 100%;
+	height: 4vh;
 	display: flex;
 	flex-direction: row;
 }
@@ -407,40 +434,6 @@ async function addAiMenuDescription() {
 	width: 100%;
 }
 
-.el-select .el-input__wrapper {
-	font-family: 'Open Sans';
-	font-size: 1.1vw;
-	width: 12vw;
-	font-weight: bolder;
-	height: auto;
-	border-radius: 30px;
-}
-
-.el-select .el-input.is-focus .el-input__wrapper {
-	box-shadow: 0 0 0 1px #ed5087 inset !important;
-}
-
-.el-select .el-input.is-ac .el-input__wrapper {
-	box-shadow: 0 0 0 1px #ed5087 inset !important;
-}
-
-.el-select {
-	--el-select-input-focus-border-color: #ed5087;
-}
-
-.el-popper {
-	border-radius: 25px;
-}
-
-.el-select-dropdown__item {
-	font-family: 'Open Sans';
-	font-size: 1vw;
-	text-align: center;
-}
-
-.el-select-dropdown__item.selected {
-	color: #ed5087;
-}
 #change-bottom-button {
 	display: flex;
 	padding-top: 8%;
