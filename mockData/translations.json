@@ -127,7 +127,7 @@
         "pleaseAddNameCategory": "Please add a name to the category before saving",
         "noData": "No data for selected period",
         "categoryCannotBeDeleted": "The selected category cannot be deleted",
-        "deleteAllItemAssigned": "Please delete all item assigned to it before retrying"
+        "deleteAllItemAssigned": "Please delete all items assigned to it before retrying"
     },
     {
         "home": "Acasa",

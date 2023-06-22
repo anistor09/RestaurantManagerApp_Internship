@@ -15,7 +15,6 @@ const currencyStore = useCurrencyStore();
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 const languageStore = useLanguageStore();
-
 const defaultSrc =
 	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
 const src = ref(restaurant.imageUrl || defaultSrc);
@@ -148,7 +147,7 @@ const saveChanges = async () => {
 	restaurant.email = email.value;
 	restaurant.category = category.value;
 
-	await useFetch('/api/restaurant/editRestaurant', {method: 'PUT',body: restaurant,headers: {'Content-Type': 'application/json',},});
+	await useFetch('/api/restaurant/editRestaurant', {watch:false, method: 'PUT',body: restaurant,headers: {'Content-Type': 'application/json',},});
 
 	// if(logoEdited.value){
 	// 	const formData = new FormData();
@@ -164,7 +163,8 @@ const saveChanges = async () => {
 		const formData = new FormData();
 		formData.append('file', backgroundEdited.value);
 		formData.append('id', restaurant.id.toString());
-		await useFetch(`/api/photos/photoBackground`, {method: 'POST',body: formData,});
+		const response = await useFetch(`/api/photos/photoBackground`, {watch:false,method: 'POST',body: formData,});
+		restaurant.imageUrl=response.data.value as string
 	}
 };
 async function addAiRestaurantDescription() {

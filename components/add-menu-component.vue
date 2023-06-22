@@ -121,11 +121,7 @@ async function addMenu() {
 	if(imageEdited.value) 
 		carte.imageUrl=""
 	const response = await useFetch('/api/menus/addMenu', {
-		method: 'POST',
-		body: carte,
-		headers: {
-			'Content-Type': 'application/json',
-		},
+		watch: false,method: 'POST',body: carte,headers: {'Content-Type': 'application/json',},
 	});
 	const carteId=response.data.value
 	if(carteId)
@@ -137,10 +133,8 @@ async function addMenu() {
 			const formData = new FormData();
 			formData.append('file', imageEdited.value);
 			formData.append('id', carteId.toString())
-			await useFetch(`/api/photos/photoMenu`, {
-				method: 'POST',
-				body: formData,
-			});
+			const response=await useFetch(`/api/photos/photoMenu`, {watch: false,method: 'POST',body: formData,});
+			carte.imageUrl=response.data.value as string
 		}
 	}
 	doubleCheck.value = false;
@@ -294,6 +288,7 @@ async function addAiMenuDescription() {
 
 .dayName {
 	width: 12%;
+	font-size: 0.8vw;
 	min-width: 80px;
 }
 .box {

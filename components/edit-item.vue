@@ -315,8 +315,8 @@ const saveButton = async () => {
 			const formData = new FormData();
 			formData.append('file', imageEdited.value);
 			formData.append('id', item.id.toString())
-			await useFetch(`/api/photos/photoItem`, {method: 'POST',body: formData,});
-			item.imageUrl=src.value
+			const response = await useFetch(`/api/photos/photoItem`, {watch:false, method: 'POST',body: formData,});
+			item.imageUrl=response.data.value as string
 		}
 		
 		// add item to store
