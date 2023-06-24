@@ -89,7 +89,7 @@ it('Check if item description is displayed', () => {
         }
       });
     const name = wrapper.find('#item-description');
-    expect(name.text()).toBe('Description:');
+    expect(name.text()).toBe('Description');
 });
 
 it('Check if item ai button description is displayed', () => {
@@ -111,7 +111,7 @@ it('Check if item category is displayed', () => {
         }
       });
     const name = wrapper.find('#item-category');
-    expect(name.text()).toBe('Category:');
+    expect(name.text()).toBe('Category');
 });
 
 
@@ -134,7 +134,7 @@ it('Check if item subcategory is displayed', () => {
         }
       });
     const name = wrapper.find('#item-subcategory');
-    expect(name.text()).toBe('Subcategory:');
+    expect(name.text()).toBe('Subcategory');
 });
 
 it('Check if item add subcategory button is displayed', () => {

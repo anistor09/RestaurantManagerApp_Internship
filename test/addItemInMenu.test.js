@@ -43,13 +43,13 @@ it('Renders popup', () => {
 it('Category subtitle', () => {
 	const prefix = wrapper.find('#categoryIdPrefix');
     expect(prefix.exists()).toBe(true);
-    expect(prefix.text()).toBe("Category:")
+    expect(prefix.text()).toBe("Category")
 });
 
 it('SubCategory subtitle', () => {
 	const prefix = wrapper.find('#subcategoryIdPrefix');
     expect(prefix.exists()).toBe(true);
-    expect(prefix.text()).toBe("Subcategory:")
+    expect(prefix.text()).toBe("Subcategory")
 });
 
 it('Item subtitle', () => {

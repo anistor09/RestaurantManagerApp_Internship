@@ -6,7 +6,6 @@ import translations from '../mockData/translations.json';
 import { ItemWrapper } from '~/interfaces/ItemWrapper';
 import { Restaurant } from '~/interfaces/Restaurant';
 
-
 const languageStore = useLanguageStore();
 
 const computedLanguageId = computed(() => languageStore.idGetter);
@@ -63,7 +62,11 @@ const handleDelete = async () => {
 		id: props.menuId,
 		itemId: deletedItemId.value,
 	};
-	await useFetch('/api/menus/removeItemFromMenu', {method: 'POST',body: data,headers: {'Content-Type': 'application/json',},});
+	await useFetch('/api/menus/removeItemFromMenu', {
+		method: 'POST',
+		body: data,
+		headers: { 'Content-Type': 'application/json' },
+	});
 
 	// Remove locally
 	localRestaurant.value.carteSet = localRestaurant.value.carteSet.filter((menu) => {
@@ -109,7 +112,11 @@ function formatPrice(price: any) {
 						prop="item.name"
 						data-testid="item-name-column"
 					/>
-					<el-table-column align="center" :label="translations[computedLanguageId].descriptionW" prop="item.description" />
+					<el-table-column
+						align="center"
+						:label="translations[computedLanguageId].description"
+						prop="item.description"
+					/>
 					<!-- <el-table-column align="center" label="Price" prop="item.price" /> -->
 					<el-table-column align="center" :label="translations[computedLanguageId].price">
 						<template #default="{ row }">
@@ -118,12 +125,16 @@ function formatPrice(price: any) {
 					</el-table-column>
 					<el-table-column align="center">
 						<template #header>
-							<el-input v-model="search" size="default" :placeholder=translations[computedLanguageId].searchByItem />
+							<el-input
+								v-model="search"
+								size="default"
+								:placeholder="translations[computedLanguageId].searchByItem"
+							/>
 						</template>
 						<template #default="{ row }">
-							<el-button id="button" color="#ED5087" plain round @click="deleteItem(row.item.id)"
-								>{{translations[computedLanguageId].removeFromMenu}}</el-button
-							>
+							<el-button id="button" color="#ED5087" plain round @click="deleteItem(row.item.id)">{{
+								translations[computedLanguageId].removeFromMenu
+							}}</el-button>
 							<Teleport to="body">
 								<el-dialog v-model="row.showDelete" width="20%" class="subcategory-delete-popup">
 									<div>

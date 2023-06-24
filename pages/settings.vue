@@ -296,7 +296,7 @@ function changeLanguageGlobally() {
 						style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 					>
 						<div id="descriptionIdPrefix" class="prefix" style="width: 18%; padding-bottom: 0.7%">
-							{{ translations[computedLanguageId].description }}
+							{{ translations[computedLanguageId].descriptionW }}
 						</div>
 
 						<el-button class="aiButtonSubcatgory" @click="addAiRestaurantDescription"
@@ -358,7 +358,7 @@ function changeLanguageGlobally() {
 				</div>
 				<div class="details">
 					<div id="categoryIdPrefix" class="prefix">
-						{{ translations[computedLanguageId].category }}
+						{{ translations[computedLanguageId].categoryW }}
 					</div>
 					<!-- The input where the restaurant category can be changed by the restaurant owner-->
 					<input

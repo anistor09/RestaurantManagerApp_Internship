@@ -22,9 +22,3 @@ body {
   height: 100% !important;
   width: 100% !important;
 }
-
-.el-button:active {
-  background-color: inherit !important;
-  border-color: inherit !important;
-  color: inherit !important;
-}
