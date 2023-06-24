@@ -490,9 +490,9 @@ _Note: The usage examples above assume that you have registered and imported the
 
 On every page where we can find a `Description` field, we can also input the decription by pressing on the `Write with AI` button which will make a request to ChatGPT in order to retrieve a AI generated description of a preset length, using the name of the item/category/subcategory/menu/restaurant.
 
-The prompt that we use has the follwoing format `Please give me a description of around ${data.length} characters for an ${data.target} named ${data.itemName}, which is part of a restaurant menu. Please make sure each sentence is coherent and is finished.` where data.length is the desired length of the description, data.target is the type for which we want a description(i.e. item/category/subcategory/menu/restaurant) and data.itemName is the name of the target(i.e. sweets, french fries).
+The prompt that we use has the follwoing format `Please give me a description of around ${data.length} characters for a ${data.target} named ${data.itemName}, which is part of a restaurant menu. Please make sure each sentence is coherent and is finished.` where data.length is the desired length of the description, data.target is the type for which we want a description(e.g. item/category/subcategory/menu/restaurant) and data.itemName is the name of the target(e.g. Pizza restaurant, sweets, french fries).
 
-The request is made to `gpt-3.5-turbo` and it uses `"temperature": 1.0` as a parameter for the request in order to have diverse(high randomization) responses for our requests. The price for the requests made to `https://api.openai.com/v1/chat/completions`, using the `Davinci model`(most powerful), is `$0.0200 / 1K tokens`, which is supported by our client, who provides us with private token. If the server experiences an unexpected overload, the user will be provided with a response advising them to retry after a short wait.
+The request is made to `gpt-3.5-turbo` and it uses `"temperature": 1.0` as a parameter for the request in order to have diverse(high randomization) responses for our requests. The price for the requests made to `https://api.openai.com/v1/chat/completions`, is `$0.02 / 1K tokens`, which is supported by our client, who provides us with a private token. If the server experiences an unexpected overload, the user will be provided with a response advising them to retry after a short wait.
 
 - **Pop-ups**:
 - `NameNeededPopUp`: This pop-up prevents sending an AI genearated request without having a name for the desired Item/Subcategory/ Category/Menu/Restaurant.
@@ -518,4 +518,17 @@ To add a new language, follow the steps:
 
 ### **13. Currency**
 
-_todo - not implemented_
+Our app supports multiple currencies. Is it possible to choose the desired currency from the settings page. 
+
+For implementing the currency, we used several steps: 
+
+- `currency.json`: In this file we store all the possible currencies that the user can choose from. Currently, our system supports three currencies: `€, £, and $`. However, it is easily extendable to accommodate additional currencies.
+
+- `Currency store`: On every page, the useCurrencyStore is imported from the ../store/currency module, which encapsulates the currently selected store.
+
+In order to display the currency of the product next to the price of it we use the followings attribute `currencyStore.currencyGetter.currency`, which is encapsulated in the `computed` function, `computedCurrency`. In order to change the currency from the already existing ones, users need to navigate to the `Settings page`, select a currency from the drop-down menu, and click on the `Save` button. The updated currency selection will be reflected on all pages where prices are displayed.
+
+To add a new language, follow the steps:
+- add the language symbol and a new ID in `currency.json` 
+
+
