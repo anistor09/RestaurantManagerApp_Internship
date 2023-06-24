@@ -45,62 +45,56 @@ const workingDays = computed(() => [
 const acceptedTypes = ['image/jpeg', 'image/png'];
 const logoEdited: Ref<File | null> = ref(null);
 const backgroundEdited: Ref<File | null> = ref(null);
-const backroundImageData={imageEdited: backgroundEdited, src}
-const logoImageData={imageEdited: logoEdited, src:imageUrl}
+const backroundImageData = { imageEdited: backgroundEdited, src };
+const logoImageData = { imageEdited: logoEdited, src: imageUrl };
 
 /// function to handle the upload of a photo to a restaurant
 function handleFileUpload(data: any, event: any) {
-	const imageEdited=data.imageEdited
-	const src=data.src
+	const imageEdited = data.imageEdited;
+	const src = data.src;
 	const file = event.target.files[0];
 	event.target.value = null;
-  	if(!file||!acceptedTypes.includes(file.type)){
-		openErrorNotification("Wrong image type")
-		return
-	}
-	else imageEdited.value=file
-	
+	if (!file || !acceptedTypes.includes(file.type)) {
+		openErrorNotification('Wrong image type');
+		return;
+	} else imageEdited.value = file;
+
 	const reader = new FileReader();
 	reader.onload = (event) => {
-		if(event.target){
+		if (event.target) {
 			const x = event.target.result;
-			if(typeof x === "string")
-			src.value=x
-			else 
-				openErrorNotification("Something went wrong!")
-		}
-		else 
-			openErrorNotification("Something went wrong!")
+			if (typeof x === 'string') src.value = x;
+			else openErrorNotification('Something went wrong!');
+		} else openErrorNotification('Something went wrong!');
 	};
-	if(imageEdited.value)
-		reader.readAsDataURL(imageEdited.value);
-	else 
-		openErrorNotification("Something went wrong!")	
+	if (imageEdited.value) reader.readAsDataURL(imageEdited.value);
+	else openErrorNotification('Something went wrong!');
 }
 
 // Function to delete the selected logo for a restaurant
-function deleteImgLogo(){
-	logoEdited.value=null
-	imageUrl.value=defaultSrc
+function deleteImgLogo() {
+	logoEdited.value = null;
+	imageUrl.value = defaultSrc;
 }
 
 // Function to delete the selected image for a menu
-function deleteImgBackground(){
-	backgroundEdited.value=null
-	src.value=defaultSrc
+function deleteImgBackground() {
+	backgroundEdited.value = null;
+	src.value = defaultSrc;
 }
 
 // Function to display a error notification
 const openErrorNotification = (notifTitle: string) => {
 	ElNotification({
 		title: notifTitle,
-		message: h('div',{ style: 'color: #ed5087; font-family: "Open Sans"' },'Please try with a diffrent file.',),
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'Please try with a diffrent file.',
+		),
 		customClass: 'notif',
 	});
 };
-
-
-
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
@@ -147,7 +141,12 @@ const saveChanges = async () => {
 	restaurant.email = email.value;
 	restaurant.category = category.value;
 
-	await useFetch('/api/restaurant/editRestaurant', {watch:false, method: 'PUT',body: restaurant,headers: {'Content-Type': 'application/json',},});
+	await useFetch('/api/restaurant/editRestaurant', {
+		watch: false,
+		method: 'PUT',
+		body: restaurant,
+		headers: { 'Content-Type': 'application/json' },
+	});
 
 	// if(logoEdited.value){
 	// 	const formData = new FormData();
@@ -163,8 +162,12 @@ const saveChanges = async () => {
 		const formData = new FormData();
 		formData.append('file', backgroundEdited.value);
 		formData.append('id', restaurant.id.toString());
-		const response = await useFetch(`/api/photos/photoBackground`, {watch:false,method: 'POST',body: formData,});
-		restaurant.imageUrl=response.data.value as string
+		const response = await useFetch(`/api/photos/photoBackground`, {
+			watch: false,
+			method: 'POST',
+			body: formData,
+		});
+		restaurant.imageUrl = response.data.value as string;
 	}
 };
 async function addAiRestaurantDescription() {
@@ -173,8 +176,12 @@ async function addAiRestaurantDescription() {
 	} else {
 		description.value = 'The new description is loading...';
 
-		const requestBody = {itemName: name.value,length: 200,target: 'restaurant',};
-		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
+		const requestBody = { itemName: name.value, length: 200, target: 'restaurant' };
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
+			method: 'POST',
+			body: requestBody,
+			headers: { 'Content-Type': 'application/json' },
+		});
 
 		description.value = response.data.value;
 	}
@@ -189,7 +196,7 @@ function changeLanguageGlobally() {
 </script>
 
 <template>
-	<title>{{translations[computedLanguageId].settings}}</title>
+	<title>{{ translations[computedLanguageId].settings }}</title>
 	<PageTitle id="titleComponent" :title="translations[computedLanguageId].settings"></PageTitle>
 	<div class="container">
 		<ClientOnly>
@@ -236,14 +243,14 @@ function changeLanguageGlobally() {
 								id="changePhotoLogo"
 								type="file"
 								style="display: none"
-								@change="handleFileUpload(logoImageData,$event)"
+								@change="handleFileUpload(logoImageData, $event)"
 							/>
-							<el-button
-								class="specialPhotoButton"
+							<label
+								class="specialPhotoLabel"
 								data-testid="deleteLogoButton"
 								style="width: 45%; height: 3vh; font-size: 0.8vw"
 								@click="deleteImgLogo()"
-								>{{ translations[computedLanguageId].deleteLogo }}</el-button
+								>{{ translations[computedLanguageId].deleteLogo }}</label
 							>
 						</div>
 					</div>
@@ -270,7 +277,7 @@ function changeLanguageGlobally() {
 							id="changePhotoBackground"
 							type="file"
 							style="display: none"
-							@change="handleFileUpload(backroundImageData,$event)"
+							@change="handleFileUpload(backroundImageData, $event)"
 						/>
 						<el-button
 							data-testid="deleteBackButton"
@@ -370,7 +377,7 @@ function changeLanguageGlobally() {
 						v-model="startTimes[index]"
 						style="width: 30%"
 						class="time-selector"
-						:placeholder= translations[computedLanguageId].startTimeRestaurant
+						:placeholder="translations[computedLanguageId].startTimeRestaurant"
 						start="00:00"
 						step="00:30"
 						end="23:59"
@@ -379,7 +386,7 @@ function changeLanguageGlobally() {
 						v-model="endTimes[index]"
 						style="width: 30%"
 						class="time-selector"
-						:placeholder= translations[computedLanguageId].endTimeRestaurant
+						:placeholder="translations[computedLanguageId].endTimeRestaurant"
 						start="00:00"
 						step="00:30"
 						end="23:59"
