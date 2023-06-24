@@ -78,7 +78,7 @@ it('Check if category description is displayed', () => {
         }
       });
     const name = wrapper.find('#category-description');
-    expect(name.text()).toBe('Description:');
+    expect(name.text()).toBe('Description');
 });
 it('Check if category order in menu  is displayed', () => {
     const wrapper = mount(EditCategoryComponent,{

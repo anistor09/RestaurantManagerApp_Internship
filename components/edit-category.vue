@@ -456,7 +456,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 								<div data-testid="subcategory-description-title" style="padding-top: 2%">
 									<div class="div" style="display: flex; align-items: center; padding-bottom: 1%">
 										<div id="subcategory-description" style="width: 30%; padding-bottom: 0.9%">
-											{{ translations[computedLanguageId].description }}
+											{{ translations[computedLanguageId].descriptionW }}
 										</div>
 
 										<el-button class="aiButtonSubcatgory" @click="addAiSubcategoryDescription"
@@ -600,7 +600,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									class="fieldText"
 									style="width: 20%; padding-bottom: 0.9%"
 								>
-									{{ translations[computedLanguageId].description }}
+									{{ translations[computedLanguageId].descriptionW }}
 								</div>
 
 								<el-button class="aiButton" @click="addAiCategoryDescription"
