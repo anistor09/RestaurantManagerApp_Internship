@@ -229,7 +229,7 @@ function changeLanguageGlobally() {
 							<label
 								for="changePhotoLogo"
 								class="specialPhotoLabel"
-								style="width: 35%; height: 3vh; font-size: 0.8vw; margin-right: 3%"
+								style="width: 45%; height: 3vh; font-size: 0.8vw; margin-right: 3%"
 								>{{ translations[computedLanguageId].changeLogo }}</label
 							>
 							<input
@@ -241,7 +241,7 @@ function changeLanguageGlobally() {
 							<el-button
 								class="specialPhotoButton"
 								data-testid="deleteLogoButton"
-								style="width: 35%; height: 3vh; font-size: 0.8vw"
+								style="width: 45%; height: 3vh; font-size: 0.8vw"
 								@click="deleteImgLogo()"
 								>{{ translations[computedLanguageId].deleteLogo }}</el-button
 							>
