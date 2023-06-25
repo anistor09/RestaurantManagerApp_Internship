@@ -50,7 +50,9 @@ describe('Menus e2e tests', () => {
 	});
 
 	it('Open Create new menu pop-up when button is clicked', () => {
+	  cy.wait(500)
 	  cy.get('.menus-button').contains('Create new menu').click();
+	  cy.wait(500)
 	  cy.get('.el-dialog').should('be.visible');
 	});
 
