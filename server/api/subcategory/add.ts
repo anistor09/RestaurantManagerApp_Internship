@@ -1,6 +1,7 @@
 import { SubCategory } from "~/interfaces/SubCategory";
 
 export default defineEventHandler((event) => {
+	const token = getCookie(event, 'token');
 	// Reads the body of the event and returns a promise
 	return readBody(event).then(async (data) => {
 		// Parses the data received from the event
@@ -29,11 +30,12 @@ export default defineEventHandler((event) => {
 			}
 		};
 		// Sends a POST request to the specified URL with the parsed data
-		const response = await fetch(`https://dev-api.ewai.fr/subcategory/?categoryid=${parseInt(data.categoryId)}`, {
+		const response = await fetch(`https://auth-api.ewai.fr/subcategory/?categoryid=${parseInt(data.categoryId)}`, {
 			method: 'POST',
 			body: JSON.stringify(parsedData),
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 		});
 	

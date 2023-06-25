@@ -23,7 +23,7 @@ const searchCategories = ref('');
 
 const filterItems = computed(() =>
 	restaurant.itemSet.filter(
-		(x) => !searchItems.value || x.name.toLowerCase().includes(searchItems.value.toLowerCase()),
+		(x) => !searchItems.value || x.name.toLowerCase().includes(searchItems.value.toLowerCase()) || x.category.name.toLowerCase().includes(searchItems.value.toLowerCase()),
 	),
 );
 

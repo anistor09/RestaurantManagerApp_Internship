@@ -1,4 +1,5 @@
 export default defineEventHandler((event) => {
+	const token = getCookie(event, 'token');
 	// Reads the body of the event and returns a promise
 	return readBody(event).then(async (data) => {
 		// Parses the data received from the event
@@ -11,11 +12,12 @@ export default defineEventHandler((event) => {
 			restaurantId: parseInt(data.requestBody.restaurant.id)
 		};
 		// Sends a PUT request to the specified URL with the parsed data
-		await fetch(`https://dev-api.ewai.fr/category/${parseInt(data.cid)}`, {
+		await fetch(`https://auth-api.ewai.fr/category/${parseInt(data.cid)}`, {
 			method: 'PUT',
 			body: JSON.stringify(parsedData),
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
 			},
 		});
 		// Returns a success message

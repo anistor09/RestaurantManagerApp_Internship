@@ -6,4 +6,5 @@ export default defineEventHandler((event) => {
 			Authorization: `Bearer ${token}`,
 		},
 	});
+	return "ok";
 });
