@@ -46,17 +46,17 @@
 	height:100% !important;
 	border-radius: 25px !important;
   font-size: 0.9vw !important;
-  border-color: #ED5087 !important;
+  border: 1px solid #ed5087 !important;
   color: #ED5087 !important;
 	background-color: rgb(253, 238, 243) !important;
 }
 
 .choice-delete-popup-button:hover{
-	background-color: #ED5087;
-    color: white;
+	background-color: #ED5087 !important;
+    color: white !important;
 }
 
 .choice-delete-popup-button:focus{
-	background-color: rgb(253, 238, 243);
-    color: #ED5087;
+	background-color: rgb(253, 238, 243) !important;
+    color: #ED5087 !important;
 }

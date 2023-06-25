@@ -114,19 +114,19 @@ watch(props.choices, () => {
 					<el-table-column align="center" label="Description" prop="choice.description" />
 					<el-table-column align="center">
 						<template #header>
-							<el-button class="option-button"  @click="editOption()">{{ translations[computedLanguageId].editOption }}</el-button>
-							<el-button class="option-button"  @click="deleteOption()">{{ translations[computedLanguageId].deleteOption }}</el-button>
+							<button class="option-button"  @click="editOption()">{{ translations[computedLanguageId].editOption }}</button>
+							<button class="option-button"  @click="deleteOption()">{{ translations[computedLanguageId].deleteOption }}</button>
 						</template>
 						<template #default="{ row }">
-							<el-button class="table-button" @click="editChoice(row.choice.id)">{{ translations[computedLanguageId].edit }}</el-button>
-							<el-button class="table-button" @click="deleteChoice(row.choice.id)" >{{ translations[computedLanguageId].delete }}</el-button>
+							<button class="table-button" @click="editChoice(row.choice.id)">{{ translations[computedLanguageId].edit }}</button>
+							<button class="table-button" @click="deleteChoice(row.choice.id)" >{{ translations[computedLanguageId].delete }}</button>
 							<Teleport to="body">
 								<el-dialog v-model="row.showDelete" class="choice-delete-popup">
 									<div style="width: 100%;height: 70%;text-align: center; display: flex; justify-content: center; align-items: center; font-size: 1.0vw;">
 										{{ translations[computedLanguageId].areYouSureYouWantToDelete }} "{{ row.choice.name }}" {{ translations[computedLanguageId].fromThisOption }}?
 									</div>
 									<div style="display: flex; justify-content: center; align-items: center; width: 100%;height: 20%;">
-										<el-button class="choice-delete-popup-button" @click="handleDeleteChoice(row.choice.id)">Yes</el-button>
+										<button class="choice-delete-popup-button" @click="handleDeleteChoice(row.choice.id)">Yes</button>
 									</div>
 								</el-dialog>
 							</Teleport>
@@ -146,7 +146,7 @@ watch(props.choices, () => {
 										</div>	
 									</div>
 									<div style="width:100%;height: 30%;display: flex;justify-content: center;align-items: center;">
-										<el-button class="choice-edit-popup-button" @click="handleEditChoice(row.choice.id)">{{ translations[computedLanguageId].save }}</el-button>
+										<button class="choice-edit-popup-button" @click="handleEditChoice(row.choice.id)">{{ translations[computedLanguageId].save }}</button>
 									</div>
 									
 								</el-dialog>
@@ -155,7 +155,7 @@ watch(props.choices, () => {
 					</el-table-column>
 				</el-table>
 				<div style="width: 100%; display: flex; justify-content: center; align-items: center;">
-					<el-button class="add-choice-button" color="#ED5087" pink round @click="addChoice()">{{ translations[computedLanguageId].addChoice }}</el-button>
+					<button class="add-choice-button" color="#ED5087" @click="addChoice()">{{ translations[computedLanguageId].addChoice }}</button>
 				</div>
 				
 			</el-collapse-item>
@@ -219,7 +219,7 @@ watch(props.choices, () => {
 	text-align: center !important;
 }
 
-.el-button+.el-button {
+.button+.button {
     margin-left: 0;
 }
 
@@ -228,7 +228,7 @@ watch(props.choices, () => {
 	height:2.5vh;
 	border-radius: 25px;
     font-size: 0.7vw;
-    border-color: #ED5087;
+    border: 1px solid #ed5087;
     color: #ED5087;
 	background-color: rgb(253, 238, 243);
 	margin-top: 1%;
@@ -250,7 +250,7 @@ watch(props.choices, () => {
 	background-color: white;
 	border-radius: 25px;
     font-size: 0.8vw;
-    border-color: #ED5087;
+    border: 1px solid #ed5087;
     background-color: white;
     color: #ED5087;
 	margin-top: 1%;
@@ -277,7 +277,7 @@ watch(props.choices, () => {
 	margin-top: 3%;
 	border-radius: 25px;
     font-size: 1vw;
-    border-color: #ED5087;
+    border: 1px solid #ed5087;
     background-color: white;
     color: #ED5087;
     width: 50%;

@@ -459,8 +459,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 											{{ translations[computedLanguageId].descriptionW }}
 										</div>
 
-										<el-button class="aiButtonSubcatgory" @click="addAiSubcategoryDescription"
-											>✨{{ translations[computedLanguageId].writeAi }}</el-button
+										<button class="aiButtonSubcatgory" @click="addAiSubcategoryDescription"
+											>✨{{ translations[computedLanguageId].writeAi }}</button
 										>
 									</div>
 
@@ -504,10 +504,10 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 											style="display: none"
 											@change="handleFileUpload(subcategoryImageData, $event)"
 										/>
-										<el-button
+										<button
 											class="specialPhotoButtonSubcategory"
 											@click="deleteImgSubCategory()"
-											>{{ translations[computedLanguageId].delete }}</el-button
+											>{{ translations[computedLanguageId].delete }}</button
 										>
 									</div>
 								</div>
@@ -603,8 +603,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									{{ translations[computedLanguageId].descriptionW }}
 								</div>
 
-								<el-button class="aiButton" @click="addAiCategoryDescription"
-									>✨{{ translations[computedLanguageId].writeAi }}</el-button
+								<button class="aiButton" @click="addAiCategoryDescription"
+									>✨{{ translations[computedLanguageId].writeAi }}</button
 								>
 							</div>
 							<textarea
@@ -634,9 +634,9 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 										style="display: none"
 										@change="handleFileUpload(categoryImageData, $event)"
 									/>
-									<el-button class="specialPhotoButton" @click="deleteImg()">{{
+									<button class="specialPhotoButton" @click="deleteImg()">{{
 										translations[computedLanguageId].delete
-									}}</el-button>
+									}}</button>
 								</div>
 							</div>
 						</div>
@@ -658,13 +658,13 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					</div>
 
 					<div style="padding-top: 7%; display: flex; padding-left: 8%">
-						<el-button
+						<button
 							v-if="!props.addCategory"
 							id="deleteCategoryButton"
 							class="specialExitButton"
 							:class="{ 'disabled-element': disableButtons }"
 							@click="deleteCategoryPopup = true"
-							>{{ translations[computedLanguageId].deleteCategory }}</el-button
+							>{{ translations[computedLanguageId].deleteCategory }}</button
 						>
 					</div>
 				</div>
@@ -706,18 +706,18 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 												style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover"
 											/>
 											<div class="photoButtonSpace" style="padding-top: 2%">
-												<el-button
+												<button
 													data-testid="edit-subcategory"
 													class="specialPhotoButton"
 													style="margin-bottom: 3vh"
 													@click="changeSubcategory(subcategory.id)"
-													>{{ translations[computedLanguageId].edit }}</el-button
+													>{{ translations[computedLanguageId].edit }}</button
 												>
-												<el-button
+												<button
 													id="deleteSubcategory"
 													class="specialPhotoButton"
 													@click="popUpDeleteSubcategoryLocally(subcategory.id)"
-													>{{ translations[computedLanguageId].delete }}</el-button
+													>{{ translations[computedLanguageId].delete }}</button
 												>
 											</div>
 										</div>
@@ -727,21 +727,21 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 						</el-scrollbar>
 					</div>
 					<div style="margin-top: 10%; display: flex; justify-content: flex-end">
-						<el-button
+						<button
 							v-if="addCategory"
 							id="saveCategoryButton"
 							class="specialExitButton"
 							:class="{ 'disabled-element': disableButtons }"
 							@click="handleAddEditCategory()"
-							>{{ translations[computedLanguageId].save }}</el-button
+							>{{ translations[computedLanguageId].save }}</button
 						>
-						<el-button
+						<button
 							v-else
 							id="addSubcategoryButton"
 							class="specialExitButton"
 							:class="{ 'disabled-element': disableButtons }"
 							@click="handleAddEditCategory()"
-							>{{ translations[computedLanguageId].save }}</el-button
+							>{{ translations[computedLanguageId].save }}</button
 						>
 					</div>
 				</div>
@@ -919,7 +919,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 .specialPhotoButton {
 	border-radius: 25px;
 	font-size: 1vw;
-	border-color: #ed5087;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
 	width: 50%;
@@ -942,7 +942,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 .specialPhotoButtonSubcategory {
 	border-radius: 25px;
 	font-size: 0.7vw;
-	border-color: #ed5087;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
 	width: 30%;
@@ -965,7 +965,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 .specialExitButton {
 	border-radius: 30px;
 	font-size: 1.25vw;
-	border-color: #ed5087;
+	border: 1px solid #ed5087;
 	background-color: #ed5087;
 	color: white;
 	width: 20%;
@@ -1033,8 +1033,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 
 .aiButton {
 	border-radius: 25px;
-	font-size: 1vw;
-	border-color: #ed5087;
+	font-size: 0.9vw;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
 	width: 20%;
@@ -1043,11 +1043,11 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 
 .aiButtonSubcatgory {
 	border-radius: 15px;
-	font-size: 0.7vw;
-	border-color: #ed5087;
+	font-size: 0.65vw;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
-	width: 27%;
+	width: 30%;
 	height: 3vh;
 }
 

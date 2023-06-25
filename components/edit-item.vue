@@ -572,8 +572,8 @@ function deleteImg(){
 								{{ translations[computedLanguageId].description }}
 							</div>
 
-							<el-button id="item-ai-description" class="aiButton" @click="addAiShortDescription"
-								>✨{{ translations[computedLanguageId].writeAi }}</el-button
+							<button id="item-ai-description" class="aiButton" @click="addAiShortDescription"
+								>✨{{ translations[computedLanguageId].writeAi }}</button
 							>
 						</div>
 						<textarea id="item-description-field" v-model="description" class="specialTextArea"></textarea>
@@ -598,9 +598,9 @@ function deleteImg(){
 								:value="categoryOption.id"
 							/>
 						</el-select>
-						<el-button id="item-add-category" class="specialAddButton" @click="addCategory">{{
+						<button id="item-add-category" class="specialAddButton" @click="addCategory">{{
 							translations[computedLanguageId].addCategory
-						}}</el-button>
+						}}</button>
 					</div>
 				</div>
 				<div class="elementLeft">
@@ -623,28 +623,28 @@ function deleteImg(){
 								:value="subCategoryOption.id"
 							/>
 						</el-select>
-						<el-button id="item-add-subcategory" class="specialAddButton" @click="editCategory">{{
+						<button id="item-add-subcategory" class="specialAddButton" @click="editCategory">{{
 							translations[computedLanguageId].addSubcategory
-						}}</el-button>
+						}}</button>
 					</div>
 				</div>
 				<div class="elementLeft">
 					<div class="box" style="">
-						<el-button
+						<button
 							v-if="props.addItem"
-							id="item-cancel-button"
+							id="item-cancbutton"
 							class="specialExitButton"
 							:class="{ 'disabled-element': disableButtons }"
 							@click="cancelButton"
-							>Cancel</el-button
+							>Cancel</button
 						>
-						<el-button
+						<button
 							v-else
 							id="item-delete-button"
 							class="specialExitButton"
 							:class="{ 'disabled-element': disableButtons }"
 							@click="deleteButton"
-							>{{ translations[computedLanguageId].delete }}</el-button
+							>{{ translations[computedLanguageId].delete }}</button
 						>
 					</div>
 				</div>
@@ -695,12 +695,12 @@ function deleteImg(){
 									/>
 								</el-row>
 							</el-col>
-							<el-button
+							<button
 								id="item-add-option"
 								class="specialAddButton"
 								style="margin-top: 1%"
 								@click="addOption()"
-								>{{ translations[computedLanguageId].addOption }}</el-button
+								>{{ translations[computedLanguageId].addOption }}</button
 							>
 						</el-scrollbar>
 					</div>
@@ -742,13 +742,13 @@ function deleteImg(){
 							>
 								{{ translations[computedLanguageId].longDescription }}
 							</div>
-							<el-button
+							<button
 								id="item-ai-long-description"
 								class="aiButton"
 								style="height: 45%"
 								@click="addAiLongDescription"
 								>✨{{ translations[computedLanguageId].writeAi }}
-							</el-button>
+							</button>
 						</div>
 						<textarea id="item-long-description-field" v-model="longDescription" class="specialTextArea"></textarea>
 					</div>
@@ -770,9 +770,9 @@ function deleteImg(){
 									style="display: none"
 									@change="handleFileUpload(imageData, $event)"
 								/>
-								<el-button id="item-photo-delete" class="specialPhotoButton" @click="deleteImg">{{
+								<button id="item-photo-delete" class="specialPhotoButton" @click="deleteImg">{{
 									translations[computedLanguageId].delete
-								}}</el-button>
+								}}</button>
 							</div>
 						</div>
 					</div>
@@ -804,7 +804,7 @@ function deleteImg(){
 				</div>
 				<div class="elementLeft">
 					<div class="box" style="width: 84%; align-items: end; padding-left: 0%">
-						<el-button
+						<button
 							id="item-save-button"
 							class="specialExitButton"
 							:class="{ 'disabled-element': disableButtons }"
@@ -812,7 +812,7 @@ function deleteImg(){
 							@click="saveButton"
 						>
 							{{ translations[computedLanguageId].save }}
-						</el-button>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -851,9 +851,9 @@ function deleteImg(){
 						align-items: center;
 					"
 				>
-					<el-button class="choice-edit-popup-button" @click="handleAddOption()">{{
+					<button class="choice-edit-popup-button" @click="handleAddOption()">{{
 						translations[computedLanguageId].addOption
-					}}</el-button>
+					}}</button>
 				</div>
 			</el-dialog>
 		</Teleport>
@@ -882,9 +882,9 @@ function deleteImg(){
 						height: 20%;
 					"
 				>
-					<el-button class="choice-delete-popup-button" @click="handleDeleteOption()">{{
+					<button class="choice-delete-popup-button" @click="handleDeleteOption()">{{
 						translations[computedLanguageId].yes
-					}}</el-button>
+					}}</button>
 				</div>
 			</el-dialog>
 		</Teleport>
@@ -911,7 +911,7 @@ function deleteImg(){
 						height: 20%;
 					"
 				>
-					<el-button class="choice-delete-popup-button" @click="handleDeleteItem()">Yes</el-button>
+					<button class="choice-delete-popup-button" @click="handleDeleteItem()">Yes</button>
 				</div>
 			</el-dialog>
 		</Teleport>
@@ -939,9 +939,9 @@ function deleteImg(){
 						align-items: center;
 					"
 				>
-					<el-button class="choice-edit-popup-button" @click="handleAddChoice()">{{
+					<button class="choice-edit-popup-button" @click="handleAddChoice()">{{
 						translations[computedLanguageId].addChoice
-					}}</el-button>
+					}}</button>
 				</div>
 			</el-dialog>
 		</Teleport>
@@ -977,9 +977,9 @@ function deleteImg(){
 						align-items: center;
 					"
 				>
-					<el-button class="option-edit-popup-button" @click="handleEditOption()">{{
+					<button class="option-edit-popup-button" @click="handleEditOption()">{{
 						translations[computedLanguageId].updateOption
-					}}</el-button>
+					}}</button>
 				</div>
 			</el-dialog>
 		</Teleport>
@@ -1081,7 +1081,7 @@ function deleteImg(){
 .specialAddButton {
 	border-radius: 25px;
 	font-size: 1vw;
-	border-color: #ed5087;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
 	width: 40%;
@@ -1090,18 +1090,18 @@ function deleteImg(){
 
 .aiButton {
 	border-radius: 25px;
-	font-size: 1vw;
-	border-color: #ed5087;
+	font-size: 0.85vw;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
 	width: 30%;
-	height: 65%;
+	height: 75%;
 }
 
 .specialPhotoButton {
 	border-radius: 25px;
 	font-size: 1vw;
-	border-color: #ed5087;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
 	width: 50%;
@@ -1125,7 +1125,7 @@ function deleteImg(){
 .specialExitButton {
 	border-radius: 25px;
 	font-size: 1.25vw;
-	border-color: #ed5087;
+	border: 1px solid #ed5087;
 	background-color: #ed5087;
 	color: white;
 	width: 30%;
@@ -1150,7 +1150,7 @@ function deleteImg(){
 	color: white;
 }
 
-.el-button + .el-button {
+.button + .button {
 	margin-left: 0;
 }
 
