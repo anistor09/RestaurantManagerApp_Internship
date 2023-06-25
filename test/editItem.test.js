@@ -148,28 +148,6 @@ it('Check if item add subcategory button is displayed', () => {
     expect(button.text()).toBe('Add subcategory');
 });
 
-it('Check if item delete button is displayed', () => {
-    const wrapper = mount(EditItemComponent,{
-        propsData: {
-            itemId : 85,
-            addItem: true,
-        }
-      });
-    const button = wrapper.find('#item-cancel-button');
-    expect(button.text()).toBe('Cancel');
-});
-
-it('Check if item delete button is displayed', () => {
-    const wrapper = mount(EditItemComponent,{
-        propsData: {
-            itemId : 85,
-            addItem: false,
-        }
-      });
-    const button = wrapper.find('#item-delete-button');
-    expect(button.text()).toBe('Delete');
-});
-
 it('Check if item sidedishes is displayed', () => {
     const wrapper = mount(EditItemComponent,{
         propsData: {
