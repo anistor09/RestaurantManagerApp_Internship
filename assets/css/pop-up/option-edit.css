@@ -44,7 +44,7 @@
 	height:40% !important;
 	border-radius: 25px !important;
     font-size: 0.9vw !important;
-    border-color: #ED5087 !important;
+    border: 1px solid #ed5087;
     color: #ED5087 !important;
 	background-color: rgb(253, 238, 243) !important;
 }

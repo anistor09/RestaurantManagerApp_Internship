@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 import { ElSelect } from 'element-plus';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useLanguageStore } from '../store/language';
 import { useRestaurantStore } from '../store/restaurant';
+import translations from '../mockData/translations.json';
 import { Carte } from '../interfaces/Carte';
-import { SubCategory } from '~/interfaces/SubCategory';
+import { SubCategory } from '../interfaces/SubCategory';
+
+const languageStore = useLanguageStore();
+const computedLanguageId = computed(() => languageStore.idGetter);
+
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
@@ -14,19 +20,24 @@ const props = defineProps({
 		type: Object as () => Carte,
 		required: true,
 	},
+	dummy: {
+		type: String,
+		required: true,
+	},
 });
+
 const menuRef = ref(props.menu);
 
 const categories = ref(restaurant.categorySet);
 
 // the category name that will be displayed on the bar
-const categoryName = ref('');
+const categoryName = ref(props.dummy);
 
 // this represents the category object itself that is selected by the user
 const selectedCategory = ref(categories.value[0]);
 
 // the category name that will be displayed on the bar
-const subcategoryName = ref('');
+const subcategoryName = ref(props.dummy);
 
 // this represents the array of subcategories
 // It is dynamically changed in order to display only the subcategories that are from the selected category
@@ -35,16 +46,16 @@ const filteredSubcategories = ref(restaurant.subCategorySet);
 // this represents the subcategory object itself that is selected by the user
 const selectedSubcategory = ref<SubCategory | null>(filteredSubcategories.value[0]);
 
-const restaurantItems = ref(restaurant.itemSet);
+const restaurantItems = restaurant.itemSet;
 
 // the items that have the category and subcategory selected
 const filteredItems = ref(restaurant.itemSet);
 
 // the name of the item which is displayed on the bar
-const itemName = ref('');
+const itemName = ref(props.dummy);
 
 // the object itself of the selected item (what the popup will return)
-const selectedItem = ref(restaurantItems.value[0]);
+const selectedItem = ref(restaurantItems[0]);
 
 const enableSubcategory = ref(false);
 
@@ -53,40 +64,66 @@ const enableSubcategory = ref(false);
   Moreover, it disables the items because the user didn't choose the subcategory. 
 */
 const changeCategory = () => {
-	enableSubcategory.value = true;
-	subcategoryName.value = '';
-	itemName.value = '';
-	selectedCategory.value = categories.value.filter((x) => x.name === categoryName.value)[0];
-	filteredItems.value = restaurantItems.value.filter(
-		(x) => x.category.id === selectedCategory.value.id,
-	);
-	filteredSubcategories.value = selectedCategory.value.subCategorySet;
+	if (categoryName.value.length > 0) {
+		enableSubcategory.value = true;
+		subcategoryName.value = '';
+		itemName.value = '';
+		selectedCategory.value = categories.value.filter((x) => x.name === categoryName.value)[0];
+		filteredItems.value = restaurantItems.filter((x) => {
+			if (x === null) return false;
+			if (x.category === null) return false;
+			if (x.category.id === null) return false;
+			return x.category.id === selectedCategory.value.id;
+		});
+		filteredSubcategories.value = selectedCategory.value.subCategorySet;
+	} else {
+		enableSubcategory.value = false;
+		subcategoryName.value = '';
+		itemName.value = '';
+		selectedCategory.value = categories.value[0];
+		filteredItems.value = restaurantItems;
+		filteredSubcategories.value = restaurant.subCategorySet;
+	}
 };
 
 /*
   This method applies when the user choose the subcategory. It enables the items and make the filtering.
 */
 const changeSubCategory = () => {
-	itemName.value = '';
-	selectedSubcategory.value = filteredSubcategories.value.filter(
-		(x) => x.name === subcategoryName.value,
-	)[0];
-	filteredItems.value = restaurantItems.value.filter(
-		(x) =>
-			x.category.id === selectedCategory.value.id &&
-			x.subCategory?.id === selectedSubcategory.value?.id,
-	);
+	if (subcategoryName.value.length > 0) {
+		itemName.value = '';
+		selectedSubcategory.value = filteredSubcategories.value.filter(
+			(x) => x.name === subcategoryName.value,
+		)[0];
+		filteredItems.value = restaurantItems.filter((x) => {
+			if (x.category === null || x.subCategory === null || selectedCategory.value === null)
+				return false;
+			else
+				return (
+					x.category.id === selectedCategory.value.id &&
+					x.subCategory.id === selectedSubcategory?.value?.id
+				);
+		});
+	} else {
+		changeCategory();
+	}
 };
 
 /*
   This method applies when the user choose the item. It updated the object.
 */
 const changeItem = () => {
-	selectedItem.value = filteredItems.value.filter((x) => x.name === itemName.value)[0];
-	selectedCategory.value = selectedItem.value.category;
-	categoryName.value = selectedCategory.value.name;
-	selectedSubcategory.value = selectedItem.value.subCategory;
-	subcategoryName.value = selectedSubcategory.value === null ? '' : selectedSubcategory.value.name;
+	if (itemName.value === '') {
+		categoryName.value = '';
+		subcategoryName.value = '';
+	} else {
+		selectedItem.value = filteredItems.value.filter((x) => x.name === itemName.value)[0];
+		selectedCategory.value = selectedItem.value.category;
+		categoryName.value = selectedCategory.value.name;
+		selectedSubcategory.value = selectedItem.value.subCategory;
+		subcategoryName.value =
+			selectedSubcategory.value === null ? '' : selectedSubcategory.value.name;
+	}
 };
 
 const addItemInMenu = async () => {
@@ -109,7 +146,7 @@ const addItemInMenu = async () => {
 <template>
 	<div id="all">
 		<div class="div">
-			<h2 id="categoryIdPrefix" class="title">Category:</h2>
+			<h2 id="categoryIdPrefix" class="title">{{ translations[computedLanguageId].category }}</h2>
 
 			<el-select
 				id="categoryId"
@@ -117,7 +154,7 @@ const addItemInMenu = async () => {
 				filterable
 				clearable
 				class="specialSelect"
-				placeholder="Select category"
+				:placeholder="translations[computedLanguageId].selectCategory"
 				size="large"
 				@change="changeCategory"
 			>
@@ -131,7 +168,9 @@ const addItemInMenu = async () => {
 		</div>
 
 		<div class="div">
-			<h2 id="subcategoryIdPrefix" class="title">Subcategory:</h2>
+			<h2 id="subcategoryIdPrefix" class="title">
+				{{ translations[computedLanguageId].subcategory }}
+			</h2>
 
 			<el-select
 				id="subcategoryId"
@@ -140,7 +179,7 @@ const addItemInMenu = async () => {
 				clearable
 				class="specialSelect"
 				:disabled="!enableSubcategory"
-				placeholder="Select subcategory"
+				:placeholder="translations[computedLanguageId].selectSubcategory"
 				size="large"
 				@change="changeSubCategory"
 			>
@@ -154,7 +193,7 @@ const addItemInMenu = async () => {
 		</div>
 
 		<div class="div">
-			<h2 id="itemIdPrefix" class="title">Item:</h2>
+			<h2 id="itemIdPrefix" class="title">{{ translations[computedLanguageId].item }}</h2>
 
 			<el-select
 				id="itemIdPrefix"
@@ -162,7 +201,7 @@ const addItemInMenu = async () => {
 				filterable
 				clearable
 				class="specialSelect"
-				placeholder="Select item"
+				:placeholder="translations[computedLanguageId].selectItem"
 				size="large"
 				@change="changeItem"
 			>
@@ -175,7 +214,15 @@ const addItemInMenu = async () => {
 			</el-select>
 		</div>
 		<div id="buttonContainer">
-			<el-button color="#ED5087" plain round @click="addItemInMenu()"> Add</el-button>
+			<el-button
+				color="#ED5087"
+				plain
+				round
+				@click="addItemInMenu()"
+				:disabled="itemName.length === 0"
+			>
+				Add</el-button
+			>
 		</div>
 	</div>
 </template>

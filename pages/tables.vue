@@ -5,6 +5,12 @@ import { useRestaurantStore } from '../store/restaurant';
 import PageTitle from '../components/page-title.vue';
 import TableComponent from '../components/table-component.vue';
 import SearchBar from '../components/search-bar.vue';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
@@ -25,7 +31,7 @@ const filteredTables = computed(() => {
 	if (!selectedTable.value) {
 		return tables.value;
 	}
-	return tables.value.filter((table) => `Table ${table.number}` === selectedTable.value);
+	return tables.value.filter((table) =>`${translations[computedLanguageId.value].table} ${table.number}` === selectedTable.value,);
 });
 async function handleDelete() {
 	await useFetch(`/api/table/${tableId.value}`);
@@ -33,9 +39,7 @@ async function handleDelete() {
 	deletePopup.value = false;
 }
 
-const getTable = computed<Table>(() => {
-	return tables.value.filter((x) => x.id === tableId.value)[0];
-});
+const getTable = computed<Table>(() => {return tables.value.filter((x) => x.id === tableId.value)[0];});
 
 const tableUrl = computed(() => getTable.value.url);
 
@@ -46,40 +50,17 @@ async function handleEdit() {
 		capacity: tableCapacity.value,
 		restaurantId: 1,
 	};
-	await useFetch(`/api/table/update`, {
-		method: 'PUT',
-		body: requestBody,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	await useFetch(`/api/table/update`, {method: 'PUT',body: requestBody,headers: {'Content-Type': 'application/json',},});
 	const index = tables.value.findIndex((x) => x.id === tableId.value);
-	tables.value.splice(index, 1, {
-		id: tableId.value,
-		number: tableNumber.value,
-		capacity: tableCapacity.value,
-		url: tableUrl.value,
-	});
+	tables.value.splice(index, 1, {id: tableId.value,number: tableNumber.value,capacity: tableCapacity.value,url: tableUrl.value,});
 	editPopup.value = false;
 }
 
 function handleAdd() {
-	const requestBody = {
-		number: tableNumber.value,
-		capacity: tableCapacity.value,
-		restaurantId: 1,
-	};
-	useFetch<Table>('/api/table/add', {
-		method: 'POST',
-		body: requestBody,
-		headers: {
-			'Content-Type': 'application/json',
-		},
+	const requestBody = {number: tableNumber.value,capacity: tableCapacity.value,restaurantId: 1,};
+	useFetch<Table>('/api/table/add', {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},
 	}).then((response) => {
-		tables.value.push({
-			id: tableId.value,
-			number: tableNumber.value,
-			capacity: tableCapacity.value,
+		tables.value.push({id: tableId.value,number: tableNumber.value,capacity: tableCapacity.value,
 			url: response.data.value?.url === undefined ? 'Not there yet' : response.data.value.url,
 		});
 		addPopup.value = false;
@@ -96,56 +77,72 @@ watchEffect(() => {
 </script>
 
 <template>
+	<title>{{translations[computedLanguageId].tables}}</title>
 	<ClientOnly>
 		<Teleport to="body">
-			<el-dialog v-model="editPopup" width="20%" style="border-radius: 5%; height: 22%">
+			<el-dialog v-model="editPopup" width="20%" style="border-radius: 40px">
 				<div class="edit">
 					<div>
-						<span>Table Number: </span
+						<span>{{ translations[computedLanguageId].tableNumber }} </span
 						><input id="addtableInput3" v-model="tableNumber" class="specialInput" />
 					</div>
 					<div style="padding-top: 2%">
-						<span>Table Capacity: </span
+						<span>{{ translations[computedLanguageId].tableCapacity }}</span
 						><input id="addtableInput4" v-model="tableCapacity" class="specialInput" />
 					</div>
 					<div style="padding-top: 5%">
-						<el-button color="#ED5087" plain round @click="editPopup = false">Cancel</el-button>
-						<el-button color="#ED5087" plain round @click="handleEdit()">Save</el-button>
+						<el-button color="#ED5087" plain round @click="editPopup = false">{{
+							translations[computedLanguageId].cancel
+						}}</el-button>
+						<el-button color="#ED5087" plain round @click="handleEdit()">{{
+							translations[computedLanguageId].save
+						}}</el-button>
 					</div>
 				</div>
 			</el-dialog>
 		</Teleport>
 		<Teleport to="body">
-			<el-dialog v-model="deletePopup" width="20%" style="border-radius: 5%; height: 20%">
+			<el-dialog v-model="deletePopup" width="20%" style="border-radius: 40px; height: 20%">
 				<div class="delete">
-					Are you sure you want to delete this table?
+					{{ translations[computedLanguageId].tableScript }}
 					<div id="bottomButtons">
-						<el-button color="#ED5087" plain round @click="deletePopup = false">No</el-button>
-						<el-button color="#ED5087" plain round @click="handleDelete()">Yes</el-button>
+						<el-button color="#ED5087" plain round @click="deletePopup = false">{{
+							translations[computedLanguageId].no
+						}}</el-button>
+						<el-button color="#ED5087" plain round @click="handleDelete()"
+							>{{ translations[computedLanguageId].yes }}
+						</el-button>
 					</div>
 				</div>
 			</el-dialog>
 		</Teleport>
 		<Teleport to="body">
-			<el-dialog v-model="qrcodePopup" width="10%" style="border-radius: 10%; height: 20%">
+			<el-dialog v-model="qrcodePopup" width="10%" style="border-radius: 40px">
 				<div class="qrcode"><img :src="qrcodeUrl" /></div>
 			</el-dialog>
 		</Teleport>
 		<Teleport to="body">
-			<el-dialog v-model="addPopup" width="20%" style="border-radius: 5%; height: 22%">
+			<el-dialog v-model="addPopup" width="20%" style="border-radius: 40px">
 				<div id="addTablePopup" class="edit">
 					<div>
-						<span>Table Number: </span
+						<span>{{ translations[computedLanguageId].tableNumber }}</span
 						><input id="addtableInput1" v-model="tableNumber" class="specialInput" />
 					</div>
 					<div style="padding-top: 2%">
-						<span>Table Capacity: </span
+						<span>{{ translations[computedLanguageId].tableCapacity }}</span
 						><input id="addtableInput2" v-model="tableCapacity" class="specialInput" />
 					</div>
 					<div style="padding-top: 5%">
-						<el-button color="#ED5087" plain round @click="addPopup = false">Cancel</el-button>
-						<el-button id="addTableButtonConfirm" color="#ED5087" plain round @click="handleAdd()"
-							>Add</el-button
+						<el-button color="#ED5087" plain round @click="addPopup = false">{{
+							translations[computedLanguageId].cancel
+						}}</el-button>
+						<el-button
+							id="addTableButtonConfirm"
+							color="#ED5087"
+							plain
+							round
+							@click="handleAdd()"
+							>{{ translations[computedLanguageId].add }}</el-button
 						>
 					</div>
 				</div>
@@ -153,12 +150,15 @@ watchEffect(() => {
 		</Teleport>
 	</ClientOnly>
 	<el-scrollbar>
-		<PageTitle title="Tables"></PageTitle>
+		<PageTitle :title="translations[computedLanguageId].tables"></PageTitle>
 		<main>
 			<div id="buttonContainer">
-				<SearchBar v-model="selectedTable" :options="tables.map((x) => 'Table ' + x.number)" />
+				<SearchBar
+					v-model="selectedTable"
+					:options="tables.map((x) => translations[computedLanguageId].table + ' ' + x.number)"
+				/>
 				<el-button id="addTableButton" color="#ED5087" plain round @click="addPopup = true">
-					+ Add Table</el-button
+					+ {{ translations[computedLanguageId].addTable }}</el-button
 				>
 			</div>
 			<div id="tableContainer">
@@ -225,6 +225,7 @@ watchEffect(() => {
 	display: flex;
 	flex-direction: column;
 	text-align: center;
+	align-items: center;
 	font-size: 1.2vw;
 	font-weight: 300;
 	color: black;
@@ -242,7 +243,6 @@ watchEffect(() => {
 	justify-self: center;
 	align-content: center;
 	justify-content: center;
-	bottom: 2.5vh;
 }
 
 .table-component {
@@ -285,4 +285,5 @@ header {
 	border: none;
 	width: 6%;
 }
+
 </style>

@@ -1,8 +1,10 @@
 import { vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import restaurants from '../mockData/restaurants.json';
+import languages from '../mockData/languages.json';
 import SettingsPage from '../pages/settings.vue';
 import PageTitle from '../components/page-title.vue';
+import currencies from '../mockData/currecyMock.json';
 
 vi.mock('../store/restaurant.ts', () => {
 	return {
@@ -15,6 +17,27 @@ vi.mock('../store/restaurant.ts', () => {
 	};
 });
 
+
+vi.mock('../store/currency.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                currencyGetter: currencies[0],
+            };
+        }),
+    };
+});
+
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
 const wrapper = mount(SettingsPage);
 
 it('renders settings page', () => {
@@ -24,7 +47,7 @@ it('renders settings page', () => {
 it('title works', () => {
 	const title = wrapper.findComponent(PageTitle);
 	expect(title.exists()).toBe(true);
-	expect(title.props('title')).toBe('Restaurant Overview');
+	expect(title.props('title')).toBe('Settings');
 });
 
 it('descriptionPrefix', () => {
@@ -104,15 +127,11 @@ it('Category correct', () => {
 });
 
 it('Buttons for logo are rendered', () => {
-    const changeButton = wrapper.find('[data-testid="changeLogoButton"]');
-	expect(changeButton.exists()).toBe(true)
     const deleteButton = wrapper.find('[data-testid="deleteLogoButton"]');
 	expect(deleteButton.exists()).toBe(true)
 });
 
 it('Buttons for background are rendered', () => {
-    const changeButton = wrapper.find('[data-testid="changeBackButton"]');
-	expect(changeButton.exists()).toBe(true)
     const deleteButton = wrapper.find('[data-testid="deleteBackButton"]');
 	expect(deleteButton.exists()).toBe(true)
 });

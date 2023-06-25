@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils';
 
 import AddItemInMenu from '../components/add-item-in-menu-component.vue';
 
-
+import languages from '../mockData/languages.json';
 import restaurants from '../mockData/restaurants.json';
 
 
@@ -18,27 +18,41 @@ vi.mock('../store/restaurant.ts', () => {
 	};
 });
 
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
+
+const wrapper = mount(AddItemInMenu,{
+    propsData: {
+        menu: {},
+        dummy: "",
+    },
+});
+
 it('Renders popup', () => {
-	const wrapper = mount(AddItemInMenu);
 	expect(wrapper.exists()).toBe(true);
 });
 
 it('Category subtitle', () => {
-    const wrapper = mount(AddItemInMenu);
 	const prefix = wrapper.find('#categoryIdPrefix');
     expect(prefix.exists()).toBe(true);
-    expect(prefix.text()).toBe("Category:")
+    expect(prefix.text()).toBe("Category")
 });
 
 it('SubCategory subtitle', () => {
-    const wrapper = mount(AddItemInMenu);
 	const prefix = wrapper.find('#subcategoryIdPrefix');
     expect(prefix.exists()).toBe(true);
-    expect(prefix.text()).toBe("Subcategory:")
+    expect(prefix.text()).toBe("Subcategory")
 });
 
 it('Item subtitle', () => {
-    const wrapper = mount(AddItemInMenu);
 	const prefix = wrapper.find('#itemIdPrefix');
     expect(prefix.exists()).toBe(true);
     expect(prefix.text()).toBe("Item:")

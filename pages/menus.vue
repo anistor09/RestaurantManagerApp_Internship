@@ -1,14 +1,5 @@
 <script lang="ts" setup>
-import {
-	ElScrollbar,
-	ElMain,
-	ElContainer,
-	ElOption,
-	ElButton,
-	ElDialog,
-	ElHeader,
-	ElSelect,
-} from 'element-plus';
+import {ElScrollbar,ElMain,ElContainer,ElOption,ElButton,ElDialog,ElHeader,ElSelect} from 'element-plus';
 import { ref, computed, watch } from 'vue';
 import SubcategoryComponent from '../components/subcategory-component.vue';
 import EditMenuComponent from '../components/edit-menu-component.vue';
@@ -21,16 +12,22 @@ import { Item } from '../interfaces/Item';
 import { ItemWrapper } from '../interfaces/ItemWrapper';
 import { SubCategory } from '../interfaces/SubCategory';
 import { useRestaurantStore } from '../store/restaurant';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
+
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
+const languageStore = useLanguageStore();
+const computedLanguageId = computed(() => languageStore.idGetter);
 
 const editPopupKey = ref(0);
+const addItemPopUpKey = ref(0);
+const addPopupKey = ref(0);
 const currentCategory = ref('');
 const selectedMenuName = ref('');
 const forceCollapse = ['1'];
-const instructions = 'Manage and customize your menus easily with these steps:';
-const steps =
-	'Step 1: Select your menu \nStep 2: Choose the category \nStep 3: Choose the subcategory \nStep 4: Happy editing!';
+const instructions = computed(() => translations[computedLanguageId.value].manageAndCustomize);
+const steps = computed(() => translations[computedLanguageId.value].menuScript);
 
 const selectedMenu = computed<Carte>(() => {
 	if (selectedMenuName.value !== '')
@@ -60,10 +57,7 @@ const selectedSubcategories = computed<SubCategory[]>(() => {
 });
 
 function createItemWrapper(item: Item): ItemWrapper {
-	return {
-		item,
-		showDelete: false,
-	};
+	return {item,showDelete: false};
 }
 
 watch(selectedMenuName, () => {
@@ -84,11 +78,17 @@ function closeEditPopup() {
 	editMenu.value = false;
 	editPopupKey.value++;
 }
+
+function closeAddPopup() {
+	addMenu.value = false;
+	addPopupKey.value++;
+}
 </script>
 
 <template>
+	<title>{{translations[computedLanguageId].menus}}</title>
 	<el-scrollbar>
-		<PageTitle title="Menus"></PageTitle>
+		<PageTitle :title=translations[computedLanguageId].menus></PageTitle>
 		<el-container>
 			<el-header>
 				<div class="el-row">
@@ -99,7 +99,7 @@ function closeEditPopup() {
 							filterable
 							clearable
 							data-testid="select-menu"
-							placeholder="Select menu"
+							:placeholder=translations[computedLanguageId].selectMenu
 						>
 							<el-option v-for="item in restaurant.carteSet" :key="item.id" :value="item.name" />
 						</el-select>
@@ -112,17 +112,19 @@ function closeEditPopup() {
 							data-testid="add-menu-button"
 							@click="addMenu = true"
 						>
-							Create new menu
+							{{ translations[computedLanguageId].createNewMenu }}
 						</el-button>
 						<ClientOnly>
 							<Teleport to="body">
 								<el-dialog
+									class="add-menu-component"
+									:key="addPopupKey"
 									v-model="addMenu"
+									:before-close="closeAddPopup"
 									:style="{
-										top: '-10%',
+										marginTop: '2% !important',
 										width: '40%',
-										height: '85%',
-										minHeight: '750px',
+										height: '90% !important',
 										display: 'flex',
 										alignItems: 'center',
 										justifyContent: 'center',
@@ -151,19 +153,19 @@ function closeEditPopup() {
 							data-testid="edit-menu-button"
 							@click="editMenu = true"
 						>
-							Edit menu
+							{{translations[computedLanguageId].editMenu}}
 						</el-button>
 						<ClientOnly>
 							<Teleport to="body">
 								<el-dialog
+									class="edit-menu-component"
 									:key="editPopupKey"
 									v-model="editMenu"
 									:before-close="closeEditPopup"
 									:style="{
-										top: '-10%',
-										width: '40%',
-										height: '85%',
-										minHeight: '750px',
+										marginTop: '2% !important',
+										width: '40% !important' ,
+										height: '90% !important',
 										display: 'flex',
 										alignItems: 'center',
 										justifyContent: 'center',
@@ -190,13 +192,17 @@ function closeEditPopup() {
 							plain
 							round
 							data-testid="place-item-button"
-							@click="addItemInMenu = true"
+							@click="
+								addItemInMenu = true;
+								addItemPopUpKey++;
+							"
 						>
-							Add item to menu
+							{{ translations[computedLanguageId].addItemToMenu }}
 						</el-button>
 						<ClientOnly>
 							<Teleport to="body">
 								<el-dialog
+									:key="addItemPopUpKey"
 									v-model="addItemInMenu"
 									:style="{
 										width: '20%',
@@ -211,6 +217,7 @@ function closeEditPopup() {
 								>
 									<AddItemInMenuComponent
 										:menu="selectedMenu"
+										:dummy="''"
 										@close="addItemInMenu = false"
 									></AddItemInMenuComponent>
 								</el-dialog>

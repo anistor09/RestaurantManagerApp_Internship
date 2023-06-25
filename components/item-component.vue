@@ -1,5 +1,16 @@
 <script lang="ts" setup>
+import { computed } from "vue";
+import { useCurrencyStore } from '../store/currency';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { Item } from '~/interfaces/Item';
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
+const currencyStore = useCurrencyStore();
+
+const computedCurrency = computed(() => currencyStore.currencyGetter.currency);
 
 const props = defineProps({
 	item: {
@@ -29,21 +40,21 @@ const editItem = () => {
 			<div id="title">{{ props.item.name }}</div>
 			<div class="info">
 				<div id="category">
-					<b>Category:</b> {{ props.item.category == null ? 'None' : props.item.category.name }}
+					<b>{{ translations[computedLanguageId].category }}</b> {{ props.item.category == null ? 'None' : props.item.category.name }}
 				</div>
 				<div id="subcategory">
-					<b>Subcategory:</b>
+					<b>{{ translations[computedLanguageId].subcategory }}</b>
 					{{ props.item.subCategory == null ? 'None' : props.item.subCategory.name }}
 				</div>
 			</div>
 
 			<div class="description">
 				<el-scrollbar>
-					<b>Description:</b> {{ props.item.description == '' ? 'None' : props.item.description }}
+					<b>{{ translations[computedLanguageId].description }}</b> {{ props.item.description == '' ? 'None' : props.item.description }}
 				</el-scrollbar>
 			</div>
 
-			<div class="price"><b>Price:</b> {{ props.item.price }}</div>
+			<div class="price"><b>{{ translations[computedLanguageId].price }}</b> {{ props.item.price }}{{ computedCurrency }}</div>
 		</div>
 	</el-card>
 </template>

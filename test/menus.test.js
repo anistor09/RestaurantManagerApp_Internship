@@ -4,7 +4,8 @@ import { mount } from '@vue/test-utils';
 
 
 import Menus from '../pages/menus.vue';
-
+import currencies from '../mockData/currecyMock.json'
+import languages from '../mockData/languages.json';
 import AddMenuComponent from '../components/add-menu-component.vue';
 import PageTitle from '../components/page-title.vue';
 import restaurants from '../mockData/restaurants.json';
@@ -20,7 +21,25 @@ vi.mock('../store/restaurant.ts', () => {
 		}),
 	};
 });
-
+vi.mock('../store/currency.ts', () => {
+    return {
+        useCurrencyStore: vi.fn(() => {
+            return {
+                currencyGetter: currencies[0],
+            };
+        }),
+    };
+});
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
 // Basic UI tests
 
 it('Renders menus page', () => {

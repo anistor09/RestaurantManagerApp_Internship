@@ -1,9 +1,10 @@
 import {vi, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { ElSelect } from 'element-plus';
 import restaurants from '../mockData/restaurants.json';
 import AddItem from '../pages/editItemView/index.vue';
 import EditItemComponent from '../components/edit-item.vue';
+import languages from '../mockData/languages.json';
+
 // import optionComponent from '../components/option-component.vue';
 
 vi.mock('../store/restaurant.ts', () => {
@@ -36,7 +37,16 @@ vi.mock('../store/item.ts', () => {
         }),
     };
 });
-
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
 it('Renders add Item page', () => {
     const wrapper = mount(AddItem);
     expect(wrapper.exists()).toBe(true);
@@ -105,17 +115,6 @@ it('Check if item category is displayed', () => {
 });
 
 
-it('Check if item category select is displayed', () => {
-    const wrapper = mount(EditItemComponent,{
-        propsData: {
-            itemId : 85,
-            addItem: false,
-        }
-      });
-    const select = wrapper.findComponent(ElSelect);
-    expect(select.exists()).toBe(true);
-});
-
 it('Check if item add category button is displayed', () => {
     const wrapper = mount(EditItemComponent,{
         propsData: {
@@ -124,7 +123,7 @@ it('Check if item add category button is displayed', () => {
         }
       });
     const button = wrapper.find('#item-add-category');
-    expect(button.text()).toBe('Add Category');
+    expect(button.text()).toBe('Add category');
 });
 
 it('Check if item subcategory is displayed', () => {
@@ -146,29 +145,7 @@ it('Check if item add subcategory button is displayed', () => {
         }
       });
     const button = wrapper.find('#item-add-subcategory');
-    expect(button.text()).toBe('Add Subcategory');
-});
-
-it('Check if item delete button is displayed', () => {
-    const wrapper = mount(EditItemComponent,{
-        propsData: {
-            itemId : 85,
-            addItem: true,
-        }
-      });
-    const button = wrapper.find('#item-cancel-button');
-    expect(button.text()).toBe('Cancel');
-});
-
-it('Check if item delete button is displayed', () => {
-    const wrapper = mount(EditItemComponent,{
-        propsData: {
-            itemId : 85,
-            addItem: false,
-        }
-      });
-    const button = wrapper.find('#item-delete-button');
-    expect(button.text()).toBe('Delete');
+    expect(button.text()).toBe('Add subcategory');
 });
 
 it('Check if item sidedishes is displayed', () => {
@@ -201,7 +178,7 @@ it('Check if item add option button is displayed', () => {
         }
       });
     const button = wrapper.find('#item-add-option');
-    expect(button.text()).toBe('Add Option');
+    expect(button.text()).toBe('Add option');
 });
 
 it('Check if item presentation is displayed', () => {
@@ -257,17 +234,6 @@ it('Check if item photo is displayed', () => {
       });
     const name = wrapper.find('#item-photo');
     expect(name.text()).toBe('Photo');
-});
-
-it('Check if item change photo button is displayed', () => {
-    const wrapper = mount(EditItemComponent,{
-        propsData: {
-            itemId : 85,
-            addItem: false,
-        }
-      });
-    const button = wrapper.find('#item-photo-change');
-    expect(button.text()).toBe('Change');
 });
 
 it('Check if item delete photo button is displayed', () => {

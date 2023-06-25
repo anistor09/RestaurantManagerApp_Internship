@@ -1,13 +1,18 @@
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 import PageTitle from '../components/page-title.vue';
+import { useLanguageStore } from '../store/language';
 import AnalyticsBarComponent from '../components/analytics-bar-component.vue';
 import AnalyticsGraphComponent from '../components/analytics-graph-component.vue';
 import RestaurantComponent from '../components/restaurant-component.vue';
-import { MostSoldItems } from '~/interfaces/MostSoldItems';
-import { TimePrice } from '~/interfaces/TimePrice';
+import { MostSoldItems } from '../interfaces/MostSoldItems';
+import { TimePrice } from '../interfaces/TimePrice';
+import translations from '../mockData/translations.json'
 
-const barTitle = 'Most Sold Items';
+const languageStore = useLanguageStore();
+const computedLanguageId = computed(() => languageStore.idGetter);
+
+const barTitle = computed(() => translations[computedLanguageId.value].mostSoldItems);
 
 const itemNames = ref<string[][]>([]);
 const itemValues = ref<number[][]>([]);
@@ -22,14 +27,14 @@ onBeforeMount(async () => {
 });
 
 // Props for graph chart (total revenue)
-const graphTitle = 'Total Generated Revenue';
-const graphShortTitle = 'revenue';
+const graphTitle = computed(() => translations[computedLanguageId.value].totalGeneratedRevenue);
+const graphShortTitle = computed(() => translations[computedLanguageId.value].revenue);
 
 const graphValues = ref<number[][]>([]);
 
 // Props for graph chart (average order price)
-const graphTitle2 = 'Average Basket Price';
-const graphShortTitle2 = 'price';
+const graphTitle2 = computed(() => translations[computedLanguageId.value].averageBasketPrice);
+const graphShortTitle2 = computed(() => translations[computedLanguageId.value].price);
 
 const graphValues2 = ref<number[][]>([]);
 
@@ -38,9 +43,7 @@ async function loadAveragePerPerson() {
 		const response = await fetch('/api/analytics/averagePerPerson');
 		if (response.ok) {
 			const responseData = (await response.json()) as TimePrice[];
-			graphValues2.value = responseData.map((x) =>
-				Array.of(x.time * 1000, parseFloat(x.price.toFixed(2))),
-			);
+			graphValues2.value = responseData.map((x) => Array.of(x.time * 1000, parseFloat(x.price.toFixed(2))),);
 		} else {
 			throw new Error('Failed to fetch data');
 		}
@@ -97,14 +100,25 @@ async function loadMostSoldItems() {
 }
 
 const svg = `
-		<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<circle cx="50" cy="50" r="45"/>
-		</svg>
-      `;
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <circle class="loadingCircle" cx="50" cy="50" r="45" style="
+    animation: 1.4s ease-in-out infinite both circle-animation1 !important;
+    display: block !important;
+    fill: transparent !important;
+    stroke: #ed5087 !important;
+    stroke-linecap: round !important;
+    stroke-dasharray: 283 !important;
+    stroke-dashoffset: 100 !important;
+    stroke-width: 5px !important;
+    transform-origin: 50% 50% !important;
+  "/>
+</svg>
+`;
 </script>
 
 <template>
-	<PageTitle title="Home"></PageTitle>
+	<title>{{translations[computedLanguageId].home}}</title>
+	<PageTitle :title=translations[computedLanguageId].home></PageTitle>
 	<div style="padding-top: 0.5vh; padding-left: 2vw; padding-right: 2vw">
 		<RestaurantComponent></RestaurantComponent>
 	</div>

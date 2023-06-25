@@ -1,10 +1,16 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { Carte } from '~/interfaces/Carte';
 import { Hours } from '~/interfaces/Hours';
 import { Restaurant } from '~/interfaces/Restaurant';
 
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 
 const emit = defineEmits(['close']);
 
@@ -15,25 +21,81 @@ const props = defineProps({
 	},
 });
 const restaurantRef = ref(props.restaurant);
-const defaultSrc =
-	'https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg';
+const defaultSrc = 'https://img.favpng.com/23/21/6/knife-fork-spoon-clip-art-png-favpng-g0zSCK2EGgjPqfDQWPh6qVtmY.jpg';
 const src = ref(defaultSrc);
 const name = ref('');
 const description = ref('');
-const workingDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 const startTimes = ref(['', '', '', '', '', '', '']);
 const endTimes = ref(['', '', '', '', '', '', '']);
 
+
+const workingDays = computed(() => [translations[computedLanguageId.value].monday, translations[computedLanguageId.value].tuesday, 
+translations[computedLanguageId.value].wednesday, translations[computedLanguageId.value].thursday, translations[computedLanguageId.value].friday,
+translations[computedLanguageId.value].saturday, translations[computedLanguageId.value].sunday]);
+
+
 const doubleCheck = ref(false);
 
 const nameNeededPopUp = ref(false);
+const imageEdited: Ref<File | null> = ref(null);
+const acceptedTypes = ['image/jpeg', 'image/png'];
+
+/// function to handle the upload of a image to a menu
+function handleFileUpload(event: any) {
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openErrorNotification("Wrong image type")
+		return
+	}
+	else imageEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if(event.target){
+			const x = event.target.result;
+			if(typeof x === "string")
+				src.value=x
+			else 
+				openErrorNotification("Something went wrong!")
+		}
+		else 
+			openErrorNotification("Something went wrong!")
+	};
+	if(imageEdited.value)
+		reader.readAsDataURL(imageEdited.value);
+	else 
+		openErrorNotification("Something went wrong!")	
+}
+
+// Function to delete the selected image for a menu
+function deleteImg(){
+	imageEdited.value=null
+	src.value=defaultSrc
+}
+
+
+// Function to display a error notification
+const openErrorNotification = (notifTitle: string) => {
+	ElNotification({
+		title: notifTitle,
+		message: h(
+			'div',
+			{ style: 'color: #ed5087; font-family: "Open Sans"' },
+			'Please try with a diffrent file.',
+		),
+		customClass: 'notif',
+	});
+};
+
+
 
 const checkIfChange = () => {
 	doubleCheck.value = true;
 };
 
-const addMenu = async () => {
+async function addMenu() {
 	const hoursSet = [];
 	for (let i = 0; i < 7; i++) {
 		if (startTimes.value[i] !== '' && endTimes.value[i] !== '') {
@@ -52,18 +114,29 @@ const addMenu = async () => {
 		description: description.value,
 		version: 1,
 		active: true,
-		imageUrl: defaultSrc,
+		imageUrl: src.value,
 		itemSet: [],
 		hoursSet,
 	};
-	await useFetch('/api/menus/addMenu', {
-		method: 'POST',
-		body: carte,
-		headers: {
-			'Content-Type': 'application/json',
-		},
+	if(imageEdited.value) 
+		carte.imageUrl=""
+	const response = await useFetch('/api/menus/addMenu', {
+		watch: false,method: 'POST',body: carte,headers: {'Content-Type': 'application/json',},
 	});
-	restaurantRef.value.carteSet.push(carte);
+	const carteId=response.data.value
+	if(carteId)
+	{
+		carte.id=carteId
+		carte.imageUrl=src.value
+		restaurantRef.value.carteSet.push(carte);
+		if(imageEdited.value){
+			const formData = new FormData();
+			formData.append('file', imageEdited.value);
+			formData.append('id', carteId.toString())
+			const response=await useFetch(`/api/photos/photoMenu`, {watch: false,method: 'POST',body: formData,});
+			carte.imageUrl=response.data.value as string
+		}
+	}
 	doubleCheck.value = false;
 	emit('close');
 };
@@ -93,21 +166,22 @@ async function addAiMenuDescription() {
 <template>
 	<div id="all">
 		<div class="box" style="height: 100%">
-			<div class="fieldText">Photo</div>
+			<div class="fieldText">{{ translations[computedLanguageId].photo }}</div>
 			<div style="width: 92%; height: 100%; display: flex">
 				<el-image
 					:src="src"
 					style="width: 13vw; height: 15vh; object-fit: cover; border-radius: 40px"
 				/>
 				<div class="photoButtonSpace">
-					<el-button class="specialPhotoButton">Change</el-button>
-					<el-button class="specialPhotoButton">Delete</el-button>
+					<label for="changePhoto" class="specialPhotoLabel" >{{ translations[computedLanguageId].change }}</label>
+					<input id="changePhoto" type="file" style="display: none;" @change="handleFileUpload"/>
+					<el-button class="specialPhotoButton" @click="deleteImg()">{{ translations[computedLanguageId].delete }}</el-button>
 				</div>
 			</div>
 		</div>
 		<div class="box">
 			<div id="addName">
-				<div id="nameIdPrefix" class="fieldText">Name</div>
+				<div id="nameIdPrefix" class="fieldText">{{ translations[computedLanguageId].name }}</div>
 				<input
 					id="nameId"
 					v-model="name"
@@ -118,37 +192,41 @@ async function addAiMenuDescription() {
 			</div>
 		</div>
 		<div class="box" style="">
-			<!-- <div id="descriptionIdPrefix" class="fieldText">Description</div> -->
 			<div
 				class="div"
 				style="display: flex; align-items: center; padding-bottom: 1%; padding-top: 3%"
 			>
 				<div id="descriptionIdPrefix" class="fieldText" style="width: 18%; padding-bottom: 0.7%; padding-right: 3%;">
-					Description
+					{{ translations[computedLanguageId].description }}
 				</div>
 
 				<el-button class="aiButtonSubcatgory" @click="addAiMenuDescription"
-					>✨Write with AI</el-button
+					>✨{{ translations[computedLanguageId].writeAi }}</el-button
 				>
 			</div>
-			<textarea id="descriptionIdPrefix" v-model="description" class="specialTextArea"></textarea>
+			<textarea
+				id="descriptionIdPrefix"
+				v-model="description"
+				style="padding-top: 0"
+				class="specialTextArea"
+			></textarea>
 		</div>
 		<div class="box" style="">
-			<div class="fieldText">Menu periods</div>
+			<div class="fieldText">{{ translations[computedLanguageId].menuPeriods }}</div>
 			<div v-for="(day, index) in workingDays" :key="index" class="workingDay">
 				<div class="dayName">{{ day }}</div>
 				<el-time-select
 					v-model="startTimes[index]"
-					style="width: 25%"
-					placeholder="Start time"
+					class="elTimeSelect"
+					:placeholder=translations[computedLanguageId].startTime
 					start="00:00"
 					step="00:30"
 					end="23:59"
 				/>
 				<el-time-select
 					v-model="endTimes[index]"
-					style="width: 25%"
-					placeholder="End time"
+					class="elTimeSelect"
+					:placeholder=translations[computedLanguageId].endTime
 					start="00:00"
 					step="00:30"
 					end="23:59"
@@ -161,10 +239,11 @@ async function addAiMenuDescription() {
 				style="width: 15%; height: 50%"
 				data-testid="add-button"
 				@click="checkIfChange()"
-				>Add</el-button
+				:disabled="name.length == 0"
+				>{{ translations[computedLanguageId].add}}</el-button
 			>
 		</div>
-		<ClientOnly>
+		<ClientOnly>	
 			<Teleport to="body">
 				<NameNeededPopUp
 					v-model="nameNeededPopUp"
@@ -189,10 +268,10 @@ async function addAiMenuDescription() {
 				"
 			>
 				<div>
-					Are you sure you want to add this menu?
+					{{ translations[computedLanguageId]['areYouSureYouWantToAddThisMenu?']}}
 					<div id="change-bottom-button">
 						<el-button color="#ED5087" plain round data-testid="confirm-add" @click="addMenu()"
-							>Yes</el-button
+							>{{ translations[computedLanguageId].yes}}</el-button
 						>
 					</div>
 				</div>
@@ -207,9 +286,35 @@ async function addAiMenuDescription() {
 	width: 40% !important;
 }
 
+.elTimeSelect{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 25%; height: 100%;
+}
+
+.elTimeSelect :deep(.select-trigger){
+	height: 90%;
+	width: 95%;
+}
+
+.elTimeSelect :deep(.el-input){
+	height: 100%;
+	width: 100%;
+}
+
+.elTimeSelect :deep(.el-input__wrapper) {
+	font-family: 'Open Sans';
+	font-size: 0.9vw;
+	font-weight: bolder;
+}
+
 .dayName {
-	width: 12%;
-	min-width: 80px;
+	display: flex;
+	align-items: center;
+	width: 16%;
+	height: 100%;
+	font-size: 0.8vw;
 }
 .box {
 	padding-left: 17%;
@@ -243,6 +348,20 @@ async function addAiMenuDescription() {
 	width: 50%;
 	height: 30%;
 }
+
+.specialPhotoLabel {
+	border-radius: 25px;
+	font-size: 1vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 50%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .aiButtonSubcatgory {
 	border-radius: 15px;
 	font-size: 0.9vw;
@@ -260,11 +379,18 @@ async function addAiMenuDescription() {
 	color: white;
 }
 
+.specialPhotoLabel:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
 .el-button + .el-button {
 	margin-left: 0;
 }
 
 .workingDay {
+	width: 100%;
+	height: 4vh;
 	display: flex;
 	flex-direction: row;
 }
@@ -304,53 +430,16 @@ async function addAiMenuDescription() {
 	justify-content: center;
 	align-items: center;
 	padding-top: 5%;
-	/*padding-right: 15%;*/
-	align-items: center;
 	height: 10%;
 	width: 100%;
 }
 
-.el-select .el-input__wrapper {
-	font-family: 'Open Sans';
-	font-size: 1.1vw;
-	width: 12vw;
-	font-weight: bolder;
-	height: auto;
-	border-radius: 30px;
-}
-
-.el-select .el-input.is-focus .el-input__wrapper {
-	box-shadow: 0 0 0 1px #ed5087 inset !important;
-}
-
-.el-select .el-input.is-ac .el-input__wrapper {
-	box-shadow: 0 0 0 1px #ed5087 inset !important;
-}
-
-.el-select {
-	--el-select-input-focus-border-color: #ed5087;
-}
-
-.el-popper {
-	border-radius: 25px;
-}
-
-.el-select-dropdown__item {
-	font-family: 'Open Sans';
-	font-size: 1vw;
-	text-align: center;
-}
-
-.el-select-dropdown__item.selected {
-	color: #ed5087;
-}
 #change-bottom-button {
 	display: flex;
 	padding-top: 8%;
 	justify-content: center;
 }
 .specialTextArea::-webkit-scrollbar {
-  width: 5px;
+	width: 5px;
 }
-
 </style>

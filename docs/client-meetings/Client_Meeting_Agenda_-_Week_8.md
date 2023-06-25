@@ -31,3 +31,10 @@
 - Decide on scheduling next meeting
 
 # Meeting Notes
+
+- Keep the ratio for the background image
+- Not allow empty names when adding new menu
+- There will be created an endpoint for changing the logo of the restaurant 
+- Avg Backet Price instead of average person revenue.
+- Ask the TA regarding the deploying of the product (is it required to be done by us?)
+

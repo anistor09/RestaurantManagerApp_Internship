@@ -5,6 +5,7 @@ import AddMenu from '../components/add-menu-component.vue';
 
 
 import restaurants from '../mockData/restaurants.json';
+import languages from '../mockData/languages.json';
 
 
 vi.mock('../store/restaurant.ts', () => {
@@ -18,6 +19,17 @@ vi.mock('../store/restaurant.ts', () => {
 	};
 });
 
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
+            };
+        }),
+    };
+});
+
 it('Renders popup', () => {
 	const wrapper = mount(AddMenu);
 	expect(wrapper.exists()).toBe(true);
@@ -26,10 +38,9 @@ it('Renders popup', () => {
 it('Buttons', () => {
     const wrapper = mount(AddMenu);
 	const buttons = wrapper.findAll(".specialPhotoButton");
-    expect(buttons.length).toBe(3);
-    expect(buttons[0].text()).toBe("Change")
-    expect(buttons[1].text()).toBe("Delete")
-    expect(buttons[2].text()).toBe("Add")
+    expect(buttons.length).toBe(2);
+    expect(buttons[0].text()).toBe("Delete")
+    expect(buttons[1].text()).toBe("Add")
 });
 
 it('Name subtitle', () => {

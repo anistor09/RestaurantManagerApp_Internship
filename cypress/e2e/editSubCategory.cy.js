@@ -12,14 +12,15 @@ describe('EditSubCategory e2e tests', () => {
         cy.viewport(1500, 900);
 
         // Login on the test account
-        cy.visit('http://localhost:3000/login');
-        cy.get('[data-testid="login-button"]').click().click();
+		cy.visit('http://localhost:3000/login');
+		cy.wait(1000)
+		cy.get('[data-testid="login-button"]').click();
 
-        cy.origin('https://auth.ewai.fr', async () => {
-            cy.get('#signInFormUsername').type('test@ewai.fr', { force: true });
-            cy.get('#signInFormPassword').type('9AFPz3DCT@', { force: true });
-            await cy.get('.submitButton-customizable').filter(':visible').click({ force: true });
-        })
+		cy.origin('https://auth.ewai.fr', async () => {
+			cy.get('#signInFormUsername').type('test@ewai.fr', {force: true});
+			cy.get('#signInFormPassword').type('9AFPz3DCT@', {force: true});
+			await cy.get('.submitButton-customizable').filter(':visible').click({ force: true});
+		})
 
         cy.wait(1000)
         cy.visit('http://localhost:3000/editCategoryView')
@@ -42,7 +43,7 @@ describe('EditSubCategory e2e tests', () => {
         );
         cy.get('#category-orderinmenu').should(
             'contain',
-            'Order in Menu',
+            'Presentation Order',
         );
     });
 
@@ -57,15 +58,15 @@ describe('EditSubCategory e2e tests', () => {
 
         cy.get('[data-testid="subcategory-name-title"').should(
             'contain',
-            'Name: ',
+            'Name',
         );
         cy.get('[data-testid="subcategory-description-title"').should(
             'contain',
-            'Description: ',
+            'Description',
         );
         cy.get('[data-testid="subcategory-presentation-order-title"').should(
             'contain',
-            'Presentation order: ',
+            'Presentation Order',
         );
     });
 

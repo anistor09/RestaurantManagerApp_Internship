@@ -1,22 +1,29 @@
 <script lang="ts" setup>
+import { computed } from "vue";
 import { Search } from '@element-plus/icons-vue';
-import { useRestaurantStore } from '~/store/restaurant';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import { useCategoryStore } from '~/store/category';
 import { useItemStore } from '~/store/item';
+import { useRestaurantStore } from '~/store/restaurant';
+
+const languageStore = useLanguageStore();
+const computedLanguageId = computed(() => languageStore.idGetter);
 
 const categoryStore = useCategoryStore();
 const itemStore = useItemStore();
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 
-const currentProduct = ref('Items');
-const selectedProducts = ['Items', 'Categories'];
+const currentProduct = ref(translations[computedLanguageId.value].items);
+const selectedProducts = computed(() => [translations[computedLanguageId.value].items, translations[computedLanguageId.value].categories]);
+
 const searchItems = ref('');
 const searchCategories = ref('');
 
 const filterItems = computed(() =>
 	restaurant.itemSet.filter(
-		(x) => !searchItems.value || x.name.toLowerCase().includes(searchItems.value.toLowerCase()),
+		(x) => !searchItems.value || x.name.toLowerCase().includes(searchItems.value.toLowerCase()) || x.category.name.toLowerCase().includes(searchItems.value.toLowerCase()),
 	),
 );
 
@@ -59,9 +66,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 				restaurant.categorySet[index].presentationOrder = newCategory.presentationOrder;
 				restaurant.categorySet[index].subCategorySet = newCategory.subCategorySet;
 			}
-			setTimeout(() => {
-				categoryStore.categoryReset();
-			}, 1000);
+			setTimeout(() => {categoryStore.categoryReset();}, 1000);
 		}
 		if (categoryStore.deleteGetter.length !== 0) {
 			const categoryId = categoryStore.deleteGetter[0];
@@ -69,9 +74,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 			if (index !== -1) {
 				restaurant.categorySet.splice(index, 1);
 			}
-			setTimeout(() => {
-				categoryStore.categoryReset();
-			}, 1000);
+			setTimeout(() => {categoryStore.categoryReset();}, 1000);
 		}
 	} else if (event.key === 'item') {
 		itemStore.$hydrate();
@@ -93,9 +96,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 				restaurant.itemSet[index].optionSet = newItem.optionSet;
 				restaurant.itemSet[index].sideItemSet = newItem.sideItemSet;
 			}
-			setTimeout(() => {
-				itemStore.itemReset();
-			}, 1000);
+			setTimeout(() => {itemStore.itemReset();}, 1000);
 		}
 		if (itemStore.deleteGetter.length !== 0) {
 			const itemId = itemStore.deleteGetter[0];
@@ -103,18 +104,17 @@ const handleStorageEvent = (event: StorageEvent) => {
 			if (index !== -1) {
 				restaurant.itemSet.splice(index, 1);
 			}
-			setTimeout(() => {
-				itemStore.itemReset();
-			}, 1000);
+			setTimeout(() => {itemStore.itemReset();}, 1000);
 		}
 	}
 };
 </script>
 
 <template>
+	<title>{{translations[computedLanguageId].products}}</title>
 	<ClientOnly>
 		<el-scrollbar>
-			<PageTitle title="Products"></PageTitle>
+			<PageTitle :title=translations[computedLanguageId].products></PageTitle>
 			<el-tabs v-model="currentProduct" class="products-tabs">
 				<el-tab-pane
 					v-for="product in selectedProducts"
@@ -123,41 +123,42 @@ const handleStorageEvent = (event: StorageEvent) => {
 					:name="product"
 					class="products-individual-tab"
 				>
-					<el-row v-if="currentProduct === 'Items'" class="up-buttons-products">
+					<el-row v-if="currentProduct === selectedProducts[0]" class="up-buttons-products">
 						<el-col :span="2" :offset="1">
 							<el-input
 								v-model="searchItems"
 								class="search-bar-products"
 								size="default"
 								clearable
-								placeholder="Search by item"
+								:placeholder=translations[computedLanguageId].searchByItem
 								:prefix-icon="Search"
 							/>
 						</el-col>
 						<el-col :span="2" :offset="17">
-							<el-button class="products-button" color="#ED5087" plain round @click="addItem()"
-								>+ Add item</el-button
+							<el-button id="addItemButtonProducts" class="products-button" color="#ED5087" plain round @click="addItem()"
+								>+ {{translations[computedLanguageId].addItem}}</el-button
 							>
 						</el-col>
 					</el-row>
 					<el-row v-else class="up-buttons-products">
 						<el-col :span="2" :offset="1">
 							<el-input
+								id="searchforitems"
 								v-model="searchCategories"
 								class="search-bar-products"
 								size="default"
 								clearable
-								placeholder="Search by category"
+								:placeholder=translations[computedLanguageId].searchByCategory
 								:prefix-icon="Search"
 							/>
 						</el-col>
 						<el-col :span="2" :offset="17">
 							<el-button class="products-button" color="#ED5087" plain round @click="addCategory()"
-								>+ Add category</el-button
+								>+ {{translations[computedLanguageId].addCategory}}</el-button
 							>
 						</el-col>
 					</el-row>
-					<div v-if="currentProduct === 'Items'">
+					<div v-if="currentProduct === selectedProducts[0]">
 						<el-row
 							v-for="rowIndex in Math.ceil(filterItems.length / 3)"
 							:key="rowIndex"
@@ -237,7 +238,7 @@ const handleStorageEvent = (event: StorageEvent) => {
 }
 
 .products-button {
-	width: 7vw;
+	width: 9vw;
 	font-size: 0.8vw;
 	font-weight: bold;
 }

@@ -5,6 +5,8 @@ import restaurants from '../mockData/restaurants.json';
 import categories from '../mockData/categories.json';
 import AddCategory from '../pages/editCategoryView/index.vue';
 import EditCategoryComponent from '../components/edit-category.vue';
+import languages from '../mockData/languages.json';
+
 
 vi.mock('../store/restaurant.ts', () => {
     return {
@@ -22,6 +24,16 @@ vi.mock('../store/category.ts', () => {
             return {
                 categoryGetter: categories,
                 // getCategory: vi.fn(),
+            };
+        }),
+    };
+});
+vi.mock('../store/language.ts', () => {
+    return {
+        useLanguageStore: vi.fn(() => {
+            return {
+                languageGetter: languages[0],
+				idGetter: 0
             };
         }),
     };
@@ -66,7 +78,7 @@ it('Check if category description is displayed', () => {
         }
       });
     const name = wrapper.find('#category-description');
-    expect(name.text()).toBe('Description');
+    expect(name.text()).toBe('Description:');
 });
 it('Check if category order in menu  is displayed', () => {
     const wrapper = mount(EditCategoryComponent,{
@@ -76,7 +88,7 @@ it('Check if category order in menu  is displayed', () => {
         }
       });
     const name = wrapper.find('#category-orderinmenu');
-    expect(name.text()).toBe('Order in Menu');
+    expect(name.text()).toBe('Presentation Order');
 });
 // it('Check if subcategory name  is displayed in pop up', () => {
 //     const wrapper = mount(EditCategoryComponent,{

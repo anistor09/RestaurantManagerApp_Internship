@@ -1,8 +1,7 @@
-import { Carte } from '~/interfaces/Carte';
-
 export default defineEventHandler((event) => {
 	const token = getCookie(event, 'token');
-	readBody(event).then(async (data: Carte) => {
+	return readBody(event).then(async (data) => {
+		delete data.id;
 		const response = await fetch(`https://auth-api.ewai.fr/carte/?restaurantId=1`, {
 			method: 'POST',
 			body: JSON.stringify(data),
@@ -11,6 +10,8 @@ export default defineEventHandler((event) => {
 				Authorization: `Bearer ${token}`,
 			},
 		});
-		console.log(response);
+		const responseString = await response.text()
+		const id = parseInt(responseString.split(" ")[2])
+		return id;
 	});
 });

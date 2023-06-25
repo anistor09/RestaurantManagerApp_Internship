@@ -2,13 +2,22 @@
 import { ref, computed } from 'vue';
 import { useRestaurantStore } from '../store/restaurant';
 import { useCategoryStore } from '../store/category';
+import { useLanguageStore } from '../store/language';
+import translations from '../mockData/translations.json';
 import PageTitle from '../components/page-title.vue';
 import { SubCategory } from '../interfaces/SubCategory';
 import NameNeededPopUp from '../components/nameNeededPopUp.vue';
+import { ImageWrapper } from '~/interfaces/ImageWrapper';
+
+const languageStore = useLanguageStore();
+
+const computedLanguageId = computed(() => languageStore.idGetter);
 // Retrieve the restaurant store and category store
 const restaurantStore = useRestaurantStore();
 const restaurant = restaurantStore.restaurantGetter;
 const categoryStore = useCategoryStore();
+const acceptedTypes = ['image/jpeg', 'image/png'];
+
 // Set the default source for any image
 const defaultSrc =
 	'https://assets.website-files.com/6364b6fd26e298b11fb9391f/6364b6fd26e298fa16b93cd8_DrawKit0094_Food_%26_Drink_Icons_Banner-min.png';
@@ -22,16 +31,21 @@ const props = defineProps({
 });
 // Define reactive variables using the ref function
 const name = ref('');
+const selectedFile: Ref<File | null> = ref(null);
+const imageEdited: Ref<File | null> = ref(null);
 const description = ref('');
 const src = ref(defaultSrc);
+const categoryImageData={imageEdited:selectedFile,src}
 const hasSubcategories = ref(false);
 const presentationOrder = ref(0);
 const subCategories: Ref<SubCategory[]> = ref([]);
+const imageSubCategories: Ref<ImageWrapper[]> = ref([]);
 const newSubcategoryName = ref('');
 const newSubcategoryDescription = ref('');
 const addSubcategoryPopUp = ref(false);
 const presentationSubcategoryOrder = ref(0);
-const newSubcategorySrc = ref(src.value);
+const newSubcategorySrc = ref(defaultSrc);
+const subcategoryImageData={imageEdited,src:newSubcategorySrc}
 const editSubcategory = ref(false);
 const editedSubcategoryId = ref(0);
 const tobeDeletedSubcat: Ref<number[]> = ref([]);
@@ -40,6 +54,7 @@ const deleteSubcategoryPopup = ref(false);
 const deleteCategoryPopup = ref(false);
 const deleteSubcatIdLocally = ref(-1);
 const nameNeededPopUp = ref(false);
+const disableButtons = ref(false);
 
 if (props.addCategory === false) {
 	const category = restaurant.categorySet.filter((x) => x.id === props.categoryId)[0];
@@ -50,18 +65,61 @@ if (props.addCategory === false) {
 	if (category.subCategorySet !== undefined)
 		if (category.subCategorySet.length > 0) {
 			subCategories.value = category.subCategorySet;
+			imageSubCategories.value = category.subCategorySet.map((x) => {
+				const rez: ImageWrapper = { id: x.id, img: null };
+				return rez;
+			});
 			hasSubcategories.value = true;
 		}
 }
+
+/// function to handle the upload of a image to a item
+function handleFileUpload(data: any, event: any) {
+	const imageEdited=data.imageEdited
+	const src=data.src
+	const file = event.target.files[0];
+	event.target.value = null;
+  	if(!file||!acceptedTypes.includes(file.type)){
+		openNotification(translations[computedLanguageId.value].wrongImageType,translations[computedLanguageId.value].pleaseTryDifferentFile)
+		return
+	}
+	else imageEdited.value=file
+	
+	const reader = new FileReader();
+	reader.onload = (event) => {
+		if (event.target) {
+			const x = event.target.result;
+			if(typeof x === "string")
+			src.value=x
+			else 
+				openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile)
+		}
+		else 
+			openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile)
+	};
+	if(imageEdited.value)
+		reader.readAsDataURL(imageEdited.value);
+	else 
+		openNotification(translations[computedLanguageId.value].somethingWentWrong,translations[computedLanguageId.value].pleaseTryDifferentFile)	
+}
+
+// Function to delete the selected image for a category
+function deleteImg() {
+	selectedFile.value = null;
+	src.value = defaultSrc;
+}
+
+// Function to delete the selected image for a subcategory
+function deleteImgSubCategory() {
+	imageEdited.value = null;
+	newSubcategorySrc.value = defaultSrc;
+}
+
 // Function to display a notification
-const openNotification = (notifTitle: string) => {
+const openNotification = (notifTitle: string, notifBody: string) => {
 	ElNotification({
 		title: notifTitle,
-		message: h(
-			'div',
-			{ style: 'color: #ed5087; font-family: "Open Sans"' },
-			'You will be redirected now.',
-		),
+		message: h('div',{ style: 'color: #ed5087; font-family: "Open Sans"' },notifBody,),
 		customClass: 'notif',
 	});
 };
@@ -78,6 +136,10 @@ const getUniqueId = () => {
 };
 // Function to save a new subcategory locally
 function saveNewSubcategoryLocally() {
+	if(newSubcategoryName.value===""){
+		openNotification(translations[computedLanguageId.value].youHaveNotInsertedNameSubcategory,translations[computedLanguageId.value].pleaseAddNameSubcategory)
+		return
+	}
 	if (editSubcategory.value) {
 		editSubcategoryLocally();
 	} else {
@@ -89,6 +151,9 @@ function saveNewSubcategoryLocally() {
 			imageUrl: newSubcategorySrc.value,
 		};
 		subCategories.value.push(newSubcategory);
+		const aux: ImageWrapper = { id: newSubcategory.id, img: imageEdited.value };
+		imageSubCategories.value.push(aux);
+
 		addSubcategoryPopUp.value = false;
 		refreshDetails();
 	}
@@ -98,6 +163,7 @@ function deleteSubcategoryLocally(idSubcat: number) {
 	addSubcategoryPopUp.value = false;
 	deleteSubcategoryPopup.value = false;
 	subCategories.value = subCategories.value.filter((x) => x.id !== idSubcat);
+	imageSubCategories.value = imageSubCategories.value.filter((x) => x.id !== idSubcat);
 	if (idSubcat >= 0) {
 		tobeDeletedSubcat.value.push(idSubcat);
 	}
@@ -114,7 +180,10 @@ function editSubcategoryLocally() {
 		presentationOrder: presentationSubcategoryOrder.value,
 		imageUrl: newSubcategorySrc.value,
 	});
-
+	const aux = imageSubCategories.value.find((x) => x.id === editedSubcategoryId.value);
+	if (aux) {
+		aux.img = imageEdited.value;
+	}
 	if (editedSubcategoryId.value >= 0) {
 		toBeEditedSubcat.value.add(editedSubcategoryId.value);
 	}
@@ -126,6 +195,7 @@ function refreshDetails() {
 	newSubcategoryName.value = '';
 	newSubcategoryDescription.value = '';
 	newSubcategorySrc.value = defaultSrc;
+	imageEdited.value = null;
 	presentationSubcategoryOrder.value = 0;
 	addSubcategoryPopUp.value = false;
 	hasSubcategoriesFct();
@@ -138,50 +208,30 @@ function hasSubcategoriesFct() {
 // Handles the addition or editing of a subcategory.
 async function handleAddEditSubcategory(subcategory: SubCategory, cid: number, editMode: boolean) {
 	const requestBody = {
-		name: subcategory.name,
-		description: subcategory.description,
-		presentationOrder: subcategory.presentationOrder,
-		imageUrl: subcategory.imageUrl,
-		categoryId: cid,
-		restaurant: {
-			id: restaurant.id,
-			name: restaurant.name,
-			latitude: restaurant.latitude,
-			imageUrl: restaurant.imageUrl,
-			longitude: restaurant.longitude,
-			rating: restaurant.rating,
-			category: restaurant.category,
-			backgroundColor: restaurant.backgroundColor,
-			foregroundColor: restaurant.foregroundColor,
-			font_color: restaurant.font_color,
-			description: restaurant.description,
-			logoUrl: restaurant.logoUrl,
-			addresse: restaurant.addresse,
-			phoneNumber: restaurant.phoneNumber,
-			email: restaurant.email,
-			averageWaitingTime: 0,
-		},
+		name: subcategory.name,description: subcategory.description,presentationOrder: subcategory.presentationOrder,imageUrl: subcategory.imageUrl,categoryId: cid,
+		restaurant: {id: restaurant.id,name: restaurant.name,latitude: restaurant.latitude,imageUrl: restaurant.imageUrl,longitude: restaurant.longitude,rating: restaurant.rating,category: restaurant.category,backgroundColor: restaurant.backgroundColor,foregroundColor: restaurant.foregroundColor,font_color: restaurant.font_color,description: restaurant.description,logoUrl: restaurant.logoUrl,addresse: restaurant.addresse,phoneNumber: restaurant.phoneNumber,email: restaurant.email,averageWaitingTime: 0}
 	};
+	const aux = imageSubCategories.value.filter((x) => x.id === subcategory.id)[0];
+	if (aux.img) requestBody.imageUrl = '';
 	if (!editMode) {
-		await useFetch('/api/subcategory/add', {
-			method: 'POST',
-			body: requestBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const response = await useFetch('/api/subcategory/add', {watch:false, method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
+		const newId = response.data.value;
+		if (aux.img && newId) {
+			const formData = new FormData();
+			formData.append('file', aux.img);
+			formData.append('id', newId.toString());
+			await useFetch(`/api/photos/photoSubCategory`, {watch:false, method: 'POST',body: formData,});
+		}
 	} else {
-		const putBody = {
-			requestBody,
-			sid: subcategory.id,
-		};
-		await useFetch('/api/subcategory/update', {
-			method: 'PUT',
-			body: putBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const putBody = {requestBody,sid: subcategory.id,};
+		await useFetch('/api/subcategory/update', {watch:false,method: 'PUT',body: putBody,headers: {'Content-Type': 'application/json',},});
+
+		if (aux.img) {
+			const formData = new FormData();
+			formData.append('file', aux.img);
+			formData.append('id', subcategory.id.toString());
+			await useFetch(`/api/photos/photoSubCategory`, {watch:false, method: 'POST',body: formData,});
+		}
 	}
 }
 // Changes the selected subcategory for editing.
@@ -191,7 +241,9 @@ const changeSubcategory = (idSubcat: number) => {
 	newSubcategoryName.value = editedSubcategory === undefined ? '' : editedSubcategory.name;
 	newSubcategoryDescription.value =
 		editedSubcategory === undefined ? '' : editedSubcategory.description;
-	newSubcategorySrc.value = editedSubcategory === undefined ? '' : editedSubcategory.imageUrl;
+	newSubcategorySrc.value =
+		editedSubcategory === undefined ? defaultSrc : editedSubcategory.imageUrl;
+	imageEdited.value = imageSubCategories.value.filter((x) => x.id === idSubcat)[0].img;
 	presentationSubcategoryOrder.value =
 		editedSubcategory === undefined
 			? subCategories.value.length
@@ -202,16 +254,8 @@ const changeSubcategory = (idSubcat: number) => {
 };
 // Handles the deletion of a subcategory.
 async function handleDeleteSubcategory(idSubcat: number) {
-	const requestBody = {
-		id: idSubcat,
-	};
-	await useFetch('/api/subcategory/delete', {
-		method: 'DELETE',
-		body: requestBody,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	const requestBody = {id: idSubcat,};
+	await useFetch('/api/subcategory/delete', {method: 'DELETE',body: requestBody,headers: {'Content-Type': 'application/json',},});
 	addSubcategoryPopUp.value = false;
 	subCategories.value = subCategories.value.filter((x) => x.id !== idSubcat);
 	hasSubcategoriesFct();
@@ -233,38 +277,18 @@ async function handleSubcategories(categoryId: number) {
 }
 // Handles the addition or editing of a category.
 async function handleAddEditCategory() {
+	if(name.value===""){
+		openNotification(translations[computedLanguageId.value].youHaveNotInsertedNameCategory,translations[computedLanguageId.value].pleaseAddNameCategory)
+		return
+	}
+	disableButtons.value = true
 	const requestBody = {
-		name: name.value,
-		description: description.value,
-		presentationOrder: presentationOrder.value,
-		imageUrl: src.value,
-		restaurant: {
-			id: restaurant.id,
-			name: restaurant.name,
-			imageUrl: restaurant.imageUrl,
-			latitude: restaurant.latitude,
-			longitude: restaurant.longitude,
-			rating: restaurant.rating,
-			category: restaurant.category,
-			foregroundColor: restaurant.foregroundColor,
-			backgroundColor: restaurant.backgroundColor,
-			font_color: restaurant.font_color,
-			description: restaurant.description,
-			logoUrl: restaurant.logoUrl,
-			addresse: restaurant.addresse,
-			phoneNumber: restaurant.phoneNumber,
-			email: restaurant.email,
-			averageWaitingTime: 0,
-		},
+		name: name.value,description: description.value,presentationOrder: presentationOrder.value,imageUrl: src.value,
+		restaurant: {id: restaurant.id,name: restaurant.name,imageUrl: restaurant.imageUrl,latitude: restaurant.latitude,longitude: restaurant.longitude,rating: restaurant.rating,category: restaurant.category,foregroundColor: restaurant.foregroundColor,backgroundColor: restaurant.backgroundColor,font_color: restaurant.font_color,description: restaurant.description,logoUrl: restaurant.logoUrl,addresse: restaurant.addresse,phoneNumber: restaurant.phoneNumber,email: restaurant.email,averageWaitingTime: 0,},
 	};
+	if (selectedFile.value) requestBody.imageUrl = '';
 	if (props.addCategory) {
-		const response = await useFetch('/api/category/add', {
-			method: 'POST',
-			body: requestBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const response = await useFetch('/api/category/add', {watch:false,method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
 		const categoryId = response.data.value;
 		if (categoryId != null) {
 			categoryStore.categoryGetter.push({
@@ -276,21 +300,18 @@ async function handleAddEditCategory() {
 				subCategorySet: subCategories.value,
 			});
 		}
+		if (selectedFile.value) {
+			const formData = new FormData();
+			formData.append('file', selectedFile.value);
+			formData.append('id', categoryId?.toString() as string);
+			await useFetch(`/api/photos/photoCategory`, {watch:false,method: 'POST',body: formData,});
+			
+		}
 		if (categoryId !== null) await handleSubcategories(categoryId);
-		openNotification('Category was successfully added');
+		openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyAdded,translations[computedLanguageId.value].youWillBeRedirectedNow);
 	} else {
-		const putBody = {
-			requestBody,
-			cid: props.categoryId,
-		};
-		await useFetch('/api/category/update', {
-			method: 'PUT',
-			body: putBody,
-
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const putBody = {requestBody,cid: props.categoryId,};
+		await useFetch('/api/category/update', {watch:false,method: 'PUT',body: putBody,headers: {'Content-Type': 'application/json',},});
 		if (props.categoryId !== undefined) {
 			const index = categoryStore.categoryGetter.findIndex((x) => x.id === props.categoryId);
 			categoryStore.categoryGetter.splice(index, 1, {
@@ -299,15 +320,18 @@ async function handleAddEditCategory() {
 				description: description.value,
 				presentationOrder: presentationOrder.value,
 				imageUrl: src.value,
-				subCategorySet: subCategories.value,
-			});
+				subCategorySet: subCategories.value,});
+		}
+		if (selectedFile.value && props.categoryId) {
+			const formData = new FormData();
+			formData.append('file', selectedFile.value);
+			formData.append('id', props.categoryId.toString());
+			await useFetch(`/api/photos/photoCategory`, {method: 'POST',body: formData,});
 		}
 		if (props.categoryId !== undefined) await handleSubcategories(props.categoryId);
-		openNotification('Category was successfully edited');
+		openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyEdited,translations[computedLanguageId.value].youWillBeRedirectedNow);
 	}
-	setTimeout(() => {
-		window.close();
-	}, 2000);
+	setTimeout(() => {window.close();}, 2000);
 }
 // Opens a popup to confirm deleting a subcategory locally.
 function popUpDeleteSubcategoryLocally(subcatid: number) {
@@ -316,22 +340,22 @@ function popUpDeleteSubcategoryLocally(subcatid: number) {
 }
 // Handles the deletion of a category.
 async function handleDeleteCategory() {
+	disableButtons.value=true
+	if(restaurant.itemSet.filter(x=>x.category.id===props.categoryId).length>0){
+		openNotification(translations[computedLanguageId.value].categoryCannotBeDeleted,translations[computedLanguageId.value].deleteAllItemAssigned)
+		setTimeout(() => {window.close();}, 3000);
+		return 
+	}
 	for (const subcategory of subCategories.value) {
 		await handleDeleteSubcategory(subcategory.id);
 	}
 	const requestBody = {
 		id: props.categoryId,
 	};
-	await useFetch('/api/category/delete', {
-		method: 'DELETE',
-		body: requestBody,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	await useFetch('/api/category/delete', {method: 'DELETE',body: requestBody,headers: {'Content-Type': 'application/json',},});
 	if (props.categoryId) categoryStore.deleteGetter.push(props.categoryId);
-	openNotification('Category was successfully deleted');
-	window.close();
+	openNotification(translations[computedLanguageId.value].categoryWasSuccessfullyDeleted,translations[computedLanguageId.value].youWillBeRedirectedNow);
+	setTimeout(() => {window.close();}, 2000);
 }
 // Cancels adding a new subcategory.
 const cancelNewSubcategory = () => {
@@ -376,18 +400,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 			newSubcategoryDescription.value = 'The new description is loading...';
 			queriedName = newSubcategoryName.value;
 		}
-		const requestBody = {
-			itemName: queriedName,
-			length: neededLength,
-			target: 'a category',
-		};
-		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {
-			method: 'POST',
-			body: requestBody,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const requestBody = {itemName: queriedName,length: neededLength,target: 'a category',};
+		const response = await useFetch(`/api/autocompletion/getAutocompletion`, {method: 'POST',body: requestBody,headers: {'Content-Type': 'application/json',},});
 		if (forCategory) {
 			description.value = response.data.value;
 		} else {
@@ -396,10 +410,14 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	}
 }
 </script>
-
 <template>
+	<title v-if="addCategory">{{translations[computedLanguageId].addACategory}}</title>
+	<title v-else> {{translations[computedLanguageId].editACategory}}</title>
 	<ClientOnly>
-		<page-title v-if="addCategory" title="Add category"></page-title>
+		<page-title
+			v-if="addCategory"
+			:title="translations[computedLanguageId].addCategory"
+		></page-title>
 		<page-title v-else title="Edit category"></page-title>
 		<div class="container">
 			<div id="add-Category-Info" class="bottom">
@@ -426,7 +444,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 										style="padding-bottom: 1%"
 										data-testid="subcategory-name-title"
 									>
-										Name:
+										{{ translations[computedLanguageId].name }}
 									</div>
 									<input
 										id="subcategory-name-input"
@@ -438,11 +456,11 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 								<div data-testid="subcategory-description-title" style="padding-top: 2%">
 									<div class="div" style="display: flex; align-items: center; padding-bottom: 1%">
 										<div id="subcategory-description" style="width: 30%; padding-bottom: 0.9%">
-											Description:
+											{{ translations[computedLanguageId].descriptionW }}
 										</div>
 
-										<el-button class="aiButtonSubcatgory" @click="addAiSubcategoryDescription"
-											>✨Write with AI</el-button
+										<button class="aiButtonSubcatgory" @click="addAiSubcategoryDescription"
+											>✨{{ translations[computedLanguageId].writeAi }}</button
 										>
 									</div>
 
@@ -455,7 +473,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 								</div>
 								<div data-testid="subcategory-presentation-order-title" style="padding-top: 2%">
 									<div id="subcategory-presentationorder" style="padding-bottom: 1%">
-										Presentation order:
+										{{ translations[computedLanguageId].presentationOrder }}
 									</div>
 									<input
 										v-model.number="presentationSubcategoryOrder"
@@ -476,11 +494,21 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 										:src="newSubcategorySrc"
 										style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover"
 									/>
-									<div class="photoButtonSpace" style="margin-bottom: 3vh; padding-top: 3%">
-										<el-button class="specialPhotoButtonSubcategory" style="margin-bottom: 3vh"
-											>Change</el-button
+									<div class="photoButtonSpace" style="height: 12vh">
+										<label for="changeSubCategoryPhoto" class="specialPhotoLabelSubcategory">{{
+											translations[computedLanguageId].change
+										}}</label>
+										<input
+											id="changeSubCategoryPhoto"
+											type="file"
+											style="display: none"
+											@change="handleFileUpload(subcategoryImageData, $event)"
+										/>
+										<button
+											class="specialPhotoButtonSubcategory"
+											@click="deleteImgSubCategory()"
+											>{{ translations[computedLanguageId].delete }}</button
 										>
-										<el-button class="specialPhotoButtonSubcategory">Delete</el-button>
 									</div>
 								</div>
 								<div>
@@ -491,7 +519,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 											plain
 											round
 											@click="cancelNewSubcategory()"
-											>Cancel</el-button
+											>{{ translations[computedLanguageId].cancel }}</el-button
 										>
 										<el-button
 											data-testid="save-subcategory-button"
@@ -499,7 +527,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 											plain
 											round
 											@click="saveNewSubcategoryLocally()"
-											>Save</el-button
+											>{{ translations[computedLanguageId].save }}</el-button
 										>
 									</div>
 								</div>
@@ -514,18 +542,18 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 							style="border-radius: 5%"
 						>
 							<div class="delete">
-								Are you sure you want to delete this subcategory?
+								{{ translations[computedLanguageId].areYouSureYouWantToDeleteSubCategory }}
 								<div id="bottomButtons">
-									<el-button color="#ED5087" plain round @click="deleteSubcategoryPopup = false"
-										>No</el-button
-									>
+									<el-button color="#ED5087" plain round @click="deleteSubcategoryPopup = false">{{
+										translations[computedLanguageId].no
+									}}</el-button>
 									<el-button
 										id="yessafetyPopUpDeleteSubcategory"
 										color="#ED5087"
 										plain
 										round
 										@click="deleteSubcategoryLocally(deleteSubcatIdLocally)"
-										>Yes</el-button
+										>{{ translations[computedLanguageId].yes }}</el-button
 									>
 								</div>
 							</div>
@@ -534,14 +562,14 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					<Teleport to="body">
 						<el-dialog v-model="deleteCategoryPopup" width="20%" style="border-radius: 5%">
 							<div class="delete">
-								Are you sure you want to delete category {{ name }}?
+								{{ translations[computedLanguageId].areYouSureYouWantToDeleteCategory }} {{ name }}?
 								<div id="bottomButtons">
-									<el-button color="#ED5087" plain round @click="deleteCategoryPopup = false"
-										>No</el-button
-									>
-									<el-button color="#ED5087" plain round @click="handleDeleteCategory()"
-										>Yes</el-button
-									>
+									<el-button color="#ED5087" plain round @click="deleteCategoryPopup = false">{{
+										translations[computedLanguageId].no
+									}}</el-button>
+									<el-button color="#ED5087" plain round @click="handleDeleteCategory()">{{
+										translations[computedLanguageId].yes
+									}}</el-button>
 								</div>
 							</div>
 						</el-dialog>
@@ -551,7 +579,9 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					<div class="elementLeft">
 						<div class="box">
 							<div style="height: 40%; width: 100%">
-								<div id="category-name" class="fieldText" style="padding-bottom: 2%">Name</div>
+								<div id="category-name" class="fieldText" style="padding-bottom: 2%">
+									{{ translations[computedLanguageId].name }}
+								</div>
 								<input
 									id="input-category-name"
 									v-model="name"
@@ -570,11 +600,11 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									class="fieldText"
 									style="width: 20%; padding-bottom: 0.9%"
 								>
-									Description
+									{{ translations[computedLanguageId].descriptionW }}
 								</div>
 
-								<el-button class="aiButton" @click="addAiCategoryDescription"
-									>✨Write with AI</el-button
+								<button class="aiButton" @click="addAiCategoryDescription"
+									>✨{{ translations[computedLanguageId].writeAi }}</button
 								>
 							</div>
 							<textarea
@@ -586,15 +616,27 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					</div>
 					<div class="elementLeft" style="padding-bottom: 5%">
 						<div class="box" style="padding-top: 10%">
-							<div class="fieldText" style="padding-bottom: 2%">Photo</div>
+							<div class="fieldText" style="padding-bottom: 2%">
+								{{ translations[computedLanguageId].photo }}
+							</div>
 							<div style="width: 92%; height: 90%; display: flex; padding-bottom: 10%">
 								<el-image
-									:src="defaultSrc"
+									:src="src"
 									style="width: 35%; height: 15vh; object-fit: cover; border-radius: 40px"
 								/>
 								<div class="photoButtonSpace" style="padding-top: 0.9%">
-									<el-button class="specialPhotoButton">Change</el-button>
-									<el-button class="specialPhotoButton">Delete</el-button>
+									<label for="changeCategoryPhoto" class="specialPhotoLabel">{{
+										translations[computedLanguageId].change
+									}}</label>
+									<input
+										id="changeCategoryPhoto"
+										type="file"
+										style="display: none"
+										@change="handleFileUpload(categoryImageData, $event)"
+									/>
+									<button class="specialPhotoButton" @click="deleteImg()">{{
+										translations[computedLanguageId].delete
+									}}</button>
 								</div>
 							</div>
 						</div>
@@ -603,7 +645,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 						<div class="box" style="">
 							<div style="height: 40%; width: 100%">
 								<div id="category-orderinmenu" class="fieldText" style="padding-bottom: 2%">
-									Order in Menu
+									{{ translations[computedLanguageId].presentationOrder }}
 								</div>
 								<input
 									id="input-category-order"
@@ -616,12 +658,13 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					</div>
 
 					<div style="padding-top: 7%; display: flex; padding-left: 8%">
-						<el-button
+						<button
 							v-if="!props.addCategory"
 							id="deleteCategoryButton"
 							class="specialExitButton"
+							:class="{ 'disabled-element': disableButtons }"
 							@click="deleteCategoryPopup = true"
-							>Delete Category</el-button
+							>{{ translations[computedLanguageId].deleteCategory }}</button
 						>
 					</div>
 				</div>
@@ -629,7 +672,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 					<div class="elementLeft" style="padding-top: 5%; height: 10% !important">
 						<div style="width: 100%; height: 90%; display: flex; padding-bottom: 10%">
 							<div class="box">
-								<div class="fieldText">Subcategories</div>
+								<div class="fieldText">{{ translations[computedLanguageId].subcategories }}</div>
 							</div>
 							<div class="box" style="padding-left: 20%">
 								<el-button
@@ -640,7 +683,7 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 									round
 									style="width: 8vw; font-size: 0.8vw; font-weight: bolder"
 									@click="addSubcategoryPopUp = true"
-									>Add subcategory</el-button
+									>{{ translations[computedLanguageId].addSubcategory }}</el-button
 								>
 							</div>
 						</div>
@@ -663,18 +706,18 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 												style="width: 40%; height: 12vh; border-radius: 40px; object-fit: cover"
 											/>
 											<div class="photoButtonSpace" style="padding-top: 2%">
-												<el-button
+												<button
 													data-testid="edit-subcategory"
 													class="specialPhotoButton"
 													style="margin-bottom: 3vh"
 													@click="changeSubcategory(subcategory.id)"
-													>Edit</el-button
+													>{{ translations[computedLanguageId].edit }}</button
 												>
-												<el-button
+												<button
 													id="deleteSubcategory"
 													class="specialPhotoButton"
 													@click="popUpDeleteSubcategoryLocally(subcategory.id)"
-													>Delete</el-button
+													>{{ translations[computedLanguageId].delete }}</button
 												>
 											</div>
 										</div>
@@ -684,19 +727,21 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 						</el-scrollbar>
 					</div>
 					<div style="margin-top: 10%; display: flex; justify-content: flex-end">
-						<el-button
+						<button
 							v-if="addCategory"
 							id="saveCategoryButton"
 							class="specialExitButton"
+							:class="{ 'disabled-element': disableButtons }"
 							@click="handleAddEditCategory()"
-							>Save</el-button
+							>{{ translations[computedLanguageId].save }}</button
 						>
-						<el-button
+						<button
 							v-else
 							id="addSubcategoryButton"
 							class="specialExitButton"
+							:class="{ 'disabled-element': disableButtons }"
 							@click="handleAddEditCategory()"
-							>Save</el-button
+							>{{ translations[computedLanguageId].save }}</button
 						>
 					</div>
 				</div>
@@ -874,27 +919,53 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 .specialPhotoButton {
 	border-radius: 25px;
 	font-size: 1vw;
-	border-color: #ed5087;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
 	width: 50%;
 	height: 30%;
 }
 
+.specialPhotoLabel {
+	border-radius: 25px;
+	font-size: 1vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 50%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .specialPhotoButtonSubcategory {
 	border-radius: 25px;
 	font-size: 0.7vw;
-	border-color: #ed5087;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
 	width: 30%;
 	height: 30%;
 }
 
+.specialPhotoLabelSubcategory {
+	border-radius: 25px;
+	font-size: 0.7vw;
+	border: 1px solid #ed5087;
+	background-color: white;
+	color: #ed5087;
+	width: 30%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .specialExitButton {
 	border-radius: 30px;
 	font-size: 1.25vw;
-	border-color: #ed5087;
+	border: 1px solid #ed5087;
 	background-color: #ed5087;
 	color: white;
 	width: 20%;
@@ -913,7 +984,19 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	color: white;
 }
 
+.specialPhotoLabel:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
+
 .specialPhotoButtonSubcategory:hover {
+	background-color: #ed5087;
+	border-color: darkgrey;
+	color: white;
+}
+
+.specialPhotoLabelSubcategory:hover {
 	background-color: #ed5087;
 	border-color: darkgrey;
 	color: white;
@@ -950,8 +1033,8 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 
 .aiButton {
 	border-radius: 25px;
-	font-size: 1vw;
-	border-color: #ed5087;
+	font-size: 0.9vw;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
 	width: 20%;
@@ -960,11 +1043,11 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 
 .aiButtonSubcatgory {
 	border-radius: 15px;
-	font-size: 0.7vw;
-	border-color: #ed5087;
+	font-size: 0.65vw;
+	border: 1px solid #ed5087;
 	background-color: white;
 	color: #ed5087;
-	width: 27%;
+	width: 30%;
 	height: 3vh;
 }
 
@@ -973,5 +1056,10 @@ async function addAiDescription(neededLength: string, forCategory: boolean) {
 	background-color: #ed5087;
 	border-color: #ed5087;
 	color: white;
+}
+
+.disabled-element {
+	opacity: 0.2;
+	pointer-events: none;
 }
 </style>

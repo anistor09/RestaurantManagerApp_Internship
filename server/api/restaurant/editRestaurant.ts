@@ -1,11 +1,13 @@
-export default defineEventHandler(async(event) => {
+export default defineEventHandler(async (event) => {
+	const token = getCookie(event, 'token');
 	const data = await readBody(event);
-	const response = await fetch(`https://dev-api.ewai.fr/restaurant/1`, {
+	await fetch(`https://auth-api.ewai.fr/restaurant/1`, {
 		method: 'PUT',
 		body: JSON.stringify(data),
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`,
 		},
 	});
-	console.log(response);
+	return "ok";
 });
